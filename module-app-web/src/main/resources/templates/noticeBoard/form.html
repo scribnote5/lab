@@ -11,7 +11,7 @@
 <div th:replace="layout/header::header"></div>
 
 <div class="container">
-    <form name="form" id="form" th:object="${noticeBoard}" action="#">
+    <form name="form" id="form" th:object="${noticeBoardDto}" action="#">
 
         <div class="page-header">
             <h1 th:if="!*{idx}">NoticeBoard Register</h1>
@@ -99,10 +99,10 @@
     });
 </script>
 
-<script th:if="!${noticeBoard?.idx}">
+<script th:if="!${noticeBoardDto?.idx}">
     $('#insert').click(function () {
         var jsonData = $("#form").serializeObject();
-        var noticeBoardIdx;
+        var noticeBoardDtoIdx;
 
         // 게시글 업로드
         $.ajax({
@@ -122,7 +122,7 @@
     });
 </script>
 
-<script th:if="${noticeBoard?.idx}" th:inline="javascript">
+<script th:if="${noticeBoardDto?.idx}" th:inline="javascript">
     $('#update').click(function () {
         var jsonData = $("#form").serializeObject();
         var idx = document.getElementsByName("idx")[0].value;

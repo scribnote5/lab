@@ -21,7 +21,7 @@ public class NoticeBoardController {
     // List
     @GetMapping("/list")
     public String noticeBoardList(@PageableDefault Pageable pageable, Model model) {
-        model.addAttribute("noticeBoardList", noticeBoardService.findNoticeBoardList(pageable));
+        model.addAttribute("noticeBoardDtoList", noticeBoardService.findNoticeBoardList(pageable));
 
         return "/noticeBoard/list";
     }
@@ -29,7 +29,7 @@ public class NoticeBoardController {
     // Form Update
     @GetMapping("/form{idx}")
     public String noticeBoardForm(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
-        model.addAttribute("noticeBoard", noticeBoardService.findNoticeBoardByIdx(idx));
+        model.addAttribute("noticeBoardDto", noticeBoardService.findNoticeBoardByIdx(idx));
 
         return "/noticeBoard/form";
     }
@@ -37,7 +37,7 @@ public class NoticeBoardController {
     // Read
     @GetMapping({"", "/"})
     public String noticeBoardRead(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
-        model.addAttribute("noticeBoard", noticeBoardService.findNoticeBoardByIdx(idx));
+        model.addAttribute("noticeBoardDto", noticeBoardService.findNoticeBoardByIdx(idx));
 
         return "/noticeBoard/read";
     }

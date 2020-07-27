@@ -30,19 +30,19 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="noticeBoard : ${noticeBoardList}">
-                <td th:text="${noticeBoard.idx}"></td>
+            <tr th:each="noticeBoardDto : ${noticeBoardDtoList}">
+                <td th:text="${noticeBoardDto.idx}"></td>
                 <td>
-                    <a th:href="'/notice-board?idx='+${noticeBoard.idx}" th:text="${noticeBoard.title}"></a>
+                    <a th:href="'/notice-board?idx='+${noticeBoardDto.idx}" th:text="${noticeBoardDto.title}"></a>
                 </td>
-                <td th:text="${noticeBoard.createdBy}">></td>
-                <td th:text="${#temporals.format(noticeBoard.createdDate,'yyyy-MM-dd HH:mm')}"></td>
-                <td th:text="${#temporals.format(noticeBoard.lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="${noticeBoardDto.createdBy}">></td>
+                <td th:text="${#temporals.format(noticeBoardDto.createdDate,'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="${#temporals.format(noticeBoardDto.lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
 
-                <td th:if="${noticeBoard.activeStatus?.name() == 'ACTIVE'}" th:text="Active"></td>
-                <td th:if="${noticeBoard.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"></td>
+                <td th:if="${noticeBoardDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active"></td>
+                <td th:if="${noticeBoardDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"></td>
 
-                <td th:text="${noticeBoard.viewCount}"></td>
+                <td th:text="${noticeBoardDto.viewCount}"></td>
             </tr>
             </tbody>
         </table>
@@ -56,24 +56,24 @@
     <!-- Pagination -->
     <nav aria-label="Page navigation" style="text-align: center;">
         <ul class="pagination"
-            th:with="startNumber=${T(Math).floor(noticeBoardList.number/10)}*10+1, endNumber=(${noticeBoardList.totalPages} > ${startNumber}+9) ? ${startNumber}+9 : ${noticeBoardList.totalPages}">
+            th:with="startNumber=${T(Math).floor(noticeBoardDtoList.number/10)}*10+1, endNumber=(${noticeBoardDtoList.totalPages} > ${startNumber}+9) ? ${startNumber}+9 : ${noticeBoardDtoList.totalPages}">
             <li>
                 <a aria-label="Previous" href="/notice-board/list?page=1">&laquo;</a>
             </li>
-            <li th:style="${noticeBoardList.first} ? 'display:none'">
-                <a th:href="@{/notice-board/list(page=${noticeBoardList.number})}">&lsaquo;</a>
+            <li th:style="${noticeBoardDtoList.first} ? 'display:none'">
+                <a th:href="@{/notice-board/list(page=${noticeBoardDtoList.number})}">&lsaquo;</a>
             </li>
 
             <li th:each="page :${#numbers.sequence(startNumber, endNumber)}"
-                th:class="(${page} == ${noticeBoardList.number}+1) ? 'active'">
+                th:class="(${page} == ${noticeBoardDtoList.number}+1) ? 'active'">
                 <a th:href="@{/notice-board/list(page=${page})}" th:text="${page}"><span class="sr-only"></span></a>
             </li>
 
-            <li th:style="${noticeBoardList.last} ? 'display:none'">
-                <a th:href="@{/notice-board/list(page=${noticeBoardList.number}+2)}">&rsaquo;</a>
+            <li th:style="${noticeBoardDtoList.last} ? 'display:none'">
+                <a th:href="@{/notice-board/list(page=${noticeBoardDtoList.number}+2)}">&rsaquo;</a>
             </li>
             <li>
-                <a aria-label="Next" th:href="@{/notice-board/list(page=${noticeBoardList.totalPages})}">&raquo;</a>
+                <a aria-label="Next" th:href="@{/notice-board/list(page=${noticeBoardDtoList.totalPages})}">&raquo;</a>
             </li>
         </ul>
     </nav>

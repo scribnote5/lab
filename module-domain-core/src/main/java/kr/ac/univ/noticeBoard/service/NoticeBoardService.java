@@ -1,12 +1,11 @@
 package kr.ac.univ.noticeBoard.service;
 
 import kr.ac.univ.noticeBoard.domain.NoticeBoard;
+import kr.ac.univ.noticeBoard.dto.NoticeBoardDto;
+import kr.ac.univ.noticeBoard.dto.mapper.NoticeBoardMapper;
 import kr.ac.univ.noticeBoard.repository.NoticeBoardRepository;
 import kr.ac.univ.noticeBoard.repository.NoticeBoardRepositoryImpl;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -21,10 +20,13 @@ public class NoticeBoardService {
         this.noticeBoardRepositoryImpl = noticeBoardRepositoryImpl;
     }
 
-    public Page<NoticeBoard> findNoticeBoardList(Pageable pageable) {
-        pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1, pageable.getPageSize(), Sort.Direction.DESC, "idx");
+    public Page<NoticeBoardDto> findNoticeBoardList(Pageable pageable) {
+        Page<NoticeBoard> noticeBoardList = null;
 
-        return noticeBoardRepository.findAll(pageable);
+        pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1, pageable.getPageSize(), Sort.Direction.DESC, "idx");
+        noticeBoardList = noticeBoardRepository.findAll(pageable);
+
+        return new PageImpl<NoticeBoardDto>(NoticeBoardMapper.INSTANCE.toDto(noticeBoardList.getContent()), pageable, noticeBoardList.getTotalElements());
     }
 
     public Long insertNoticeBoard(NoticeBoard noticeBoard) {
@@ -32,10 +34,10 @@ public class NoticeBoardService {
         return noticeBoardRepository.save(noticeBoard).getIdx();
     }
 
-    public NoticeBoard findNoticeBoardByIdx(Long idx) {
+    public NoticeBoardDto findNoticeBoardByIdx(Long idx) {
         noticeBoardRepositoryImpl.updateViewCountById(idx);
 
-        return noticeBoardRepository.findById(idx).orElse(new NoticeBoard());
+        return NoticeBoardMapper.INSTANCE.toDto(noticeBoardRepository.findById(idx).orElse(new NoticeBoard()));
     }
 
     @Transactional
