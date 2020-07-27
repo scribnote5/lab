@@ -1,0 +1,7 @@
+rootProject.name = 'lab'
+include 'module-system-common'
+include 'module-domain-core'
+include 'module-app-api'
+include 'module-app-web'
+include 'module-app-admin'
+

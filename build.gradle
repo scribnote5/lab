@@ -1,0 +1,103 @@
+// 외부 의존 라이브러리를 클래스 패스에 추가한다.
+buildscript {
+    ext {
+        // 스프링 부트의 버전을 지정한다.
+        springBootVersion = "2.3.2.RELEASE"
+        // querydsl 플러그인 버전을 지정한다.
+        querydslPluginVersion = "1.0.10"
+
+    }
+    // 의존성 라이브러리를 다운받는 원격 저장소를 지정한다.
+    repositories {
+        mavenCentral()
+        jcenter()
+        // plugin 저장소
+        maven { url "https://plugins.gradle.org/m2/" }
+
+    }
+    // 프로젝트 개발에 필요한 의존성을 선언한다.
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.9.RELEASE"
+        classpath "gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:${querydslPluginVersion}"
+    }
+}
+
+subprojects {
+    // 자바 플러그인을 설정한다.
+    apply plugin: "java"
+    apply plugin: "eclipse"
+    apply plugin: "org.springframework.boot"
+    apply plugin: "io.spring.dependency-management"
+    apply plugin: "idea"
+
+    group = "kr.ac.univ"
+    version = "0.0.1-SNAPSHOT"
+    // 자바 버전을 지정한다.
+    sourceCompatibility = 11
+
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
+    // 프로젝트 개발에 필요한 공통 의존성 라이브러리를 선언한다.
+    dependencies {
+        // spring boot
+        implementation "org.springframework.boot:spring-boot-starter-web"
+        implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+        runtimeOnly "org.springframework.boot:spring-boot-devtools"
+
+        // lombok
+        implementation "org.projectlombok:lombok"
+        annotationProcessor "org.projectlombok:lombok"
+
+        //log4jdbc
+        compileOnly "org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4:1.16"
+
+        // db
+        runtimeOnly "com.h2database:h2"
+        runtimeOnly "org.mariadb.jdbc:mariadb-java-client"
+
+        // test
+        testImplementation "org.springframework.boot:spring-boot-starter-test"
+    }
+}
+
+// 모듈의 의존성 라이브러리를 선언한다.
+project(":module-system-common") {
+    dependencies {
+
+    }
+}
+
+project(":module-domain-core") {
+    dependencies {
+        compile project(":module-system-common")
+    }
+}
+
+project(":module-app-web") {
+    dependencies {
+        compile project(":module-system-common")
+        compile project(":module-domain-core")
+
+        implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
+    }
+}
+
+project(":module-app-admin") {
+    dependencies {
+        compile project(":module-system-common")
+        compile project(":module-domain-core")
+    }
+}
+
+project("module-app-api") {
+    dependencies {
+        compile project(":module-system-common")
+        compile project(":module-domain-core")
+
+        implementation "org.springframework.boot:spring-boot-starter-security"
+    }
+}

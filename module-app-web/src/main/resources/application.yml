@@ -1,0 +1,47 @@
+spring:
+  jpa:
+    open-in-view: false
+  devtools:
+    # 프론트 수정 사항을 자동으로 반영한다.
+    livereload:
+      enabled: true
+  thymeleaf:
+    cache: false
+---
+spring:
+  profiles: test
+  jpa:
+    hibernate:
+      ddl-auto: create
+  h2:
+    console:
+      enabled: true
+      path: /console
+  datasource:
+    # test는 DB 이름으로서 생성한 DB 이름으로 변경 필요, 메인 메모리를 저장 장소로 사용한다.(휘발성)
+    url: jdbc:h2:mem:test;MODE=mysql;
+    # test는 DB 이름으로서 생성한 DB 이름으로 변경 필요, File을 저장 장소로 사용한다.(비휘발성)
+    # url: jdbc:h2:file:~/data/h2/testdb;MODE=MySQL
+    # 개인 아이디로 변경 필요하다.
+    username: scribnote5
+    # 개인 비밀번호로 변경 필요하다.
+    password: 123123123
+    driver-class-name: org.h2.Driver
+server:
+  port: 8080
+---
+spring:
+  profiles: local
+  #  jpa:
+  #    hibernate:
+  #      ddl-auto: create
+  datasource:
+    # test는 DB 이름으로서 생성한 DB 이름으로 변경 필요하다.
+    url: jdbc:mariadb://127.0.0.1:3306/lab
+    # 개인 아이디로 변경 필요하다.
+    username: scribnote5
+    # 개인 비밀번호로 변경 필요하다.
+    password: 123123123
+    driver-class-name: org.mariadb.jdbc.Driver
+server:
+  port: 8080

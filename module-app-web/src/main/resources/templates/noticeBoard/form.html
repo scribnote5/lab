@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- css -->
+    <th:block th:replace="layout/css.html"></th:block>
+
+    <title>NoticeBoard Form</title>
+</head>
+<body>
+<!-- header -->
+<div th:replace="layout/header::header"></div>
+
+<div class="container">
+    <form name="form" id="form" th:object="${noticeBoard}" action="#">
+
+        <div class="page-header">
+            <h1 th:if="!*{idx}">NoticeBoard Register</h1>
+            <h1 th:if="*{idx}">NoticeBoard Update</h1>
+        </div>
+        <br/>
+        <table class="table" style="table-layout:fixed; word-break:break-all;">
+            <colgroup>
+                <col width="15%"/>
+                <col width="85%"/>
+            </colgroup>
+            <tr>
+                <th style="padding:13px 0 0 15px">Active Status</th>
+                <td>
+                    <div class="pull-left">
+                        <select name="activeStatus" th:field="*{activeStatus}" class="form-control input-sm">
+                            <option th:value="ACTIVE">Active</option>
+                            <option th:value="INACTIVE">Inactive</option>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <tr th:if="*{idx}">
+                <th style="padding:13px 0 0 15px;">Created Date</th>
+                <td><input type="text" class="col-md-1 form-control input-sm" readonly="readonly"
+                           th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+            </tr>
+            <tr th:if="*{idx}">
+                <th style="padding:13px 0 0 15px;">Modified Date</th>
+                <td><input type="text" class="col-md-1 form-control input-sm" readonly="readonly"
+                           th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+            </tr>
+            <tr>
+                <th style="padding:13px 0 0 15px;">Title</th>
+                <td><input type="text" name="title" id="title" class="col-md-1 form-control input-sm"
+                           th:value="*{title}"/></td>
+            </tr>
+            <tr>
+                <!--<td colspan="2"><textarea name="content" id="content" class="col-md-1 form-control input-sm"
+                                          maxlength="140" rows="7" style="height: 200px; resize: none;"
+                                          th:text="*{content}"></textarea></td>-->
+                <td colspan="2"><textarea name="content" id="summernote" class="summernote" th:text="*{content}"></textarea></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+
+        </table>
+
+        <div class="pull-left">
+            <a href="/notice-board/list" class="btn btn-default">Move to List</a>
+        </div>
+        <div class="pull-right">
+            <button th:if="!*{idx}" id="insert" type="button" class="btn btn-primary">Register</button>
+            <button th:if="*{idx}" id="update" type="button" class="btn btn-info">Update</button>
+        </div>
+
+        <!-- input type="hidden" -->
+        <input type="hidden" name="idx" th:value="*{idx}"/>
+        <input type="hidden" name="createdDate" th:value="*{createdDate}"/>
+
+    </form>
+</div>
+
+<!-- footer -->
+<div th:replace="layout/footer::footer"></div>
+
+<!-- script file -->
+<th:block th:replace="layout/script.html"></th:block>
+
+<!-- javascript -->
+<script>
+    $(document).ready(function() {
+        <!-- summernote setting -->
+        $('#summernote').summernote({
+            height: 250,	// 에디터 높이
+            minHeight: null,	// 최소 높이
+            maxHeight: null,	// 최대 높이
+            // focus: true,	// 에디터 로딩후 포커스를 맞출지 여부
+            lang: "ko-KR",// 한글 설정
+            placeholder: "The editor's max input size of bytes is 16777215."	//placeholder 설정
+
+        });
+    });
+</script>
+
+<script th:if="!${noticeBoard?.idx}">
+    $('#insert').click(function () {
+        var jsonData = $("#form").serializeObject();
+        var noticeBoardIdx;
+
+        // 게시글 업로드
+        $.ajax({
+            url: "http://localhost:8081/api/notice-boards",
+            type: "post",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                location.href = "/notice-board?idx=" + msg;
+            })
+            .fail(function (msg) {
+
+            });
+    });
+</script>
+
+<script th:if="${noticeBoard?.idx}" th:inline="javascript">
+    $('#update').click(function () {
+        var jsonData = $("#form").serializeObject();
+        var idx = document.getElementsByName("idx")[0].value;
+
+        // 게시글 수정
+        $.ajax({
+            url: "http://localhost:8081/api/notice-boards/" + document.getElementsByName("idx")[0].value,
+            type: "put",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                location.href = "/notice-board?idx=" + document.getElementsByName("idx")[0].value;
+            })
+            .fail(function (msg) {
+
+            });
+    });
+</script>
+
+</body>
+</html>
