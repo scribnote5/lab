@@ -74,6 +74,9 @@ project(":module-system-common") {
 project(":module-domain-core") {
     dependencies {
         compile project(":module-system-common")
+
+        implementation("com.querydsl:querydsl-core")
+        implementation("com.querydsl:querydsl-jpa")
     }
 }
 
@@ -99,5 +102,20 @@ project("module-app-api") {
         compile project(":module-domain-core")
 
         implementation "org.springframework.boot:spring-boot-starter-security"
+    }
+}
+
+def queryDslProjects = [project(":module-domain-core")]
+configure(queryDslProjects) {
+    dependencies {
+
+        annotationProcessor("com.querydsl:querydsl-apt:${dependencyManagement.importedProperties["querydsl.version"]}:jpa") // querydsl JPAAnnotationProcessor 사용 지정
+        annotationProcessor("jakarta.persistence:jakarta.persistence-api") // java.lang.NoClassDefFoundError(javax.annotation.Entity) 발생 대응
+        annotationProcessor("jakarta.annotation:jakarta.annotation-api") // java.lang.NoClassDefFoundError (javax.annotation.Generated) 발생 대응
+    }
+
+    // clean 태스크 실행시 QClass 삭제
+    clean {
+        delete file("src/main/generated") // intelliJ Annotation processor Q객체 생성 위치
     }
 }

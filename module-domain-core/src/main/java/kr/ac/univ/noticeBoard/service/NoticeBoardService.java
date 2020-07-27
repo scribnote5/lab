@@ -2,6 +2,7 @@ package kr.ac.univ.noticeBoard.service;
 
 import kr.ac.univ.noticeBoard.domain.NoticeBoard;
 import kr.ac.univ.noticeBoard.repository.NoticeBoardRepository;
+import kr.ac.univ.noticeBoard.repository.NoticeBoardRepositoryImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,9 +14,11 @@ import javax.transaction.Transactional;
 @Service
 public class NoticeBoardService {
     private final NoticeBoardRepository noticeBoardRepository;
+    private final NoticeBoardRepositoryImpl noticeBoardRepositoryImpl;
 
-    public NoticeBoardService(NoticeBoardRepository noticeBoardRepository) {
+    public NoticeBoardService(NoticeBoardRepository noticeBoardRepository, NoticeBoardRepositoryImpl noticeBoardRepositoryImpl) {
         this.noticeBoardRepository = noticeBoardRepository;
+        this.noticeBoardRepositoryImpl = noticeBoardRepositoryImpl;
     }
 
     public Page<NoticeBoard> findNoticeBoardList(Pageable pageable) {
@@ -30,6 +33,7 @@ public class NoticeBoardService {
     }
 
     public NoticeBoard findNoticeBoardByIdx(Long idx) {
+        noticeBoardRepositoryImpl.updateViewCountById(idx);
 
         return noticeBoardRepository.findById(idx).orElse(new NoticeBoard());
     }
