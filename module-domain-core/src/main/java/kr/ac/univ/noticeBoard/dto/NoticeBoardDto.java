@@ -19,4 +19,7 @@ public class NoticeBoardDto extends CommonDto {
     private String content;
     private ActiveStatus activeStatus;
     private Long viewCount;
+
+    /* newIcon */
+    private boolean isNewIcon;
 }
