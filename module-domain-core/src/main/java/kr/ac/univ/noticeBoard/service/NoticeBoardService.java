@@ -39,9 +39,9 @@ public class NoticeBoardService {
         return noticeBoardDtoList;
     }
 
-    public Long insertNoticeBoard(NoticeBoard noticeBoard) {
+    public Long insertNoticeBoard(NoticeBoardDto noticeBoardDto) {
 
-        return noticeBoardRepository.save(noticeBoard).getIdx();
+        return noticeBoardRepository.save(NoticeBoardMapper.INSTANCE.toEntity(noticeBoardDto)).getIdx();
     }
 
     public NoticeBoardDto findNoticeBoardByIdx(Long idx) {
@@ -51,8 +51,11 @@ public class NoticeBoardService {
     }
 
     @Transactional
-    public Long updateNoticeBoard(Long idx, NoticeBoard noticeBoard) {
-        noticeBoardRepository.getOne(idx).update(noticeBoard);
+    public Long updateNoticeBoard(Long idx, NoticeBoardDto noticeBoardDto) {
+        NoticeBoard persistNoticeBoard = noticeBoardRepository.getOne(idx);
+        NoticeBoard noticeBoard = NoticeBoardMapper.INSTANCE.toEntity(noticeBoardDto);
+
+        persistNoticeBoard.update(noticeBoard);
 
         return noticeBoardRepository.save(noticeBoard).getIdx();
     }

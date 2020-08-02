@@ -29,10 +29,10 @@ public class NoticeBoard extends CommonAudit {
     private Long viewCount = 0L;
 
     @Builder
-    public NoticeBoard(String title, String content, ActiveStatus activeStatus, Long viewCount) {
+    public NoticeBoard(Long idx, String title, String content, ActiveStatus activeStatus) {
+        this.idx = idx;
         this.title = title;
         this.content = content;
-        this.viewCount = viewCount;
         this.activeStatus = activeStatus;
     }
 
