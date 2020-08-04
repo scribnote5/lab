@@ -37,7 +37,6 @@ public class QueryDslTest {
                 .forEach(index -> noticeBoardRepository.save(NoticeBoard.builder()
                         .title("게시글" + index)
                         .content("컨텐츠")
-                        .viewCount(0L)
                         .activeStatus(ActiveStatus.ACTIVE)
                         .build()));
     }

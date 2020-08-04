@@ -5,6 +5,15 @@
     <th:block th:replace="layout/css.html"></th:block>
 
     <title>NoticeBoard Form</title>
+
+    <style>
+        .fileDrop {
+            width: 300px;
+            height: 75px;
+            margin: 10px 0px 10px;
+            border: 1px dotted blue;
+        }
+    </style>
 </head>
 <body>
 <!-- header -->
@@ -24,7 +33,7 @@
                 <col width="85%"/>
             </colgroup>
             <tr>
-                <th style="padding:13px 0 0 15px">Active Status</th>
+                <th>Active Status</th>
                 <td>
                     <div class="pull-left">
                         <select name="activeStatus" th:field="*{activeStatus}" class="form-control input-sm">
@@ -35,17 +44,17 @@
                 </td>
             </tr>
             <tr th:if="*{idx}">
-                <th style="padding:13px 0 0 15px;">Created Date</th>
+                <th>Created Date</th>
                 <td><input type="text" class="col-md-1 form-control input-sm" readonly="readonly"
                            th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
             </tr>
             <tr th:if="*{idx}">
-                <th style="padding:13px 0 0 15px;">Modified Date</th>
+                <th>Modified Date</th>
                 <td><input type="text" class="col-md-1 form-control input-sm" readonly="readonly"
                            th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
             </tr>
             <tr>
-                <th style="padding:13px 0 0 15px;">Title</th>
+                <th>Title</th>
                 <td><input type="text" name="title" id="title" class="col-md-1 form-control input-sm"
                            th:value="*{title}"/></td>
             </tr>
@@ -53,7 +62,38 @@
                 <!--<td colspan="2"><textarea name="content" id="content" class="col-md-1 form-control input-sm"
                                           maxlength="140" rows="7" style="height: 200px; resize: none;"
                                           th:text="*{content}"></textarea></td>-->
-                <td colspan="2"><textarea name="content" id="summernote" class="summernote" th:text="*{content}"></textarea></td>
+                <td colspan="2"><textarea name="content" id="summernote" class="summernote"
+                                          th:text="*{content}"></textarea></td>
+            </tr>
+            <tr>
+                <th>Attached File</th>
+                <td>
+                    <input type="file" multiple="multiple" name="file" id="file"/>
+                    <div id="fileDrop" class="fileDrop"></div>
+                </td>
+            </tr>
+            <tr>
+                <th>Total file size</th>
+                <td>
+                    <div><span id="totalFileSize"> 0 MB</span>, Up to 20 MB</div>
+                </td>
+            <tr>
+                <th>Uplaod Attached File</th>
+                <td>
+                    <div id="attachedFileList"></div>
+                </td>
+            </tr>
+            <tr>
+                <th>Uploaded Attached File</th>
+                <td>
+                    <div id="uploadedAttachedFileList" th:each="attachedFile : *{attachedFileList}">
+                        <div th:id="imgData + ${attachedFileStat.index}">
+                            <span th:text="${attachedFile.fileName} + ',&nbsp;' + 'File Size: ' + ${attachedFile.fileSize} + '&nbsp;'"></span>
+                            <img th:attr="src=@{|/images/cancel.png|}, onclick=|deleteFile('${attachedFileStat.index}','${attachedFile.idx}','${attachedFile.savedFileName}')|"
+                                 th:style="'width: 16px; height: 16px'"/>
+                        </div>
+                    </div>
+                </td>
             </tr>
             <tr>
                 <td></td>
@@ -85,7 +125,13 @@
 
 <!-- javascript -->
 <script>
-    $(document).ready(function() {
+    var totalFileSize = 0;
+    var insertFileArray = [];
+    var deleteFileArray = [];
+    var imgDataId = 0;
+    var exit = null;
+
+    $(document).ready(function () {
         <!-- summernote setting -->
         $('#summernote').summernote({
             height: 250,	// 에디터 높이
@@ -96,13 +142,91 @@
             placeholder: "The editor's max input size of bytes is 16777215."	//placeholder 설정
 
         });
+
+        <!-- File Drop -->
+        $("#fileDrop").on("dragenter dragover", function (event) {
+            event.preventDefault(); // 기본 이벤트 발생을 막음
+        });
     });
+
+    /* input tag event */
+    $('#file').change(function () {
+        var files = document.getElementsByName("file")[0].files;
+
+        for (var i = 0; i < files.length; i++) {
+            insertFileArray.push(files[i]);
+            document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
+
+            $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
+                + '<span>'
+                + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size) + "&nbsp;"
+                + '<img src="/images/cancel.png" style="width: 16px; height: 16px" onClick="cancelFile(' + imgDataId + ')" />'
+                + '</span>'
+                + '</div>');
+
+            imgDataId++;
+        }
+    });
+
+    /* Drag & drop event */
+    $("#fileDrop").on("drop", function (event) {
+        event.preventDefault(); // 기본 효과를 막음
+        // 드래그된 파일의 정보
+        // event : jQuery의 이벤트
+        // originalEvent : javascript의 이벤트
+        var files = event.originalEvent.dataTransfer.files;
+
+        for (var i = 0; i < files.length; i++) {
+            insertFileArray.push(files[i]);
+            document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
+
+            $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
+                + '<span>'
+                + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size) + "&nbsp;"
+                + '<img src="/images/cancel.png" style="width: 16px; height: 16px" onClick="cancelFile(' + imgDataId + ')" />'
+                + '</span>'
+                + '</div>');
+
+            imgDataId++;
+        }
+    });
+
+    // 새로 업로드한 파일을 취소하는 경우
+    function cancelFile(fileId) {
+        $('#imgData' + fileId).remove();
+
+        insertFileArray[fileId] = null;
+    }
+
+    // 기존 업로드한 파일을 삭제하는 경우
+    function deleteFile(fileId, idx, savedFileName) {
+        $('#imgData' + fileId).remove();
+
+        deleteFileArray.push(idx);
+    }
+
+    function deleteNoticeBoard(noticeBoardIdx) {
+        // 게시글 삭제
+        $.ajax({
+            url: "/api/notice-boards/" + noticeBoardIdx,
+            type: "delete",
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                console.log("NoticeBoard delete success.");
+            })
+            .fail(function (msg) {
+                console.log("NoticeBoard delete fail.");
+            });
+    }
 </script>
 
 <script th:if="!${noticeBoardDto?.idx}">
     $('#insert').click(function () {
         var jsonData = $("#form").serializeObject();
-        var noticeBoardDtoIdx;
+        var noticeBoardIdx;
 
         // 게시글 업로드
         $.ajax({
@@ -114,11 +238,41 @@
             async: false,
         })
             .done(function (msg) {
-                location.href = "/notice-board?idx=" + msg;
+                noticeBoardIdx = msg;
+                exit = false;
             })
             .fail(function (msg) {
-
+                exit = true;
             });
+
+        if (exit) return false;
+
+        // 파일 업로드
+        var formData = new FormData();
+
+        for (var i = 0; i < insertFileArray.length; i++) {
+            formData.append("files", insertFileArray[i]);
+        }
+
+        formData.append("idx", noticeBoardIdx);
+
+        $.ajax({
+            url: "http://localhost:8081/api/notice-boards/attachedFile",
+            type: "post",
+            data: formData,
+            dataType: "text",
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            async: false,
+        })
+            .done(function (msg) {
+                location.href = "/notice-board?idx=" + noticeBoardIdx;
+            })
+            .fail(function (msg) {
+                deleteNoticeBoard(noticeBoardIdx);
+            });
+
     });
 </script>
 
@@ -137,11 +291,69 @@
             async: false,
         })
             .done(function (msg) {
+                exit = false;
+
+            })
+            .fail(function (msg) {
+                exit = true;
+            });
+
+        if (exit) return false;
+
+        // 만일 파일이 수정되지 않은 경우 '파일 업로드' 및 '파일 삭제'를 수행하지 않음
+        if (insertFileArray.length == 0 && deleteFileArray.length == 0) {
+            location.href = '/notice-board?idx=' + document.getElementsByName("idx")[0].value;
+        }
+
+        // 파일 삭제
+        if (deleteFileArray.length > 0) {
+            $.ajax({
+                url: "http://localhost:8081/api/notice-boards/attachedFile",
+                type: "delete",
+                data: JSON.stringify(deleteFileArray),
+                contentType: "application/json",
+                async: false,
+            })
+                .done(function (msg) {
+                    console.log("AttachedFile delete success.");
+                    exit = false;
+                })
+                .fail(function (msg) {
+                    console.log("AttachedFile delete fail.");
+                    exit = true;
+                });
+        }
+
+        if (exit) return false;
+
+        if (insertFileArray.length <= 0) location.href = "/notice-board?idx=" + document.getElementsByName("idx")[0].value;
+
+        // 파일 업로드
+        var formData = new FormData();
+
+        for (var i = 0; i < insertFileArray.length; i++) {
+            formData.append("files", insertFileArray[i]);
+        }
+
+        formData.append("idx", idx);
+
+        $.ajax({
+            url: "http://localhost:8081/api/notice-boards/attachedFile",
+            type: "post",
+            data: formData,
+            dataType: "text",
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            async: false,
+        })
+            .done(function (msg) {
                 location.href = "/notice-board?idx=" + document.getElementsByName("idx")[0].value;
             })
             .fail(function (msg) {
 
-            });
+            })
+
     });
 </script>
 

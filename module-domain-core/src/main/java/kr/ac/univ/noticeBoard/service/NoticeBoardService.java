@@ -31,7 +31,7 @@ public class NoticeBoardService {
         noticeBoardDtoList = new PageImpl<NoticeBoardDto>(NoticeBoardMapper.INSTANCE.toDto(noticeBoardList.getContent()), pageable, noticeBoardList.getTotalElements());
 
         // NewIcon 판별
-        for(NoticeBoardDto noticeBoardDto : noticeBoardDtoList) {
+        for (NoticeBoardDto noticeBoardDto : noticeBoardDtoList) {
             // 추후 변경
             noticeBoardDto.setNewIcon(NewIconCheck.isNew(LocalDateTime.now()));
         }

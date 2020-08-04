@@ -1,5 +1,8 @@
 package kr.ac.univ.controller;
 
+import kr.ac.univ.noticeBoard.dto.NoticeBoardDto;
+import kr.ac.univ.noticeBoard.dto.mapper.NoticeBoardMapper;
+import kr.ac.univ.noticeBoard.service.NoticeBoardAttachedFileService;
 import kr.ac.univ.noticeBoard.service.NoticeBoardService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -13,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/notice-board")
 public class NoticeBoardController {
     private final NoticeBoardService noticeBoardService;
+    private final NoticeBoardAttachedFileService noticeBoardAttachedFileService;
 
-    public NoticeBoardController(NoticeBoardService noticeBoardService) {
+    public NoticeBoardController(NoticeBoardService noticeBoardService, NoticeBoardAttachedFileService noticeBoardAttachedFileService) {
         this.noticeBoardService = noticeBoardService;
+        this.noticeBoardAttachedFileService = noticeBoardAttachedFileService;
     }
 
     // List
@@ -29,7 +34,12 @@ public class NoticeBoardController {
     // Form Update
     @GetMapping("/form{idx}")
     public String noticeBoardForm(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
-        model.addAttribute("noticeBoardDto", noticeBoardService.findNoticeBoardByIdx(idx));
+        NoticeBoardDto noticeBoardDto = null;
+
+        noticeBoardDto = noticeBoardService.findNoticeBoardByIdx(idx);
+        noticeBoardDto = noticeBoardAttachedFileService.findAttachedFileByNoticeBoardIdx(idx, noticeBoardDto);
+
+        model.addAttribute("noticeBoardDto", noticeBoardDto);
 
         return "/noticeBoard/form";
     }
@@ -37,7 +47,12 @@ public class NoticeBoardController {
     // Read
     @GetMapping({"", "/"})
     public String noticeBoardRead(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
-        model.addAttribute("noticeBoardDto", noticeBoardService.findNoticeBoardByIdx(idx));
+        NoticeBoardDto noticeBoardDto = null;
+
+        noticeBoardDto = noticeBoardService.findNoticeBoardByIdx(idx);
+        noticeBoardDto = noticeBoardAttachedFileService.findAttachedFileByNoticeBoardIdx(idx, noticeBoardDto);
+
+        model.addAttribute("noticeBoardDto", noticeBoardDto);
 
         return "/noticeBoard/read";
     }
