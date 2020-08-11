@@ -1,5 +1,6 @@
 package kr.ac.univ.noticeBoard.service;
 
+import kr.ac.univ.common.dto.SearchDto;
 import kr.ac.univ.noticeBoard.domain.NoticeBoard;
 import kr.ac.univ.noticeBoard.dto.NoticeBoardDto;
 import kr.ac.univ.noticeBoard.dto.mapper.NoticeBoardMapper;
@@ -22,12 +23,27 @@ public class NoticeBoardService {
         this.noticeBoardRepositoryImpl = noticeBoardRepositoryImpl;
     }
 
-    public Page<NoticeBoardDto> findNoticeBoardList(Pageable pageable) {
+    public Page<NoticeBoardDto> findNoticeBoardList(Pageable pageable, SearchDto searchDto) {
         Page<NoticeBoard> noticeBoardList = null;
         Page<NoticeBoardDto> noticeBoardDtoList = null;
 
         pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1, pageable.getPageSize(), Sort.Direction.DESC, "idx");
-        noticeBoardList = noticeBoardRepository.findAll(pageable);
+
+        switch (searchDto.getSearchType()) {
+            case "TITLE":
+                noticeBoardList = noticeBoardRepository.findAllByTitleContaining(pageable, searchDto.getKeyword());
+                break;
+            case "CONTENT":
+                noticeBoardList = noticeBoardRepository.findAllByContentContaining(pageable, searchDto.getKeyword());
+                break;
+            case "ID":
+                noticeBoardList = noticeBoardRepository.findAllByCreatedByContaining(pageable, searchDto.getKeyword());
+                break;
+            default:
+                noticeBoardList = noticeBoardRepository.findAll(pageable);
+                break;
+        }
+
         noticeBoardDtoList = new PageImpl<NoticeBoardDto>(NoticeBoardMapper.INSTANCE.toDto(noticeBoardList.getContent()), pageable, noticeBoardList.getTotalElements());
 
         // NewIcon 판별

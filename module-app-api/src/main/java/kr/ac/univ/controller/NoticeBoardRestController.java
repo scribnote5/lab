@@ -1,6 +1,5 @@
 package kr.ac.univ.controller;
 
-import kr.ac.univ.noticeBoard.domain.NoticeBoard;
 import kr.ac.univ.noticeBoard.dto.NoticeBoardDto;
 import kr.ac.univ.noticeBoard.service.NoticeBoardAttachedFileService;
 import kr.ac.univ.noticeBoard.service.NoticeBoardService;

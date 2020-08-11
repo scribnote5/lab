@@ -1,7 +1,7 @@
 package kr.ac.univ.controller;
 
+import kr.ac.univ.common.dto.SearchDto;
 import kr.ac.univ.noticeBoard.dto.NoticeBoardDto;
-import kr.ac.univ.noticeBoard.dto.mapper.NoticeBoardMapper;
 import kr.ac.univ.noticeBoard.service.NoticeBoardAttachedFileService;
 import kr.ac.univ.noticeBoard.service.NoticeBoardService;
 import org.springframework.data.domain.Pageable;
@@ -25,8 +25,8 @@ public class NoticeBoardController {
 
     // List
     @GetMapping("/list")
-    public String noticeBoardList(@PageableDefault Pageable pageable, Model model) {
-        model.addAttribute("noticeBoardDtoList", noticeBoardService.findNoticeBoardList(pageable));
+    public String noticeBoardList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
+        model.addAttribute("noticeBoardDtoList", noticeBoardService.findNoticeBoardList(pageable, searchDto));
 
         return "/noticeBoard/list";
     }

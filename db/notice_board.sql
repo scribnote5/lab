@@ -1,5 +1,5 @@
 /* notice_board table */
-create table notice_board
+CREATE TABLE notice_board
 (
     idx                bigint auto_increment    primary key,
     created_by         varchar(255) null,

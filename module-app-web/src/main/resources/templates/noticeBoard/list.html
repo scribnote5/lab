@@ -12,74 +12,97 @@
 
 <div class="container">
     <div class="page-header">
-        <h1>NoticeBoard Lists</h1>
+        <h1>NoticeBoard List</h1>
     </div>
 
-    <br/> <br/> <br/>
-    <div id="mainHide">
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th class="col-md-1">No.</th>
-                <th class="col-md-3">Title</th>
-                <th class="col-md-1">ID</th>
-                <th class="col-md-2">Created Date</th>
-                <th class="col-md-2">Modified Date</th>
-                <th class="col-md-2">Active Status</th>
-                <th class="col-md-1">View Count</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="noticeBoardDto : ${noticeBoardDtoList}">
-                <td th:text="${noticeBoardDto.idx}"></td>
-                <td>
-                    <a th:href="'/notice-board?idx='+${noticeBoardDto.idx}" th:text="${noticeBoardDto.title}"></a>
-                    <img th:if="${noticeBoardDto.newIcon}" th:attr="src=@{|/images/new_icon.png|}"
-                         th:style="'width: 15px; height: 15px'"/>
-                </td>
-                <td th:text="${noticeBoardDto.createdBy}">></td>
-                <td th:text="${#temporals.format(noticeBoardDto.createdDate,'yyyy-MM-dd HH:mm')}"></td>
-                <td th:text="${#temporals.format(noticeBoardDto.lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
+    <form name="form" id="form" th:object="${searchDto}" action="#">
+        <div class="pull-right">
+            <div class="pull-left" style="width: 100px; margin: 10px 10px;">
+                <select name="searchType" th:field="*{searchType}" class="form-control input-sm">
+                    <option th:value="TITLE">Title</option>
+                    <option th:value="CONTENT">Content</option>
+                    <option th:value="ID">ID</option>
+                </select>
+            </div>
 
-                <td th:if="${noticeBoardDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active"></td>
-                <td th:if="${noticeBoardDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"></td>
+            <div class="pull-left" style="width: 200px; margin: 10px 10px; float: left;">
+                <input type="text" name="keyword" class="col-md-1 form-control input-sm"
+                       th:value="${searchDto?.keyword}"/>
+            </div>
 
-                <td th:text="${noticeBoardDto.viewCount}"></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    <br>
+            <div class="pull-left" style="width: 100px; margin: 10px 0; float:left;">
+                <button id="search" type="button" class="btn btn-primary btn-block">Search</button>
+            </div>
+        </div>
 
-    <div class="pull-right" style="width: 100px; margin: 10px 0;">
-        <a href="/notice-board/form" class="btn btn-primary btn-block">Register</a>
-    </div>
+        <br/> <br/> <br/>
+        <div id="mainHide">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th class="col-md-1">No.</th>
+                    <th class="col-md-3">Title</th>
+                    <th class="col-md-1">ID</th>
+                    <th class="col-md-2">Created Date</th>
+                    <th class="col-md-2">Modified Date</th>
+                    <th class="col-md-2">Active Status</th>
+                    <th class="col-md-1">View Count</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="noticeBoardDto : ${noticeBoardDtoList}">
+                    <td th:text="${noticeBoardDto.idx}"></td>
+                    <td>
+                        <a th:href="'/notice-board?idx='+${noticeBoardDto.idx}" th:text="${noticeBoardDto.title}"></a>
+                        <img th:if="${noticeBoardDto.newIcon}" th:attr="src=@{|/images/new_icon.png|}"
+                             th:style="'width: 15px; height: 15px'"/>
+                    </td>
+                    <td th:text="${noticeBoardDto.createdBy}">></td>
+                    <td th:text="${#temporals.format(noticeBoardDto.createdDate,'yyyy-MM-dd HH:mm')}"></td>
+                    <td th:text="${#temporals.format(noticeBoardDto.lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
 
-    <!-- Pagination -->
-    <nav aria-label="Page navigation" style="text-align: center;">
-        <ul class="pagination"
-            th:with="startNumber=${T(Math).floor(noticeBoardDtoList.number/10)}*10+1, endNumber=(${noticeBoardDtoList.totalPages} > ${startNumber}+9) ? ${startNumber}+9 : ${noticeBoardDtoList.totalPages}">
-            <li>
-                <a aria-label="Previous" href="/notice-board/list?page=1">&laquo;</a>
-            </li>
-            <li th:style="${noticeBoardDtoList.first} ? 'display:none'">
-                <a th:href="@{/notice-board/list(page=${noticeBoardDtoList.number})}">&lsaquo;</a>
-            </li>
+                    <td th:if="${noticeBoardDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active"></td>
+                    <td th:if="${noticeBoardDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"></td>
 
-            <li th:each="page :${#numbers.sequence(startNumber, endNumber)}"
-                th:class="(${page} == ${noticeBoardDtoList.number}+1) ? 'active'">
-                <a th:href="@{/notice-board/list(page=${page})}" th:text="${page}"><span class="sr-only"></span></a>
-            </li>
+                    <td th:text="${noticeBoardDto.viewCount}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <br>
 
-            <li th:style="${noticeBoardDtoList.last} ? 'display:none'">
-                <a th:href="@{/notice-board/list(page=${noticeBoardDtoList.number}+2)}">&rsaquo;</a>
-            </li>
-            <li>
-                <a aria-label="Next" th:href="@{/notice-board/list(page=${noticeBoardDtoList.totalPages})}">&raquo;</a>
-            </li>
-        </ul>
-    </nav>
-    <!-- /Pagination -->
+        <div class="pull-right" style="width: 100px; margin: 10px 0;">
+            <a href="/notice-board/form" class="btn btn-primary btn-block">Register</a>
+        </div>
+
+        <!-- Pagination -->
+        <nav aria-label="Page navigation" style="text-align: center;">
+            <ul class="pagination"
+                th:with="startNumber=${T(Math).floor(noticeBoardDtoList.number/10)}*10+1, endNumber=(${noticeBoardDtoList.totalPages} > ${startNumber}+9) ? ${startNumber}+9 : (${noticeBoardDtoList.totalPages} == 0 ? 1 : ${noticeBoardDtoList.totalPages})">
+                <li>
+                    <a aria-label="Previous"
+                       th:href="@{/notice-board/list(page=1,searchType=*{searchType},keyword=*{keyword})}">&laquo;</a>
+                </li>
+                <li th:style="${noticeBoardDtoList.first} ? 'display:none'">
+                    <a th:href="@{/notice-board/list(page=${noticeBoardDtoList.number},searchType=*{searchType},keyword=*{keyword})}">&lsaquo;</a>
+                </li>
+
+                <li th:each="page :${#numbers.sequence(startNumber, endNumber)}"
+                    th:class="(${page} == ${noticeBoardDtoList.number}+1) ? 'active'">
+                    <a th:href="@{/notice-board/list(page=${page},searchType=*{searchType},keyword=*{keyword})}"
+                       th:text="${page}"><span class="sr-only"></span></a>
+                </li>
+
+                <li th:style="${noticeBoardDtoList.last} ? 'display:none'">
+                    <a th:href="@{/notice-board/list(page=${noticeBoardDtoList.number}+2,searchType=*{searchType},keyword=*{keyword})}">&rsaquo;</a>
+                </li>
+                <li>
+                    <a aria-label="Next"
+                       th:href="@{/notice-board/list(page=${noticeBoardDtoList.totalPages},searchType=*{searchType},keyword=*{keyword})}">&raquo;</a>
+                </li>
+            </ul>
+        </nav>
+        <!-- /Pagination -->
 
     </form>
 </div>

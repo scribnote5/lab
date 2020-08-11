@@ -1,12 +1,5 @@
 package kr.ac.univ.controller;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -16,9 +9,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 @RestController
 @RequestMapping("/api/attachedFiles")
-public class AttachedFileController {
+public class AttachedFileRestController {
     @GetMapping("/download/{savedFileName}")
     public ResponseEntity<?> downloadAttachedFile(@PathVariable("savedFileName") String savedFileName) throws Exception {
         // 파일 이름이 한글인 경우 인코딩이 깨지지 않도록 변경
