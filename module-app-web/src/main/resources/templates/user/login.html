@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- css -->
+    <th:block th:replace="layout/css.html"></th:block>
+
+    <title>Login</title>
+</head>
+<body>
+<!-- header -->
+<div class="container">
+    <h1>Login</h1>
+    <hr>
+    <form action="/user/login" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <input type="text" name="username" th:value="*{username}" placeholder="Enter the Id.">
+        <input type="password" name="password" placeholder="Enter the passwords.">
+        <span th:text="*{errormsg}"> </span>
+        <button type="submit">Login</button>
+    </form>
+</div>
+</body>
+</html>

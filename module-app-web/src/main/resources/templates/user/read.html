@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- css -->
+    <th:block th:replace="layout/css.html"></th:block>
+
+    <title>Login Form</title>
+</head>
+<body>
+<!-- header -->
+<div th:replace="layout/header::header"></div>
+
+<div class="container" >
+    <form name="form" id="form" th:object="${userDto}" action="#"  >
+
+        <div class="page-header">
+            <h1>User Read</h1>
+        </div>
+        <br/>
+        <table class="table" style="table-layout:fixed; word-break:break-all;">
+            <colgroup>
+                <col width="15%" />
+                <col width="35%" />
+                <col width="15%" />
+                <col width="35%" />
+            </colgroup>
+
+            <tr>
+                <th colspan="2" style="padding:13px 0 13px 15px; text-align: center">Personal Information</th>
+            </tr>
+            <tr>
+                <th style="padding:13px 0 0 15px;">User Id</th>
+
+                <td><span id="username" class="col-md-1 form-control input-sm" th:text="*{username}"></span></td>
+            </tr>
+
+            <tr>
+                <th style="padding:13px 0 0 15px;">Photo</th>
+                <td id="imgData">
+                    Uploaded Photo File:<br>
+                    <span th:if="*{attachedFileList.size()} == 0" th:text="No + ' ' + file."></span>
+                    <span th:if="*{attachedFileList.size()} != 0" th:attr="onclick=|location.href='http://localhost:8081/api/attachedFiles/download/*{attachedFileList[0].savedFileName}'|"
+                          th:text="*{attachedFileList[0].fileName} + ',&nbsp;' + 'File size: ' + *{attachedFileList[0].fileSize}"></span>
+                </td>
+                <td id="imgPreview">
+                    <img th:if="*{attachedFileList.size()} == 0" th:attr="src=@{http://localhost:8080/images/no_preview_available.jpg}" width="125px" height="125px" />
+                    <img th:if="*{attachedFileList.size()} != 0" th:attr="src=@{|http://localhost:8081/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}" width="125px" height="125px" />
+                </td>
+            </tr>
+            <tr>
+                <th style="padding:13px 0 0 15px;">Korean Name</th>
+                <td><span id="koreanName" class="col-md-1 form-control input-sm" th:text="*{koreanName}"></span></td>
+            </tr>
+            <tr>
+                <th style="padding:13px 0 0 15px;">English Name</th>
+                <td><span id="EnglishName" class="col-md-1 form-control input-sm" th:text="*{englishName}"></span></td>
+            </tr>
+            <tr>
+                <th style="padding:13px 0 0 15px;">Gender</th>
+                <td>
+                    <span class="col-md-1 form-control input-sm" th:if="*{gender?.name() == 'MALE'}" th:text="Male"> </span>
+                    <span class="col-md-1 form-control input-sm" th:if="*{gender?.name() == 'FEMALE'}" th:text="Female"> </span>
+                </td>
+            </tr>
+            <tr>
+                <th style="padding:13px 0 0 15px;">Birth Date</th>
+                <td><span class="col-md-1 form-control input-sm" th:text="*{birthDate}"> </span></td>
+            </tr>
+            <tr>
+                <th style="padding:13px 0 0 15px;">Email</th>
+                <td><span class="col-md-1 form-control input-sm" th:text="*{email}"> </span></td>
+            </tr>
+            <tr>
+                <th style="padding:13px 0 0 15px;">Private Email</th>
+                <td><span class="col-md-1 form-control input-sm" th:text="*{privateEmail}"> </span></td>
+            </tr>
+            <tr>
+                <th style="padding:13px 0 0 15px;">Messanger Id</th>
+                <td><span class="col-md-1 form-control input-sm" th:text="*{messangerId}"> </span></td>
+            </tr>
+            <tr>
+                <th style="padding:13px 0 0 15px;">Contact</th>
+                <td><span class="col-md-1 form-control input-sm" th:text="*{contact}"> </span></td>
+            </tr>
+            <tr>
+                <th style="padding:13px 0 0 15px;">User Type</th>
+                <td>
+                    <span class="col-md-1 form-control input-sm" th:if="*{userType?.name() == 'FACULTY'}" th:text="Faculty"> </span>
+                    <span class="col-md-1 form-control input-sm" th:if="*{userType?.name() == 'FULL_TIME_PhD'}" th:text="'Ph.D. ' + ' - ' + 'Full Time'"> </span>
+                    <span class="col-md-1 form-control input-sm" th:if="*{userType?.name() == 'PART_TIME_PhD'}" th:text="'Ph.D. ' + ' - ' + 'Part Time'"> </span>
+                    <span class="col-md-1 form-control input-sm" th:if="*{userType?.name() == 'FULL_TIME_MS'}" th:text="'M.S.' + ' - ' + 'Full Time'"> </span>
+                    <span class="col-md-1 form-control input-sm" th:if="*{userType?.name() == 'PART_TIME_MS'}" th:text="'M.S.' + '-' + 'Part Time'"> </span>
+                    <span class="col-md-1 form-control input-sm" th:if="*{userType?.name() == 'BS'}" th:text="B.S."> </span>
+                </td>
+            </tr>
+            <tr>
+                <th style="padding:13px 0 0 15px;">Status</th>
+                <td>
+                    <span class="col-md-1 form-control input-sm" th:if="*{userStatus?.name() == 'ATTENDING'}" th:text="Attending"> </span>
+                    <span class="col-md-1 form-control input-sm" th:if="*{userStatus?.name() == 'GRADUATED'}" th:text="Graduated"> </span>
+                </td>
+            </tr>
+            <tr>
+                <th style="padding:13px 0 0 15px;">Self Introduction</th>
+                <!-- summernote -->
+                <td colspan="4"><span id="introduction" class="col-md-1 form-control input-sm" style="height: 250px; overflow: auto" th:text="*{introduction}"></span></td>
+            </tr>
+
+
+            <tr>
+                <th colspan="2" style="padding:13px 0 13px 15px; text-align: center">Additional Information</th>
+            </tr>
+            <tr>
+                <th style="padding:13px 0 0 15px;">Admission Date</th>
+                <td><span class="col-md-1 form-control input-sm" th:text="*{admissionDate}"> </span></td>
+            </tr>
+            <tr>
+                <th style="padding:13px 0 0 15px;">Graduated Date</th>
+                <td><span class="col-md-1 form-control input-sm" th:text="*{graduatedDate}"> </span></td>
+            </tr>
+            <tr>
+                <th style="padding:13px 0 0 15px;">Web Page</th>
+                <td><span class="col-md-1 form-control input-sm" th:text="*{webPage}"> </span></td>
+            </tr>
+            <tr>
+                <th style="padding:13px 0 0 15px;">Workplace</th>
+                <td><span class="col-md-1 form-control input-sm" th:text="*{workplace}"> </span></td>
+            </tr>
+
+
+            <tr>
+                <th colspan="2" style="padding:13px 0 13px 15px; text-align: center">Other Information</th>
+            </tr>
+            <tr>
+                <th style="padding:13px 0 0 15px;">Active Status</th>
+                <td>
+                    <span class="col-md-1 form-control input-sm" th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active"> </span>
+                    <span class="col-md-1 form-control input-sm" th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"> </span>
+                </td>
+            </tr>
+            <tr>
+                <th style="padding:13px 0 0 15px;">Authority Type</th>
+                <td>
+                    <span class="col-md-1 form-control input-sm" th:if="*{authorityType?.name() == 'MANAGER'}" th:text="Manager"> </span>
+                    <span class="col-md-1 form-control input-sm" th:if="*{authorityType?.name() == 'GENERAL'}" th:text="General"> </span>
+                    <span class="col-md-1 form-control input-sm" th:if="*{authorityType?.name() == 'NON_USER'}" th:text="Non + ' ' + User"> </span>
+                </td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+
+        </table>
+        <div class="pull-left">
+            <a href="/user/list" class="btn btn-default">Move to List</a>
+        </div>
+        <div class="pull-right">
+            <a th:href="'/user/form?idx='+*{idx}" class="btn btn-info">Update</a>
+            <button type="button" class="btn btn-danger" id="delete">Delete</button>
+        </div>
+
+        <!-- input type="hidden" -->
+        <input type="hidden" name="idx" th:value="*{idx}"/>
+
+    </form>
+</div>
+
+<!-- footer -->
+<div th:replace="layout/footer::footer"></div>
+
+<!-- script file -->
+<th:block th:replace="layout/script.html"></th:block>
+
+<!-- javascript -->
+<script th:inline="javascript">
+    $(document).ready(function() {
+        document.getElementById("introduction").innerHTML = [[${userDto.introduction}]];
+    });
+
+    $('#delete').click(function () {
+        if(!confirm("Do you want to delete user?")) {
+            return true;
+        }
+
+        // 회원 삭제
+        $.ajax({
+            url: "http://localhost:8081/api/users/" + document.getElementsByName("idx")[0].value,
+            type: "delete",
+            dataType: "text",
+            contentType: "application/json",
+
+            success: function () {
+                alert("Delete user is successful.");
+                location.href = "/user/list";
+            },
+            error: function () {
+                alert("Delete user is fail.");
+            }
+        });
+    });
+</script>
+</body>
+</html>

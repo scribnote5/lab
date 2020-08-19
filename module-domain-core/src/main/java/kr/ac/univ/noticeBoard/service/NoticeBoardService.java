@@ -61,7 +61,7 @@ public class NoticeBoardService {
     }
 
     public NoticeBoardDto findNoticeBoardByIdx(Long idx) {
-        noticeBoardRepositoryImpl.updateViewCountById(idx);
+        noticeBoardRepositoryImpl.updateViewCountByIdx(idx);
 
         return NoticeBoardMapper.INSTANCE.toDto(noticeBoardRepository.findById(idx).orElse(new NoticeBoard()));
     }

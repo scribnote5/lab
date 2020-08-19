@@ -32,7 +32,7 @@ public class NoticeBoardRepositoryImpl extends QuerydslRepositorySupport {
                 .fetch();
     }
 
-    public long updateViewCountById(Long idx) {
+    public long updateViewCountByIdx(Long idx) {
         QNoticeBoard noticeBoard = QNoticeBoard.noticeBoard;
         /*
          * UPDATE notice_board

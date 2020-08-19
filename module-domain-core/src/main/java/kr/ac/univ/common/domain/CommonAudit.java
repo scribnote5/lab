@@ -1,22 +1,17 @@
 package kr.ac.univ.common.domain;
 
-import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.ToString;
 
-import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import lombok.Getter;
-import lombok.ToString;
+import java.time.LocalDateTime;
 
 @MappedSuperclass
 @Getter
 @ToString
-@EntityListeners(AuditingEntityListener.class)
 public abstract class CommonAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

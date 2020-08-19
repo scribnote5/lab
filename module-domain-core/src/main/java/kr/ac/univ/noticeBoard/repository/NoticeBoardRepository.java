@@ -12,5 +12,5 @@ public interface NoticeBoardRepository extends JpaRepository<NoticeBoard, Long> 
 
     Page<NoticeBoard> findAllByContentContaining(Pageable pageable, String content);
 
-    Page<NoticeBoard> findAllByCreatedByContaining(Pageable pageable, String memberId);
+    Page<NoticeBoard> findAllByCreatedByContaining(Pageable pageable, String username);
 }

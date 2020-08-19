@@ -46,6 +46,7 @@ subprojects {
         // spring boot
         implementation "org.springframework.boot:spring-boot-starter-web"
         implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+        implementation "org.springframework.boot:spring-boot-starter-security"
         runtimeOnly "org.springframework.boot:spring-boot-devtools"
 
         // mapstruct, lombok 의존성보다 먼저 선언되어야 한다.
@@ -90,6 +91,7 @@ project(":module-app-web") {
         compile project(":module-domain-core")
 
         implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
+        implementation "org.thymeleaf.extras:thymeleaf-extras-springsecurity5"
     }
 }
 
@@ -104,8 +106,6 @@ project("module-app-api") {
     dependencies {
         compile project(":module-system-common")
         compile project(":module-domain-core")
-
-        implementation "org.springframework.boot:spring-boot-starter-security"
     }
 }
 

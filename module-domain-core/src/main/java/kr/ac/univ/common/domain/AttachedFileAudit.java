@@ -1,14 +1,15 @@
 package kr.ac.univ.common.domain;
 
 import lombok.Getter;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.*;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
 @Getter
-@EntityListeners(AuditingEntityListener.class)
 public abstract class AttachedFileAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
