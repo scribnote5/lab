@@ -30,7 +30,8 @@ public class UserAttachedFile extends AttachedFileAudit {
     private String fileSize;
 
     @Builder
-    public UserAttachedFile(Long userIdx, String fileName, String savedFileName, String fileSize) {
+    public UserAttachedFile(String createdBy, Long userIdx, String fileName, String savedFileName, String fileSize) {
+        setCreatedBy(createdBy);
         this.userIdx = userIdx;
         this.fileName = fileName;
         this.savedFileName = savedFileName;

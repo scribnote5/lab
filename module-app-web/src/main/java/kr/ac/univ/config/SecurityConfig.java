@@ -1,5 +1,6 @@
 package kr.ac.univ.config;
 
+import kr.ac.univ.handler.CustomAuthenticationEntryPoint;
 import kr.ac.univ.handler.CustomAuthenticationFailureHandler;
 import kr.ac.univ.handler.CustomAuthenticationSuccessHandler;
 import kr.ac.univ.user.service.UserService;
@@ -39,6 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 // 페이지 권한 설정
                 .antMatchers("/user/list").hasAuthority("root")
+                .antMatchers("/**/form").hasAnyAuthority("root, manager, general")
                 .antMatchers("/h2-console/**").permitAll() // h2-console 접근 허용
                 .antMatchers("/**").permitAll()
                 .and()
@@ -50,6 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 로그인 설정
                 .formLogin()
                 .loginPage("/user/login")   // login 페이지 URL
+                .loginProcessingUrl("/user/login/process")  // login 수행 URL
                 // 사용자 정의 handler
                 .successHandler(CustomAuthenticationSuccessHandler())
                 .failureHandler(CustomAuthenticationFailureHandler())
@@ -62,8 +65,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/user/logout/success")
                 .invalidateHttpSession(true)
                 .and()
-                // 권한이 없는 경우, 403 예외처리 핸들링
-                .exceptionHandling().accessDeniedPage("/user/permission-denied");
+                // 예외처리
+                .exceptionHandling()
+                .accessDeniedPage("/user/permission-denied") // 권한이 없는 경우, 403 예외처리 핸들링
+                .authenticationEntryPoint(new CustomAuthenticationEntryPoint());
+
     }
 
     @Bean

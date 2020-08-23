@@ -112,7 +112,8 @@
 
         <!-- input type="hidden" -->
         <input type="hidden" name="idx" th:value="*{idx}"/>
-        <input type="hidden" name="createdDate" th:value="*{createdDate}"/>
+        <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}" />
+        <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}" />
 
     </form>
 </div>
@@ -255,6 +256,7 @@
         }
 
         formData.append("idx", noticeBoardIdx);
+        formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
 
         $.ajax({
             url: "http://localhost:8081/api/notice-boards/attachedFile",
@@ -336,6 +338,7 @@
         }
 
         formData.append("idx", idx);
+        formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
 
         $.ajax({
             url: "http://localhost:8081/api/notice-boards/attachedFile",

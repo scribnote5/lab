@@ -1,6 +1,7 @@
 package kr.ac.univ;
 
 import kr.ac.univ.common.domain.enums.ActiveStatus;
+import kr.ac.univ.noticeBoard.domain.NoticeBoard;
 import kr.ac.univ.noticeBoard.repository.NoticeBoardRepository;
 import kr.ac.univ.user.domain.enums.AuthorityType;
 import kr.ac.univ.user.domain.enums.UserType;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import kr.ac.univ.user.domain.User;
 import kr.ac.univ.user.repository.UserRepository;
+
+import java.util.stream.IntStream;
 
 @RestController
 @SpringBootApplication
@@ -30,8 +33,6 @@ public class ModuleWebApplication {
             /* noticeBoardRepository.deleteAll(); */
 
             /* 게시글 등록 */
-
-
             /*
             IntStream.rangeClosed(1, 200).forEach(index ->
                 noticeBoardRepository.save(NoticeBoard.builder()

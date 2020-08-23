@@ -30,9 +30,10 @@ public class NoticeBoardAttachedFile extends AttachedFileAudit {
     private String fileSize;
 
     @Builder
-    public NoticeBoardAttachedFile(Long noticeBoardIdx, String fileName, String savedFileName, String fileSize) {
-        this.fileName = fileName;
+    public NoticeBoardAttachedFile(String createdBy, Long noticeBoardIdx, String fileName, String savedFileName, String fileSize) {
+        setCreatedBy(createdBy);
         this.noticeBoardIdx = noticeBoardIdx;
+        this.fileName = fileName;
         this.savedFileName = savedFileName;
         this.fileSize = fileSize;
     }

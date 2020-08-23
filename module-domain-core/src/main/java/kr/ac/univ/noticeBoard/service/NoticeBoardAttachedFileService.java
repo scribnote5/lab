@@ -59,7 +59,7 @@ public class NoticeBoardAttachedFileService {
      * @param noticeBoardIdx
      * @param files
      */
-    public void uploadAttachedFile(Long noticeBoardIdx, MultipartFile[] files) throws Exception {
+    public void uploadAttachedFile(Long noticeBoardIdx, String createdBy, MultipartFile[] files) throws Exception {
         NoticeBoardAttachedFile uploadFile = new NoticeBoardAttachedFile();
 
         for (MultipartFile file : files) {
@@ -75,6 +75,7 @@ public class NoticeBoardAttachedFileService {
 
             uploadFile = NoticeBoardAttachedFile.builder()
                     .noticeBoardIdx(noticeBoardIdx)
+                    .createdBy(createdBy)
                     .fileName(file.getOriginalFilename())
                     .savedFileName(savedFileName)
                     .fileSize(FileUtil.convertFileSize(file.getSize()))

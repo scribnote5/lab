@@ -6,6 +6,7 @@ import kr.ac.univ.user.dto.UserPrincipal;
 import kr.ac.univ.user.dto.mapper.UserMapper;
 import kr.ac.univ.user.service.UserAttachedFileService;
 import kr.ac.univ.user.service.UserService;
+import kr.ac.univ.util.EmptyUtil;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -31,17 +32,26 @@ public class UserController {
 
     // Login Index
     @GetMapping("/index")
-    public String index(@AuthenticationPrincipal UserPrincipal userPrincipal, Model model) {
-        model.addAttribute("userDto", userPrincipal);
+    public String index(Model model) {
 
         return "/user/index";
     }
 
     //Login Page
     @GetMapping("/login")
-    public String login() {
+    public String login(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        String returnPage = null;
 
-        return "/user/login";
+        // 사용자가 로그인하지 않는 경우 login 페이지로 이동
+        if(EmptyUtil.isEmpty(userPrincipal)) {
+            returnPage = "/user/login";
+        }
+        // 사용자가 로그인한 경우 index 페이지로 이동
+        else {
+            returnPage = "user/index";
+        }
+
+        return returnPage;
     }
 
     // Login Fail
@@ -63,6 +73,13 @@ public class UserController {
     public String permissionDenied() {
 
         return "/user/permission-denied";
+    }
+
+    // Anonymous User Permission Denied
+    @GetMapping("/anonymous-user-permission-denied")
+    public String anonymousUserPermissionDenied() {
+
+        return "/user/anonymous-user-permission-denied";
     }
 
     // List

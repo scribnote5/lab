@@ -1,24 +1,30 @@
 package kr.ac.univ.common.domain;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
 @Getter
+@Setter
 @ToString
+@EntityListeners(AuditingEntityListener.class)
 public abstract class CommonAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Long idx;
+    private Long idx;
 
+    @Column(nullable = false, updatable = false)
+    @CreatedDate
     private LocalDateTime createdDate;
 
+    @LastModifiedDate
     private LocalDateTime lastModifiedDate;
 
     private String createdBy;

@@ -88,8 +88,10 @@ public class User extends CommonAudit {
     private AuthorityType authorityType;
 
     @Builder
-    public User(Long idx, String username, String password, String koreanName, String englishName, GenderType gender, LocalDate birthDate, String email, String privateEmail, String messangerId, String contact, UserType userType, UserStatus userStatus, String introduction, LocalDate admissionDate, LocalDate graduatedDate, String webPage, String workplace, ActiveStatus activeStatus, AuthorityType authorityType) {
-        this.idx = idx;
+    public User(Long idx, String createdBy, String lastModifiedBy, String username, String password, String koreanName, String englishName, GenderType gender, LocalDate birthDate, String email, String privateEmail, String messangerId, String contact, UserType userType, UserStatus userStatus, String introduction, LocalDate admissionDate, LocalDate graduatedDate, String webPage, String workplace, ActiveStatus activeStatus, AuthorityType authorityType) {
+        setIdx(idx);
+        setCreatedBy(createdBy);
+        setLastModifiedBy(lastModifiedBy);
         this.username = username;
         this.password = password;
         this.koreanName = koreanName;

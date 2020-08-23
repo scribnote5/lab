@@ -1,6 +1,7 @@
 package kr.ac.univ.controller;
 
 import kr.ac.univ.noticeBoard.dto.NoticeBoardDto;
+import kr.ac.univ.noticeBoard.dto.mapper.NoticeBoardMapper;
 import kr.ac.univ.noticeBoard.service.NoticeBoardAttachedFileService;
 import kr.ac.univ.noticeBoard.service.NoticeBoardService;
 import org.springframework.http.HttpStatus;
@@ -45,8 +46,8 @@ public class NoticeBoardRestController {
 
     // 첨부 파일 업로드
     @PostMapping("/attachedFile")
-    public ResponseEntity<?> uploadAttachedFile(Long idx, MultipartFile[] files) throws Exception {
-        noticeBoardAttachedFileService.uploadAttachedFile(idx, files);
+    public ResponseEntity<?> uploadAttachedFile(Long idx, String createdBy, MultipartFile[] files) throws Exception {
+        noticeBoardAttachedFileService.uploadAttachedFile(idx, createdBy, files);
 
         return new ResponseEntity<>("{}", HttpStatus.CREATED);
     }

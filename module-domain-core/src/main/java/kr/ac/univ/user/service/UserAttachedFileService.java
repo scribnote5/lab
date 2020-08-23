@@ -53,7 +53,7 @@ public class UserAttachedFileService {
      * @param userIdx
      * @param files
      */
-    public void uploadAttachedFile(Long userIdx, MultipartFile[] files) throws Exception {
+    public void uploadAttachedFile(Long userIdx, String createdBy, MultipartFile[] files) throws Exception {
         UserAttachedFile uploadFile = new UserAttachedFile();
 
         for (MultipartFile file : files) {
@@ -65,6 +65,7 @@ public class UserAttachedFileService {
 
             uploadFile = UserAttachedFile.builder()
                     .userIdx(userIdx)
+                    .createdBy(createdBy)
                     .fileName(file.getOriginalFilename())
                     .savedFileName(savedFileName)
                     .fileSize(FileUtil.convertFileSize(file.getSize()))

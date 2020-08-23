@@ -53,8 +53,8 @@ public class UserRestController {
 
     // 첨부 파일 업로드
     @PostMapping("/attachedFile")
-    public ResponseEntity<?> uploadAttachedFile(Long idx, MultipartFile[] files) throws Exception {
-        userAttachedFileService.uploadAttachedFile(idx, files);
+    public ResponseEntity<?> uploadAttachedFile(Long idx, String createdBy, MultipartFile[] files) throws Exception {
+        userAttachedFileService.uploadAttachedFile(idx, createdBy, files);
 
         return new ResponseEntity<>("성공!", HttpStatus.CREATED);
     }

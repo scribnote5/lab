@@ -9,14 +9,15 @@
 <body>
 <!-- header -->
 <div class="container">
-    <form name="form" id="form" th:object="${userDto}" action="#">
+    <form name="form" id="form" action="#">
         <h1>Index</h1>
         <hr>
         <a sec:authorize="isAnonymous()" th:href="@{/user/login}">Login</a>
         <a sec:authorize="isAnonymous()" th:href="@{/user/form}">Join</a>
 
         <a sec:authorize="isAuthenticated()" th:href="@{/user/logout}">Logout</a>
-        <a sec:authorize="isAuthenticated()" th:href="@{'/user?idx='+*{idx}}">My Information</a>
+        <a sec:authorize="isAuthenticated()" th:href="@{'/user?idx='+${#authentication.principal.idx}}">My Information</a>
+        <a href="http://localhost:8080/notice-board/list"> test </a>
 
         <br>
         <br>
