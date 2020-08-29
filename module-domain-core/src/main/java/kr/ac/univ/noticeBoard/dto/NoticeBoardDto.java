@@ -21,7 +21,6 @@ public class NoticeBoardDto extends CommonDto {
     /* 기본 정보 */
     private String title;
     private String content;
-    private ActiveStatus activeStatus;
     private Long viewCount;
 
     /* newIcon */
@@ -29,5 +28,4 @@ public class NoticeBoardDto extends CommonDto {
 
     /* 첨부 파일 */
     private List<NoticeBoardAttachedFile> attachedFileList = new ArrayList<NoticeBoardAttachedFile>();
-
 }

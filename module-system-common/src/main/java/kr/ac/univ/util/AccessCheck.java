@@ -1,12 +1,11 @@
 package kr.ac.univ.util;
 
-import lombok.extern.slf4j.Slf4j;
+import kr.ac.univ.util.EmptyUtil;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
-@Slf4j
 public class AccessCheck {
     /**
      * 사용자 권한에 따른 접근 허용
@@ -19,11 +18,9 @@ public class AccessCheck {
      * @param createdBy
      * @return
      */
-    public static Boolean isAccess(String createdBy) {
+    public static Boolean isAccess(String createdBy, String authorityType) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean result = false;
-
-        log.info("User login: " + authentication.getPrincipal().toString() +", " + authentication.getDetails().toString());
 
         // 익명 사용자, 인증이 안된 경우, authentication 객체가 null인 경우 false 반환
         if ("anonymousUser".equals(authentication.getPrincipal()) || !authentication.isAuthenticated() || EmptyUtil.isEmpty(authentication)) {
@@ -38,14 +35,18 @@ public class AccessCheck {
                         result = true;
                         break;
                     case "manager":
-                        if (!username.equals(createdBy) && !"root".equals(grantedAuthority.getAuthority()))
-                            result = false;
+                        if ("root".equals(authorityType)) result = false;
+                            // Authority가 MANAGER, 작성자와 username이 같은 경우 접근 허용
+                        else if ("manager".equals(authorityType) && username.equals(createdBy)) result = true;
+                            // Authority가 MANAGER, 작성자와 username이 다른 경우 접근 불가
+                        else if ("manager".equals(authorityType) && !username.equals(createdBy)) result = false;
                         else result = true;
                         break;
                     case "general":
                         if (username.equals(createdBy)) result = true;
                         break;
                     default:
+                        result = false;
                         break;
                 }
             }
@@ -53,5 +54,4 @@ public class AccessCheck {
 
         return result;
     }
-
 }

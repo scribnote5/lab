@@ -49,7 +49,6 @@ public class UserDto extends CommonDto  {
     private String webPage;
 
     /* 관리자가 수정하는 정보 */
-    private ActiveStatus activeStatus;
     private AuthorityType authorityType;
 
     /* 첨부 파일 */

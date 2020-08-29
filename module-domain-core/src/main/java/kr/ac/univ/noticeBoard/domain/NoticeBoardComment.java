@@ -7,37 +7,34 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Getter
 @NoArgsConstructor
 @Entity
 @Table
 @ToString
-public class NoticeBoard extends CommonAudit {
+public class NoticeBoardComment extends CommonAudit {
     @Column
-    private String title;
+    private Long noticeBoardIdx;
 
     @Column
     private String content;
 
-
-    @Column
-    private Long viewCount = 0L;
-
     @Builder
-    public NoticeBoard(Long idx, String createdBy, String lastModifiedBy, String title, String content, ActiveStatus activeStatus) {
+    public NoticeBoardComment(Long idx, String createdBy, String lastModifiedBy, ActiveStatus activeStatus, Long noticeBoardIdx, String content) {
         setIdx(idx);
         setCreatedBy(createdBy);
         setLastModifiedBy(lastModifiedBy);
         setActiveStatus(activeStatus);
-        this.title = title;
+        this.noticeBoardIdx = noticeBoardIdx;
         this.content = content;
     }
 
-    public void update(NoticeBoard noticeBoard) {
+    public void update(NoticeBoardComment noticeBoard) {
         setActiveStatus(noticeBoard.getActiveStatus());
-        this.title = noticeBoard.getTitle();
         this.content = noticeBoard.getContent();
     }
 }

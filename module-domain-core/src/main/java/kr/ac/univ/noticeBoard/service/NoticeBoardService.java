@@ -1,26 +1,29 @@
 package kr.ac.univ.noticeBoard.service;
 
 import kr.ac.univ.common.dto.SearchDto;
+import kr.ac.univ.util.AccessCheck;
 import kr.ac.univ.noticeBoard.domain.NoticeBoard;
 import kr.ac.univ.noticeBoard.dto.NoticeBoardDto;
 import kr.ac.univ.noticeBoard.dto.mapper.NoticeBoardMapper;
 import kr.ac.univ.noticeBoard.repository.NoticeBoardRepository;
 import kr.ac.univ.noticeBoard.repository.NoticeBoardRepositoryImpl;
+import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.NewIconCheck;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 
 @Service
 public class NoticeBoardService {
     private final NoticeBoardRepository noticeBoardRepository;
     private final NoticeBoardRepositoryImpl noticeBoardRepositoryImpl;
+    private final UserRepository userRepository;
 
-    public NoticeBoardService(NoticeBoardRepository noticeBoardRepository, NoticeBoardRepositoryImpl noticeBoardRepositoryImpl) {
+    public NoticeBoardService(NoticeBoardRepository noticeBoardRepository, NoticeBoardRepositoryImpl noticeBoardRepositoryImpl, UserRepository userRepository) {
         this.noticeBoardRepository = noticeBoardRepository;
         this.noticeBoardRepositoryImpl = noticeBoardRepositoryImpl;
+        this.userRepository = userRepository;
     }
 
     public Page<NoticeBoardDto> findNoticeBoardList(Pageable pageable, SearchDto searchDto) {
@@ -48,8 +51,7 @@ public class NoticeBoardService {
 
         // NewIcon 판별
         for (NoticeBoardDto noticeBoardDto : noticeBoardDtoList) {
-            // 추후 변경
-            noticeBoardDto.setNewIcon(NewIconCheck.isNew(LocalDateTime.now()));
+            noticeBoardDto.setNewIcon(NewIconCheck.isNew(noticeBoardDto.getCreatedDate()));
         }
 
         return noticeBoardDtoList;
@@ -61,9 +63,23 @@ public class NoticeBoardService {
     }
 
     public NoticeBoardDto findNoticeBoardByIdx(Long idx) {
+        NoticeBoardDto noticeBoardDto = NoticeBoardMapper.INSTANCE.toDto(noticeBoardRepository.findById(idx).orElse(new NoticeBoard()));
+
+        // 권한 설정
+        // Register: 로그인한 사용자 Register 접근 가능
+        if (idx == 0) {
+            noticeBoardDto.setAccess(true);
+        }
+        // Update: isAccess 메소드에 따라 접근 가능 및 불가
+        else if (AccessCheck.isAccess(noticeBoardDto.getCreatedBy(), userRepository.findByUsername(noticeBoardDto.getCreatedBy()).getAuthorityType().getAuthorityType())) {
+            noticeBoardDto.setAccess(true);
+        } else {
+            noticeBoardDto.setAccess(false);
+        }
+
         noticeBoardRepositoryImpl.updateViewCountByIdx(idx);
 
-        return NoticeBoardMapper.INSTANCE.toDto(noticeBoardRepository.findById(idx).orElse(new NoticeBoard()));
+        return noticeBoardDto;
     }
 
     @Transactional

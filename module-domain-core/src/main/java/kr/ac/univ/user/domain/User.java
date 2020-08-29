@@ -81,17 +81,14 @@ public class User extends CommonAudit {
     /* 관리자가 수정하는 정보 */
     @Column
     @Enumerated(EnumType.STRING)
-    private ActiveStatus activeStatus;
-
-    @Column
-    @Enumerated(EnumType.STRING)
     private AuthorityType authorityType;
 
     @Builder
-    public User(Long idx, String createdBy, String lastModifiedBy, String username, String password, String koreanName, String englishName, GenderType gender, LocalDate birthDate, String email, String privateEmail, String messangerId, String contact, UserType userType, UserStatus userStatus, String introduction, LocalDate admissionDate, LocalDate graduatedDate, String webPage, String workplace, ActiveStatus activeStatus, AuthorityType authorityType) {
+    public User(Long idx, String createdBy, String lastModifiedBy, ActiveStatus activeStatus, String username, String password, String koreanName, String englishName, GenderType gender, LocalDate birthDate, String email, String privateEmail, String messangerId, String contact, UserType userType, UserStatus userStatus, String introduction, LocalDate admissionDate, LocalDate graduatedDate, String webPage, String workplace, AuthorityType authorityType) {
         setIdx(idx);
         setCreatedBy(createdBy);
         setLastModifiedBy(lastModifiedBy);
+        setActiveStatus(activeStatus);
         this.username = username;
         this.password = password;
         this.koreanName = koreanName;
@@ -109,7 +106,6 @@ public class User extends CommonAudit {
         this.workplace = workplace;
         this.admissionDate = admissionDate;
         this.graduatedDate = graduatedDate;
-        this.activeStatus = activeStatus;
         this.authorityType = authorityType;
     }
 
@@ -117,10 +113,11 @@ public class User extends CommonAudit {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         // 비밀번호가 입력되지 않은 경우, 비밀번호를 변경하지 않음
-        if (!"".equals(user.getPassword())) {
+        if (EmptyUtil.isEmpty(user.getPassword())) {
             this.password = passwordEncoder.encode(user.getPassword());
         }
 
+        setActiveStatus(user.getActiveStatus());
         this.username = user.getUsername();
         this.koreanName = user.getKoreanName();
         this.englishName = user.getEnglishName();
@@ -137,7 +134,6 @@ public class User extends CommonAudit {
         this.workplace = user.getWorkplace();
         this.admissionDate = user.getAdmissionDate();
         this.graduatedDate = user.getGraduatedDate();
-        this.activeStatus = user.getActiveStatus();
         this.authorityType = user.getAuthorityType();
     }
 }

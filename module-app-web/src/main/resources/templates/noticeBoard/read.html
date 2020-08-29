@@ -60,23 +60,85 @@
                     </div>
                 </td>
             </tr>
+
+            <tr th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}">
+                <th style="padding:13px 0 0 15px;">Comment</th>
+                <td>
+                    <textarea class="col-md-1 form-control input-sm"
+                              style="height: 75px; width: 500px; overflow: auto; resize: none;"
+                              name="content"></textarea>
+                    &nbsp;
+                    <button type="button" class="btn btn-primary" id="insertComment">Register</button>
+                </td>
+            </tr>
             <tr>
                 <td></td>
                 <td></td>
             </tr>
         </table>
 
+        <table class="table table-hover">
+            <tr th:each="noticeBoardCommentDto : ${noticeBoardCommentDtoList}">
+                <td>
+                    <span th:text="${noticeBoardCommentDto.createdBy}"></span>
+                    <br>
+                    <span th:text="${#temporals.format(noticeBoardCommentDto.createdDate,'yyyy-MM-dd HH:mm')}"></span>
+                    <img th:if="${noticeBoardCommentDto.newIcon}" th:attr="src=@{|/images/new_icon.png|}"
+                         th:style="'width: 15px; height: 15px'"/>
+                    <br>
+                    <span style="display: inline" th:id="content + ${noticeBoardCommentDtoStat.index}"
+                          th:text="${noticeBoardCommentDto.content}"></span>
+
+                    <textarea class="col-md-1 form-control input-sm"
+                              style="height: 75px; width: 500px; overflow: auto; resize: none; display: none;"
+                              name="updateContent"
+                              th:id="updateContent + ${noticeBoardCommentDtoStat.index}"
+                              th:text="${noticeBoardCommentDto.content}">
+					</textarea>&nbsp;
+
+                    <div th:if="${noticeBoardCommentDto.access}">
+                        <button type="button" class="btn btn-default"
+                                th:id="displayComment + ${noticeBoardCommentDtoStat.index}"
+                                th:onclick="displayComment([[${noticeBoardCommentDtoStat.index}]])">Update
+                        </button>
+                        <button type="button" class="btn btn-default"
+                                th:id="deleteComment + ${noticeBoardCommentDtoStat.index}"
+                                th:onclick="deleteComment([[${noticeBoardCommentDto.idx}]], [[${noticeBoardCommentDtoStat.index}]])">
+                            Delete
+                        </button>
+                        &nbsp;
+                        <button type="button" style="display:none;" class="btn btn-default"
+                                th:id="updateComment + ${noticeBoardCommentDtoStat.index}"
+                                th:onclick="updateComment([[${noticeBoardCommentDto.idx}]], [[${noticeBoardCommentDto.createdBy}]], [[${noticeBoardCommentDto.activeStatus}]],[[${noticeBoardCommentDtoStat.index}]])">
+                            Register
+                        </button>
+                        <button type="button" style="display:none;" class="btn btn-default"
+                                th:id="cancelComment + ${noticeBoardCommentDtoStat.index}"
+                                th:onclick="cancelComment([[${noticeBoardCommentDtoStat.index}]])">Cancel
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
         <div class="pull-left">
             <a href="/notice-board/list" class="btn btn-default">Move to List</a>
         </div>
-        <div class="pull-right">
+        <div class="pull-right" th:if="*{access}">
             <a th:href="'/notice-board/form?idx='+*{idx}" class="btn btn-info">Update</a>
             <button type="button" class="btn btn-danger" id="delete">Delete</button>
         </div>
 
         <!-- input type="hidden" -->
         <input type="hidden" name="idx" th:value="*{idx}"/>
-
+        <input type="hidden" name="createdBy" th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}"
+               th:value="${#authentication.principal.username}"/>
+        <input type="hidden" name="lastModifiedBy"
+               th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}"
+               th:value="${#authentication.principal.username}"/>
+        <input type="hidden" name="activeStatus"
+               th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}"
+               th:value="ACTIVE"/>
     </form>
 </div>
 
@@ -91,26 +153,124 @@
         document.getElementById("content").innerHTML = [[${noticeBoardDto.content}]];
     });
 
-    $('#delete').click(function () {
+    $("#delete").click(function () {
         if (!confirm("Do you want to delete post?")) {
             return true;
         }
 
         // 게시글 삭제
         $.ajax({
-            url: "http://localhost:8081/api/notice-boards/" + document.getElementsByName('idx')[0].value,
+            url: "http://localhost:8081/api/notice-boards/" + document.getElementsByName("idx")[0].value,
             type: "delete",
             dataType: "text",
             contentType: "application/json",
 
             success: function () {
-                location.href = '/notice-board/list';
+                location.href = "/notice-board/list";
             },
             error: function () {
 
             }
         });
     });
+
+    $("#insertComment").click(function () {
+        var jsonData =
+            {
+                createdBy: document.getElementsByName("createdBy")[0].value,
+                lastModifiedBy: document.getElementsByName("lastModifiedBy")[0].value,
+                activeStatus: document.getElementsByName("activeStatus")[0].value,
+                noticeBoardIdx: document.getElementsByName("idx")[0].value,
+                content: document.getElementsByName("content")[0].value
+            }
+
+        // 댓글 등록
+        $.ajax({
+            url: "http://localhost:8081/api/notice-boards-comments/",
+            type: "post",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+
+            success: function () {
+                location.href = "http://localhost:8080/notice-board?idx=" + document.getElementsByName("idx")[0].value;
+            },
+            error: function () {
+                console.log("Register comment is fail.");
+            }
+        });
+    });
+
+    function updateComment(idx, createdBy, activeStatus, commentId) {
+        var jsonData =
+            {
+                idx: idx,
+                createdBy: createdBy,
+                lastModifiedBy: document.getElementsByName("lastModifiedBy")[0].value,
+                activeStatus: activeStatus,
+                noticeBoardIdx: document.getElementsByName("idx")[0].value,
+                content: document.getElementsByName("updateContent")[commentId].value
+            }
+
+        // 댓글 수정
+        $.ajax({
+            url: "http://localhost:8081/api/notice-boards-comments/" + idx,
+            type: "put",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+
+            success: function () {
+                location.href = "http://localhost:8080/notice-board?idx=" + document.getElementsByName("idx")[0].value;
+            },
+            error: function () {
+                console.log("Update comment is fail.");
+            }
+        });
+    }
+
+    function deleteComment(idx, commentId) {
+        if (!confirm("Do you want to delete comment?")) {
+            return true;
+        }
+
+        // 댓글 삭제
+        $.ajax({
+            url: "http://localhost:8081/api/notice-boards-comments/" + idx,
+            type: "delete",
+            dataType: "text",
+            contentType: "application/json",
+
+            success: function () {
+                location.href = "http://localhost:8080/notice-board?idx=" + document.getElementsByName("idx")[0].value;
+            },
+            error: function () {
+                console.log("Delete comment is fail.");
+            }
+        });
+    }
+
+    function displayComment(index) {
+        document.getElementsByName("updateContent")[index].style.display = "inline";
+        document.getElementById("content" + index).style.display = "none";
+
+        document.getElementById("displayComment" + index).style.display = "none";
+        document.getElementById("deleteComment" + index).style.display = "none";
+        document.getElementById("updateComment" + index).style.display = "inline";
+        document.getElementById("cancelComment" + index).style.display = "inline";
+    }
+
+    function cancelComment(index) {
+        document.getElementsByName("updateContent")[index].style.display = "none";
+        document.getElementById("content" + index).style.display = "inline";
+
+        document.getElementById("displayComment" + index).style.display = "inline";
+        document.getElementById("deleteComment" + index).style.display = "inline";
+        document.getElementById("updateComment" + index).style.display = "none";
+        document.getElementById("cancelComment" + index).style.display = "none";
+    }
 </script>
 
 </body>

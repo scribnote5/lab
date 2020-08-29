@@ -274,7 +274,6 @@
     });
 
     $("#file").on("change", function () {
-        console.log();
         document.getElementById("imgData").innerHTML = this.files[0].name + ", File size: " + convertFileSize(this.files[0].size);
         readURL(this);
     });

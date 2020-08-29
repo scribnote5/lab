@@ -1,5 +1,6 @@
 package kr.ac.univ.common.domain;
 
+import kr.ac.univ.common.domain.enums.ActiveStatus;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -30,4 +31,8 @@ public abstract class CommonAudit {
     private String createdBy;
 
     private String lastModifiedBy;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private ActiveStatus activeStatus;
 }

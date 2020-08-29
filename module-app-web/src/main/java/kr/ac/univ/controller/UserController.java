@@ -7,6 +7,7 @@ import kr.ac.univ.user.dto.mapper.UserMapper;
 import kr.ac.univ.user.service.UserAttachedFileService;
 import kr.ac.univ.user.service.UserService;
 import kr.ac.univ.util.EmptyUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 
+@Slf4j
 @Controller
 @RequestMapping("/user")
 public class UserController {
@@ -42,12 +44,14 @@ public class UserController {
     public String login(@AuthenticationPrincipal UserPrincipal userPrincipal) {
         String returnPage = null;
 
-        // 사용자가 로그인하지 않는 경우 login 페이지로 이동
+        // 사용자가 로그인 안된 경우 login 페이지로 이동
         if(EmptyUtil.isEmpty(userPrincipal)) {
             returnPage = "/user/login";
         }
         // 사용자가 로그인한 경우 index 페이지로 이동
         else {
+
+            log.info("User login: " + userPrincipal.toString());
             returnPage = "user/index";
         }
 

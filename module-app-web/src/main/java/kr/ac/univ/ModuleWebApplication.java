@@ -39,11 +39,12 @@ public class ModuleWebApplication {
                     .title("게시글" + index)
                     .content("컨텐츠" + index)
                     .activeStatus(ActiveStatus.ACTIVE)
+                    .createdBy("root")
                     .build()));
             */
 
             /* 사용자 모두 삭제 */
-           /* userRepository.deleteAll(); */
+            /* userRepository.deleteAll(); */
 
             /* 사용자 생성 */
             /* userRepository.save(User.builder()
