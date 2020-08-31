@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title>NoticeBoard Form</title>
+    <title>Publication Form</title>
 
     <style>
         .fileDrop {
@@ -20,11 +21,11 @@
 <div th:replace="layout/header::header"></div>
 
 <div class="container">
-    <form name="form" id="form" th:object="${noticeBoardDto}" action="#">
+    <form name="form" id="form" th:object="${publicationDto}" action="#">
 
         <div class="page-header">
-            <h1 th:if="!*{idx}">NoticeBoard Register</h1>
-            <h1 th:if="*{idx}">NoticeBoard Update</h1>
+            <h1 th:if="!*{idx}">Publication Register</h1>
+            <h1 th:if="*{idx}">Publication Update</h1>
         </div>
         <br/>
         <table class="table" style="table-layout:fixed; word-break:break-all;">
@@ -55,15 +56,81 @@
             </tr>
             <tr>
                 <th>Title</th>
-                <td><input type="text" name="title" id="title" class="col-md-1 form-control input-sm"
-                           th:value="*{title}"/></td>
+                <td><input type="text" name="title" class="col-md-1 form-control input-sm" th:value="*{title}"/></td>
             </tr>
             <tr>
-                <!--<td colspan="2"><textarea name="content" id="content" class="col-md-1 form-control input-sm"
-                                          maxlength="140" rows="7" style="height: 200px; resize: none;"
-                                          th:text="*{content}"></textarea></td>-->
-                <td colspan="2"><textarea name="content" id="summernote" class="summernote"
-                                          th:text="*{content}"></textarea></td>
+                <th>Authors</th>
+                <td><input type="text" name="authors" class="col-md-1 form-control input-sm" th:value="*{authors}"/>
+                </td>
+            </tr>
+            <tr>
+                <th>Publication Type</th>
+                <td>
+                    <div class="pull-left">
+                        <select name="publicationType" th:field="*{publicationType}" class="form-control input-sm">
+                            <option th:value="JOURNAL">Journal</option>
+                            <option th:value="POSTER">Poster</option>
+                            <option th:value="REGULAR">Regular</option>
+                            <option th:value="DEMO">Demo</option>
+                            <option th:value="WORKSHOP">Workshop</option>
+                            <option th:value="WORKINPROCESS">Work in Process</option>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>Publishing Area</th>
+                <td>
+                    <div class="pull-left">
+                        <select name="kindType" th:field="*{publishingArea}" class="form-control input-sm">
+                            <option th:value="DOMESTIC">Domestic</option>
+                            <option th:value="INTERNATIONAL">International</option>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>Published In</th>
+                <td><input type="text" name="publishedIn" class="col-md-1 form-control input-sm"
+                           th:value="*{publishedIn}"/></td>
+            </tr>
+            <tr>
+                <th>Impact Factor(SCIE )</th>
+                <td><input type="text" name="impactFactor" class="col-md-1 form-control input-sm" th:placeholder="*{#strings.isEmpty(impactFactor)} ? 'ex) SCI(IF: 0.861)' : ''"
+                           th:value="*{impactFactor}"/></td>
+            </tr>
+            <tr>
+                <th>Published Date</th>
+                <td><input type="date" name="publishedDate" class="col-md-1 form-control input-sm"
+                           th:value="*{publishedDate}"/></td>
+            </tr>
+            <tr>
+                <th>Pages</th>
+                <td><input type="text" name="pages" class="col-md-1 form-control input-sm" th:value="*{pages}"/></td>
+            </tr>
+            <tr>
+                <th>Volume</th>
+                <td><input type="text" name="volume" class="col-md-1 form-control input-sm" th:value="*{volume}"/></td>
+            </tr>
+            <tr>
+                <th>Number</th>
+                <td><input type="text" name="number" class="col-md-1 form-control input-sm" th:value="*{number}"/></td>
+            </tr>
+            <tr>
+                <th>DOI</th>
+                <td><input type="text" name="doi" class="col-md-1 form-control input-sm" th:value="*{doi}"/></td>
+            </tr>
+            <tr>
+                <th>URI</th>
+                <td><input type="text" name="uri" class="col-md-1 form-control input-sm" th:value="*{uri}"/></td>
+            </tr>
+            <tr>
+                <th>ISBN/ISSN</th>
+                <td><input type="text" name="isbnIssn" class="col-md-1 form-control input-sm" th:value="*{isbnIssn}"/></td>
+            </tr>
+            <tr>
+                <th>Remark</th>
+                <td><input type="text" name="remark" class="col-md-1 form-control input-sm" th:value="*{remark}"/></td>
             </tr>
             <tr>
                 <th>Attached File</th>
@@ -103,7 +170,7 @@
         </table>
 
         <div class="pull-left">
-            <a href="/notice-board/list" class="btn btn-default">Move to List</a>
+            <a href="/publication/list" class="btn btn-default">Move to List</a>
         </div>
         <div class="pull-right">
             <button th:if="!*{idx}" id="insert" type="button" class="btn btn-primary">Register</button>
@@ -134,20 +201,9 @@
     var exit = null;
 
     $(document).ready(function () {
-        <!-- summernote setting -->
-        $('#summernote').summernote({
-            height: 250,	// 에디터 높이
-            minHeight: null,	// 최소 높이
-            maxHeight: null,	// 최대 높이
-            // focus: true,	// 에디터 로딩후 포커스를 맞출지 여부
-            lang: "ko-KR",// 한글 설정
-            placeholder: "The editor's max input size of bytes is 16777215."	//placeholder 설정
-
-        });
-
         <!-- File Drop -->
         $("#fileDrop").on("dragenter dragover", function (event) {
-            event.preventDefault(); // 기본 이벤트 발생을 막음
+            event.preventDefault(); // 기본 효과를 막음
         });
     });
 
@@ -195,22 +251,22 @@
 
     // 새로 업로드한 파일을 취소하는 경우
     function cancelFile(fileId) {
-        $('#imgData' + fileId).remove();
+        $("#imgData" + fileId).remove();
 
         insertFileArray[fileId] = null;
     }
 
     // 기존 업로드한 파일을 삭제하는 경우
     function deleteFile(fileId, idx, savedFileName) {
-        $('#imgData' + fileId).remove();
+        $("#imgData" + fileId).remove();
 
         deleteFileArray.push(idx);
     }
 
-    function deleteNoticeBoard(noticeBoardIdx) {
+    function deletePublication(publicationIdx) {
         // 게시글 삭제
         $.ajax({
-            url: "http://localhost:8081/api/notice-boards/" + noticeBoardIdx,
+            url: "http://localhost:8081/api/notice-boards/" + publicationIdx,
             type: "delete",
             dataType: "text",
             contentType: "application/json",
@@ -223,16 +279,16 @@
                 console.log("NoticeBoard delete fail.");
             });
     }
-</script>
 
-<script th:if="!${noticeBoardDto?.idx}">
-    $('#insert').click(function () {
+</script>
+<script th:if="!${publicationDto?.idx}">
+    $("#insert").click(function () {
         var jsonData = $("#form").serializeObject();
-        var noticeBoardIdx;
+        var publicationIdx;
 
         // 게시글 업로드
         $.ajax({
-            url: "http://localhost:8081/api/notice-boards",
+            url: "http://localhost:8081/api/publications",
             type: "post",
             data: JSON.stringify(jsonData),
             dataType: "text",
@@ -240,7 +296,7 @@
             async: false,
         })
             .done(function (msg) {
-                noticeBoardIdx = msg;
+                publicationIdx = msg;
                 exit = false;
             })
             .fail(function (msg) {
@@ -256,37 +312,36 @@
             formData.append("files", insertFileArray[i]);
         }
 
-        formData.append("idx", noticeBoardIdx);
+        formData.append("idx", publicationIdx);
         formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
 
         $.ajax({
-            url: "http://localhost:8081/api/notice-boards/attachedFile",
+            url: "http://localhost:8081/api/publications/attachedFile",
             type: "post",
             data: formData,
             dataType: "text",
-            enctype: 'multipart/form-data',
+            enctype: "multipart/form-data",
             processData: false,
             contentType: false,
             async: false,
         })
             .done(function (msg) {
-                location.href = "/notice-board?idx=" + noticeBoardIdx;
+                location.href = "/publication/list";
             })
             .fail(function (msg) {
-                deleteNoticeBoard(noticeBoardIdx);
+                alert('파일 업로드 실패!');
             });
 
     });
 </script>
-
-<script th:if="${noticeBoardDto?.idx}" th:inline="javascript">
-    $('#update').click(function () {
+<script th:if="${publicationDto?.idx}" th:inline="javascript">
+    $("#update").click(function () {
         var jsonData = $("#form").serializeObject();
         var idx = document.getElementsByName("idx")[0].value;
 
         // 게시글 수정
         $.ajax({
-            url: "http://localhost:8081/api/notice-boards/" + document.getElementsByName("idx")[0].value,
+            url: "http://localhost:8081/api/publications/" + document.getElementsByName("idx")[0].value,
             type: "put",
             data: JSON.stringify(jsonData),
             dataType: "text",
@@ -305,13 +360,15 @@
 
         // 만일 파일이 수정되지 않은 경우 '파일 업로드' 및 '파일 삭제'를 수행하지 않음
         if (insertFileArray.length == 0 && deleteFileArray.length == 0) {
-            location.href = "/notice-board?idx=" + document.getElementsByName("idx")[0].value;
+            location.href = "/publication?idx=" + document.getElementsByName("idx")[0].value;
+
+            return true;
         }
 
-        // 파일 삭제
+        // 파일 삭제  
         if (deleteFileArray.length > 0) {
             $.ajax({
-                url: "http://localhost:8081/api/notice-boards/attachedFile",
+                url: "http://localhost:8081/api/publications/attachedFile",
                 type: "delete",
                 data: JSON.stringify(deleteFileArray),
                 contentType: "application/json",
@@ -342,17 +399,17 @@
         formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
 
         $.ajax({
-            url: "http://localhost:8081/api/notice-boards/attachedFile",
+            url: "http://localhost:8081/api/publications/attachedFile",
             type: "post",
             data: formData,
             dataType: "text",
-            enctype: 'multipart/form-data',
+            enctype: "multipart/form-data",
             processData: false,
             contentType: false,
             async: false,
         })
             .done(function (msg) {
-                location.href = "/notice-board?idx=" + document.getElementsByName("idx")[0].value;
+                location.href = "/publication?idx=" + document.getElementsByName("idx")[0].value;
             })
             .fail(function (msg) {
 

@@ -85,10 +85,8 @@
             <tr>
                 <th style="padding:13px 0 0 15px;">Gender*</th>
                 <td>
-                    Male <input type="radio" name="gender" th:value="MALE"
-                                th:checked="*{gender?.name() == 'MALE' ||  gender?.name() == null}">
-                    Female <input type="radio" name="gender" th:value="FEMALE"
-                                  th:checked="*{gender?.name() == 'FEMALE'}">
+                    <label th:for="male"> Male </label> <input type="radio" name="gender" id="male" th:value="MALE"  th:checked="*{gender?.name() == 'MALE' ||  gender?.name() == null}">
+                    <label th:for="female"> Female </label> <input type="radio" name="gender" id="female" th:value="FEMALE"  th:checked="*{gender?.name() == 'FEMALE'}">
                 </td>
             </tr>
             <tr>

@@ -94,22 +94,22 @@
         <ul class="pagination"
             th:with="startNumber=${T(Math).floor(userDtoList.number/10)}*10+1, endNumber=(${userDtoList.totalPages} > ${startNumber}+9) ? ${startNumber}+9 : (${userDtoList.totalPages} == 0 ? 1 : ${userDtoList.totalPages})">
             <li>
-                <a aria-label="Previous" href="/user/list?page=1">&laquo;</a>
+                <a aria-label="Previous" th:href="@{/user/list(page=1,searchType=*{searchType},keyword=*{keyword})}">&laquo;</a>
             </li>
             <li th:style="${userDtoList.first} ? 'display:none'">
-                <a th:href="@{/user/list(page=${userDtoList.number})}">&lsaquo;</a>
+                <a th:href="@{/user/list(page=${userDtoList.number},searchType=*{searchType},keyword=*{keyword})}">&lsaquo;</a>
             </li>
 
             <li th:each="page :${#numbers.sequence(startNumber, endNumber)}"
                 th:class="(${page} == ${userDtoList.number}+1) ? 'active'">
-                <a th:href="@{/user/list(page=${page})}" th:text="${page}"><span class="sr-only"></span></a>
+                <a th:href="@{/user/list(page=${page},searchType=*{searchType},keyword=*{keyword})}" th:text="${page}"><span class="sr-only"></span></a>
             </li>
 
             <li th:style="${userDtoList.last} ? 'display:none'">
-                <a th:href="@{/user/list(page=${userDtoList.number}+2)}">&rsaquo;</a>
+                <a th:href="@{/user/list(page=${userDtoList.number}+2,searchType=*{searchType},keyword=*{keyword})}">&rsaquo;</a>
             </li>
             <li>
-                <a aria-label="Next" th:href="@{/user/list(page=${userDtoList.totalPages})}">&raquo;</a>
+                th:href="@{/user/list(page=${userDtoList.totalPages},searchType=*{searchType},keyword=*{keyword})}">&raquo;</a>
             </li>
         </ul>
     </nav>

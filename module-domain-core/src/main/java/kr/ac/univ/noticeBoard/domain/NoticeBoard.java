@@ -26,7 +26,7 @@ public class NoticeBoard extends CommonAudit {
     private Long viewCount = 0L;
 
     @Builder
-    public NoticeBoard(Long idx, String createdBy, String lastModifiedBy, String title, String content, ActiveStatus activeStatus) {
+    public NoticeBoard(Long idx, String createdBy, String lastModifiedBy, ActiveStatus activeStatus, String title, String content) {
         setIdx(idx);
         setCreatedBy(createdBy);
         setLastModifiedBy(lastModifiedBy);

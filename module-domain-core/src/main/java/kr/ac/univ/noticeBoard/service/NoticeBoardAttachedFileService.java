@@ -30,7 +30,6 @@ public class NoticeBoardAttachedFileService {
     public NoticeBoardDto findAttachedFileByNoticeBoardIdx(Long noticeBoardIdx, NoticeBoardDto noticeBoardDto) {
 
         return NoticeBoardMapper.INSTANCE.toDto(noticeBoardDto, noticeBoardAttachedFileRepositoryImpl.findAttachedFileByNoticeBoardIdx(noticeBoardIdx));
-
     }
 
     public void insertAttachedFile(NoticeBoardAttachedFile attachedFile) {

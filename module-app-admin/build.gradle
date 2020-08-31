@@ -1,0 +1,3 @@
+// 해당 모듈은 추후 개발 예정으로, 현재는 실행 가능한 자바 파일을 생성하지 않는다.
+bootJar { enabled = false }
+jar { enabled = true }
