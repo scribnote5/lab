@@ -181,6 +181,7 @@
 
     $('#delete').click(function () {
         if(!confirm("Do you want to delete user?")) {
+
             return true;
         }
 
@@ -190,15 +191,14 @@
             type: "delete",
             dataType: "text",
             contentType: "application/json",
-
-            success: function () {
-                alert("Delete user is successful.");
+            async: false,
+        })
+            .done(function (msg) {
                 location.href = "/user/list";
-            },
-            error: function () {
-                alert("Delete user is fail.");
-            }
-        });
+            })
+            .fail(function (msg) {
+                console.log("Delete user is fail.");
+            });
     });
 </script>
 </body>

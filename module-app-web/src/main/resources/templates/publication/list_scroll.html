@@ -19,15 +19,23 @@
         <div class="pull-right">
             <div>
                 <label th:for="showAll"> Show All </label>
-                <input type="radio" name="publicationSearchType" id="showAll" th:value="SHOW_ALL" th:checked="*{publicationSearchType?.name() == 'SHOW_ALL' ||  publicationSearchType?.name() == null}"> <br>
+                <input type="radio" name="publicationSearchType" id="showAll" th:value="SHOW_ALL"
+                       th:checked="*{publicationSearchType?.name() == 'SHOW_ALL' ||  publicationSearchType?.name() == null}">
+                <br>
                 <label th:for="internationalJournal"> International Journal </label>
-                <input type="radio" name="publicationSearchType" id="internationalJournal" th:value="INTERNATIONAL_JOURNAL" th:checked="*{publicationSearchType?.name() == 'INTERNATIONAL_JOURNAL'}"> <br>
+                <input type="radio" name="publicationSearchType" id="internationalJournal"
+                       th:value="INTERNATIONAL_JOURNAL"
+                       th:checked="*{publicationSearchType?.name() == 'INTERNATIONAL_JOURNAL'}"> <br>
                 <label th:for="internationalConference"> International Conference </label>
-                <input type="radio" name="publicationSearchType" id="internationalConference" th:value="INTERNATIONAL_CONFERENCE" th:checked="*{publicationSearchType?.name() == 'INTERNATIONAL_CONFERENCE'}"> <br>
+                <input type="radio" name="publicationSearchType" id="internationalConference"
+                       th:value="INTERNATIONAL_CONFERENCE"
+                       th:checked="*{publicationSearchType?.name() == 'INTERNATIONAL_CONFERENCE'}"> <br>
                 <label th:for="domesticJournal"> Domestic Journal </label>
-                <input type="radio" name="publicationSearchType" id="domesticJournal" th:value="DOMESTIC_JOURNAL" th:checked="*{publicationSearchType?.name() == 'DOMESTIC_JOURNAL'}"> <br>
+                <input type="radio" name="publicationSearchType" id="domesticJournal" th:value="DOMESTIC_JOURNAL"
+                       th:checked="*{publicationSearchType?.name() == 'DOMESTIC_JOURNAL'}"> <br>
                 <label th:for="domesticConference"> Domestic Conference </label>
-                <input type="radio" name="publicationSearchType" id="domesticConference" th:value="DOMESTIC_CONFERENCE" th:checked="*{publicationSearchType?.name() == 'DOMESTIC_CONFERENCE'}"> <br>
+                <input type="radio" name="publicationSearchType" id="domesticConference" th:value="DOMESTIC_CONFERENCE"
+                       th:checked="*{publicationSearchType?.name() == 'DOMESTIC_CONFERENCE'}"> <br>
             </div>
 
             <div class="pull-left" style="width: 100px; margin: 10px 10px;">
@@ -74,7 +82,7 @@
         <br>
 
         <p id="loading">
-            <img th:src="@{/images/loading.gif}" alt="Loading…" />
+            <img th:src="@{/images/loading.gif}" alt="Loading…"/>
         </p>
     </form>
 </div>
@@ -92,24 +100,24 @@
     var uri = null;
 
     // 조회하는 데이터가 10개 보다 적은 경우 loading.gif를 hide
-    if(list.length < 10) {
+    if (list.length < 10) {
         $("#loading").hide();
     }
     // 처음 발생하는 scroll event에서 데이터를 가져오는 기준이 된다.(마지막 배열 요소의 idx)
     else {
-        lastIdx = list[list.length-1].idx;
+        lastIdx = list[list.length - 1].idx;
     }
 
     console.log(list.length);
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         var win = $(window);
 
         // Each time the user scrolls
-        win.scroll(function() {
-            if($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+        win.scroll(function () {
+            if ($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
                 // 더이상 가져오는 데이터가 없는 경우
-                if(isLast) {
+                if (isLast) {
                     $('#loading').hide();
                     return;
                 }
@@ -117,7 +125,7 @@
                 $('#loading').show();
 
                 // 처음과 마지막 데이터가 중복되는 경우를 제거하기 위해서 lastIdx에서 1을 뺀다.
-                uri = { lastIdx: lastIdx - 1 };
+                uri = {lastIdx: lastIdx - 1};
 
                 // URI 생성
                 Object.assign(uri, getUriParams());
@@ -129,29 +137,28 @@
                     dataType: "text",
                     contentType: "application/json",
                     async: false,
-
-                    success: function (msg) {
+                })
+                    .done(function (msg) {
                         // 가져오는 데이터가 없는 경우
-                        if((JSON.parse(msg)).length == 0) {
+                        if ((JSON.parse(msg)).length == 0) {
                             isLast = true;
                             return;
                         }
 
                         // 다음 발생하는 scroll event에서 데이터를 가져오는 기준이 된다.(마지막 배열 요소의 idx)
-                        lastIdx = (JSON.parse(msg))[(JSON.parse(msg)).length-1].idx;
+                        lastIdx = (JSON.parse(msg))[(JSON.parse(msg)).length - 1].idx;
 
-                        setTimeout(function(){
+                        setTimeout(function () {
                             $('#loading').hide();
                         }, 2500);
 
                         // ajax를 통하여 받은 데이터를 html에 출력한다.
                         $("#mainHide").append(msg);
-                    },
-                    error: function () {
+                    })
+                    .fail(function (msg) {
                         console.log("Fail to get data.");
                         $('#loading').hide();
-                    }
-                });
+                    })
             }
         });
     });

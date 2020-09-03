@@ -31,25 +31,25 @@
                 <th colspan="2" style="padding:13px 0 13px 15px; text-align: center">Personal Information</th>
             </tr>
             <tr>
-                <th style="padding:13px 0 0 15px;">User Id*</th>
-                <td th:if="!*{idx}"><input type="text" name="username" id="username"
-                                           class="col-md-1 form-control input-sm" th:value="*{username}"/></td>
-                <td th:if="!*{idx}">
-                    <button id="validationUserId" type="button" class="btn btn-primary">Check Duplicate</button>
+                <th style="padding:13px 0 0 15px;">Id*</th>
+                <td><input type="text" name="username" id="username"
+                           class="col-md-1 form-control input-sm" th:value="*{username}"/></td>
+                <td>
+                    <button id="validationUsername" type="button" class="btn btn-primary">Check Duplicate</button>
                 </td>
 
-                <td th:if="*{idx}"><input type="text" name="username" id="username"
-                                          class="col-md-1 form-control input-sm" th:value="*{username}" readonly/></td>
+                <!--<td th:if="*{idx}"><input type="text" name="username" id="username"
+                                          class="col-md-1 form-control input-sm" th:value="*{username}" readonly/></td>-->
                 <td><span id="usernameCheckResult"></span></td>
             </tr>
             <tr>
                 <th style="padding:13px 0 0 15px;">Password*</th>
-                <td><input type="password" name="password" id="password"
+                <td><input type="password" name="password" id="password" onchange="validatePassword()"
                            class="col-md-1 form-control input-sm"/></td>
             </tr>
             <tr>
                 <th style="padding:13px 0 0 15px;">Password Check*</th>
-                <td><input type="password" name="checkPassword" id="checkPassword"
+                <td><input type="password" name="checkPassword" id="checkPassword" onchange="validatePassword()"
                            class="col-md-1 form-control input-sm"/></td>
                 <td colspan="2"><span id="passwordCheckResult"></span></td>
             </tr>
@@ -85,8 +85,11 @@
             <tr>
                 <th style="padding:13px 0 0 15px;">Gender*</th>
                 <td>
-                    <label th:for="male"> Male </label> <input type="radio" name="gender" id="male" th:value="MALE"  th:checked="*{gender?.name() == 'MALE' ||  gender?.name() == null}">
-                    <label th:for="female"> Female </label> <input type="radio" name="gender" id="female" th:value="FEMALE"  th:checked="*{gender?.name() == 'FEMALE'}">
+                    <label th:for="male"> Male </label> <input type="radio" name="gender" id="male" th:value="MALE"
+                                                               th:checked="*{gender?.name() == 'MALE' ||  gender?.name() == null}">
+                    <label th:for="female"> Female </label> <input type="radio" name="gender" id="female"
+                                                                   th:value="FEMALE"
+                                                                   th:checked="*{gender?.name() == 'FEMALE'}">
                 </td>
             </tr>
             <tr>
@@ -215,8 +218,9 @@
 
         <!-- input type="hidden" -->
         <input type="hidden" name="idx" th:value="*{idx}"/>
-        <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}" />
-        <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}" />
+        <input type="hidden" name="createdBy"
+               th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
+        <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
     </form>
 </div>
 
@@ -230,6 +234,11 @@
 <script th:inline="javascript">
     var totalFileSize = 0;
     var exit = null;
+    var usernameVaildation = false;
+    var passwordVaildation = false;
+    var emailVaildation = false;
+    var privateEmailVaildation = false;
+    var contactVaildation = false;
 
     $(document).ready(function () {
         <!-- summernote setting -->
@@ -244,16 +253,58 @@
         });
     });
 
+    function deleteUser(userIdx) {
+        // 회원 삭제
+        $.ajax({
+            url: "http://localhost:8081/api/users/" + document.getElementsByName("idx")[0].value,
+            type: "delete",
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+
+            })
+            .fail(function (msg) {
+                console.log("Delete user is fail.");
+            });
+    }
+
+    /* username 검사 */
+    $("#username").on("change", function () {
+        var strLength = document.getElementsByName("username")[0].value.length;
+
+        if (strLength > 16 || strLength < 6) {
+            alert("The ID can be used for more than 6 characters and less than 16 characters." +
+                "\n(Number of characters currently entered: " + strLength + ").");
+            document.getElementsByName("username")[0].focus();
+            document.getElementsByName("username")[0].value = "";
+            document.getElementById("usernameCheckResult").innerHTML = "";
+
+            return false;
+        } else if (validateEmpty(document.getElementsByName("username")[0].value) || validateSpecialChar(document.getElementsByName("username")[0].value)) {
+            alert("The ID must not be blank or contain special character.");
+            document.getElementsByName("username")[0].focus();
+            document.getElementsByName("username")[0].value = "";
+            document.getElementById("usernameCheckResult").innerHTML = "";
+
+            return false;
+        } else {
+            return true;
+        }
+
+    });
+
     /* username 중복 검사 */
-    $("#validationUserId").click(function () {
+    $("#validationUsername").click(function () {
         $.ajax({
             url: "http://localhost:8081/api/users/validation/username/" + document.getElementsByName("username")[0].value,
             type: "get",
             dataType: "text",
             contentType: "application/json",
             async: false,
-
-            success: function (msg) {
+        })
+            .done(function (msg) {
                 if (msg == "false") {
                     document.getElementById("usernameCheckResult").innerHTML = "This user id is not duplicated.";
                     document.getElementById("usernameCheckResult").style.color = "blue";
@@ -263,17 +314,99 @@
                     document.getElementById("usernameCheckResult").style.color = "red";
                     usernameVaildation = false;
                 }
-
-            },
-            error: function () {
+            })
+            .fail(function (msg) {
                 alert("User id duplicate fail!");
+            })
+    });
+
+    /* passowrd 검사 */
+    function validatePassword() {
+        var password = document.getElementsByName("password")[0].value;
+        var checkPassword = document.getElementsByName("checkPassword")[0].value;
+
+        if (password.length >= 6 && password.length <= 16) {
+            if (document.getElementById("password").value != "" && document.getElementById("checkPassword").value != "") {
+                if (document.getElementsByName("password")[0].value == document.getElementById("checkPassword").value) {
+                    document.getElementById("passwordCheckResult").innerHTML = "Password matches.";
+                    document.getElementById("passwordCheckResult").style.color = "blue";
+                    passwordVaildation = true;
+                } else {
+                    document.getElementById("passwordCheckResult").innerHTML = "Passwords do not match.";
+                    document.getElementById("passwordCheckResult").style.color = "red";
+                    passwordVaildation = false;
+                }
+            } else {
+                passwordVaildation = false;
             }
-        });
+        } else {
+            alert("The password can be used for more than 6 characters and less than 16 characters.");
+            document.getElementsByName("password")[0].value = "";
+            document.getElementById("checkPassword").value = "";
+            document.getElementById("passwordCheckResult").innerHTML = "";
+        }
+    }
+
+    /* email 검사 */
+    $("#email").on("change", function () {
+        var regExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        var email = document.getElementsByName("email")[0].value;
+
+        if (regExp.test(email)) {
+            document.getElementById("emailCheckResult").innerHTML = "Email format is valid.";
+            document.getElementById("emailCheckResult").style.color = "blue";
+            emailVaildation = true;
+        } else {
+            document.getElementById("emailCheckResult").innerHTML = "Email format is not valid.";
+            document.getElementById("emailCheckResult").style.color = "red";
+            document.getElementsByName("email")[0].value = "";
+            emailVaildation = false;
+        }
+    });
+
+    /* private email 검사 */
+    $("#privateEmail").on("change", function () {
+        var regExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        var email = document.getElementsByName("privateEmail")[0].value;
+
+        if (regExp.test(email)) {
+            document.getElementById("privateEmailCheckResult").innerHTML = "Email format is valid.";
+            document.getElementById("privateEmailCheckResult").style.color = "blue";
+            privateEmailVaildation = true;
+        } else {
+            document.getElementById("privateEmailCheckResult").innerHTML = "Email format is not valid.";
+            document.getElementById("privateEmailCheckResult").style.color = "red";
+            document.getElementsByName("privateEmail")[0].value = "";
+            privateEmailVaildation = false;
+        }
+    });
+
+    /* 연락처 검사 */
+    $("#contact").on("change", function () {
+        var regExp = /(01[016789])-([1-9]{1}[0-9]{2,3})-([0-9]{4})$/;
+
+        var contact = document.getElementsByName("contact")[0].value;
+
+        if (regExp.test(contact)) {
+            document.getElementById("contactCheckResult").innerHTML = "Contact format is valid.";
+            document.getElementById("contactCheckResult").style.color = "blue";
+            contactVaildation = true;
+        } else {
+            document.getElementById("contactCheckResult").innerHTML = "Contact format is not valid.";
+            document.getElementById("contactCheckResult").style.color = "red";
+            document.getElementsByName("contact")[0].value = "";
+            contactVaildation = false;
+        }
     });
 
     $("#file").on("change", function () {
-        document.getElementById("imgData").innerHTML = this.files[0].name + ", File size: " + convertFileSize(this.files[0].size);
-        readURL(this);
+        if (validateImageFile(this.files[0])) {
+            document.getElementById("imgData").innerHTML = this.files[0].name + ", File size: " + convertFileSize(this.files[0].size);
+            readURL(this);
+        } else {
+            return false;
+        }
+
     });
 
     function readURL(input) {
@@ -291,6 +424,54 @@
 
 <script th:if="!${userDto?.idx}">
     $("#insert").click(function () {
+        // validation
+        if (!usernameVaildation) {
+            alert("Please check ID duplication.");
+            document.getElementById("username").focus();
+
+            return false;
+        } else if (!passwordVaildation) {
+            alert("Please check password.");
+            document.getElementById("password").focus();
+
+            return false;
+        } else if (validateEmpty(document.getElementsByName("koreanName")[0].value)) {
+            alert("Please check korean name.");
+            document.getElementById("koreanName").focus();
+
+            return false;
+        } else if (validateEmpty(document.getElementsByName("englishName")[0].value)) {
+            alert("Please check english name.");
+            document.getElementById("englishName").focus();
+
+            return false;
+        } else if (validateEmpty(document.getElementsByName("birthDate")[0].value)) {
+            alert("Please check birth date.");
+            document.getElementById("birthDate").focus();
+
+            return false;
+        } else if (!emailVaildation) {
+            alert("Please check email.");
+            document.getElementById("email").focus();
+
+            return false;
+        } else if (!privateEmailVaildation) {
+            alert("Please check private email.");
+            document.getElementById("privateEmail").focus();
+
+            return false;
+        } else if (validateEmpty(document.getElementsByName("messangerId")[0].value)) {
+            alert("Please check messanger id.");
+            document.getElementById("messangerId").focus();
+
+            return false;
+        } else if (!contactVaildation) {
+            alert("Please check contact.");
+            document.getElementById("contact").focus();
+
+            return false;
+        }
+
         // 회원 업로드
         var jsonData = $("#form").serializeObject();
         var userIdx = 0;
@@ -309,6 +490,7 @@
             })
 
             .fail(function (msg) {
+                console.log("Register user is fail.");
                 exit = true;
             });
 
@@ -333,32 +515,72 @@
         })
             .done(function (msg) {
                 location.href = "/user?idx=" + userIdx;
-                exit = true;
             })
             .fail(function (msg) {
-                exit = false;
+                console.log("Upload attached file is fail.");
+                deleteUser(userIdx);
             });
 
-        if (exit) return true;
-
-        // 회원 삭제
-        $.ajax({
-            url: "http://localhost:8081/api/users/" + userIdx,
-            type: "delete",
-            dataType: "text",
-            contentType: "application/json",
-            async: false,
-        })
-            .done(function (msg) {
-                console.log("Delete user is successful.");
-            })
-            .fail(function (msg) {
-                console.log("Delete user is fail.");
-            });
     });
 </script>
 <script th:if="${userDto?.idx}" th:inline="javascript">
+    // 초기 valdiation을 모두 true로 설정한다.
+    passwordVaildation = true;
+    emailVaildation = true;
+    privateEmailVaildation = true;
+    contactVaildation = true;
+
     $("#update").click(function () {
+        // validation
+        var oriUsername = [[${userDto.username}]];
+
+        if ((document.getElementsByName("username")[0].value != oriUsername) && !usernameVaildation) {
+            alert("Please check ID duplication.");
+            document.getElementById("username").focus();
+
+            return false;
+        } else if (!(passwordVaildation)) {
+            alert("Please check password.");
+            document.getElementById("password").focus();
+
+            return false;
+        } else if (validateEmpty(document.getElementsByName("koreanName")[0].value)) {
+            alert("Please check korean name.");
+            document.getElementById("koreanName").focus();
+
+            return false;
+        } else if (validateEmpty(document.getElementsByName("englishName")[0].value)) {
+            alert("Please check english name.");
+            document.getElementById("englishName").focus();
+
+            return false;
+        } else if (validateEmpty(document.getElementsByName("birthDate")[0].value)) {
+            alert("Please check birth date.");
+            document.getElementById("birthDate").focus();
+
+            return false;
+        } else if (!emailVaildation) {
+            alert("Please check email.");
+            document.getElementById("email").focus();
+
+            return false;
+        } else if (!privateEmailVaildation) {
+            alert("Please check private email.");
+            document.getElementById("privateEmail").focus();
+
+            return false;
+        } else if (validateEmpty(document.getElementsByName("messangerId")[0].value)) {
+            alert("Please check messanger id.");
+            document.getElementById("messangerId").focus();
+
+            return false;
+        } else if (!contactVaildation) {
+            alert("Please check contact.");
+            document.getElementById("contact").focus();
+
+            return false;
+        }
+
         // 회원 수정
         var jsonData = $("#form").serializeObject();
         var userIdx = +document.getElementsByName("idx")[0].value;
@@ -376,10 +598,12 @@
                 if (typeof document.getElementsByName("file")[0].files[0] == "undefined") {
                     location.href = "/user?idx=" + userIdx;
                     exit = true;
+                } else {
+                    exit = false;
                 }
             })
             .fail(function (msg) {
-                console.log("AttachedFile delete fail.");
+                console.log("Update user is fail.");
                 exit = false;
             })
 
@@ -396,6 +620,7 @@
                 exit = false;
             })
             .fail(function (msg) {
+                console.log("Delete attached file is fail.");
                 exit = true;
             });
 
@@ -421,7 +646,7 @@
                 location.href = "/user?idx=" + userIdx;
             })
             .fail(function (msg) {
-
+                console.log("Upload attached file is fail.");
             });
     });
 </script>

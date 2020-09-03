@@ -173,14 +173,14 @@
             type: "delete",
             dataType: "text",
             contentType: "application/json",
-
-            success: function () {
+            async: false,
+        })
+            .done(function (msg) {
                 location.href = "/publication/list";
-            },
-            error: function () {
+            })
+            .fail(function (msg) {
                 console.log("Delete publication is fail.");
-            }
-        });
+            });
     });
 </script>
 </body>
