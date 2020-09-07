@@ -102,10 +102,10 @@ public class ModuleWebApplication {
             */
 
             /* 논문 모두 삭제 */
-            publicationRepositroy.deleteAll();
+            /* publicationRepositroy.deleteAll(); */
 
             /* 논문 생성 */
-            IntStream.rangeClosed(1, 50).forEach(index ->
+            /* IntStream.rangeClosed(1, 50).forEach(index ->
                     publicationRepositroy.save(Publication.builder()
                             .title("게시글" + index)
                             .authors("저자" + index)
@@ -160,7 +160,7 @@ public class ModuleWebApplication {
                             .activeStatus(ActiveStatus.ACTIVE)
                             .createdBy("root")
                             .build()));
-
+            */
         };
     }
 }

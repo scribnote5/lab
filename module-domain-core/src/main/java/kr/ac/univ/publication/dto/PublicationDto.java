@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotBlank;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,6 +23,7 @@ public class PublicationDto extends CommonDto {
     /* CommonDto: JPA Audit */
 
     /* 기본 정보 */
+    @NotBlank(message = "The title must not be blank.")
     private String title;
     private String authors;
     private PublicationType publicationType;

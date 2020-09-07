@@ -1,5 +1,9 @@
 package kr.ac.univ.controller;
 
+import kr.ac.univ.common.validation.FileValidator;
+import kr.ac.univ.error.ErrorCode;
+import kr.ac.univ.error.ErrorResponse;
+import kr.ac.univ.exception.FileTypeException;
 import kr.ac.univ.noticeBoard.dto.NoticeBoardDto;
 import kr.ac.univ.noticeBoard.dto.mapper.NoticeBoardMapper;
 import kr.ac.univ.noticeBoard.service.NoticeBoardAttachedFileService;
@@ -7,8 +11,10 @@ import kr.ac.univ.noticeBoard.service.NoticeBoardService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -23,14 +29,14 @@ public class NoticeBoardRestController {
     }
 
     @PostMapping
-    public ResponseEntity<?> postNoticeBoard(@RequestBody NoticeBoardDto noticeBoardDto) {
+    public ResponseEntity<?> postNoticeBoard(@RequestBody @Valid NoticeBoardDto noticeBoardDto) {
         Long idx = noticeBoardService.insertNoticeBoard(noticeBoardDto);
 
         return new ResponseEntity<>(idx, HttpStatus.CREATED);
     }
 
     @PutMapping("/{idx}")
-    public ResponseEntity<?> putNoticeBoard(@PathVariable("idx") Long idx, @RequestBody NoticeBoardDto noticeBoardDto) {
+    public ResponseEntity<?> putNoticeBoard(@PathVariable("idx") Long idx, @RequestBody @Valid NoticeBoardDto noticeBoardDto) {
         noticeBoardService.updateNoticeBoard(idx, noticeBoardDto);
 
         return new ResponseEntity<>("{}", HttpStatus.OK);
@@ -47,6 +53,13 @@ public class NoticeBoardRestController {
     // 첨부 파일 업로드
     @PostMapping("/attachedFile")
     public ResponseEntity<?> uploadAttachedFile(Long idx, String createdBy, MultipartFile[] files) throws Exception {
+        String fileValidationResult = FileValidator.isFileValid(files);
+
+        // 파일 mime type 검사
+        if (!"valid".equals(fileValidationResult)) {
+            throw new FileTypeException(fileValidationResult);
+        }
+
         noticeBoardAttachedFileService.uploadAttachedFile(idx, createdBy, files);
 
         return new ResponseEntity<>("{}", HttpStatus.CREATED);
@@ -59,4 +72,5 @@ public class NoticeBoardRestController {
 
         return new ResponseEntity<>("{}", HttpStatus.OK);
     }
+
 }

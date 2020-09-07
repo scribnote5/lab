@@ -1,6 +1,6 @@
 /* 공백 문자 검사 */
 function validateSpaceChar(str) {
-    if(str.search(/\s/) != -1) {
+    if (str.search(/\s/) != -1) {
         return true;
     } else {
         return false;
@@ -9,7 +9,7 @@ function validateSpaceChar(str) {
 
 /* 공백 문자 및 공란 검사 */
 function validateEmpty(str) {
-    if(str.search(/\s/) != -1 || str.length == 0) {
+    if (str.search(/\s/) != -1 || str.length == 0) {
         return true;
     } else {
         return false;
@@ -19,7 +19,7 @@ function validateEmpty(str) {
 /* 특수 문자 검사 */
 function validateSpecialChar(str) {
     var regExp = /[`~!@#$%^&*|\\\'\";:\/?]/gi;
-    if(regExp.test(str) == true) {
+    if (regExp.test(str) == true) {
         return true;
     } else {
         return false;
@@ -27,16 +27,16 @@ function validateSpecialChar(str) {
 }
 
 /* 바이트 수 반환 */
-function getByteSize(el){
+function getByteSize(el) {
     var codeByte = 0;
     for (var idx = 0; idx < el.length; idx++) {
         var oneChar = escape(el.charAt(idx));
-        if ( oneChar.length == 1 ) {
-            codeByte ++;
+        if (oneChar.length == 1) {
+            codeByte++;
         } else if (oneChar.indexOf("%u") != -1) {
             codeByte += 2;
         } else if (oneChar.indexOf("%") != -1) {
-            codeByte ++;
+            codeByte++;
         }
     }
     return codeByte;
@@ -46,13 +46,13 @@ function getByteSize(el){
 function validateByLength(inputName, maxStrLength, title) {
     var strLength = document.getElementsByName(inputName)[0].value.length;
 
-    if(strLength > maxStrLength) {
+    if (strLength > maxStrLength) {
         alert("The " + title + " is up to " + maxStrLength + " characters long." +
             "\n(Number of characters currently entered: " + strLength + ")");
         document.getElementsByName(inputName)[0].focus();
 
         return false;
-    } else if(validateEmpty(document.getElementsByName(inputName)[0].value)) {
+    } else if (validateEmpty(document.getElementsByName(inputName)[0].value)) {
         alert("The " + title + " must not be blank.");
         document.getElementsByName(inputName)[0].focus();
 
@@ -66,7 +66,7 @@ function validateByLength(inputName, maxStrLength, title) {
 function validateBySize(inputName, maxByteSize, title) {
     var byteSize = getByteSize(document.getElementsByName(inputName)[0].value);
 
-    if(byteSize > maxByteSize) {
+    if (byteSize > maxByteSize) {
         alert("The " + title + "is up to " + maxByteSize + " bytes size." +
             "\n(Size of characters currently entered: " + byteSize + " bytes).");
         document.getElementsByName(inputName)[0].focus();
@@ -85,11 +85,11 @@ function validateBySize(inputName, maxByteSize, title) {
  */
 function validateImageFile(file) {
     // file validation - 필수 확장자
-    var includeArray = [ ".jpg", ".jpeg", ".png" ];
+    var includeArray = [".jpg", ".jpeg", ".png"];
     // 파일 이름
     var fileName = file.name;
     // 파일 확장자명(대문자를 소문자로 변경)
-    var extensionName = fileName.substring( fileName.lastIndexOf(".")).toLowerCase();
+    var extensionName = fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
     // 필수 확장자명 사용 여부 판단
     var result = false;
     // 첨부 파일 크기
@@ -125,7 +125,7 @@ function validateImageFile(file) {
         }
 
         /* 모든 파일 크기 검사 */
-        if(fileSize + totalFileSize > maxSize) {
+        if (fileSize + totalFileSize > maxSize) {
             alert("All attached files must be within 20 MB size.");
             $("#file").replaceWith($("#file").clone(true));
             $("#file").val('');
@@ -147,12 +147,12 @@ function validateImageFile(file) {
  */
 function validateFile(file) {
     // file validation - 제외 파일 확장자
-    var excludeArray = [ ".exe", ".jar", ".js", ".swf", ".swf", ".bin", ".wmf", ".class", ".chm", ".pgm", ".pcx", ".hlp", ".acc", ".css", ".sh",
-        ".com", "bat", "cmd", ".scf", ".lnk", ".inf", ".reg" ];
+    var excludeArray = [".exe", ".jar", ".js", ".swf", ".swf", ".bin", ".wmf", ".class", ".chm", ".pgm", ".pcx", ".hlp", ".acc", ".css", ".sh",
+        ".com", "bat", "cmd", ".scf", ".lnk", ".inf", ".reg"];
     // 파일 이름
     var fileName = file.name;
     // 파일 확장자명(대문자를 소문자로 변경)
-    var extensionName = fileName.substring( fileName.lastIndexOf(".")).toLowerCase();
+    var extensionName = fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
     // 첨부 파일 크기
     var fileSize = file.size;
     // 업로드 가능한 파일 크기: 20 MB
@@ -162,7 +162,7 @@ function validateFile(file) {
         /* 확장자명 검사 */
         for (var i = 0; i < excludeArray.length; i++) {
             if (extensionName == excludeArray[i]) {
-                alert("[" + extensionName + "] extension doesn't support uploading attached file." );
+                alert("[" + extensionName + "] extension doesn't support uploading attached file.");
                 $("#file").val('');
                 $("#file").replaceWith($("#file").clone(true));
 
@@ -180,7 +180,7 @@ function validateFile(file) {
         }
 
         /* 모든 파일 크기 검사 */
-        if(fileSize + totalFileSize > maxSize) {
+        if (fileSize + totalFileSize > maxSize) {
             alert("All attached files must be within 20 MB size.");
             $("#file").replaceWith($("#file").clone(true));
             $("#file").val('');
@@ -199,14 +199,14 @@ function validateFile(file) {
  * validation response message alert
  */
 function paraseErrorMsg(msg) {
-    console.log(msg);
+    var parseMsg = JSON.parse(msg.responseText);
+    var alertMsg = null;
 
-    if(isEmpty(msg.errors)) {
-        alert(msg.message);
+    if (isEmpty(parseMsg.errors)) {
+        alertMsg = parseMsg.message;
+    } else {
+        alertMsg = parseMsg.message + "\n" + parseMsg.errors[0].reason;
     }
-    else {
-        for(var i = 0; i < msg.errors.length; i++) {
-            alert(msg.errors[i].reason);
-        }
-    }
+
+    alert(alertMsg);
 }

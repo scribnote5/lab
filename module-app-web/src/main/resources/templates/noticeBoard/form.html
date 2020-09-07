@@ -156,7 +156,7 @@
         var files = document.getElementsByName("file")[0].files;
 
         for (var i = 0; i < files.length; i++) {
-            if(validateFile(files[i])) {
+            if (validateFile(files[i])) {
                 insertFileArray.push(files[i]);
                 document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
 
@@ -183,7 +183,7 @@
         var files = event.originalEvent.dataTransfer.files;
 
         for (var i = 0; i < files.length; i++) {
-            if(validateFile(files[i])) {
+            if (validateFile(files[i])) {
                 insertFileArray.push(files[i]);
                 document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
 
@@ -231,13 +231,14 @@
 
             })
             .fail(function (msg) {
-                console.log("Delete notice board is  fail.");
+                console.log("Delete notice board is fail.");
             });
     }
 </script>
 
 <script th:if="!${noticeBoardDto?.idx}">
     $('#insert').click(function () {
+        // (input tag mame, length or size, message)
         if (!(validateByLength("title", 50, "title") && validateBySize("content", 16777215, "content"))) {
             return false;
         }
@@ -259,6 +260,7 @@
                 exit = false;
             })
             .fail(function (msg) {
+                paraseErrorMsg(msg);
                 console.log("Update notice board is fail.");
                 exit = true;
             });
@@ -289,6 +291,7 @@
                 location.href = "/notice-board?idx=" + noticeBoardIdx;
             })
             .fail(function (msg) {
+                paraseErrorMsg(msg);
                 console.log("Update attached file is fail.");
                 deleteNoticeBoard(noticeBoardIdx);
             });
@@ -319,6 +322,7 @@
                 exit = false;
             })
             .fail(function (msg) {
+                paraseErrorMsg(msg);
                 console.log("Update notice board is fail.");
                 exit = true;
             });
@@ -343,6 +347,7 @@
                     exit = false;
                 })
                 .fail(function (msg) {
+                    paraseErrorMsg(msg);
                     console.log("Delete attached file is fail.");
                     exit = true;
                 });
@@ -376,7 +381,9 @@
                 location.href = "/notice-board?idx=" + noticeBoardIdx;
             })
             .fail(function (msg) {
+                paraseErrorMsg(msg);
                 console.log("Upload attached file is fail.");
+                deleteNoticeBoard(noticeBoardIdx);
             })
 
     });

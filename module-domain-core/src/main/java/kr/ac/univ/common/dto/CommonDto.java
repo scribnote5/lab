@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter
@@ -16,6 +18,7 @@ public class CommonDto {
     private Long idx;
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
+    @NotBlank(message = "The createdBy must not be blank.\nIf the message is alerted although you are logged in, please contact the admin.")
     private String createdBy;
     private String lastModifiedBy;
     private ActiveStatus activeStatus;

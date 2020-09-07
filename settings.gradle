@@ -4,4 +4,5 @@ include 'module-domain-core'
 include 'module-app-api'
 include 'module-app-web'
 include 'module-app-admin'
+include 'module-web-core'
 

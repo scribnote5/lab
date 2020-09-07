@@ -68,7 +68,7 @@ public class PublicationController {
 
     // List Scroll
     @GetMapping("/list_scroll")
-    public String publicationHomeList(PublicationSearchDto publicationSearchDto,
+    public String publicationListScroll(PublicationSearchDto publicationSearchDto,
                                       Model model) {
         // 방어 코드: lastIdx는 충분히 큰 값을 전달하면 된다.
         Long lastIdx = publicationService.findMaxPublicationIdx();

@@ -7,6 +7,7 @@ import java.util.List;
 
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.CommonDto;
+import kr.ac.univ.common.validation.Contact;
 import kr.ac.univ.user.domain.User;
 import kr.ac.univ.user.domain.User;
 import kr.ac.univ.user.domain.UserAttachedFile;
@@ -20,6 +21,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,15 +34,24 @@ public class UserDto extends CommonDto  {
     /* CommonDto: JPA Audit */
 
     /* 기본 정보 */
+    @Size(min = 6, max = 16, message = "The ID can be used for more than 6 characters and less than 16 characters.")
     private String username;
+    @Size(min = 6, max = 16, message = "The password can be used for more than 6 characters and less than 16 characters.")
     private String password;
+    @NotEmpty(message ="The korean name is empty.")
     private String koreanName;
+    @NotEmpty(message ="The english name is empty.")
     private String englishName;
     private GenderType gender;
+    @Past(message ="The birthDate mus be past.")
     private LocalDate birthDate;
+    @Email(message = "The email format is not valid.")
     private String email;
+    @Email(message = "The email format is not valid.")
     private String privateEmail;
+    @NotEmpty(message ="The messanger id is empty.")
     private String messangerId;
+    @Contact(message = "The contact format is not valid.")
     private String contact;
     private UserType userType;
     private UserStatus userStatus;

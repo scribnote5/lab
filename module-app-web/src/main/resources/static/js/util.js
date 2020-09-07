@@ -13,3 +13,13 @@ function makeGetUri(uri, params) {
 
     return uri;
 }
+
+/* 객체 empty 여부 반환 */
+function isEmpty(obj) {
+    for(var prop in obj) {
+        if(obj.hasOwnProperty(prop))
+            return false;
+    }
+
+    return true;
+}

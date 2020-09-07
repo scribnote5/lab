@@ -316,8 +316,9 @@
                 exit = false;
             })
             .fail(function (msg) {
-                exit = true;
+                paraseErrorMsg(msg);
                 console.log("Register publication is fail.");
+                exit = true;
             });
 
         if (exit) return false;
@@ -346,6 +347,7 @@
                 location.href = "/publication/list";
             })
             .fail(function (msg) {
+                paraseErrorMsg(msg);
                 console.log("Upload attached file is fail.");
                 deletePublication(publicationIdx);
             });
@@ -375,6 +377,7 @@
                 exit = false;
             })
             .fail(function (msg) {
+                paraseErrorMsg(msg);
                 console.log("Update publication is fail.");
                 exit = true;
             });
@@ -401,6 +404,7 @@
                     exit = false;
                 })
                 .fail(function (msg) {
+                    paraseErrorMsg(msg);
                     console.log("Delete attached file is fail.");
                     exit = true;
                 });
@@ -434,6 +438,7 @@
                 location.href = "/publication?idx=" + publcationIdx;
             })
             .fail(function (msg) {
+                paraseErrorMsg(msg);
                 console.log("Upload attached file is fail.");
                 deletePublication(publcationIdx);
             })

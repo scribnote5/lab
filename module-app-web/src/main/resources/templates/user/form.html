@@ -292,7 +292,6 @@
         } else {
             return true;
         }
-
     });
 
     /* username 중복 검사 */
@@ -316,7 +315,7 @@
                 }
             })
             .fail(function (msg) {
-                alert("User id duplicate fail!");
+                alert("Duplicate check is fail.");
             })
     });
 
@@ -326,8 +325,8 @@
         var checkPassword = document.getElementsByName("checkPassword")[0].value;
 
         if (password.length >= 6 && password.length <= 16) {
-            if (document.getElementById("password").value != "" && document.getElementById("checkPassword").value != "") {
-                if (document.getElementsByName("password")[0].value == document.getElementById("checkPassword").value) {
+            if (password != "" && checkPassword != "") {
+                if (password == checkPassword) {
                     document.getElementById("passwordCheckResult").innerHTML = "Password matches.";
                     document.getElementById("passwordCheckResult").style.color = "blue";
                     passwordVaildation = true;
@@ -341,8 +340,8 @@
             }
         } else {
             alert("The password can be used for more than 6 characters and less than 16 characters.");
-            document.getElementsByName("password")[0].value = "";
-            document.getElementById("checkPassword").value = "";
+            password = "";
+            checkPassword = "";
             document.getElementById("passwordCheckResult").innerHTML = "";
         }
     }
@@ -384,7 +383,6 @@
     /* 연락처 검사 */
     $("#contact").on("change", function () {
         var regExp = /(01[016789])-([1-9]{1}[0-9]{2,3})-([0-9]{4})$/;
-
         var contact = document.getElementsByName("contact")[0].value;
 
         if (regExp.test(contact)) {
@@ -406,7 +404,6 @@
         } else {
             return false;
         }
-
     });
 
     function readURL(input) {
@@ -488,8 +485,8 @@
                 userIdx = msg;
                 exit = false;
             })
-
             .fail(function (msg) {
+                paraseErrorMsg(msg);
                 console.log("Register user is fail.");
                 exit = true;
             });
@@ -517,6 +514,7 @@
                 location.href = "/user?idx=" + userIdx;
             })
             .fail(function (msg) {
+                paraseErrorMsg(msg);
                 console.log("Upload attached file is fail.");
                 deleteUser(userIdx);
             });
@@ -603,6 +601,7 @@
                 }
             })
             .fail(function (msg) {
+                paraseErrorMsg(msg);
                 console.log("Update user is fail.");
                 exit = false;
             })
@@ -620,6 +619,7 @@
                 exit = false;
             })
             .fail(function (msg) {
+                paraseErrorMsg(msg);
                 console.log("Delete attached file is fail.");
                 exit = true;
             });
@@ -646,8 +646,11 @@
                 location.href = "/user?idx=" + userIdx;
             })
             .fail(function (msg) {
+                paraseErrorMsg(msg);
                 console.log("Upload attached file is fail.");
+                deleteUser(userIdx);
             });
+
     });
 </script>
 

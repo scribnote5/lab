@@ -1,5 +1,8 @@
 package kr.ac.univ.controller;
 
+import kr.ac.univ.common.validation.FileValidator;
+import kr.ac.univ.exception.FileTypeException;
+import kr.ac.univ.exception.InvalidUsernameException;
 import kr.ac.univ.user.dto.UserDto;
 import kr.ac.univ.user.service.UserAttachedFileService;
 import kr.ac.univ.user.service.UserService;
@@ -7,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/users")
@@ -20,10 +25,10 @@ public class UserRestController {
     }
 
     @PostMapping
-    public ResponseEntity<?> postUser(@RequestBody UserDto userDto) {
-        // 추후 변경
-        if (userService.isDupulicationUserByUsername(userDto.getUsername())) {
-
+    public ResponseEntity<?> postUser(@RequestBody @Valid UserDto userDto) {
+        // 중복 ID 검사 및 ID 길이 제한
+        if (userService.isDupulicationUserByUsername(userDto.getUsername()) && userDto.getUsername().length() >= 6 && userDto.getUsername().length() <= 16) {
+            throw new InvalidUsernameException();
         }
 
         Long idx = userService.joinUser(userDto);
@@ -32,7 +37,7 @@ public class UserRestController {
     }
 
     @PutMapping("/{idx}")
-    public ResponseEntity<?> putUser(@PathVariable("idx") Long idx, @RequestBody UserDto userDto) {
+    public ResponseEntity<?> putUser(@PathVariable("idx") Long idx, @RequestBody @Valid UserDto userDto) {
         userService.updateUser(idx, userDto);
 
         return new ResponseEntity<>("{}", HttpStatus.OK);
@@ -54,6 +59,13 @@ public class UserRestController {
     // 첨부 파일 업로드
     @PostMapping("/attachedFile")
     public ResponseEntity<?> uploadAttachedFile(Long idx, String createdBy, MultipartFile[] files) throws Exception {
+        String fileValidationResult = FileValidator.isImageFileValid(files);
+
+        // 파일 mime type 검사
+        if (!"valid".equals(fileValidationResult)) {
+            throw new FileTypeException(fileValidationResult);
+        }
+
         userAttachedFileService.uploadAttachedFile(idx, createdBy, files);
 
         return new ResponseEntity<>("성공!", HttpStatus.CREATED);
