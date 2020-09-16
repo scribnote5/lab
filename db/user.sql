@@ -21,7 +21,7 @@ CREATE TABLE user
     username           varchar(255)     null,
     user_status        varchar(255)     null,
     user_type          varchar(255)     null,
-    messanger_id       varchar(255)     null,
+    messenger_id       varchar(255)     null,
     password           varchar(255)     null,
     web_page           varchar(255)     null,
     workplace          varchar(255)     null

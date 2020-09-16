@@ -1,0 +1,39 @@
+#content.content {
+    min-height: 300px;
+    height: auto;
+}
+
+#comment.comment {
+    height: 150px;
+    resize: none;
+}
+
+.new_icon {
+    height: 15px;
+    width: 15px;
+}
+
+.createdBy {
+    font-weight: 600;
+}
+
+.createdDate {
+    color: grey;
+}
+
+[id^="updateContent"].comment {
+    height: 150px;
+    resize: none;
+}
+
+[id^="publicationTitle"].title {
+    font-size: 1.4em;
+    color: rgb(154, 27, 31);
+    font-weight: 450;
+}
+
+[id^="publicationAuthors"].authors {
+    font-size: 1em;
+    color: rgb(34, 154, 81);
+    font-weight: 450;
+}

@@ -3,6 +3,7 @@ package kr.ac.univ.publication.service;
 
 import java.util.List;
 
+import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.SearchDto;
 import kr.ac.univ.noticeBoard.domain.NoticeBoard;
 import kr.ac.univ.noticeBoard.dto.NoticeBoardDto;
@@ -16,8 +17,11 @@ import kr.ac.univ.publication.dto.enums.PublicationSearchType;
 import kr.ac.univ.publication.dto.mapper.PublicationMapper;
 import kr.ac.univ.publication.repository.PublicationRepository;
 import kr.ac.univ.publication.repository.PublicationRepositoryImpl;
+import kr.ac.univ.user.dto.UserDto;
 import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.AccessCheck;
+import kr.ac.univ.util.NewIconCheck;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +34,8 @@ import javax.transaction.Transactional;
 
 @Service
 public class PublicationService {
+    @Value("${module.name}")
+    private String moduleName;
     private final PublicationRepository publicationRepository;
     private final PublicationRepositoryImpl publicationRepositoryImpl;
     private final UserRepository userRepository;
@@ -46,7 +52,7 @@ public class PublicationService {
 
         pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1, pageable.getPageSize(), Sort.Direction.DESC, "idx");
 
-        if("Show All".equals(publicationSearchDto.getPublicationSearchType().getSearchPublicationType())) {
+        if ("Show All".equals(publicationSearchDto.getPublicationSearchType().getSearchPublicationType())) {
             switch (publicationSearchDto.getSearchType()) {
                 case "TITLE":
                     publicationList = publicationRepository.findAllByTitleContaining(pageable, publicationSearchDto.getKeyword());
@@ -85,6 +91,11 @@ public class PublicationService {
 
         publicationDtoList = new PageImpl<PublicationDto>(PublicationMapper.INSTANCE.toDto(publicationList.getContent()), pageable, publicationList.getTotalElements());
 
+        // NewIcon 판별
+        for (PublicationDto publicationDto : publicationDtoList) {
+            publicationDto.setNewIcon(NewIconCheck.isNew(publicationDto.getCreatedDate()));
+        }
+
         return publicationDtoList;
     }
 
@@ -114,7 +125,7 @@ public class PublicationService {
             publicationDto.setAccess(true);
         }
         // Update: isAccess 메소드에 따라 접근 가능 및 불가
-        else if (AccessCheck.isAccess(publicationDto.getCreatedBy(), userRepository.findByUsername(publicationDto.getCreatedBy()).getAuthorityType().getAuthorityType())) {
+        else if (AccessCheck.isAccessInModuleWeb(publicationDto.getCreatedBy())) {
             publicationDto.setAccess(true);
         } else {
             publicationDto.setAccess(false);

@@ -1,0 +1,7 @@
+#fileDrop {
+    line-height: 150px;
+    border: 1px dashed gray;
+    text-align: center;
+    color: grey;
+    border-radius: 10px;
+}

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- css -->
+    <th:block th:replace="layout/css.html"></th:block>
+
+    <title>NoticeBoard Read</title>
+</head>
+<body>
+<!-- header -->
+<div th:replace="layout/header::header"></div>
+
+<div class="container-md">
+    <form name="form" id="form" th:object="${noticeBoardDto}" action="#">
+        <div class="page-header">
+            <h1>NoticeBoard Read</h1>
+        </div>
+        <br/>
+        <table class="table">
+            <colgroup>
+                <col width="20%"/>
+                <col width="80%"/>
+            </colgroup>
+            <tr>
+                <th colspan="2" style="text-align: center"><h5>NoticeBoard Information</h5></th>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td><span id="title" class="form-control" th:text="*{title}"></span></td>
+            </tr>
+            <tr>
+                <td colspan="2"><span class="form-control overflow-auto content" id="content"></span></td>
+            </tr>
+            <tr>
+                <th>Uploaded Attached File</th>
+                <td>
+                    <div id="attachedFileList" th:each="attachedFile : *{attachedFileList}">
+                        <span th:attr="onclick=|location.href='http://localhost:8081/api/attachedFiles/download/${attachedFile.savedFileName}'|"
+                              th:text="${attachedFile.fileName} + ',&nbsp;' + 'File size: ' + ${attachedFile.fileSize}"></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th colspan="2" style="text-align: center"><h5>Additional Information</h5></th>
+            </tr>
+            <tr>
+                <th>Active Status</th>
+                <td>
+                    <div>
+                        <span class="col-md-2 form-control" th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active"> </span>
+                        <span class="col-md-2 form-control" th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"> </span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>Created Date</th>
+                <td><input type="text" class="form-control col-md-3" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+            </tr>
+            <tr>
+                <th>Modified Date</th>
+                <td><input type="text" class="form-control col-md-3" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+            </tr>
+        </table>
+
+        <table class="table table-hover">
+            <colgroup>
+                <col width="20%"/>
+                <col width="80%"/>
+            </colgroup>
+            <tr>
+                <th colspan="2" style="text-align: center"><h5>Comments</h5></th>
+            </tr>
+            <tr th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}">
+                <td colspan="2">
+                    <textarea class="form-control comment d-flex align-items-sm-stretch" name="content" id="comment"></textarea>
+                    <button type="button" class="btn btn-primary my-md-2 d-flex align-items-sm-stretch" id="insertComment">Register</button>
+                </td>
+            </tr>
+            <tr th:each="noticeBoardCommentDto : ${noticeBoardCommentDtoList}">
+                <td colspan="2">
+                    <div>
+                        <span th:class="createdBy" th:text="${noticeBoardCommentDto.createdBy}"></span> <br>
+                        <span th:class="createdDate" th:text="${#temporals.format(noticeBoardCommentDto.createdDate,'yyyy-MM-dd HH:mm')}"></span> <img th:class="new_icon" th:if="${noticeBoardCommentDto.newIcon}" th:attr="src=@{|/images/new_icon.png|}"/>
+                    </div>
+                    <div class="my-md-2">
+                        <span th:id="content + ${noticeBoardCommentDtoStat.index}" th:text="${noticeBoardCommentDto.content}"></span>
+                        <textarea class="form-control comment"
+                                  style="display: none;"
+                                  name="updateContent"
+                                  th:id="updateContent + ${noticeBoardCommentDtoStat.index}"
+                                  th:text="${noticeBoardCommentDto.content}">
+					    </textarea>
+                    </div>
+                    <div th:if="${noticeBoardCommentDto.access}">
+                        <button type="button" class="btn btn-outline-info"
+                                th:id="displayComment + ${noticeBoardCommentDtoStat.index}"
+                                th:onclick="displayComment([[${noticeBoardCommentDtoStat.index}]])">Update
+                        </button>
+                        <button type="button" class="btn btn-outline-danger"
+                                th:id="deleteComment + ${noticeBoardCommentDtoStat.index}"
+                                th:onclick="deleteComment([[${noticeBoardCommentDto.idx}]], [[${noticeBoardCommentDtoStat.index}]])">
+                            Delete
+                        </button>
+                        <button type="button" style="display:none;" class="btn btn-outline-primary"
+                                th:id="updateComment + ${noticeBoardCommentDtoStat.index}"
+                                th:onclick="updateComment([[${noticeBoardCommentDto.idx}]], [[${noticeBoardCommentDto.createdBy}]], [[${noticeBoardCommentDto.activeStatus}]],[[${noticeBoardCommentDtoStat.index}]])">
+                            Register
+                        </button>
+                        <button type="button" style="display:none;" class="btn btn-outline-danger"
+                                th:id="cancelComment + ${noticeBoardCommentDtoStat.index}"
+                                th:onclick="cancelComment([[${noticeBoardCommentDtoStat.index}]])">Cancel
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+
+        <div class="row justify-content-md-between">
+            <a href="/notice-board/list" class="btn btn-secondary">Move to List</a>
+
+            <div th:if="*{access}">
+                <a th:href="'/notice-board/form?idx='+*{idx}" class="btn btn-info">Update</a>
+                <button type="button" class="btn btn-danger" id="delete">Delete</button>
+            </div>
+        </div>
+
+        <!-- input type="hidden" -->
+        <input type="hidden" name="idx" th:value="*{idx}"/>
+        <input type="hidden" name="createdBy" th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}"
+               th:value="${#authentication.principal.username}"/>
+        <input type="hidden" name="lastModifiedBy"
+               th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}"
+               th:value="${#authentication.principal.username}"/>
+        <input type="hidden" name="activeStatus"
+               th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}"
+               th:value="ACTIVE"/>
+    </form>
+</div>
+
+<!-- footer -->
+<div th:replace="layout/footer::footer"></div>
+
+<!-- script file -->
+<th:block th:replace="layout/script.html"></th:block>
+
+<script th:inline="javascript">
+    $(document).ready(function () {
+        document.getElementById("content").innerHTML = [[${noticeBoardDto.content}]];
+    });
+
+    $("#delete").click(function () {
+        if (!confirm("Do you want to delete post?")) {
+            return true;
+        }
+
+        // 게시글 삭제
+        $.ajax({
+            url: "http://localhost:8081/api/notice-boards/" + document.getElementsByName("idx")[0].value,
+            type: "delete",
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                location.href = "/notice-board/list";
+            })
+            .fail(function (msg) {
+                console.log("Delete notice board is fail.");
+            })
+
+    });
+
+    $("#insertComment").click(function () {
+        var jsonData =
+            {
+                createdBy: document.getElementsByName("createdBy")[0].value,
+                lastModifiedBy: document.getElementsByName("lastModifiedBy")[0].value,
+                activeStatus: document.getElementsByName("activeStatus")[0].value,
+                noticeBoardIdx: document.getElementsByName("idx")[0].value,
+                content: document.getElementsByName("content")[0].value
+            }
+
+        // 댓글 등록
+        $.ajax({
+            url: "http://localhost:8081/api/notice-boards-comments/",
+            type: "post",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                location.href = "/notice-board?idx=" + document.getElementsByName("idx")[0].value;
+            })
+            .fail(function (msg) {
+                console.log("Register comment is fail.");
+            })
+    });
+
+    function updateComment(idx, createdBy, activeStatus, commentId) {
+        var jsonData =
+            {
+                idx: idx,
+                createdBy: createdBy,
+                lastModifiedBy: document.getElementsByName("lastModifiedBy")[0].value,
+                activeStatus: activeStatus,
+                noticeBoardIdx: document.getElementsByName("idx")[0].value,
+                content: document.getElementsByName("updateContent")[commentId].value
+            }
+
+        // 댓글 수정
+        $.ajax({
+            url: "http://localhost:8081/api/notice-boards-comments/" + idx,
+            type: "put",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                location.href = "/notice-board?idx=" + document.getElementsByName("idx")[0].value;
+            })
+            .fail(function (msg) {
+                console.log("Update comment is fail.");
+            })
+    }
+
+    function deleteComment(idx, commentId) {
+        if (!confirm("Do you want to delete comment?")) {
+
+            return true;
+        }
+
+        // 댓글 삭제
+        $.ajax({
+            url: "http://localhost:8081/api/notice-boards-comments/" + idx,
+            type: "delete",
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                location.href = "/notice-board?idx=" + document.getElementsByName("idx")[0].value;
+            })
+            .fail(function (msg) {
+                console.log("Delete comment is fail.");
+            })
+    }
+
+    function displayComment(index) {
+        document.getElementsByName("updateContent")[index].style.display = "inline";
+        document.getElementById("content" + index).style.display = "none";
+
+        document.getElementById("displayComment" + index).style.display = "none";
+        document.getElementById("deleteComment" + index).style.display = "none";
+        document.getElementById("updateComment" + index).style.display = "inline";
+        document.getElementById("cancelComment" + index).style.display = "inline";
+    }
+
+    function cancelComment(index) {
+        document.getElementsByName("updateContent")[index].style.display = "none";
+        document.getElementById("content" + index).style.display = "inline";
+
+        document.getElementById("displayComment" + index).style.display = "inline";
+        document.getElementById("deleteComment" + index).style.display = "inline";
+        document.getElementById("updateComment" + index).style.display = "none";
+        document.getElementById("cancelComment" + index).style.display = "none";
+    }
+</script>
+
+</body>
+</html>

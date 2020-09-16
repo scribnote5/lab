@@ -8,7 +8,7 @@
 </head>
 <body>
 <!-- header -->
-<div class="container">
+<div class="container-md">
     <form name="form" id="form" action="#">
         <h1>Index</h1>
         <hr>
@@ -25,9 +25,6 @@
         <a sec:authorize="hasAuthority('root')">root</a>
         <a sec:authorize="hasAuthority('manager')">manager</a>
         <a sec:authorize="hasAuthority('general')">gerneral</a>
-
-
-        <br>
         <br>
 <!--        User Authority Check:-->
 <!--        <span sec:authentication="principal.authorities"></span>-->

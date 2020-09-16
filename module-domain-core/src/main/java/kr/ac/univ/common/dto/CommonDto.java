@@ -23,4 +23,5 @@ public class CommonDto {
     private String lastModifiedBy;
     private ActiveStatus activeStatus;
     private boolean isAccess;
+    private boolean isNewIcon;
 }

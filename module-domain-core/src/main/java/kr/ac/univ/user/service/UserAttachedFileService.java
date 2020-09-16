@@ -6,7 +6,11 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
+import kr.ac.univ.noticeBoard.dto.NoticeBoardDto;
+import kr.ac.univ.noticeBoard.dto.mapper.NoticeBoardMapper;
 import kr.ac.univ.user.domain.UserAttachedFile;
+import kr.ac.univ.user.dto.UserDto;
+import kr.ac.univ.user.dto.mapper.UserMapper;
 import kr.ac.univ.user.repository.UserAttachedFileRepository;
 import kr.ac.univ.user.repository.UserAttachedFileRepositoryImpl;
 import kr.ac.univ.util.FileUtil;
@@ -23,8 +27,9 @@ public class UserAttachedFileService {
         this.userAttachedFileRepositoryImpl = userAttachedFileRepositoryImpl;
     }
 
-    public List<UserAttachedFile> findAttachedFileByUserIdx(Long userIdx) {
-        return userAttachedFileRepositoryImpl.findAttachedFileByUserIdx(userIdx);
+    public UserDto findAttachedFileByUserIdx(Long userIdx, UserDto userDto) {
+
+        return UserMapper.INSTANCE.toDto(userDto, userAttachedFileRepositoryImpl.findAttachedFileByUserIdx(userIdx));
     }
 
     public void insertAttachedFile(UserAttachedFile userAttachedFile) {
@@ -32,6 +37,7 @@ public class UserAttachedFileService {
     }
 
     public UserAttachedFile findAttachedFileByIdx(Long idx) {
+
         return userAttachedFileRepository.findById(idx).orElse(new UserAttachedFile());
     }
 
@@ -81,7 +87,7 @@ public class UserAttachedFileService {
      * @param userIdx
      */
     public void deleteAttachedFile(Long userIdx) throws Exception {
-        List<UserAttachedFile> attachedFileList = findAttachedFileByUserIdx(userIdx);
+        List<UserAttachedFile> attachedFileList = userAttachedFileRepositoryImpl.findAttachedFileByUserIdx(userIdx);
 
         for (UserAttachedFile attachedFile : attachedFileList) {
             Path path = Paths.get("./upload/" + attachedFile.getSavedFileName());

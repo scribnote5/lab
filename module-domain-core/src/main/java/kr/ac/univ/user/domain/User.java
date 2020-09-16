@@ -49,7 +49,7 @@ public class User extends CommonAudit {
     private String privateEmail;
 
     @Column
-    private String messangerId;
+    private String messengerId;
 
     @Column
     private String contact;
@@ -84,7 +84,7 @@ public class User extends CommonAudit {
     private AuthorityType authorityType;
 
     @Builder
-    public User(Long idx, String createdBy, String lastModifiedBy, ActiveStatus activeStatus, String username, String password, String koreanName, String englishName, GenderType gender, LocalDate birthDate, String email, String privateEmail, String messangerId, String contact, UserType userType, UserStatus userStatus, String introduction, LocalDate admissionDate, LocalDate graduatedDate, String webPage, String workplace, AuthorityType authorityType) {
+    public User(Long idx, String createdBy, String lastModifiedBy, ActiveStatus activeStatus, String username, String password, String koreanName, String englishName, GenderType gender, LocalDate birthDate, String email, String privateEmail, String messengerId, String contact, UserType userType, UserStatus userStatus, String introduction, LocalDate admissionDate, LocalDate graduatedDate, String webPage, String workplace, AuthorityType authorityType) {
         setIdx(idx);
         setCreatedBy(createdBy);
         setLastModifiedBy(lastModifiedBy);
@@ -97,7 +97,7 @@ public class User extends CommonAudit {
         this.birthDate = birthDate;
         this.privateEmail = privateEmail;
         this.email = email;
-        this.messangerId = messangerId;
+        this.messengerId = messengerId;
         this.contact = contact;
         this.userType = userType;
         this.userStatus = userStatus;
@@ -109,11 +109,11 @@ public class User extends CommonAudit {
         this.authorityType = authorityType;
     }
 
-    public void update(User user) {
+    public void update(User user, String password) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-        // 비밀번호가 입력되지 않은 경우, 비밀번호를 변경하지 않음
-        if (EmptyUtil.isEmpty(user.getPassword())) {
+        // 비밀번호가 변경된 경우 -> 비밀번호 변경함
+        if (!passwordEncoder.matches(user.getPassword(),password) && !"".equals(user.getPassword())) {
             this.password = passwordEncoder.encode(user.getPassword());
         }
 
@@ -125,7 +125,7 @@ public class User extends CommonAudit {
         this.birthDate = user.getBirthDate();
         this.privateEmail = user.getPrivateEmail();
         this.email = user.getEmail();
-        this.messangerId = user.getMessangerId();
+        this.messengerId = user.getMessengerId();
         this.contact = user.getContact();
         this.userType = user.getUserType();
         this.userStatus = user.getUserStatus();

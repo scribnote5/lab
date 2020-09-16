@@ -1,0 +1,189 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- css -->
+    <th:block th:replace="layout/css.html"></th:block>
+
+    <title>Publication Read</title>
+</head>
+<body>
+<!-- header -->
+<div th:replace="layout/header::header"></div>
+
+<div class="container-md">
+    <form id="form" th:object="${publicationDto}" action="#">
+        <div class="page-header">
+            <h1>Publication Read</h1>
+        </div>
+        <br/>
+        <table class="table">
+            <colgroup>
+                <col width="20%"/>
+                <col width="80%"/>
+            </colgroup>
+            <tr>
+                <th colspan="4" style="text-align: center"><h5>Publication Information</h5></th>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td><span id="title" class="form-control " th:text="*{title}"></span></td>
+            </tr>
+            <tr>
+                <th>Authors</th>
+                <td><span id="authors" class="form-control " th:text="*{authors}"></span></td>
+            </tr>
+
+            <tr>
+                <th style="padding:13px 0 0 15px">Publication Type</th>
+                <td>
+                    <span class="form-control col-md-3" th:if="*{publicationType?.name() == 'JOURNAL'}"
+                          th:text="Journal"> </span>
+                    <span class="form-control col-md-3" th:if="*{publicationType?.name() == 'POSTER'}"
+                          th:text="Poster"> </span>
+                    <span class=" form-control col-md-3" th:if="*{publicationType?.name() == 'REGULAR'}"
+                          th:text="Regular"> </span>
+                    <span class=" form-control " th:if="*{publicationType?.name() == 'DEMO'}"
+                          th:text="Demo"> </span>
+                    <span class=" form-control col-md-3" th:if="*{publicationType?.name() == 'WORKSHOP'}"
+                          th:text="Workshop"> </span>
+                    <span class="1 form-control col-md-3"
+                          th:if="*{publicationType?.name() == 'WORKINPROCESS'}" th:text="Work in Process"> </span>
+                </td>
+            </tr>
+            <tr>
+                <th>Publishing Area</th>
+                <td>
+                    <span class="form-control col-md-3" th:if="*{publishingArea?.name() == 'DOMESTIC'}"
+                          th:text="Domestic"> </span>
+                    <span class="form-control col-md-3"
+                          th:if="*{publishingArea?.name() == 'INTERNATIONAL'}"
+                          th:text="International"> </span>
+                </td>
+            </tr>
+            <tr>
+                <th>Published In</th>
+                <td><span id="publishedIn" class="form-control" th:text="*{publishedIn}"></span></td>
+            </tr>
+            <tr>
+                <th>Impact Factor</th>
+                <td><span id="impactFactor" class="form-control col-md-3" th:text="*{impactFactor}"></span>
+                </td>
+            </tr>
+            <tr>
+                <th>Published Date</th>
+
+                <td><input type="text" class="col-md-3 form-control " readonly="readonly"
+                           th:value="*{#temporals.format(publishedDate,'yyyy-MM-dd')}"/></td>
+            </tr>
+            <tr>
+                <th>Pages</th>
+                <td><span id="pages" class="form-control col-md-1" th:text="*{pages}"></span></td>
+            </tr>
+            <tr>
+                <th>Volume</th>
+                <td><span id="volume" class="form-control col-md-1" th:text="*{volume}"></span></td>
+            </tr>
+            <tr>
+                <th>Number</th>
+                <td><span id="number" class="form-control col-md-1" th:text="*{number}"></span></td>
+            </tr>
+            <tr>
+                <th>Doi</th>
+                <td><span id="Doi" class="form-control " th:text="*{Doi}"></span></td>
+            </tr>
+            <tr>
+                <th>URI</th>
+                <td><span id="uri" class="form-control " th:text="*{Doi}"></span></td>
+            </tr>
+            <tr>
+                <th>ISBN/ISSN</th>
+                <td><span id="ISBN/ISSN" class="form-control col-md-1" th:text="*{isbnIssn}"></span></td>
+            </tr>
+            <tr>
+                <th>Remark</th>
+                <td><span id="remark" class="form-control" th:text="*{remark}"></span></td>
+            </tr>
+
+            <tr>
+                <th>Uploaded Attached File</th>
+                <td>
+                    <div id="attachedFileList" th:each="attachedFile : *{attachedFileList}">
+                        <span th:attr="onclick=|location.href='http://localhost:8081/api/attachedFiles/download/${attachedFile.savedFileName}'|"
+                              th:text="${attachedFile.fileName} + ',&nbsp;' + 'File size: ' + ${attachedFile.fileSize}"></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th colspan="2" style="text-align: center"><h5>Additional Information</h5></th>
+            </tr>
+            <tr>
+                <th>Active Status</th>
+                <td>
+                    <div>
+                        <span class="col-md-2 form-control" th:if="*{activeStatus?.name() == 'ACTIVE'}"
+                              th:text="Active"> </span>
+                        <span class="col-md-2 form-control" th:if="*{activeStatus?.name() == 'INACTIVE'}"
+                              th:text="Inactive"> </span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>Created Date</th>
+                <td><input type="text" class="form-control col-md-3" readonly="readonly"
+                           th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+            </tr>
+            <tr>
+                <th>Modified Date</th>
+                <td><input type="text" class="form-control col-md-3" readonly="readonly"
+                           th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+
+        <div class="row justify-content-md-between">
+            <a href="/publication/list" class="btn btn-secondary">Move to List</a>
+
+            <div class="pull-right" th:if="*{access}">
+                <a th:href="'/publication/form?idx='+*{idx}" class="btn btn-info">Update</a>
+                <button type="button" class="btn btn-danger" id="delete">Delete</button>
+            </div>
+        </div>
+
+        <!-- input type="hidden" -->
+        <input type="hidden" name="idx" th:value="*{idx}"/>
+
+    </form>
+</div>
+
+<!-- footer -->
+<div th:replace="layout/footer::footer"></div>
+
+<!-- script file -->
+<th:block th:replace="layout/script.html"></th:block>
+
+<script th:inline="javascript">
+    $('#delete').click(function () {
+        if (!confirm("Do you want to delete comment?")) {
+            return true;
+        }
+
+        // 게시글 삭제
+        $.ajax({
+            url: "http://localhost:8081/api/publications/" + document.getElementsByName('idx')[0].value,
+            type: "delete",
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                location.href = "/publication/list";
+            })
+            .fail(function (msg) {
+                console.log("Delete publication is fail.");
+            });
+    });
+</script>
+</body>
+</html>

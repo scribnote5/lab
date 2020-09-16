@@ -5,6 +5,8 @@ spring:
     # 프론트 수정 사항을 자동으로 반영한다.
     livereload:
       enabled: false
+    restart:
+      enabled: true
   servlet:
     multipart:
       # 한개의 파일의 최대 크기
@@ -12,6 +14,8 @@ spring:
       # form-data 요청에 따른 모든 파일의 최대 크기
       max-request-size: 20MB
       enabled: true
+module:
+  name: module-app-api
 server:
   tomcat:
     max-swallow-size: -1

@@ -110,6 +110,9 @@ project(":module-app-admin") {
         compile project(":module-system-common")
         compile project(":module-domain-core")
         compile project(":module-web-core")
+
+        implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
+        implementation "org.thymeleaf.extras:thymeleaf-extras-springsecurity5"
     }
 }
 

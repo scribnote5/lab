@@ -9,7 +9,7 @@ CREATE TABLE notice_board
     active_status      varchar(255)     null,
     content            longtext         null,
     title              varchar(255)     null,
-    view_count         bigint           null
+    views              bigint           null
 );
 
 ALTER TABLE notice_board AUTO_INCREMENT=1;

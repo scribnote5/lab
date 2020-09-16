@@ -5,8 +5,12 @@ spring:
     # 프론트 수정 사항을 자동으로 반영한다.
     livereload:
       enabled: true
+    restart:
+      enabled: true
   thymeleaf:
     cache: false
+module:
+  name: module-app-web
 ---
 spring:
   profiles: test

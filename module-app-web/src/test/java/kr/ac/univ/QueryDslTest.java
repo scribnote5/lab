@@ -52,15 +52,15 @@ public class QueryDslTest {
     }
 
     @Test
-    @DisplayName("QueryDsl로 구현한 updateViewCountByIdx 테스트")
+    @DisplayName("QueryDsl로 구현한 updateViewsByIdx 테스트")
     public void Test2() {
         // update된 column 개수 반환
-        Long cnt = noticeBoardRepositoryImpl.updateViewCountByIdx(1L);
+        Long cnt = noticeBoardRepositoryImpl.updateViewsByIdx(1L);
         assertEquals(cnt, 1);
     }
 
     @Test
-    @DisplayName("JPA findById를 사용한 viewCount 테스트")
+    @DisplayName("JPA findById를 사용한 views 테스트")
     public void Test3() {
         Optional<NoticeBoard> optionalNoticeBoard = noticeBoardRepository.findById(1L);
         NoticeBoard noticeBoard = null;
@@ -71,6 +71,6 @@ public class QueryDslTest {
 
         // idx 1인 column을 조회한다.
         assertEquals(noticeBoard.getIdx(), 1L);
-        assertEquals(noticeBoard.getViewCount(), 1L);
+        assertEquals(noticeBoard.getViews(), 1L);
     }
 }

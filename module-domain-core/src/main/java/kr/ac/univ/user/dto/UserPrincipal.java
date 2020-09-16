@@ -78,7 +78,7 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return this.getAuthorityType() != AuthorityType.NON_USER;
     }
 
     @Override

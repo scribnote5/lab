@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- css -->
+    <th:block th:replace="layout/css.html"></th:block>
+
+    <title>Publication Form</title>
+</head>
+<body>
+<!-- header -->
+<div th:replace="layout/header::header"></div>
+
+<div class="container-md">
+    <form name="form" id="form" th:object="${publicationDto}" action="#">
+        <div class="page-header">
+            <h1 th:if="!*{idx}">Publication Register</h1>
+            <h1 th:if="*{idx}">Publication Update</h1>
+        </div>
+        <br/>
+        <table class="table">
+            <colgroup>
+                <col width="20%"/>
+                <col width="80%"/>
+            </colgroup>
+            <tr>
+                <th colspan="2" style="text-align: center"><h5>Publication Information</h5></th>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td><input type="text" name="title" class="form-control" th:value="*{title}"/></td>
+            </tr>
+            <tr>
+                <th>Authors</th>
+                <td><input type="text" name="authors" class="form-control " th:value="*{authors}"/>
+                </td>
+            </tr>
+            <tr>
+                <th>Publication Type</th>
+                <td>
+                    <select class="custom-select col-md-3" name="publicationType" th:field="*{publicationType}">
+                        <option th:value="JOURNAL">Journal</option>
+                        <option th:value="POSTER">Poster</option>
+                        <option th:value="REGULAR">Regular</option>
+                        <option th:value="DEMO">Demo</option>
+                        <option th:value="WORKSHOP">Workshop</option>
+                        <option th:value="WORKINPROCESS">Work in Process</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>Publishing Area</th>
+                <td>
+                    <select class="custom-select col-md-3" name="publishingArea" th:field="*{publishingArea}">
+                        <option th:value="DOMESTIC">Domestic</option>
+                        <option th:value="INTERNATIONAL">International</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>Published In</th>
+                <td><input type="text" class="form-control" name="publishedIn"
+                           th:value="*{publishedIn}"/></td>
+            </tr>
+            <tr>
+                <th>Impact Factor(SCIE)</th>
+                <td><input type="text" name="impactFactor" class="form-control col-md-3"
+                           th:placeholder="*{#strings.isEmpty(impactFactor)} ? 'ex) IF: 0.861' : ''"
+                           th:value="*{impactFactor}"/></td>
+            </tr>
+            <tr>
+                <th>Published Date</th>
+                <td><input type="date" name="publishedDate" class="form-control col-md-3"
+                           th:value="*{publishedDate}"/></td>
+            </tr>
+            <tr>
+                <th>Pages</th>
+                <td><input type="text" name="pages" class="col-md-1 form-control " th:value="*{pages}"/></td>
+            </tr>
+            <tr>
+                <th>Volume</th>
+                <td><input type="text" name="volume" class="col-md-1 form-control " th:value="*{volume}"/></td>
+            </tr>
+            <tr>
+                <th>Number</th>
+                <td><input type="text" name="number" class="col-md-1 form-control " th:value="*{number}"/></td>
+            </tr>
+            <tr>
+                <th>DOI</th>
+                <td><input type="text" name="doi" class="form-control " th:value="*{doi}"/></td>
+            </tr>
+            <tr>
+                <th>URI</th>
+                <td><input type="text" name="uri" class="form-control " th:value="*{uri}"/></td>
+            </tr>
+            <tr>
+                <th>ISBN/ISSN</th>
+                <td><input type="text" name="isbnIssn" class="col-md-3 form-control " th:value="*{isbnIssn}"/></td>
+            </tr>
+            <tr>
+                <th>Remark</th>
+                <td><input type="text" name="remark" class="form-control " th:value="*{remark}"/></td>
+            </tr>
+            <tr>
+                <th>Attached File</th>
+                <td>
+                    <div class="custom-file py-md-4">
+                        <input type="file" class="custom-file-input" id="file" name="file">
+                        <label class="custom-file-label" for="file">Choose file.</label>
+                    </div>
+                    <div id="fileDrop" class="fileDrop">
+                        <strong>Drop files here.</strong>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>Total file size</th>
+                <td>
+                    <div><span id="totalFileSize"> 0 MB</span>, Up to 20 MB</div>
+                </td>
+            <tr>
+                <th>Upload Attached File</th>
+                <td>
+                    <div id="attachedFileList"></div>
+                </td>
+            </tr>
+            <tr>
+                <th>Uploaded Attached File</th>
+                <td>
+                    <div id="uploadedAttachedFileList" th:each="attachedFile : *{attachedFileList}">
+                        <div th:id="imgData + ${attachedFileStat.index}">
+                            <span th:text="${attachedFile.fileName} + ',&nbsp;' + 'File Size: ' + ${attachedFile.fileSize} + '&nbsp;'"></span>
+                            <img th:attr="src=@{|/images/cancel.png|}, onclick=|deleteFile('${attachedFileStat.index}','${attachedFile.idx}','${attachedFile.savedFileName}')|"
+                                 th:style="'width: 16px; height: 16px'"/>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th colspan="2" style="text-align: center"><h5>Additional Information</h5></th>
+            </tr>
+            <tr>
+                <th>Active Status</th>
+                <td>
+                    <div class="pull-left">
+                        <select class="custom-select col-md-2" name="activeStatus" th:field="*{activeStatus}">
+                            <option th:value="ACTIVE">Active</option>
+                            <option th:value="INACTIVE">Inactive</option>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <tr th:if="*{idx}">
+                <th>Created Date</th>
+                <td><input type="text" class="form-control col-md-3" readonly="readonly"
+                           th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+            </tr>
+            <tr th:if="*{idx}">
+                <th>Modified Date</th>
+                <td><input type="text" class="form-control col-md-3" readonly="readonly"
+                           th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+
+        <div class="row justify-content-md-between">
+            <a href="/publication/list" class="btn btn-secondary col-md-auto">Move to List</a>
+
+            <button th:if="!*{idx}" id="insert" type="button" class="btn btn-primary col-md-auto">Register</button>
+            <button th:if="*{idx}" id="update" type="button" class="btn btn-info col-md-auto">Update</button>
+        </div>
+
+        <!-- input type="hidden" -->
+        <input type="hidden" name="idx" th:value="*{idx}"/>
+        <input type="hidden" name="createdBy"
+               th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
+        <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
+
+    </form>
+</div>
+
+<!-- footer -->
+<div th:replace="layout/footer::footer"></div>
+
+<!-- script file -->
+<th:block th:replace="layout/script.html"></th:block>
+
+<!-- javascript -->
+<script>
+    var totalFileSize = 0;
+    var insertFileArray = [];
+    var deleteFileArray = [];
+    var imgDataId = 0;
+    var exit = null;
+
+    $(document).ready(function () {
+        <!-- File Drop -->
+        $("#fileDrop").on("dragenter dragover", function (event) {
+            event.preventDefault(); // 기본 효과를 막음
+        });
+    });
+
+    /* input tag event */
+    $("#file").change(function () {
+        var files = document.getElementsByName("file")[0].files;
+
+        for (var i = 0; i < files.length; i++) {
+            if (validateFile(files[i])) {
+                insertFileArray.push(files[i]);
+                document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
+
+                $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
+                    + '<span>'
+                    + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size) + "&nbsp;"
+                    + '<img src="/images/cancel.png" style="width: 16px; height: 16px" onClick="cancelFile(' + imgDataId + ')" />'
+                    + '</span>'
+                    + '</div>');
+
+                imgDataId++;
+            } else {
+                return false;
+            }
+        }
+    });
+
+    /* Drag & drop event */
+    $("#fileDrop").on("drop", function (event) {
+        event.preventDefault(); // 기본 효과를 막음
+        // 드래그된 파일의 정보
+        // event : jQuery의 이벤트
+        // originalEvent : javascript의 이벤트
+        var files = event.originalEvent.dataTransfer.files;
+
+        for (var i = 0; i < files.length; i++) {
+            if (validateFile(files[i])) {
+                insertFileArray.push(files[i]);
+                document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
+
+                $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
+                    + '<span>'
+                    + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size) + "&nbsp;"
+                    + '<img src="/images/cancel.png" style="width: 16px; height: 16px" onClick="cancelFile(' + imgDataId + ')" />'
+                    + '</span>'
+                    + '</div>');
+
+                imgDataId++;
+            } else {
+                return false;
+            }
+        }
+    });
+
+    // 새로 업로드한 파일을 취소하는 경우
+    function cancelFile(fileId) {
+        $("#imgData" + fileId).remove();
+
+        totalFileSize -= insertFileArray[fileId].size;
+        insertFileArray[fileId] = null;
+
+        document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
+    }
+
+    // 기존 업로드한 파일을 삭제하는 경우
+    function deleteFile(fileId, idx, savedFileName) {
+        $("#imgData" + fileId).remove();
+
+        deleteFileArray.push(idx);
+    }
+
+    function deletePublication(publicationIdx) {
+        // 게시글 삭제
+        $.ajax({
+            url: "http://localhost:8081/api/publications/" + publicationIdx,
+            type: "delete",
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+
+            })
+            .fail(function (msg) {
+                console.log("Delete publication is fail.");
+            });
+    }
+
+
+    publish
+    publishingArea
+
+</script>
+<script th:if="!${publicationDto?.idx}">
+    $("#insert").click(function () {
+        // (input tag mame, length or size, message)
+        if (!(validateByLength("title", 50, "title"))) {
+            return false;
+        }
+
+        var jsonData = $("#form").serializeObject();
+        var publicationIdx;
+
+        // 게시글 업로드
+        $.ajax({
+            url: "http://localhost:8081/api/publications",
+            type: "post",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                publicationIdx = msg;
+                exit = false;
+            })
+            .fail(function (msg) {
+                paraseErrorMsg(msg);
+                console.log("Register publication is fail.");
+                exit = true;
+            });
+
+        if (exit) return false;
+
+        // 파일 업로드
+        var formData = new FormData();
+
+        for (var i = 0; i < insertFileArray.length; i++) {
+            formData.append("files", insertFileArray[i]);
+        }
+
+        formData.append("idx", publicationIdx);
+        formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
+
+        $.ajax({
+            url: "http://localhost:8081/api/publications/attachedFile",
+            type: "post",
+            data: formData,
+            dataType: "text",
+            enctype: "multipart/form-data",
+            processData: false,
+            contentType: false,
+            async: false,
+        })
+            .done(function (msg) {
+                location.href = "/publication/list";
+            })
+            .fail(function (msg) {
+                paraseErrorMsg(msg);
+                console.log("Upload attached file is fail.");
+                deletePublication(publicationIdx);
+            });
+
+    });
+</script>
+<script th:if="${publicationDto?.idx}" th:inline="javascript">
+    $("#update").click(function () {
+        // (input tag mame, length or size, message)
+        if (!(validateByLength("title", 50, "title"))) {
+            return false;
+        }
+
+        var jsonData = $("#form").serializeObject();
+        var publcationIdx = document.getElementsByName("idx")[0].value;
+
+        // 게시글 수정
+        $.ajax({
+            url: "http://localhost:8081/api/publications/" + publcationIdx,
+            type: "put",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                exit = false;
+            })
+            .fail(function (msg) {
+                paraseErrorMsg(msg);
+                console.log("Update publication is fail.");
+                exit = true;
+            });
+
+        if (exit) return false;
+
+        // 만일 파일이 수정되지 않은 경우 '파일 업로드' 및 '파일 삭제'를 수행하지 않음
+        if (insertFileArray.length == 0 && deleteFileArray.length == 0) {
+            location.href = "/publication?idx=" + publcationIdx;
+
+            return true;
+        }
+
+        // 파일 삭제  
+        if (deleteFileArray.length > 0) {
+            $.ajax({
+                url: "http://localhost:8081/api/publications/attachedFile",
+                type: "delete",
+                data: JSON.stringify(deleteFileArray),
+                contentType: "application/json",
+                async: false,
+            })
+                .done(function (msg) {
+                    exit = false;
+                })
+                .fail(function (msg) {
+                    paraseErrorMsg(msg);
+                    console.log("Delete attached file is fail.");
+                    exit = true;
+                });
+        }
+
+        if (exit) return false;
+
+        if (insertFileArray.length <= 0) location.href = "/notice-board?idx=" + publcationIdx;
+
+        // 파일 업로드
+        var formData = new FormData();
+
+        for (var i = 0; i < insertFileArray.length; i++) {
+            formData.append("files", insertFileArray[i]);
+        }
+
+        formData.append("idx", publcationIdx);
+        formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
+
+        $.ajax({
+            url: "http://localhost:8081/api/publications/attachedFile",
+            type: "post",
+            data: formData,
+            dataType: "text",
+            enctype: "multipart/form-data",
+            processData: false,
+            contentType: false,
+            async: false,
+        })
+            .done(function (msg) {
+                location.href = "/publication?idx=" + publcationIdx;
+            })
+            .fail(function (msg) {
+                paraseErrorMsg(msg);
+                console.log("Upload attached file is fail.");
+                deletePublication(publcationIdx);
+            })
+
+    });
+</script>
+
+</body>
+</html>

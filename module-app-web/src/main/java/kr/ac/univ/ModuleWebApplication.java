@@ -43,7 +43,7 @@ public class ModuleWebApplication {
                 noticeBoardRepository.save(NoticeBoard.builder()
                     .title("게시글" + index)
                     .content("컨텐츠" + index)
-                    .activeStatus(ActiveStatus.ACTIVE)
+                    .activeStatus(ActiveStatus.ACTIVEx)
                     .createdBy("root")
                     .build()));
             */
@@ -58,6 +58,7 @@ public class ModuleWebApplication {
                     .userType(UserType.PART_TIME_MS)
                     .authorityType(AuthorityType.ROOT)
                     .activeStatus(ActiveStatus.ACTIVE)
+                    .createdBy("root")
                     .build());
 
             userRepository.save(User.builder()
@@ -66,6 +67,7 @@ public class ModuleWebApplication {
                     .userType(UserType.PART_TIME_MS)
                     .authorityType(AuthorityType.MANAGER)
                     .activeStatus(ActiveStatus.ACTIVE)
+                    .createdBy("manager")
                     .build());
 
             userRepository.save(User.builder()
@@ -74,6 +76,7 @@ public class ModuleWebApplication {
                     .userType(UserType.PART_TIME_MS)
                     .authorityType(AuthorityType.MANAGER)
                     .activeStatus(ActiveStatus.ACTIVE)
+                    .createdBy("manager2")
                     .build());
 
             userRepository.save(User.builder()
@@ -82,6 +85,7 @@ public class ModuleWebApplication {
                     .userType(UserType.PART_TIME_MS)
                     .authorityType(AuthorityType.GENERAL)
                     .activeStatus(ActiveStatus.ACTIVE)
+                    .createdBy("general")
                     .build());
 
             userRepository.save(User.builder()
@@ -90,6 +94,7 @@ public class ModuleWebApplication {
                     .userType(UserType.PART_TIME_MS)
                     .authorityType(AuthorityType.GENERAL)
                     .activeStatus(ActiveStatus.ACTIVE)
+                    .createdBy("general2")
                     .build());
 
             userRepository.save(User.builder()
@@ -98,6 +103,7 @@ public class ModuleWebApplication {
                     .userType(UserType.PART_TIME_MS)
                     .authorityType(AuthorityType.NON_USER)
                     .activeStatus(ActiveStatus.ACTIVE)
+                    .createdBy("non_user")
                     .build());
             */
 

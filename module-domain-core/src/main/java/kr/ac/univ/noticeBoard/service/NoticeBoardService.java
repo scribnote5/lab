@@ -1,5 +1,6 @@
 package kr.ac.univ.noticeBoard.service;
 
+import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.SearchDto;
 import kr.ac.univ.util.AccessCheck;
 import kr.ac.univ.noticeBoard.domain.NoticeBoard;
@@ -9,6 +10,7 @@ import kr.ac.univ.noticeBoard.repository.NoticeBoardRepository;
 import kr.ac.univ.noticeBoard.repository.NoticeBoardRepositoryImpl;
 import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.NewIconCheck;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,8 @@ import javax.transaction.Transactional;
 
 @Service
 public class NoticeBoardService {
+    @Value("${module.name}")
+    private String moduleName;
     private final NoticeBoardRepository noticeBoardRepository;
     private final NoticeBoardRepositoryImpl noticeBoardRepositoryImpl;
     private final UserRepository userRepository;
@@ -34,16 +38,40 @@ public class NoticeBoardService {
 
         switch (searchDto.getSearchType()) {
             case "TITLE":
-                noticeBoardList = noticeBoardRepository.findAllByTitleContaining(pageable, searchDto.getKeyword());
+                if ("module-app-admin".equals(moduleName)) {
+                    noticeBoardList = noticeBoardRepository.findAllByTitleContaining(pageable, searchDto.getKeyword());
+                } else if ("module-app-web".equals(moduleName)) {
+                    noticeBoardList = noticeBoardRepository.findAllByTitleContainingAndActiveStatusIs(pageable, searchDto.getKeyword(), ActiveStatus.ACTIVE);
+                } else {
+                    noticeBoardList = null;
+                }
                 break;
             case "CONTENT":
-                noticeBoardList = noticeBoardRepository.findAllByContentContaining(pageable, searchDto.getKeyword());
+                if ("module-app-admin".equals(moduleName)) {
+                    noticeBoardList = noticeBoardRepository.findAllByContentContaining(pageable, searchDto.getKeyword());
+                } else if ("module-app-web".equals(moduleName)) {
+                    noticeBoardList = noticeBoardRepository.findAllByContentContainingAndActiveStatusIs(pageable, searchDto.getKeyword(), ActiveStatus.ACTIVE);
+                } else {
+                    noticeBoardList = null;
+                }
                 break;
             case "ID":
-                noticeBoardList = noticeBoardRepository.findAllByCreatedByContaining(pageable, searchDto.getKeyword());
+                if ("module-app-admin".equals(moduleName)) {
+                    noticeBoardList = noticeBoardRepository.findAllByCreatedByContaining(pageable, searchDto.getKeyword());
+                } else if ("module-app-web".equals(moduleName)) {
+                    noticeBoardList = noticeBoardRepository.findAllByCreatedByContainingAndActiveStatusIs(pageable, searchDto.getKeyword(), ActiveStatus.ACTIVE);
+                } else {
+                    noticeBoardList = null;
+                }
                 break;
             default:
-                noticeBoardList = noticeBoardRepository.findAll(pageable);
+                if ("module-app-admin".equals(moduleName)) {
+                    noticeBoardList = noticeBoardRepository.findAll(pageable);
+                } else if ("module-app-web".equals(moduleName)) {
+                    noticeBoardList = noticeBoardRepository.findAllByActiveStatusIs(pageable, ActiveStatus.ACTIVE);
+                } else {
+                    noticeBoardList = null;
+                }
                 break;
         }
 
@@ -71,13 +99,13 @@ public class NoticeBoardService {
             noticeBoardDto.setAccess(true);
         }
         // Update: isAccess 메소드에 따라 접근 가능 및 불가
-        else if (AccessCheck.isAccess(noticeBoardDto.getCreatedBy(), userRepository.findByUsername(noticeBoardDto.getCreatedBy()).getAuthorityType().getAuthorityType())) {
+        else if (AccessCheck.isAccessInModuleWeb(noticeBoardDto.getCreatedBy())) {
             noticeBoardDto.setAccess(true);
         } else {
             noticeBoardDto.setAccess(false);
         }
 
-        noticeBoardRepositoryImpl.updateViewCountByIdx(idx);
+        noticeBoardRepositoryImpl.updateViewsByIdx(idx);
 
         return noticeBoardDto;
     }

@@ -23,7 +23,7 @@ public class NoticeBoard extends CommonAudit {
 
 
     @Column
-    private Long viewCount = 0L;
+    private Long views = 0L;
 
     @Builder
     public NoticeBoard(Long idx, String createdBy, String lastModifiedBy, ActiveStatus activeStatus, String title, String content) {

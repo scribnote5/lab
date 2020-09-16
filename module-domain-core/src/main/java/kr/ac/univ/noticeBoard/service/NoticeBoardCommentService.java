@@ -39,7 +39,7 @@ public class NoticeBoardCommentService {
             noticeBoardCommentDto.setNewIcon(NewIconCheck.isNew(noticeBoardCommentDto.getCreatedDate()));
 
             // 권한 설정
-            if (AccessCheck.isAccess(noticeBoardCommentDto.getCreatedBy(), userRepository.findByUsername(noticeBoardCommentDto.getCreatedBy()).getAuthorityType().getAuthorityType())) {
+            if (AccessCheck.isAccessInModuleWeb(noticeBoardCommentDto.getCreatedBy())) {
                 noticeBoardCommentDto.setAccess(true);
             } else {
                 noticeBoardCommentDto.setAccess(false);

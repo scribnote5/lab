@@ -6,6 +6,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
+import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.publication.domain.Publication;
 import kr.ac.univ.publication.domain.QPublication;
 import kr.ac.univ.publication.domain.enums.PublicationType;
@@ -120,6 +121,7 @@ public class PublicationRepositoryImpl extends QuerydslRepositorySupport {
         return queryFactory
                 .selectFrom(publication)
                 .where(publication.idx.loe(lastIdx),
+                        publication.activeStatus.eq(ActiveStatus.ACTIVE),
                         eqSearchType(publicationSearchDto),
                         eqPublicationSearchType(publicationSearchDto))
                 .orderBy(publication.idx.desc())

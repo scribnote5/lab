@@ -1,14 +1,25 @@
 package kr.ac.univ.user.service;
 
 
+import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.SearchDto;
+import kr.ac.univ.noticeBoard.dto.NoticeBoardDto;
+import kr.ac.univ.noticeBoard.dto.mapper.NoticeBoardMapper;
 import kr.ac.univ.user.domain.User;
+import kr.ac.univ.user.domain.enums.AuthorityType;
 import kr.ac.univ.user.dto.UserDto;
 import kr.ac.univ.user.dto.UserPrincipal;
 import kr.ac.univ.user.dto.mapper.UserMapper;
 import kr.ac.univ.user.repository.UserRepository;
+import kr.ac.univ.util.AccessCheck;
 import kr.ac.univ.util.EmptyUtil;
+import kr.ac.univ.util.NewIconCheck;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.data.domain.*;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,8 +27,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class UserService implements UserDetailsService {
+    @Value("${module.name}")
+    private String moduleName;
     private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
@@ -47,6 +62,11 @@ public class UserService implements UserDetailsService {
 
         userDtoList = new PageImpl<UserDto>(UserMapper.INSTANCE.toDto(userList.getContent()), pageable, userList.getTotalElements());
 
+        // NewIcon 판별
+        for (UserDto userDto : userDtoList) {
+            userDto.setNewIcon(NewIconCheck.isNew(userDto.getCreatedDate()));
+        }
+
         return userDtoList;
     }
 
@@ -74,26 +94,53 @@ public class UserService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
+        User user = null;
         UserPrincipal userPrincipal = null;
 
-        if(EmptyUtil.isEmpty(user)) {
-            // 추후 변경: 에러 처리
-            throw new UsernameNotFoundException("Username is not found");
+        if ("module-app-admin".equals(moduleName)) {
+            AuthorityType[] authorityType = {AuthorityType.ROOT, AuthorityType.MANAGER};
+
+            user = userRepository.findByUsernameAndAuthorityTypeIn(username, authorityType);
+        } else if ("module-app-web".equals(moduleName)) {
+            user = userRepository.findByUsername(username);
         } else {
-            userPrincipal = new UserPrincipal(user);
+            user = null;
         }
+
+        if (EmptyUtil.isEmpty(user)) {
+            throw new BadCredentialsException(null);
+        }
+
+        userPrincipal = new UserPrincipal(user);
 
         return userPrincipal;
     }
 
-    public Long insertUser(User user) {
-        return userRepository.save(user).getIdx();
-    }
+    public UserDto findUserByIdx(Long idx) {
+        UserDto userDto = UserMapper.INSTANCE.toDto(userRepository.findById(idx).orElse(new User()));
 
-    public User findUserByIdx(Long idx) {
+        if ("module-app-admin".equals(moduleName)) {
+            // 권한 설정
+            // Register: 로그인한 사용자 Register 접근 가능
+            if (idx == 0) {
+                userDto.setAccess(true);
+            }
+            // Update: isAccess 메소드에 따라 접근 가능 및 불가
+            else if (AccessCheck.isAccessInModuleAdmin(userDto.getCreatedBy())) {
+                userDto.setAccess(true);
+            } else {
+                userDto.setAccess(false);
+            }
+        } else {
+            // Update: isAccess 메소드에 따라 접근 가능 및 불가
+            if (AccessCheck.isAccessInModuleWeb(userDto.getCreatedBy())) {
+                userDto.setAccess(true);
+            } else {
+                userDto.setAccess(false);
+            }
+        }
 
-        return userRepository.findById(idx).orElse(new User());
+        return userDto;
     }
 
     @Transactional
@@ -101,7 +148,7 @@ public class UserService implements UserDetailsService {
         User persistUser = userRepository.getOne(idx);
         User user = UserMapper.INSTANCE.toEntity(userDto);
 
-        persistUser.update(user);
+        persistUser.update(user, persistUser.getPassword());
 
         return userRepository.save(persistUser).getIdx();
     }
@@ -114,7 +161,4 @@ public class UserService implements UserDetailsService {
         return (userRepository.countByUsername(username) > 0) ? true : false;
     }
 
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
 }

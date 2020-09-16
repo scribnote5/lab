@@ -81,7 +81,7 @@ public class UserController {
 
     // Anonymous User Permission Denied
     @GetMapping("/anonymous-user-permission-denied")
-    public String anonymousUserPermissionDenied() {
+    public String anonymousUserPermissionDenied()   {
 
         return "/user/anonymous-user-permission-denied";
     }
@@ -97,24 +97,40 @@ public class UserController {
     // Form Update
     @GetMapping("/form{idx}")
     public String loginForm(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
-        UserDto userDto = null;
-        userDto = UserMapper.INSTANCE.toDto(userService.findUserByIdx(idx));
-        userDto = UserMapper.INSTANCE.toDto(userDto, userAttachedFileService.findAttachedFileByUserIdx(idx));
+        UserDto userDto = userService.findUserByIdx(idx);
+        String returnPage = null;
 
-        model.addAttribute("userDto", userDto);
+        // 권한 확인
+        if (userDto.isAccess()) {
+            userDto = userAttachedFileService.findAttachedFileByUserIdx(idx, userDto);
 
-        return "/user/form";
+            model.addAttribute("userDto", userDto);
+
+            returnPage = "/user/form";
+        } else {
+            returnPage = "/user/permission-denied";
+        }
+
+        return returnPage;
     }
 
     // Read
     @GetMapping({"", "/"})
     public String noticeBoardRead(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
-        UserDto userDto = null;
-        userDto = UserMapper.INSTANCE.toDto(userService.findUserByIdx(idx));
-        userDto = UserMapper.INSTANCE.toDto(userDto, userAttachedFileService.findAttachedFileByUserIdx(idx));
+        UserDto userDto = userService.findUserByIdx(idx);
+        String returnPage = null;
 
-        model.addAttribute("userDto", userDto);
+        // 권한 확인
+        if (userDto.isAccess()) {
+            userDto = userAttachedFileService.findAttachedFileByUserIdx(idx, userDto);
 
-        return "/user/read";
+            model.addAttribute("userDto", userDto);
+
+            returnPage = "/user/read";
+        } else {
+            returnPage = "/user/permission-denied";
+        }
+
+        return returnPage;
     }
 }

@@ -32,16 +32,16 @@ public class NoticeBoardRepositoryImpl extends QuerydslRepositorySupport {
                 .fetch();
     }
 
-    public long updateViewCountByIdx(Long idx) {
+    public long updateViewsByIdx(Long idx) {
         QNoticeBoard noticeBoard = QNoticeBoard.noticeBoard;
         /*
          * UPDATE notice_board
-         *    SET view_count = view_count + 1
+         *    SET views = views + 1
          *  WHERE id = 'id';
          */
         return queryFactory
                 .update(noticeBoard)
-                .set(noticeBoard.viewCount, noticeBoard.viewCount.add(1))
+                .set(noticeBoard.views, noticeBoard.views.add(1))
                 .where(noticeBoard.idx.eq(idx))
                 .execute();
     }
