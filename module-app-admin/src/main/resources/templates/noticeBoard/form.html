@@ -159,8 +159,8 @@
 
                 $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
                     + '<span>'
-                    + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size) + "&nbsp;"
-                    + '<img src="/images/cancel.png" style="width: 16px; height: 16px" onClick="cancelFile(' + imgDataId + ')" />'
+                    + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size)
+                    + '<img src="/images/cancel.png" class="cancel_icon" onClick="cancelFile(' + imgDataId + ')" />'
                     + '</span>'
                     + '</div>');
 
@@ -188,8 +188,8 @@
 
                 $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
                     + '<span>'
-                    + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size) + "&nbsp;"
-                    + '<img src="/images/cancel.png" style="width: 16px; height: 16px" onClick="cancelFile(' + imgDataId + ')" />'
+                    + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size)
+                    + '<img src="/images/cancel.png" class="cancel_icon" onClick="cancelFile(' + imgDataId + ')" />'
                     + '</span>'
                     + '</div>');
 

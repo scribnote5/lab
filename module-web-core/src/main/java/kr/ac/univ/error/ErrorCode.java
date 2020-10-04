@@ -14,12 +14,15 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR(500, "C005", "Internal Server Error."),
 
     // File
-    FILE_SIZE_ERROR(500, "F001", "The file size must be less than 20 MB."),
-    FILE_TYPE_ERROR(500, "F002", "The file type is supposed to dangerous and malicious."),
+    FILE_SIZE_ERROR(500, "F001", "The upload file size must be less than 20 MB."),
+    FILE_TYPE_ERROR(500, "F002", "The upload file type is supposed to dangerous and malicious."),
+    FILE_NUMBER_EXCEEDED(500, "F003", "The upload file number is exceeded."),
 
     // User
-    INVALID_USERNAME(500, "U001", "The ID is duplicated or ID can be used for more than 6 characters and less than 16 characters.")
+    INVALID_USERNAME(500, "U001", "The ID is duplicated or ID can be used for more than 6 characters and less than 16 characters."),
 
+    // Album
+    MAIN_PAGE_PRIORITY_DUPLICATE(500, "A001", "The main page priority is duplicated.")
     ;
 
     private final String code;

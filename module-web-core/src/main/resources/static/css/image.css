@@ -1,4 +1,17 @@
 .new_icon {
     height: 15px;
     width: 15px;
+    margin: 0px 0px 5px 0px;
+}
+
+.cancel_icon {
+    height: 15px;
+    width: 15px;
+    margin: 0px 0px 5px 5px;
+}
+
+.album_img_preview {
+    max-width: 100%;
+    width: auto;
+    height: 205px; !important;
 }

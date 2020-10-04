@@ -20,21 +20,12 @@ public class UserAttachedFile extends AttachedFileAudit {
     @Column
     private Long userIdx;
 
-    @Column
-    private String fileName;
-
-    @Column
-    private String savedFileName;
-
-    @Column
-    private String fileSize;
-
     @Builder
     public UserAttachedFile(String createdBy, Long userIdx, String fileName, String savedFileName, String fileSize) {
         setCreatedBy(createdBy);
+        setFileName(fileName);
+        setSavedFileName(savedFileName);
+        setFileSize(fileSize);
         this.userIdx = userIdx;
-        this.fileName = fileName;
-        this.savedFileName = savedFileName;
-        this.fileSize = fileSize;
     }
 }

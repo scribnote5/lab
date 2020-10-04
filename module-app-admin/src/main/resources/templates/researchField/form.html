@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- css -->
+    <th:block th:replace="layout/css.html"></th:block>
+
+    <title>ResearchField Form</title>
+</head>
+<body>
+<!-- header -->
+<div th:replace="layout/header::header"></div>
+
+<div class="container-md">
+    <form name="form" id="form" th:object="${researchFieldDto}" action="#">
+        <div class="page-header">
+            <h1 th:if="!*{idx}">ResearchField Register</h1>
+            <h1 th:if="*{idx}">ResearchField Update</h1>
+        </div>
+        <br/>
+        <table class="table">
+            <colgroup>
+                <col width="20%"/>
+                <col width="80%"/>
+            </colgroup>
+            <tr>
+                <th colspan="2" style="text-align: center"><h5>ResearchField Information</h5></th>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td><input type="text" name="title" id="title" class="form-control" th:value="*{title}"/></td>
+            </tr>
+            <tr>
+                <th>Sub Title</th>
+                <td><input type="text" name="subTitle" id="subTitle" class="form-control" th:value="*{subTitle}"/></td>
+            </tr>
+            <tr>
+                <!--<td colspan="2"><textarea name="content" id="content" class="col-md-1 form-control input-sm"
+                                          maxlength="140" rows="7" style="height: 200px; resize: none;"
+                                          th:text="*{content}"></textarea></td>-->
+                <td colspan="2"><textarea name="content" id="summernote" class="summernote"
+                                          th:text="*{content}"></textarea></td>
+            </tr>
+            <tr>
+                <th colspan="2" style="text-align: center"><h5>Additional Information</h5></th>
+            </tr>
+            <tr>
+                <th>Active Status</th>
+                <td>
+                    <div class="pull-left">
+                        <select class="custom-select col-md-2" name="activeStatus" th:field="*{activeStatus}">
+                            <option th:value="ACTIVE">Active</option>
+                            <option th:value="INACTIVE">Inactive</option>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <tr th:if="*{idx}">
+                <th>Created Date</th>
+                <td><input type="text" class="form-control col-md-3" readonly="readonly"
+                           th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+            </tr>
+            <tr th:if="*{idx}">
+                <th>Modified Date</th>
+                <td><input type="text" class="form-control col-md-3" readonly="readonly"
+                           th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+
+        <div class="row justify-content-md-between">
+            <a href="/research-field/list" class="btn btn-secondary col-md-auto">Move to List</a>
+
+            <button th:if="!*{idx}" id="insert" type="button" class="btn btn-primary col-md-auto">Register</button>
+            <button th:if="*{idx}" id="update" type="button" class="btn btn-info col-md-auto">Update</button>
+        </div>
+
+        <!-- input type="hidden" -->
+        <input type="hidden" name="idx" th:value="*{idx}"/>
+        <input type="hidden" name="createdBy"
+               th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
+        <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
+
+    </form>
+</div>
+
+<!-- footer -->
+<div th:replace="layout/footer::footer"></div>
+
+<!-- script file -->
+<th:block th:replace="layout/script.html"></th:block>
+
+<!-- javascript -->
+<script>
+    $(document).ready(function () {
+        <!-- summernote setting -->
+        $('#summernote').summernote({
+            height: 400,	// 에디터 높이
+            minHeight: null,	// 최소 높이
+            maxHeight: null,	// 최대 높이
+            // focus: true,	// 에디터 로딩후 포커스를 맞출지 여부
+            lang: "ko-KR",// 한글 설정
+            placeholder: "The editor's max input size of bytes is 16777215(16 MB)."	//placeholder 설정
+        });
+
+    });
+</script>
+
+<script th:if="!${researchFieldDto?.idx}">
+    $('#insert').click(function () {
+        // (input tag mame, length or size, message)
+        if (!(validateByLength("title", 50, "title") && validateByLength("subTitle", 50, "subtitle") && validateBySize("content", 16777215, "content"))) {
+            return false;
+        }
+
+        var jsonData = $("#form").serializeObject();
+        var researchFieldIdx;
+
+        // 게시글 업로드
+        $.ajax({
+            url: "http://localhost:8081/api/research-fields",
+            type: "post",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                researchFieldIdx = msg;
+                location.href = "/research-field?idx=" + researchFieldIdx;
+
+            })
+            .fail(function (msg) {
+                paraseErrorMsg(msg);
+                console.log("Update notice board is fail.");
+
+            });
+    });
+</script>
+
+<script th:if="${researchFieldDto?.idx}" th:inline="javascript">
+    $('#update').click(function () {
+        // (input tag mame, length or size, message)
+        if (!(validateByLength("title", 50, "title") && validateByLength("subTitle", 50, "sub title") && validateBySize("content", 16777215, "content"))) {
+            return false;
+        }
+
+        var jsonData = $("#form").serializeObject();
+        var researchFieldIdx = document.getElementsByName("idx")[0].value;
+
+        // 게시글 수정
+        $.ajax({
+            url: "http://localhost:8081/api/research-fields/" + researchFieldIdx,
+            type: "put",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                location.href = "/research-field?idx=" + researchFieldIdx;
+            })
+            .fail(function (msg) {
+                paraseErrorMsg(msg);
+                console.log("Update research field is fail.");
+            });
+    });
+</script>
+
+</body>
+</html>

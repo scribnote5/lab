@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- css -->
+    <th:block th:replace="layout/css.html"></th:block>
+
+    <title>Category Form</title>
+</head>
+<body>
+<!-- header -->
+<div th:replace="layout/header::header"></div>
+
+<div class="container-md">
+    <form name="form" id="form" th:object="${categoryDto}" action="#">
+        <div class="page-header">
+            <h1 th:if="!*{idx}">Category Register</h1>
+            <h1 th:if="*{idx}">Category Update</h1>
+        </div>
+        <br/>
+        <table class="table">
+            <colgroup>
+                <col width="20%"/>
+                <col width="80%"/>
+            </colgroup>
+            <tr>
+                <th colspan="2" style="text-align: center"><h5>Category Information</h5></th>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td><input type="text" name="title" id="title" class="form-control" th:value="*{title}"/></td>
+            </tr>
+            <tr>
+                <th colspan="2" style="text-align: center"><h5>Additional Information</h5></th>
+            </tr>
+            <tr>
+                <th>Active Status</th>
+                <td>
+                    <div class="pull-left">
+                        <select class="custom-select col-md-2" name="activeStatus" th:field="*{activeStatus}">
+                            <option th:value="ACTIVE">Active</option>
+                            <option th:value="INACTIVE">Inactive</option>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <tr th:if="*{idx}">
+                <th>Created Date</th>
+                <td><input type="text" class="form-control col-md-3" readonly="readonly"
+                           th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+            </tr>
+            <tr th:if="*{idx}">
+                <th>Modified Date</th>
+                <td><input type="text" class="form-control col-md-3" readonly="readonly"
+                           th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+
+        <div class="row justify-content-md-between">
+            <a href="/category/list" class="btn btn-secondary col-md-auto">Move to List</a>
+
+            <button th:if="!*{idx}" id="insert" type="button" class="btn btn-primary col-md-auto">Register</button>
+            <button th:if="*{idx}" id="update" type="button" class="btn btn-info col-md-auto">Update</button>
+        </div>
+
+        <!-- input type="hidden" -->
+        <input type="hidden" name="idx" th:value="*{idx}"/>
+        <input type="hidden" name="createdBy"
+               th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
+        <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
+
+    </form>
+</div>
+
+<!-- footer -->
+<div th:replace="layout/footer::footer"></div>
+
+<!-- script file -->
+<th:block th:replace="layout/script.html"></th:block>
+
+<!-- javascript -->
+<script>
+    function deleteCategory(categoryIdx) {
+        // 게시글 삭제
+        $.ajax({
+            url: "http://localhost:8081/api/categories/" + categoryIdx,
+            type: "delete",
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+
+            })
+            .fail(function (msg) {
+                console.log("Delete notice board is fail.");
+            });
+    }
+</script>
+
+<script th:if="!${categoryDto?.idx}">
+    $('#insert').click(function () {
+        // (input tag mame, length or size, message)
+        if (!(validateByLength("title", 50, "title"))) {
+            return false;
+        }
+
+        var jsonData = $("#form").serializeObject();
+
+        // 게시글 업로드
+        $.ajax({
+            url: "http://localhost:8081/api/categories",
+            type: "post",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                location.href = "/category?idx=" + msg;
+            })
+            .fail(function (msg) {
+                paraseErrorMsg(msg);
+                console.log("Update category is fail.");
+            });
+    });
+</script>
+
+<script th:if="${categoryDto?.idx}" th:inline="javascript">
+    $('#update').click(function () {
+        // (input tag mame, length or size, message)
+        if (!(validateByLength("title", 50, "title"))) {
+            return false;
+        }
+
+        var jsonData = $("#form").serializeObject();
+        var categoryIdx = document.getElementsByName("idx")[0].value;
+
+        // 게시글 수정
+        $.ajax({
+            url: "http://localhost:8081/api/categories/" + categoryIdx,
+            type: "put",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                location.href = "/category?idx=" + categoryIdx;
+            })
+            .fail(function (msg) {
+                paraseErrorMsg(msg);
+                console.log("Update category is fail.");
+                exit = true;
+            });
+
+    });
+</script>
+
+</body>
+</html>

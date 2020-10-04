@@ -1,14 +1,14 @@
-/* 공백 문자 검사 */
-function validateSpaceChar(str) {
-    if (str.search(/\s/) != -1) {
-        return true;
-    } else {
+/* 공백 및 공란 검사 */
+function validateByWhiteSpace(str) {
+    if (str.trim().length == 0) {
         return false;
+    } else {
+        return true;
     }
 }
 
 /* 공백 문자 및 공란 검사 */
-function validateEmpty(str) {
+function validateByEmpty(str) {
     if (str.search(/\s/) != -1 || str.length == 0) {
         return true;
     } else {
@@ -17,7 +17,7 @@ function validateEmpty(str) {
 }
 
 /* 특수 문자 검사 */
-function validateSpecialChar(str) {
+function validateBySpecialChar(str) {
     var regExp = /[`~!@#$%^&*|\\\'\";:\/?]/gi;
     if (regExp.test(str) == true) {
         return true;
@@ -52,7 +52,7 @@ function validateByLength(inputName, maxStrLength, title) {
         document.getElementsByName(inputName)[0].focus();
 
         return false;
-    } else if (validateEmpty(document.getElementsByName(inputName)[0].value)) {
+    } else if (!validateByWhiteSpace(document.getElementsByName(inputName)[0].value)) {
         alert("The " + title + " must not be blank.");
         document.getElementsByName(inputName)[0].focus();
 
@@ -70,6 +70,60 @@ function validateBySize(inputName, maxByteSize, title) {
         alert("The " + title + "is up to " + maxByteSize + " bytes size." +
             "\n(Size of characters currently entered: " + byteSize + " bytes).");
         document.getElementsByName(inputName)[0].focus();
+
+        return false;
+    } else {
+        return true;
+    }
+}
+
+/* select tag validation - inactive or delete option인지 확인 */
+function validateBySelect(inputName, title) {
+    var target = document.getElementsByName(inputName)[0];
+
+    if (target.options[target.selectedIndex].value == -1) {
+        alert("The " + title + " is inactive or deleted." +
+            "\nPlease check validate " + title + ".");
+
+        return false;
+    } else {
+        return true;
+    }
+}
+
+// 배열 요소가 NULL인 경우를 제외하여 배열 길이를 계산함
+function deleteArrayIndexIsNull() {
+    insertFileArrayLength = insertFileArray.filter(function (item) {
+        return item !== null && item !== undefined && item !== '';
+    }).length;
+
+    deleteFileArrayLength = deleteFileArray.filter(function (item) {
+        return item !== null && item !== undefined && item !== '';
+    }).length;
+}
+
+/* 파일 validation - 파일 존재 여부 */
+function validateByFileExist() {
+    // 배열 요소가 null인 경우를 제외하여 배열 길이를 계산함
+    deleteArrayIndexIsNull();
+
+    if (uploadedAttachedFileLength + insertFileArrayLength - deleteFileArrayLength !== 1) {
+        alert("The upload file does not exist." +
+            "\nPlease upload file.");
+
+        return false;
+    } else {
+        return true;
+    }
+}
+
+// 업로드하는 파일 개수가 number가 넘어가는 경우, 파일 업로드 불가
+function validateByFileNumber(files, number) {
+    // 배열 요소가 NULL인 경우를 제외하여 배열 길이를 계산함
+    deleteArrayIndexIsNull();
+
+    if (files.length > number || (uploadedAttachedFileLength - insertFileArrayLength - deleteFileArrayLength !== 0)) {
+        alert("The number of file that can be uploaded is 1.");
 
         return false;
     } else {

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- css -->
+    <th:block th:replace="layout/css.html"></th:block>
+
+    <title>Introduction Read</title>
+</head>
+<body>
+<!-- header -->
+<div th:replace="layout/header::header"></div>
+
+<div class="container-md">
+    <form name="form" id="form" th:object="${introductionDto}" action="#">
+        <div class="page-header">
+            <h1>Introduction Read</h1>
+        </div>
+        <br/>
+        <table class="table">
+            <colgroup>
+                <col width="20%"/>
+                <col width="80%"/>
+            </colgroup>
+            <tr>
+                <th colspan="2" style="text-align: center"><h5>Introduction Information</h5></th>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td><span id="title" class="form-control" th:text="*{title}"></span></td>
+            </tr>
+            <tr>
+                <td colspan="2"><span class="form-control overflow-auto content" id="content"></span></td>
+            </tr>
+            <tr>
+                <th colspan="2" style="text-align: center"><h5>Additional Information</h5></th>
+            </tr>
+            <tr>
+                <th>Active Status</th>
+                <td>
+                    <div>
+                        <span class="col-md-2 form-control" th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active"> </span>
+                        <span class="col-md-2 form-control" th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"> </span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>Created Date</th>
+                <td><input type="text" class="form-control col-md-3" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+            </tr>
+            <tr>
+                <th>Modified Date</th>
+                <td><input type="text" class="form-control col-md-3" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+            </tr>
+        </table>
+
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+
+        <div class="row justify-content-md-between">
+            <a href="/introduction/list" class="btn btn-secondary">Move to List</a>
+
+            <div th:if="*{access}">
+                <a th:href="'/introduction/form?idx='+*{idx}" class="btn btn-info">Update</a>
+                <button type="button" class="btn btn-danger" id="delete">Delete</button>
+            </div>
+        </div>
+
+        <!-- input type="hidden" -->
+        <input type="hidden" name="idx" th:value="*{idx}"/>
+        <input type="hidden" name="createdBy" th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}"
+               th:value="${#authentication.principal.username}"/>
+        <input type="hidden" name="lastModifiedBy"
+               th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}"
+               th:value="${#authentication.principal.username}"/>
+        <input type="hidden" name="activeStatus"
+               th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}"
+               th:value="ACTIVE"/>
+    </form>
+</div>
+
+<!-- footer -->
+<div th:replace="layout/footer::footer"></div>
+
+<!-- script file -->
+<th:block th:replace="layout/script.html"></th:block>
+
+<script th:inline="javascript">
+    $(document).ready(function () {
+        document.getElementById("content").innerHTML = [[${introductionDto.content}]];
+    });
+
+    $("#delete").click(function () {
+        if (!confirm("Do you want to delete post?")) {
+            return true;
+        }
+
+        // 게시글 삭제
+        $.ajax({
+            url: "http://localhost:8081/api/introductions/" + document.getElementsByName("idx")[0].value,
+            type: "delete",
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                location.href = "/introduction/list";
+            })
+            .fail(function (msg) {
+                console.log("Delete notice board is fail.");
+            })
+    });
+</script>
+
+</body>
+</html>

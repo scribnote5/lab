@@ -37,3 +37,22 @@
     color: rgb(34, 154, 81);
     font-weight: 450;
 }
+
+#publicationAbstract.input_height_300 {
+    height: 300px;
+    resize: none;
+}
+
+.hashTag {
+    background-color: rgb(215, 215, 215);
+    color: rgb(75, 75, 75);
+    border-radius: 5px;
+    display: inline-block;
+    padding: 5px 5px 5px 5px;
+    margin: 5px 5px 5px 5px;
+}
+
+.disable {
+    background-color: rgb(215, 215, 215);
+    color: rgb(75, 75, 75);
+}

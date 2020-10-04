@@ -3,6 +3,7 @@ package kr.ac.univ.handler;
 import kr.ac.univ.error.ErrorCode;
 import kr.ac.univ.error.ErrorResponse;
 import kr.ac.univ.exception.BusinessException;
+import kr.ac.univ.exception.FileNumberExceededException;
 import kr.ac.univ.exception.FileTypeException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -92,6 +93,17 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<?> handleFileTypeException(Exception e) {
         log.error("handleFileTypeException", e);
         final ErrorResponse response = ErrorResponse.of(ErrorCode.FILE_TYPE_ERROR, e.getMessage());
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * file type이 위험하고 악의적인 것으로 판별되는 경우 발생
+     */
+    @ExceptionHandler(FileNumberExceededException.class)
+    protected ResponseEntity<?> handleFileNumberExceededException(Exception e) {
+        log.error("handleNumberExceedeException", e);
+        final ErrorResponse response = ErrorResponse.of(ErrorCode.FILE_NUMBER_EXCEEDED, e.getMessage());
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }

@@ -169,6 +169,7 @@
                 location.href = "/notice-board/list";
             })
             .fail(function (msg) {
+                paraseErrorMsg(msg);
                 console.log("Delete notice board is fail.");
             })
 

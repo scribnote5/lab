@@ -61,7 +61,7 @@
                     <td th:text="${userDto.idx}"></td>
                     <td>
                         <a th:href="'/user?idx='+${userDto.idx}" th:text="${userDto.username}"></a>
-                         <img th:if="${userDto.newIcon}" th:attr="src=@{|/images/new_icon.png|}" th:style="'width: 15px; height: 15px'" />
+                         <img th:if="${userDto.newIcon}" th:attr="src=@{|/images/new_icon.png|}" class="new_icon"/>
                     </td>
                     <td th:text="${userDto.koreanName}"></td>
                     <td th:text="${userDto.email}"></td>

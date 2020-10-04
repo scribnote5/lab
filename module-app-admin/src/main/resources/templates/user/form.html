@@ -83,13 +83,13 @@
                     <div class="custom-control custom-radio custom-control-inline">
                         <input type="radio" class="custom-control-input" name="gender" id="male" th:value="MALE"
                                th:checked="*{gender?.name() == 'MALE' ||  gender?.name() == null}">
-                        <label class="custom-control-label" th:for="male"> Male </label>
+                        <label class="custom-control-label" th:for="male"><strong> Male </strong></label>
                     </div>
                     <div class="custom-control custom-radio custom-control-inline">
                         <input type="radio" class="custom-control-input" name="gender" id="female"
                                th:value="FEMALE"
                                th:checked="*{gender?.name() == 'FEMALE'}">
-                        <label class="custom-control-label" th:for="female"> Female </label>
+                        <label class="custom-control-label" th:for="female"><strong> Female </strong></label>
                     </div>
                 </td>
             </tr>
@@ -465,7 +465,7 @@
             document.getElementById("privateEmail").focus();
 
             return false;
-        } else if (validateEmpty(document.getElementsByName("messengerId")[0].value)) {
+        } else if (validateByEmpty(document.getElementsByName("messengerId")[0].value)) {
             alert("Please check messenger id.");
             document.getElementById("messengerId").focus();
 

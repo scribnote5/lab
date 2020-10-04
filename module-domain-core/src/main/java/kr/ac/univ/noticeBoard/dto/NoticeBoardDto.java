@@ -22,8 +22,10 @@ public class NoticeBoardDto extends CommonDto {
     /* 기본 정보 */
     @NotBlank(message = "The title must not be blank.")
     private String title;
+
     @Editor(max = 16777215, message = "The editor's input size of bytes is exceeded.")
     private String content;
+
     private Long views;
 
     /* 첨부 파일 */

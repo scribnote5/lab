@@ -68,8 +68,6 @@ public class UserController {
     // Logout
     @GetMapping("/logout/success")
     public RedirectView logout(Model model) {
-        System.out.println("logout");
-
         return new RedirectView("/user/login");
     }
 

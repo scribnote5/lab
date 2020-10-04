@@ -56,7 +56,7 @@
                     <td>
                         <a th:href="'/publication?idx='+${publicationDto.idx}" th:text="${publicationDto.title}"></a>
                         &nbsp;<img th:if="${publicationDto.newIcon}" th:attr="src=@{|/images/new_icon.png|}"
-                                   th:style="'width: 15px; height: 15px'"/>
+                                   class="new_icon"/>
                     </td>
                     <td th:text="${publicationDto.authors}"></td>
                     <td th:text="${publicationDto.publishedIn}"></td>

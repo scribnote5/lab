@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- css -->
+    <th:block th:replace="layout/css.html"></th:block>
+
+    <title>Album Form</title>
+</head>
+<body>
+<!-- header -->
+<div th:replace="layout/header::header"></div>
+
+<div class="container-md">
+    <form name="form" id="form" th:object="${albumDto}" action="#">
+        <div class="page-header">
+            <h1 th:if="!*{idx}">Album Register</h1>
+            <h1 th:if="*{idx}">Album Update</h1>
+        </div>
+        <br/>
+        <table class="table">
+            <colgroup>
+                <col width="20%"/>
+                <col width="50%"/>
+                <col width="30%"/>
+            </colgroup>
+            <tr>
+                <th colspan="3" style="text-align: center"><h5>Album Information</h5></th>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td colspan="2"><input type="text" name="title" id="title" class="form-control" th:value="*{title}"/></td>
+            </tr>
+            <tr>
+                <th>Photo Taken Date</th>
+                <td colspan="2"><input type="date" name="photoTakenDate" id="photoTakenDate" class="form-control" th:value="*{photoTakenDate}"/></td>
+            </tr>
+            <tr>
+                <th>Main Page Priority</th>
+                <td colspan="2">
+                    <div style="margin-bottom: 10px;">
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="mainPageNonCheck" name="mainPage" class="custom-control-input" th:checked="*{mainPagePriority == -1 ||  mainPagePriority == null}">
+                            <label class="custom-control-label" for="mainPageNonCheck"><strong>Don't show main page.</strong></label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="mainPageCheck" name="mainPage" class="custom-control-input" th:checked="*{mainPagePriority >= 0}">
+                            <label class="custom-control-label" for="mainPageCheck"><strong>Show main page and set priority.</strong></label>
+                        </div>
+                    </div>
+
+                    <select class="custom-select col-md-5" name="mainPagePriority" th:field="*{mainPagePriority}" th:style="*{mainPagePriority >= 0} ? 'display: inline;' : 'display: none'"><option th:value="-1" th:text="'Don\'t show main page.'" th:style="'display: none;'" selected></option></select>
+                </td>
+            </tr>
+            <tr>
+                <th>Hash Tag Input</th>
+                <td colspan="2">
+                    <input th:if="!*{idx}" type="text" id="hashTag" class="form-control" placeholder="#Hash Tag ↵ (Special character is not available.)"/>
+                    <input th:if="*{idx}" type="text" id="hashTag" class="form-control" placeholder="#Hash Tag ↵ (Special character is not available.)"/>
+                </td>
+            </tr>
+            <tr>
+                <th>Hash Tags</th>
+                <td id="hashTagsTd" colspan="2">
+                    <input type="hidden" name="hashTags" id="hashTags" class="form-control" readonly/>
+                </td>
+            </tr>
+            <tr>
+                <th>Attached File</th>
+                <td>
+                    <div class="custom-file py-md-4">
+                        <input type="file" class="custom-file-input" id="file" name="file">
+                        <label class="custom-file-label" for="file">Choose file.</label>
+                    </div>
+                    <div id="fileDrop" class="fileDrop">
+                        <strong>Drop files here.</strong>
+                    </div>
+                </td>
+                <td>
+                    <img id="imgPreview" th:if="*{attachedFileList.size()} == 0" class="album_img_preview"
+                         th:attr="src=@{/images/no_preview_available.jpg}" />
+                    <img id="imgPreview" th:if="*{attachedFileList.size()} != 0" class="album_img_preview"
+                         th:attr="src=@{|http://localhost:8081/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}"
+                    />
+                </td>
+            </tr>
+            <tr>
+                <th>Total file size</th>
+                <td colspan="2">
+                    <div><span id="totalFileSize"> 0 MB</span>, Up to 20 MB</div>
+                </td>
+            <tr>
+                <th>Upload Attached File</th>
+                <td colspan="2">
+                    <div id="attachedFileList"></div>
+                </td>
+            </tr>
+            <tr>
+                <th>Uploaded Attached File</th>
+                <td colspan="2">
+                    <div id="uploadedAttachedFileList" th:each="attachedFile : *{attachedFileList}">
+                        <div th:id="imgData + ${attachedFileStat.index}">
+                            <span th:text="${attachedFile.fileName} + ',&nbsp;' + 'File Size: ' + ${attachedFile.fileSize}"></span>
+                            <img th:attr="src=@{|/images/cancel.png|}, onclick=|deleteFile('${attachedFileStat.index}','${attachedFile.idx}','${attachedFile.savedFileName}')|"
+                                 class="cancel_icon"/>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th colspan="2" style="text-align: center"><h5>Additional Information</h5></th>
+            </tr>
+            <tr>
+                <th>Active Status</th>
+                <td colspan="2">
+                    <div class="pull-left">
+                        <select class="custom-select col-md-2" name="activeStatus" th:field="*{activeStatus}">
+                            <option th:value="ACTIVE">Active</option>
+                            <option th:value="INACTIVE">Inactive</option>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <tr th:if="*{idx}">
+                <th>Created Date</th>
+                <td colspan="2"><input type="text" class="form-control col-md-3" readonly="readonly"
+                           th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+            </tr>
+            <tr th:if="*{idx}">
+                <th>Modified Date</th>
+                <td colspan="2"><input type="text" class="form-control col-md-3" readonly="readonly"
+                           th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td colspan="2"></td>
+            </tr>
+        </table>
+
+        <div class="row justify-content-md-between">
+            <a href="/album/list" class="btn btn-secondary col-md-auto">Move to List</a>
+
+            <button th:if="!*{idx}" id="insert" type="button" class="btn btn-primary col-md-auto">Register</button>
+            <button th:if="*{idx}" id="update" type="button" class="btn btn-info col-md-auto">Update</button>
+        </div>
+
+        <!-- input type="hidden" -->
+        <input type="hidden" name="idx" th:value="*{idx}"/>
+        <input type="hidden" name="createdBy"
+               th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
+        <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
+
+    </form>
+</div>
+
+<!-- footer -->
+<div th:replace="layout/footer::footer"></div>
+
+<!-- script file -->
+<th:block th:replace="layout/script.html"></th:block>
+
+<!-- javascript -->
+<script th:inline="javascript">
+    var totalFileSize = 0;
+    var insertFileArray = [];
+    var deleteFileArray = [];
+    var imgDataId = 0;
+    var exit = null;
+
+    // 파일 Number validation
+    var insertFileArrayLength = 0;
+    var deleteFileArrayLength = 0;
+    var uploadedAttachedFileLength = [[${albumDto.attachedFileList}]].length;
+
+    var hashTagId = 0;
+
+    $(document).ready(function () {
+        <!-- File Drop -->
+        $("#fileDrop").on("dragenter dragover", function (event) {
+            event.preventDefault(); // 기본 이벤트 발생을 막음
+        });
+
+        <!-- Main Page Priority -->
+        var mainPagePrioritySelect = document.getElementsByName("mainPagePriority")[0];
+        var albumDtoList = [[${albumDtoList}]];
+        var albumDto = [[${albumDto}]];
+
+        for(var i = 0; i < 25; i++) {
+            var option = document.createElement("option");
+            option.text = i+1;
+            option.value = i+1;
+            mainPagePrioritySelect.options.add(option, i+1);
+        }
+
+        for(var i = 0; i < albumDtoList.length; i++) {
+            var mainPagePriority = albumDtoList[i].mainPagePriority;
+
+            // 현재 album의 mainPagePriority인 경우(select)
+            if(mainPagePriority == albumDto.mainPagePriority) {
+                mainPagePrioritySelect.options.item(mainPagePriority).selected = true;
+            }
+            // 다른 album의 mainPagePriority인 경우(disable)
+            else {
+                mainPagePrioritySelect.options.item(mainPagePriority).text += " has been set by '" + albumDtoList[i].title + "'.(disabled)";
+                mainPagePrioritySelect.options.item(mainPagePriority).className = "disable";
+                mainPagePrioritySelect.options.item(mainPagePriority).disabled = true;
+            }
+        }
+    });
+
+    /* input tag event */
+    $("#file").change(function () {
+        var files = document.getElementsByName("file")[0].files;
+
+        // 업로드하는 파일 개수가 number개가 넘어가는 경우, 파일 업로드 불가
+        if (!validateByFileNumber(files, 1)) {
+            return false;
+        }
+
+        for (var i = 0; i < files.length; i++) {
+            if (validateImageFile(files[i])) {
+                insertFileArray.push(files[i]);
+                document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
+
+                $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
+                    + '<span>'
+                    + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size)
+                    + '<img src="/images/cancel.png" class="cancel_icon" onClick="cancelFile(' + imgDataId + ')"/>'
+                    + '</span>'
+                    + '</div>');
+
+                imgDataId++;
+                readURL(this);
+            } else {
+                return false;
+            }
+        }
+    });
+
+    /* Drag & drop event */
+    $("#fileDrop").on("drop", function (event) {
+        event.preventDefault(); // 기본 효과를 막음
+        document.getElementById("fileDrop").style.opacity = 1;
+
+        // 드래그된 파일의 정보
+        // event : jQuery의 이벤트
+        // originalEvent : javascript의 이벤트
+        var files = event.originalEvent.dataTransfer.files;
+
+        // 업로드하는 파일 개수가 number개가 넘어가는 경우, 파일 업로드 불가
+        if (!validateByFileNumber(files, 1)) {
+            return false;
+        }
+
+        for (var i = 0; i < files.length; i++) {
+            if (validateImageFile(files[i])) {
+                insertFileArray.push(files[i]);
+                document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
+
+                $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
+                    + '<span>'
+                    + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size)
+                    + '<img src="/images/cancel.png" class="cancel_icon" onClick="cancelFile(' + imgDataId + ')" />'
+                    + '</span>'
+                    + '</div>');
+
+                imgDataId++;
+                readURL(this);
+            } else {
+                return false;
+            }
+        }
+    });
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#imgPreview').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $("#fileDrop").on("dragover", function (event) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        document.getElementById("fileDrop").style.opacity = 0.25;
+    });
+
+    $("#fileDrop").on("dragleave", function (event) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        document.getElementById("fileDrop").style.opacity = 1;
+    });
+
+    // 새로 업로드한 파일을 취소하는 경우
+    function cancelFile(fileId) {
+        $('#imgData' + fileId).remove();
+
+        totalFileSize -= insertFileArray[fileId].size;
+        insertFileArray[fileId] = null;
+
+        document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
+        document.getElementById("imgPreview").src = "/images/no_preview_available.jpg";
+    }
+
+    // 기존 업로드한 파일을 삭제하는 경우
+    function deleteFile(fileId, idx, savedFileName) {
+        $('#imgData' + fileId).remove();
+
+        deleteFileArray.push(idx);
+        document.getElementById("imgPreview").src = "/images/no_preview_available.jpg";
+    }
+
+    function deleteAlbum(albumIdx) {
+        // 게시글 삭제
+        $.ajax({
+            url: "http://localhost:8081/api/albums/" + albumIdx,
+            type: "delete",
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+
+            })
+            .fail(function (msg) {
+                console.log("Delete notice board is fail.");
+            });
+    }
+
+    /* Hash Tag 추가 */
+    $("#hashTag").on("change", function () {
+        var regExp = /^[#][a-zA-Zㄱ-힣0-9|s]*$/;
+        var hashTag = document.getElementById("hashTag").value;
+
+        if (regExp.test(hashTag)) {
+            $("#hashTagsTd").append('<span id="hashTagData' + hashTagId + '" class="hashTag">'
+                + hashTag
+                + '<img src="/images/cancel.png" class="cancel_icon" onClick="cancelHashTag(' + hashTagId + ')" />'
+                + '</span>');
+
+            document.getElementById("hashTag").value = "";
+            hashTagId++;
+        }
+    });
+
+    // 새로 업로드한 Hash Tag를 취소하는 경우
+    function cancelHashTag(hashTagId) {
+        $('#hashTagData' + hashTagId).remove();
+    }
+
+    // Main Page Priority 변경
+    $("#mainPageNonCheck").on("change", function () {
+        document.getElementsByName("mainPagePriority")[0].style.display ="none";
+        document.getElementsByName("mainPagePriority")[0].value = -1;
+    });
+
+    $("#mainPageCheck").on("change", function () {
+        var albumDto = [[${albumDto}]];
+        document.getElementsByName("mainPagePriority")[0].style.display = "inline";
+
+
+        // register || update 일 때의 mainPagePriority
+        if(!(albumDto.mainPagePriority == null || albumDto.mainPagePriority == -1)) {
+            document.getElementsByName("mainPagePriority")[0].options.item(albumDto.mainPagePriority - 1).selected = true;
+        }
+    });
+</script>
+
+<script th:if="!${albumDto?.idx}">
+    $('#insert').click(function () {
+        // input name hashTags에 hashTag 추가
+        document.getElementsByName("hashTags")[0].value = "";
+
+        for (var i = 0; i < hashTagId; i++) {
+            if (document.getElementById("hashTagData" + i)) {
+                var hashTag = document.getElementById("hashTagData" + i).innerText;
+                document.getElementsByName("hashTags")[0].value += hashTag;
+            }
+        }
+
+        // (input tag mame, length or size, message)
+        if (!(validateByLength("title", 50, "title") && validateByLength("hashTags", 255, "hashTags") && validateByFileExist())) {
+            return false;
+        }
+
+        var jsonData = $("#form").serializeObject();
+        var albumIdx;
+
+        // 게시글 업로드
+        $.ajax({
+            url: "http://localhost:8081/api/albums",
+            type: "post",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                albumIdx = msg;
+                exit = false;
+            })
+            .fail(function (msg) {
+                paraseErrorMsg(msg);
+                console.log("Update notice board is fail.");
+                exit = true;
+            });
+
+        if (exit) return false;
+
+        // 파일 업로드
+        var formData = new FormData();
+
+        for (var i = 0; i < insertFileArray.length; i++) {
+            formData.append("files", insertFileArray[i]);
+        }
+
+        formData.append("idx", albumIdx);
+        formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
+
+        $.ajax({
+            url: "http://localhost:8081/api/albums/attachedFile",
+            type: "post",
+            data: formData,
+            dataType: "text",
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            async: false,
+        })
+            .done(function (msg) {
+                location.href = "/album?idx=" + albumIdx;
+            })
+            .fail(function (msg) {
+                paraseErrorMsg(msg);
+                console.log("Update attached file is fail.");
+                deleteAlbum(albumIdx);
+            });
+
+    });
+</script>
+
+<script th:if="${albumDto?.idx}" th:inline="javascript">
+    var hashTags = [[${albumDto.hashTags}]]
+    var hashTagArray = hashTags.split("#");
+
+    // input name hashTags에 hashTag 추가
+    document.getElementsByName("hashTags")[0].value = "";
+
+    for (var i = 1; i < hashTagArray.length; i++) {
+        $("#hashTagsTd").append('<span id="hashTagData' + hashTagId + '" class="hashTag">'
+            + '#' + hashTagArray[i]
+            + '<img src="/images/cancel.png" class="cancel_icon" onClick="cancelHashTag(' + hashTagId + ')" />'
+            + '</span>');
+
+        hashTagId++;
+    }
+
+    $('#update').click(function () {
+        // input name hashTags에 hashTag 추가
+        document.getElementsByName("hashTags")[0].value = "";
+
+        for (var i = 0; i < hashTagId; i++) {
+            if (document.getElementById("hashTagData" + i)) {
+                var hashTag = document.getElementById("hashTagData" + i).innerText;
+                document.getElementsByName("hashTags")[0].value += hashTag;
+            }
+        }
+
+        // (input tag mame, length or size, message)
+        if (!(validateByLength("title", 50, "title") && validateByLength("hashTags", 255, "hashTags") && validateByFileExist())) {
+            return false;
+        }
+
+        var jsonData = $("#form").serializeObject();
+        var albumIdx = document.getElementsByName("idx")[0].value;
+
+        // 게시글 수정
+        $.ajax({
+            url: "http://localhost:8081/api/albums/" + albumIdx,
+            type: "put",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                exit = false;
+            })
+            .fail(function (msg) {
+                paraseErrorMsg(msg);
+                console.log("Update notice board is fail.");
+                exit = true;
+            });
+
+        if (exit) return false;
+
+        // 만일 파일이 수정되지 않은 경우 '파일 업로드' 및 '파일 삭제'를 수행하지 않음
+        if (insertFileArray.length == 0 && deleteFileArray.length == 0) {
+            location.href = "/album?idx=" + albumIdx;
+        }
+
+        // 파일 삭제
+        if (deleteFileArray.length > 0) {
+            $.ajax({
+                url: "http://localhost:8081/api/albums/attachedFile",
+                type: "delete",
+                data: JSON.stringify(deleteFileArray),
+                contentType: "application/json",
+                async: false,
+            })
+                .done(function (msg) {
+                    exit = false;
+                })
+                .fail(function (msg) {
+                    paraseErrorMsg(msg);
+                    console.log("Delete attached file is fail.");
+                    exit = true;
+                });
+        }
+
+        if (exit) return false;
+
+        if (insertFileArray.length <= 0) location.href = "/album?idx=" + albumIdx;
+
+        // 파일 업로드
+        var formData = new FormData();
+
+        for (var i = 0; i < insertFileArray.length; i++) {
+            formData.append("files", insertFileArray[i]);
+        }
+
+        formData.append("idx", albumIdx);
+        formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
+
+        $.ajax({
+            url: "http://localhost:8081/api/albums/attachedFile",
+            type: "post",
+            data: formData,
+            dataType: "text",
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            async: false,
+        })
+            .done(function (msg) {
+                location.href = "/album?idx=" + albumIdx;
+            })
+            .fail(function (msg) {
+                paraseErrorMsg(msg);
+                console.log("Upload attached file is fail.");
+                deleteAlbum(albumIdx);
+            })
+
+    });
+</script>
+
+</body>
+</html>

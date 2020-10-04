@@ -92,7 +92,6 @@ public class UserAttachedFileService {
         for (UserAttachedFile attachedFile : attachedFileList) {
             Path path = Paths.get("./upload/" + attachedFile.getSavedFileName());
             Files.delete(path);
-
         }
 
         deleteAttachedFileByUserIdx(userIdx);

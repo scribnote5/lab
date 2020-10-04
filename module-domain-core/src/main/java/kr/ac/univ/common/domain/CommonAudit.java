@@ -28,8 +28,10 @@ public abstract class CommonAudit {
     @LastModifiedDate
     private LocalDateTime lastModifiedDate;
 
+    @Column
     private String createdBy;
 
+    @Column
     private String lastModifiedBy;
 
     @Column

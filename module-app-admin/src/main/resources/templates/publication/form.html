@@ -130,7 +130,7 @@
                         <div th:id="imgData + ${attachedFileStat.index}">
                             <span th:text="${attachedFile.fileName} + ',&nbsp;' + 'File Size: ' + ${attachedFile.fileSize} + '&nbsp;'"></span>
                             <img th:attr="src=@{|/images/cancel.png|}, onclick=|deleteFile('${attachedFileStat.index}','${attachedFile.idx}','${attachedFile.savedFileName}')|"
-                                 th:style="'width: 16px; height: 16px'"/>
+                                 class="cancel_icon"/>
                         </div>
                     </div>
                 </td>
@@ -213,8 +213,8 @@
 
                 $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
                     + '<span>'
-                    + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size) + "&nbsp;"
-                    + '<img src="/images/cancel.png" style="width: 16px; height: 16px" onClick="cancelFile(' + imgDataId + ')" />'
+                    + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size)
+                    + '<img src="/images/cancel.png" class="cancel_icon" onClick="cancelFile(' + imgDataId + ')" />'
                     + '</span>'
                     + '</div>');
 
@@ -240,8 +240,8 @@
 
                 $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
                     + '<span>'
-                    + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size) + "&nbsp;"
-                    + '<img src="/images/cancel.png" style="width: 16px; height: 16px" onClick="cancelFile(' + imgDataId + ')" />'
+                    + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size)
+                    + '<img src="/images/cancel.png" class="cancel_icon" onClick="cancelFile(' + imgDataId + ')" />'
                     + '</span>'
                     + '</div>');
 
