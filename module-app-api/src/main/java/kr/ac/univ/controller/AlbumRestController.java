@@ -30,7 +30,7 @@ public class AlbumRestController {
 
     @PostMapping
     public ResponseEntity<?> postAlbum(@RequestBody @Valid AlbumDto albumDto) {
-        if(albumDto.getMainPagePriority() != - 1 && !EmptyUtil.isEmpty(albumService.findByMainPagePriorityIs(albumDto.getMainPagePriority())))  {
+        if(albumDto.getMainPagePriority() != - 1 && !EmptyUtil.isEmpty(albumService.findByMainPagePriorityIs(albumDto.getIdx(), albumDto.getMainPagePriority())))  {
             throw new BusinessException(ErrorCode.MAIN_PAGE_PRIORITY_DUPLICATE);
         }
 
@@ -41,7 +41,7 @@ public class AlbumRestController {
 
     @PutMapping("/{idx}")
     public ResponseEntity<?> putAlbum(@PathVariable("idx") Long idx, @RequestBody @Valid AlbumDto albumDto) {
-        if(albumDto.getMainPagePriority() != - 1 && !EmptyUtil.isEmpty(albumService.findByMainPagePriorityIs(albumDto.getMainPagePriority())))  {
+        if(albumDto.getMainPagePriority() != - 1 && !EmptyUtil.isEmpty(albumService.findByMainPagePriorityIs(albumDto.getIdx(), albumDto.getMainPagePriority())))  {
             throw new BusinessException(ErrorCode.MAIN_PAGE_PRIORITY_DUPLICATE);
         }
 

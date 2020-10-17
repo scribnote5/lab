@@ -1,33 +1,35 @@
-#content.content {
-    min-height: 300px;
+.sub-item-title {
+    font-weight: var(--strong-font-weight);
+    font-size: var(--larger-font-size);
+    text-align: center;
+}
+
+.content {
+    overflow: auto;
+    min-height: 25rem;
     height: auto;
 }
 
 #comment.comment {
-    height: 150px;
+    height: 10rem;
     resize: none;
 }
 
-.new_icon {
-    height: 15px;
-    width: 15px;
-}
-
 .createdBy {
-    font-weight: 600;
+    font-weight: var(--strong-font-weight);
 }
 
 .createdDate {
-    color: grey;
+    color: var(--main-grey);
 }
 
 [id^="updateContent"].comment {
-    height: 150px;
+    height: 10rem;
     resize: none;
 }
 
 [id^="publicationTitle"].title {
-    font-size: 1.4em;
+    font-size: 1.5em;
     color: rgb(154, 27, 31);
     font-weight: 450;
 }
@@ -39,20 +41,66 @@
 }
 
 #publicationAbstract.input_height_300 {
-    height: 300px;
+    height: 10rem;
     resize: none;
 }
 
-.hashTag {
-    background-color: rgb(215, 215, 215);
-    color: rgb(75, 75, 75);
-    border-radius: 5px;
+.active-status {
+    width: 7rem !important;
+}
+
+.created-modified-date {
+    width: 11.5rem !important;
+}
+
+.main-page-priority {
+    width: 20rem !important;
+}
+
+.presentation-date {
+    width: 17rem !important;
+}
+
+.published-date {
+    width: 11.5rem !important;
+}
+
+.admission-graduated-date {
+    width: 11.5rem !important;
+}
+
+.published-date {
+    width: 11.5rem !important;
+}
+
+.pages-volume-number {
+    width: 5rem !important;
+}
+
+.authority-type {
+    width: 8.5rem !important;
+}
+
+.birth-date {
+    width: 11.5rem !important;
+}
+
+.hash-tag {
+    background-color: var(--lightest-grey);
+    color: var(--dark-grey);
+    border-radius: .5rem;
     display: inline-block;
-    padding: 5px 5px 5px 5px;
-    margin: 5px 5px 5px 5px;
+    padding: .5rem;
+    margin-right: .5rem;
 }
 
 .disable {
-    background-color: rgb(215, 215, 215);
-    color: rgb(75, 75, 75);
+    background-color: var(--lighter-grey);
+    color: var(--dark-grey);
+}
+
+.required-field {
+    margin-left: .25rem;
+    color: red;
+    font-weight: 700;
 }

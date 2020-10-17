@@ -7,118 +7,121 @@
     <title>LearnMore Form</title>
 </head>
 <body>
-<!-- header -->
-<div th:replace="layout/header::header"></div>
+<div class="d-flex" id="wrapper">
+    <!-- sidebar -->
+    <div th:replace="layout/sidebar::sidebar"></div>
 
-<div class="container-md">
-    <form name="form" id="form" th:object="${learnMoreDto}" action="#">
-        <div class="page-header">
-            <h1 th:if="!*{idx}">LearnMore Register</h1>
-            <h1 th:if="*{idx}">LearnMore Update</h1>
+    <div id="page-content-wrapper">
+        <!-- header -->
+        <div th:replace="layout/header::header"></div>
+
+        <div class="container-fluid">
+            <form name="form" id="form" th:object="${learnMoreDto}" action="#">
+                <div class="page-header">
+                    <h1 th:if="!*{idx}">LearnMore Register</h1>
+                    <h1 th:if="*{idx}">LearnMore Update</h1>
+                </div>
+
+                <div class="mt-5">
+                    <table class="table">
+                        <colgroup>
+                            <col width="15%"/>
+                            <col width="85%"/>
+                        </colgroup>
+                        <tr>
+                            <th colspan="2" class="sub-item-title">LearnMore Information</th>
+                        </tr>
+                        <tr>
+                            <th>Title</th>
+                            <td><input type="text" name="title" id="title" class="form-control" th:value="*{title}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Download File Type</th>
+                            <td>
+                                <div class="pull-left">
+                                    <select class="custom-select" name="downloadFileType" th:field="*{downloadFileType}">
+                                        <option th:value="READ">Read file</option>
+                                        <option th:value="VIDEO">Video file</option>
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Attached File</th>
+                            <td>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="file" name="file">
+                                    <label class="custom-file-label" for="file">Choose file.</label>
+                                </div>
+                                <div id="fileDrop" class="fileDrop">
+                                    <strong>Drop files here.</strong>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Total file size</th>
+                            <td>
+                                <div><span id="totalFileSize"> 0 MB</span>, Up to 20 MB</div>
+                            </td>
+                        <tr>
+                            <th>Upload Attached File</th>
+                            <td>
+                                <div id="attachedFileList"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Uploaded Attached File</th>
+                            <td>
+                                <div id="uploadedAttachedFileList" th:each="attachedFile : *{attachedFileList}">
+                                    <div th:id="imgData + ${attachedFileStat.index}">
+                                        <span th:text="${attachedFile.fileName} + ',&nbsp;' + 'File Size: ' + ${attachedFile.fileSize} + '&nbsp;'"></span>
+                                        <img th:attr="src=@{|/images/cancel-icon.png|}, onclick=|deleteFile('${attachedFileStat.index}','${attachedFile.idx}','${attachedFile.savedFileName}')|" class="cancel-icon"/>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Additional Information</th>
+                        </tr>
+                        <tr>
+                            <th>Active Status</th>
+                            <td>
+                                <div class="pull-left">
+                                    <select class="custom-select" name="activeStatus" th:field="*{activeStatus}">
+                                        <option th:value="ACTIVE">Active</option>
+                                        <option th:value="INACTIVE">Inactive</option>
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Created Date</th>
+                            <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Modified Date</th>
+                            <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="row justify-content-between mt-5 mb-3">
+                    <div class="col-auto mx-3">
+                        <a href="/learn-more/list" class="btn btn-secondary col-auto">Move to List</a>
+                    </div>
+                    <div class="col-auto mx-3">
+                        <button th:if="!*{idx}" id="insert" type="button" class="btn btn-primary">Register</button>
+                        <button th:if="*{idx}" id="update" type="button" class="btn btn-info">Update</button>
+                    </div>
+                </div>
+
+                <!-- input type="hidden" -->
+                <input type="hidden" name="idx" th:value="*{idx}"/>
+                <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
+                <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
+            </form>
         </div>
-        <br/>
-        <table class="table">
-            <colgroup>
-                <col width="20%"/>
-                <col width="80%"/>
-            </colgroup>
-            <tr>
-                <th colspan="2" style="text-align: center"><h5>LearnMore Information</h5></th>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td><input type="text" name="title" id="title" class="form-control" th:value="*{title}"/></td>
-            </tr>
-            <tr>
-                <th>Download File Type</th>
-                <td>
-                    <div class="pull-left">
-                        <select class="custom-select col-md-2" name="downloadFileType" th:field="*{downloadFileType}">
-                            <option th:value="READ">Read file</option>
-                            <option th:value="VIDEO">Video file</option>
-                        </select>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <th>Attached File</th>
-                <td>
-                    <div class="custom-file py-md-4">
-                        <input type="file" class="custom-file-input" id="file" name="file">
-                        <label class="custom-file-label" for="file">Choose file.</label>
-                    </div>
-                    <div id="fileDrop" class="fileDrop">
-                        <strong>Drop files here.</strong>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <th>Total file size</th>
-                <td>
-                    <div><span id="totalFileSize"> 0 MB</span>, Up to 20 MB</div>
-                </td>
-            <tr>
-                <th>Upload Attached File</th>
-                <td>
-                    <div id="attachedFileList"></div>
-                </td>
-            </tr>
-            <tr>
-                <th>Uploaded Attached File</th>
-                <td>
-                    <div id="uploadedAttachedFileList" th:each="attachedFile : *{attachedFileList}">
-                        <div th:id="imgData + ${attachedFileStat.index}">
-                            <span th:text="${attachedFile.fileName} + ',&nbsp;' + 'File Size: ' + ${attachedFile.fileSize} + '&nbsp;'"></span>
-                            <img th:attr="src=@{|/images/cancel.png|}, onclick=|deleteFile('${attachedFileStat.index}','${attachedFile.idx}','${attachedFile.savedFileName}')|"
-                                 class="cancel_icon"/>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <th colspan="2" style="text-align: center"><h5>Additional Information</h5></th>
-            </tr>
-            <tr>
-                <th>Active Status</th>
-                <td>
-                    <div class="pull-left">
-                        <select class="custom-select col-md-2" name="activeStatus" th:field="*{activeStatus}">
-                            <option th:value="ACTIVE">Active</option>
-                            <option th:value="INACTIVE">Inactive</option>
-                        </select>
-                    </div>
-                </td>
-            </tr>
-            <tr th:if="*{idx}">
-                <th>Created Date</th>
-                <td><input type="text" class="form-control col-md-3" readonly="readonly"
-                           th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
-            </tr>
-            <tr th:if="*{idx}">
-                <th>Modified Date</th>
-                <td><input type="text" class="form-control col-md-3" readonly="readonly"
-                           th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-            </tr>
-        </table>
-
-        <div class="row justify-content-md-between">
-            <a href="/learn-more/list" class="btn btn-secondary col-md-auto">Move to List</a>
-
-            <button th:if="!*{idx}" id="insert" type="button" class="btn btn-primary col-md-auto">Register</button>
-            <button th:if="*{idx}" id="update" type="button" class="btn btn-info col-md-auto">Update</button>
-        </div>
-
-        <!-- input type="hidden" -->
-        <input type="hidden" name="idx" th:value="*{idx}"/>
-        <input type="hidden" name="createdBy"
-               th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
-        <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
-
-    </form>
+    </div>
 </div>
 
 <!-- footer -->
@@ -164,7 +167,7 @@
                 $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
                     + '<span>'
                     + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size)
-                    + '<img src="/images/cancel.png" class="cancel_icon" onClick="cancelFile(' + imgDataId + ')" />'
+                    + '<img src="/images/cancel-icon.png" class="cancel-icon" onClick="cancelFile(' + imgDataId + ')" />'
                     + '</span>'
                     + '</div>');
 
@@ -198,7 +201,7 @@
                 $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
                     + '<span>'
                     + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size)
-                    + '<img src="/images/cancel.png" class="cancel_icon" onClick="cancelFile(' + imgDataId + ')" />'
+                    + '<img src="/images/cancel-icon.png" class="cancel-icon" onClick="cancelFile(' + imgDataId + ')" />'
                     + '</span>'
                     + '</div>');
 

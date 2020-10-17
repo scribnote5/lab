@@ -1,15 +1,15 @@
 .error {
     color: rgb(226,76,75);
     font-size: 3em;
-    font-weight: 600;
+    font-weight: var(--strong-font-weight);
 }
 
-.error_msg {
-    font-size: 1.5em;
-    font-weight: 500;
+.error-msg {
+    font-size: var(--larger-font-size);
+    font-weight: var(--regualr-font-weight);
 }
 
-.login_error_msg {
+.login-error-msg {
     color: rgb(154,27,31);
-    font-weight: 500;
+    font-weight: var(--regualr-font-weight);
 }

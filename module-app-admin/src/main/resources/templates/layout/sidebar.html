@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- sidebar -->
+<div th:fragment="sidebar">
+    <nav id="sidebar-wrapper">
+        <div class="sidebar-heading bg-light border-right">
+            <a href="/main/home">
+                <img src="/images/logo.png" class="logo">
+            </a>
+        </div>
+
+        <div class="sidebar-list">
+            <span class="dropdown-btn">
+                Main Page
+                <img src="/images/chevron-down-icon.svg" class="chevron-down-icon">
+            </span>
+            <div class="dropdown-container">
+                <a href="/notice-board/list">Notice Board</a>
+                <a href="/album/list">Album</a>
+            </div>
+
+            <span class="dropdown-btn">
+                Introduction Page
+                <img src="/images/chevron-down-icon.svg" class="chevron-down-icon">
+            </span>
+            <div class="dropdown-container">
+                <a href="/introduction/list">Introduction</a>
+                <a href="/research-field/list">Research Field</a>
+                <a href="/learn-more/list">Learn More</a>
+            </div>
+
+            <span class="dropdown-btn">
+                Project Page
+                <img src="/images/chevron-down-icon.svg" class="chevron-down-icon">
+            </span>
+            <div class="dropdown-container">
+                <a href="/research-field/list">Research Field</a>
+                <a href="/project/list">Project</a>
+            </div>
+
+            <span class="dropdown-btn">
+                Seminar Page
+                <img src="/images/chevron-down-icon.svg" class="chevron-down-icon">
+            </span>
+            <div class="dropdown-container">
+                <a href="/category/list">Category</a>
+                <a href="/seminar/list">Seminar</a>
+            </div>
+
+            <a href="/publication/list">Publication</a>
+            <a href="/album/list">Album</a>
+            <a href="/alumni-association/list">Alumni Association</a>
+            <a href="/user/list">User</a>
+        </div>
+    </nav>
+</div>
+<!--/sidebar-->
+</html>

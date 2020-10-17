@@ -7,125 +7,124 @@
     <title>Project Form</title>
 </head>
 <body>
-<!-- header -->
-<div th:replace="layout/header::header"></div>
+<div class="d-flex" id="wrapper">
+    <!-- sidebar -->
+    <div th:replace="layout/sidebar::sidebar"></div>
 
-<div class="container-md">
-    <form name="form" id="form" th:object="${projectDto}" action="#">
-        <div class="page-header">
-            <h1 th:if="!*{idx}">Project Register</h1>
-            <h1 th:if="*{idx}">Project Update</h1>
+    <div id="page-content-wrapper">
+        <!-- header -->
+        <div th:replace="layout/header::header"></div>
+
+        <div class="container-fluid">
+            <form name="form" id="form" th:object="${projectDto}" action="#">
+                <div class="page-header">
+                    <h1 th:if="!*{idx}">Project Register</h1>
+                    <h1 th:if="*{idx}">Project Update</h1>
+                </div>
+
+                <div class="mt-5">
+                    <table class="table">
+                        <colgroup>
+                            <col width="15%"/>
+                            <col width="85%"/>
+                        </colgroup>
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Project Information</th>
+                        </tr>
+                        <tr>
+                            <th>Title</th>
+                            <td><input type="text" name="title" id="title" class="form-control" th:value="*{title}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Research Field</th>
+                            <td>
+                                <select class="custom-select" name="researchFieldIdx" th:field="*{researchFieldIdx}">
+                                    <option th:if="${#strings.isEmpty(researchFieldDto)} and *{idx}" th:value="-1">This field is inactive or deleted.</option>
+                                    <option th:each="researchFieldDto : ${researchFieldDtoList}"
+                                            th:value="${researchFieldDto.idx}"
+                                            th:text="${researchFieldDto.title}+' - '+${researchFieldDto.subTitle}"></option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><textarea name="content" id="summernote" class="summernote" th:text="*{content}"></textarea></td>
+                        </tr>
+                        <tr>
+                            <th>Attached File</th>
+                            <td>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="file" name="file">
+                                    <label class="custom-file-label" for="file">Choose file.</label>
+                                </div>
+                                <div id="fileDrop" class="fileDrop">
+                                    <strong>Drop files here.</strong>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Total file size</th>
+                            <td>
+                                <div><span id="totalFileSize"> 0 MB</span>, Up to 20 MB</div>
+                            </td>
+                        <tr>
+                            <th>Upload Attached File</th>
+                            <td>
+                                <div id="attachedFileList"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Uploaded Attached File</th>
+                            <td>
+                                <div id="uploadedAttachedFileList" th:each="attachedFile : *{attachedFileList}">
+                                    <div th:id="imgData + ${attachedFileStat.index}">
+                                        <span th:text="${attachedFile.fileName} + ',&nbsp;' + 'File Size: ' + ${attachedFile.fileSize} + '&nbsp;'"></span>
+                                        <img th:attr="src=@{|/images/cancel-icon.png|}, onclick=|deleteFile('${attachedFileStat.index}','${attachedFile.idx}','${attachedFile.savedFileName}')|" class="cancel-icon"/>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Additional Information</th>
+                        </tr>
+                        <tr>
+                            <th>Active Status</th>
+                            <td>
+                                <div class="pull-left">
+                                    <select class="custom-select active-status" name="activeStatus" th:field="*{activeStatus}">
+                                        <option th:value="ACTIVE">Active</option>
+                                        <option th:value="INACTIVE">Inactive</option>
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Created Date</th>
+                            <td><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Modified Date</th>
+                            <td><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="row justify-content-between mt-5 mb-3">
+                    <div class="col-auto mx-3">
+                        <a href="/project/list" class="btn btn-secondary">Move to List</a>
+                    </div>
+                    <div class="col-auto mx-3">
+                        <button th:if="!*{idx}" id="insert" type="button" class="btn btn-primary">Register</button>
+                        <button th:if="*{idx}" id="update" type="button" class="btn btn-info">Update</button>
+                    </div>
+                </div>
+
+                <!-- input type="hidden" -->
+                <input type="hidden" name="idx" th:value="*{idx}"/>
+                <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
+                <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
+            </form>
         </div>
-        <br/>
-        <table class="table">
-            <colgroup>
-                <col width="20%"/>
-                <col width="80%"/>
-            </colgroup>
-            <tr>
-                <th colspan="2" style="text-align: center"><h5>Project Information</h5></th>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td><input type="text" name="title" id="title" class="form-control" th:value="*{title}"/></td>
-            </tr>
-            <tr>
-                <th>Research Field</th>
-                <td>
-                    <select class="custom-select col-md-5" name="researchFieldIdx" th:field="*{researchFieldIdx}">
-                        <option th:if="${#strings.isEmpty(researchFieldDto)} and *{idx}" th:value="-1">This field is inactive or deleted.</option>
-                        <option th:each="researchFieldDto : ${researchFieldDtoList}"
-                                th:value="${researchFieldDto.idx}"
-                                th:text="${researchFieldDto.title}+' - '+${researchFieldDto.subTitle}"></option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <!--<td colspan="2"><textarea name="content" id="content" class="col-md-1 form-control input-sm"
-                                          maxlength="140" rows="7" style="height: 200px; resize: none;"
-                                          th:text="*{content}"></textarea></td>-->
-                <td colspan="2"><textarea name="content" id="summernote" class="summernote"
-                                          th:text="*{content}"></textarea></td>
-            </tr>
-            <tr>
-                <th>Attached File</th>
-                <td>
-                    <div class="custom-file py-md-4">
-                        <input type="file" class="custom-file-input" id="file" name="file">
-                        <label class="custom-file-label" for="file">Choose file.</label>
-                    </div>
-                    <div id="fileDrop" class="fileDrop">
-                        <strong>Drop files here.</strong>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <th>Total file size</th>
-                <td>
-                    <div><span id="totalFileSize"> 0 MB</span>, Up to 20 MB</div>
-                </td>
-            <tr>
-                <th>Upload Attached File</th>
-                <td>
-                    <div id="attachedFileList"></div>
-                </td>
-            </tr>
-            <tr>
-                <th>Uploaded Attached File</th>
-                <td>
-                    <div id="uploadedAttachedFileList" th:each="attachedFile : *{attachedFileList}">
-                        <div th:id="imgData + ${attachedFileStat.index}">
-                            <span th:text="${attachedFile.fileName} + ',&nbsp;' + 'File Size: ' + ${attachedFile.fileSize} + '&nbsp;'"></span>
-                            <img th:attr="src=@{|/images/cancel.png|}, onclick=|deleteFile('${attachedFileStat.index}','${attachedFile.idx}','${attachedFile.savedFileName}')|"
-                                 th:style="'width: 16px; height: 16px'"/>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <th colspan="2" style="text-align: center"><h5>Additional Information</h5></th>
-            </tr>
-            <tr>
-                <th>Active Status</th>
-                <td>
-                    <div class="pull-left">
-                        <select class="custom-select col-md-2" name="activeStatus" th:field="*{activeStatus}">
-                            <option th:value="ACTIVE">Active</option>
-                            <option th:value="INACTIVE">Inactive</option>
-                        </select>
-                    </div>
-                </td>
-            </tr>
-            <tr th:if="*{idx}">
-                <th>Created Date</th>
-                <td><input type="text" class="form-control col-md-3" readonly="readonly"
-                           th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
-            </tr>
-            <tr th:if="*{idx}">
-                <th>Modified Date</th>
-                <td><input type="text" class="form-control col-md-3" readonly="readonly"
-                           th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-            </tr>
-        </table>
-
-        <div class="row justify-content-md-between">
-            <a href="/project/list" class="btn btn-secondary col-md-auto">Move to List</a>
-
-            <button th:if="!*{idx}" id="insert" type="button" class="btn btn-primary col-md-auto">Register</button>
-            <button th:if="*{idx}" id="update" type="button" class="btn btn-info col-md-auto">Update</button>
-        </div>
-
-        <!-- input type="hidden" -->
-        <input type="hidden" name="idx" th:value="*{idx}"/>
-        <input type="hidden" name="createdBy"
-               th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
-        <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
-
-    </form>
+    </div>
 </div>
 
 <!-- footer -->
@@ -171,7 +170,7 @@
                 $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
                     + '<span>'
                     + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size)
-                    + '<img src="/images/cancel.png" class="cancel_icon" onClick="cancelFile(' + imgDataId + ')" />'
+                    + '<img src="/images/cancel-icon.png" class="cancel-icon" onClick="cancelFile(' + imgDataId + ')" />'
                     + '</span>'
                     + '</div>');
 
@@ -200,7 +199,7 @@
                 $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
                     + '<span>'
                     + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size)
-                    + '<img src="/images/cancel.png" class="cancel_icon" onClick="cancelFile(' + imgDataId + ')" />'
+                    + '<img src="/images/cancel-icon.png" class="cancel-icon" onClick="cancelFile(' + imgDataId + ')" />'
                     + '</span>'
                     + '</div>');
 
@@ -211,14 +210,14 @@
         }
     });
 
-    $("#fileDrop").on("dragover", function (event){
+    $("#fileDrop").on("dragover", function (event) {
         event.stopPropagation();
         event.preventDefault();
 
         document.getElementById("fileDrop").style.opacity = 0.25;
     });
 
-    $("#fileDrop").on("dragleave", function (event){
+    $("#fileDrop").on("dragleave", function (event) {
         event.stopPropagation();
         event.preventDefault();
 
@@ -326,7 +325,7 @@
 <script th:if="${projectDto?.idx}" th:inline="javascript">
     $('#update').click(function () {
         // (input tag mame, length or size, message)
-        if (!(validateByLength("title", 50, "title") && validateBySize("content", 16777215, "content")  && validateBySelect("researchFieldIdx", "Research Field"))) {
+        if (!(validateByLength("title", 50, "title") && validateBySize("content", 16777215, "content") && validateBySelect("researchFieldIdx", "Research Field"))) {
             return false;
         }
 

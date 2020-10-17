@@ -48,8 +48,8 @@
                     <td th:text="${noticeBoardDto.idx}"></td>
                     <td>
                         <a th:href="'/notice-board?idx='+${noticeBoardDto.idx}" th:text="${noticeBoardDto.title}"></a>
-                        <img th:if="${noticeBoardDto.newIcon}" th:attr="src=@{|/images/new_icon.png|}"
-                             class="new_icon"/>
+                        <img th:if="${noticeBoardDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}"
+                             class="new-icon"/>
                     </td>
                     <td th:text="${noticeBoardDto.createdBy}">></td>
                     <td th:text="${#temporals.format(noticeBoardDto.createdDate,'yyyy-MM-dd HH:mm')}"></td>

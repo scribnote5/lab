@@ -41,7 +41,7 @@
                           th:text="*{attachedFileList[0].fileName} + ',&nbsp;' + 'File size: ' + *{attachedFileList[0].fileSize}"></span>
                 </td>
                 <td id="imgPreview">
-                    <img th:if="*{attachedFileList.size()} == 0" th:attr="src=@{/images/no_preview_available.jpg}"
+                    <img th:if="*{attachedFileList.size()} == 0" th:attr="src=@{/images/no-preview-available.jpg}"
                          width="150" height="150"/>
                     <img th:if="*{attachedFileList.size()} != 0"
                          th:attr="src=@{|http://localhost:8081/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}"

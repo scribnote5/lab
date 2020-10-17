@@ -143,7 +143,7 @@ public class UserService implements UserDetailsService {
         return userDto;
     }
 
-    @Transactional
+        @Transactional
     public Long updateUser(Long idx, UserDto userDto) {
         User persistUser = userRepository.getOne(idx);
         User user = UserMapper.INSTANCE.toEntity(userDto);

@@ -1,0 +1,45 @@
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/jquery.serialize-object.min.js}"></script>
+<script th:src="@{/js/fileUtil.js}"></script>
+<script th:src="@{/js/util.js}"></script>
+<script th:src="@{/js/validation.js}"></script>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/summernote/summernote-bs4.min.js}"></script>
+
+<script th:inline="javascript">
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+    $(function () {
+        $(document).ajaxSend(function (e, xhr, options) {
+            xhr.setRequestHeader(header, token);
+        });
+    });
+
+    $("#menu-toggle").click(function (e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+
+    /* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */
+    var dropdown = document.getElementsByClassName("dropdown-btn");
+
+    for (var i = 0; i < dropdown.length; i++) {
+        dropdown[i].addEventListener("click", function () {
+            var dropdownContent = this.nextElementSibling;
+            this.classList.toggle("sidebar-active");
+
+            if (dropdownContent.style.display === "block") {
+                dropdownContent.style.display = "none";
+            } else {
+                dropdownContent.style.display = "block";
+            }
+        });
+    }
+
+    $('#logout').click(function () {
+        if(confirm("Do you want to logout?")) {
+            location.href = "/user/logout";
+        }
+    });
+</script>

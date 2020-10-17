@@ -7,83 +7,83 @@
     <title>ResearchField Form</title>
 </head>
 <body>
-<!-- header -->
-<div th:replace="layout/header::header"></div>
+<div class="d-flex" id="wrapper">
+    <!-- sidebar -->
+    <div th:replace="layout/sidebar::sidebar"></div>
 
-<div class="container-md">
-    <form name="form" id="form" th:object="${researchFieldDto}" action="#">
-        <div class="page-header">
-            <h1 th:if="!*{idx}">ResearchField Register</h1>
-            <h1 th:if="*{idx}">ResearchField Update</h1>
-        </div>
-        <br/>
-        <table class="table">
-            <colgroup>
-                <col width="20%"/>
-                <col width="80%"/>
-            </colgroup>
-            <tr>
-                <th colspan="2" style="text-align: center"><h5>ResearchField Information</h5></th>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td><input type="text" name="title" id="title" class="form-control" th:value="*{title}"/></td>
-            </tr>
-            <tr>
-                <th>Sub Title</th>
-                <td><input type="text" name="subTitle" id="subTitle" class="form-control" th:value="*{subTitle}"/></td>
-            </tr>
-            <tr>
-                <!--<td colspan="2"><textarea name="content" id="content" class="col-md-1 form-control input-sm"
-                                          maxlength="140" rows="7" style="height: 200px; resize: none;"
-                                          th:text="*{content}"></textarea></td>-->
-                <td colspan="2"><textarea name="content" id="summernote" class="summernote"
-                                          th:text="*{content}"></textarea></td>
-            </tr>
-            <tr>
-                <th colspan="2" style="text-align: center"><h5>Additional Information</h5></th>
-            </tr>
-            <tr>
-                <th>Active Status</th>
-                <td>
-                    <div class="pull-left">
-                        <select class="custom-select col-md-2" name="activeStatus" th:field="*{activeStatus}">
-                            <option th:value="ACTIVE">Active</option>
-                            <option th:value="INACTIVE">Inactive</option>
-                        </select>
+    <div id="page-content-wrapper">
+        <!-- header -->
+        <div th:replace="layout/header::header"></div>
+
+        <div class="container-fluid">
+            <form name="form" id="form" th:object="${researchFieldDto}" action="#">
+                <div class="page-header">
+                    <h1 th:if="!*{idx}">ResearchField Register</h1>
+                    <h1 th:if="*{idx}">ResearchField Update</h1>
+                </div>
+
+                <div class="mt-5">
+                    <table class="table">
+                        <colgroup>
+                            <col width="15%"/>
+                            <col width="85%"/>
+                        </colgroup>
+                        <tr>
+                            <th colspan="2" class="sub-item-title">ResearchField Information</th>
+                        </tr>
+                        <tr>
+                            <th>Title</th>
+                            <td><input type="text" name="title" id="title" class="form-control" th:value="*{title}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Sub Title</th>
+                            <td><input type="text" name="subTitle" id="subTitle" class="form-control" th:value="*{subTitle}"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><textarea name="content" id="summernote" class="summernote" th:text="*{content}"></textarea></td>
+                        </tr>
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Additional Information</th>
+                        </tr>
+                        <tr>
+                            <th>Active Status</th>
+                            <td>
+                                <div class="pull-left">
+                                    <select class="custom-select active-status" name="activeStatus" th:field="*{activeStatus}">
+                                        <option th:value="ACTIVE">Active</option>
+                                        <option th:value="INACTIVE">Inactive</option>
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Created Date</th>
+                            <td><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Modified Date</th>
+                            <td><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="row justify-content-between mt-5 mb-3">
+                    <div class="col-auto mx-3">
+                        <a href="/research-field/list" class="btn btn-secondary">Move to List</a>
                     </div>
-                </td>
-            </tr>
-            <tr th:if="*{idx}">
-                <th>Created Date</th>
-                <td><input type="text" class="form-control col-md-3" readonly="readonly"
-                           th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
-            </tr>
-            <tr th:if="*{idx}">
-                <th>Modified Date</th>
-                <td><input type="text" class="form-control col-md-3" readonly="readonly"
-                           th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-            </tr>
-        </table>
+                    <div class="col-auto mx-3">
+                        <button th:if="!*{idx}" id="insert" type="button" class="btn btn-primary">Register</button>
+                        <button th:if="*{idx}" id="update" type="button" class="btn btn-info">Update</button>
+                    </div>
+                </div>
 
-        <div class="row justify-content-md-between">
-            <a href="/research-field/list" class="btn btn-secondary col-md-auto">Move to List</a>
-
-            <button th:if="!*{idx}" id="insert" type="button" class="btn btn-primary col-md-auto">Register</button>
-            <button th:if="*{idx}" id="update" type="button" class="btn btn-info col-md-auto">Update</button>
+                <!-- input type="hidden" -->
+                <input type="hidden" name="idx" th:value="*{idx}"/>
+                <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
+                <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
+            </form>
         </div>
-
-        <!-- input type="hidden" -->
-        <input type="hidden" name="idx" th:value="*{idx}"/>
-        <input type="hidden" name="createdBy"
-               th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
-        <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
-
-    </form>
+    </div>
 </div>
 
 <!-- footer -->

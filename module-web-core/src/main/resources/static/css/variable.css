@@ -1,0 +1,34 @@
+:root {
+    /* font-weight */
+    --strong-font-weight: 700;
+    --regular-font-weight: 500;
+    --light-font-weight: 300;
+    --thin-font-weight: 100;
+
+    /* font-size */
+    --largest-font-size: 1.2rem;
+    --larger-font-size: 1.1rem;
+    --large-font-size: 1rem;
+    --regular-font-size: .9rem;
+    --small-font-size: .8rem;
+    --smaller-font-size: .7rem;
+
+    /* color */
+    --black: rgb(0, 0, 0);
+
+    --main-black: rgb(32, 32, 32);
+    --light-black: rgb(48, 48, 48);
+    --lighter-black: rgb(64, 64, 64);
+
+    --dark-grey: rgb(96, 96, 96);
+    --main-grey: rgb(128, 128, 128);
+    --light-grey: rgb(160, 160, 160);
+    --lighter-grey: rgb(192, 192, 192);
+    --lightest-grey: rgb(224, 224, 224);
+
+    --white: rgb(255, 255, 255);
+
+    --light-red: rgb(186, 44, 48);
+    --main-red: rgb(158, 37, 41);
+    --dark-red: rgb(126, 35, 29);
+}

@@ -80,7 +80,7 @@
                 <td colspan="2">
                     <div>
                         <span th:class="createdBy" th:text="${noticeBoardCommentDto.createdBy}"></span> <br>
-                        <span th:class="createdDate" th:text="${#temporals.format(noticeBoardCommentDto.createdDate,'yyyy-MM-dd HH:mm')}"></span> <img th:class="new_icon" th:if="${noticeBoardCommentDto.newIcon}" th:attr="src=@{|/images/new_icon.png|}"/>
+                        <span th:class="createdDate" th:text="${#temporals.format(noticeBoardCommentDto.createdDate,'yyyy-MM-dd HH:mm')}"></span> <img th:class="new-icon" th:if="${noticeBoardCommentDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}"/>
                     </div>
                     <div class="my-md-2">
                         <span th:id="content + ${noticeBoardCommentDtoStat.index}" th:text="${noticeBoardCommentDto.content}"></span>

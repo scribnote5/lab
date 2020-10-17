@@ -26,6 +26,16 @@ function validateBySpecialChar(str) {
     }
 }
 
+/* ID 검사: 영어 소문자와 숫자 검사 */
+function validateById(str) {
+    var regexp = /^[a-z]+[a-z0-9]{5,19}$/g;
+    if (regexp.test(str) == true) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 /* 바이트 수 반환 */
 function getByteSize(el) {
     var codeByte = 0;

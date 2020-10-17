@@ -1,17 +1,80 @@
-.new_icon {
-    height: 15px;
-    width: 15px;
-    margin: 0px 0px 5px 0px;
+.login-logo {
+    margin-bottom: .75rem;
+    height: 5rem;
+    width: auto;
 }
 
-.cancel_icon {
-    height: 15px;
-    width: 15px;
-    margin: 0px 0px 5px 5px;
-}
-
-.album_img_preview {
+.album-img-preview {
     max-width: 100%;
     width: auto;
-    height: 205px; !important;
+    height: 13.5rem;
+    /*height: 205px; !important;*/
+}
+
+.user-img-preview {
+    width: 10rem;
+    height: 10rem;
+}
+
+.new-icon {
+    margin-left: 0.25rem;
+    margin-bottom: 0.1rem;
+    height: 1rem;
+    width: 1rem;
+}
+
+.cancel-icon {
+    margin-left: 0.25rem;
+    margin-bottom: 0.1rem;
+    height: 1rem;
+    width: 1rem;
+}
+
+.chevron-down-icon {
+    height: 1.5rem;
+    width: 1.5rem;
+    float: right;
+}
+
+.user-information-icon {
+    border-right: .075rem solid var(--light-grey);
+    padding-right: .2rem;
+    float: left;
+    height: 1.5rem;
+    width: auto;
+}
+
+.logout-icon {
+    border-left: .075rem solid var(--light-grey);
+    padding-left: .2rem;
+    float: right;
+    height: 1.5rem;
+    width: auto;
+    cursor: pointer;
+}
+
+.logo {
+    height: 3.25rem;
+    width: auto;
+    object-fit: contain;
+}
+
+.sidebar-icon {
+    height: 2.5rem;
+    width: 2.5rem;
+}
+
+.menu-icon {
+    height: 2.5rem;
+    width: 2.5rem;
+}
+
+.img-border {
+    border: .1rem solid var(--light-grey);
+    border-radius: .25rem;
+    padding: .1rem;
+}
+
+.img-border:hover {
+    box-shadow: 0 0 .2rem .1rem rgba(0, 140, 186, 0.5);
 }

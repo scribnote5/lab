@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- css -->
+    <th:block th:replace="layout/css.html"></th:block>
+
+    <title>Main</title>
+</head>
+<body>
+
+<div class="d-flex" id="wrapper">
+    <!-- sidebar -->
+    <div th:replace="layout/sidebar::sidebar"></div>
+
+    <div id="page-content-wrapper">
+        <!-- header -->
+        <div th:replace="layout/header::header"></div>
+
+        <div class="container-fluid">
+            내용입니다.
+        </div>
+    </div>
+    <!-- /#page-content-wrapper -->
+</div>
+<!-- /#wrapper -->
+
+<!-- footer -->
+<div th:replace="layout/footer::footer"></div>
+
+<!-- script file -->
+<th:block th:replace="layout/script.html"></th:block>
+
+</body>
+</html>

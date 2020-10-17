@@ -7,102 +7,102 @@
     <title>Album Read</title>
 </head>
 <body>
-<!-- header -->
-<div th:replace="layout/header::header"></div>
+<div class="d-flex" id="wrapper">
+    <!-- sidebar -->
+    <div th:replace="layout/sidebar::sidebar"></div>
 
-<div class="container-md">
-    <form name="form" id="form" th:object="${albumDto}" action="#">
-        <div class="page-header">
-            <h1>Album Read</h1>
-        </div>
-        <br/>
-        <table class="table">
-            <colgroup>
-                <col width="20%"/>
-                <col width="50%"/>
-                <col width="30%"/>
-            </colgroup>
-            <tr>
-                <th colspan="3" style="text-align: center"><h5>Album Information</h5></th>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td colspan="2"><span id="title" class="form-control" th:text="*{title}"></span></td>
-            </tr>
-            <tr>
-                <th>Photo Taken Date</th>
-                <td colspan="2"><span type="date" id="photoTakenDate" class="form-control" th:text="*{#temporals.format(photoTakenDate,'yyyy-MM-dd')}"/></td>
-            </tr>
-            <tr>
-                <th>Main Page Priority</th>
-                <td colspan="2"><span id="mainPagePriority" class="form-control" th:text="*{mainPagePriority == -1} ? 'This post not shown on the main page.' : *{mainPagePriority}"/></td>
-            </tr>
-            <tr>
-                <th>Hash Tags</th>
-                <td colspan="2">
-                    <span th:each="hashTag : *{#strings.arraySplit(hashTags,'#')}">
-                        <span id="hashTag" class="hashTag" th:text="'#' + ${hashTag}"></span>
-                    </span>
-                </td>
-            </tr>
-                <th>Uploaded Attached File</th>
-                <td>
-                    <div id="attachedFileList" th:each="attachedFile : *{attachedFileList}">
-                        <span th:attr="onclick=|location.href='http://localhost:8081/api/attachedFiles/download/${attachedFile.savedFileName}'|"
-                              th:text="${attachedFile.fileName} + ',&nbsp;' + 'File size: ' + ${attachedFile.fileSize}"></span>
+    <div id="page-content-wrapper">
+        <!-- header -->
+        <div th:replace="layout/header::header"></div>
+
+        <div class="container-fluid">
+            <form name="form" id="form" th:object="${albumDto}" action="#">
+                <div class="page-header">
+                    <h1>Album Read</h1>
+                </div>
+
+                <div class="mt-5">
+                    <table class="table">
+                        <colgroup>
+                            <col width="15%"/>
+                            <col width="50%"/>
+                            <col width="35%"/>
+                        </colgroup>
+                        <tr>
+                            <th colspan="3" class="sub-item-title">Album Information</th>
+                        </tr>
+                        <tr>
+                            <th>Title</th>
+                            <td colspan="2"><span id="title" class="form-control" th:text="*{title}"></span></td>
+                        </tr>
+                        <tr>
+                            <th>Photo Taken Date</th>
+                            <td colspan="2"><span type="date" id="photoTakenDate" class="form-control" th:text="*{#temporals.format(photoTakenDate,'yyyy-MM-dd')}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Main Page Priority</th>
+                            <td colspan="2"><span id="mainPagePriority" class="form-control main-page-priority" th:text="*{mainPagePriority == -1} ? 'This post not shown on the main page.' : *{mainPagePriority}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Hash Tags</th>
+                            <td colspan="2">
+                                <span th:each="hashTag : *{#strings.arraySplit(hashTags,'#')}">
+                                    <span id="hashTag" class="hash-tag" th:text="'#' + ${hashTag}"></span>
+                                </span>
+                            </td>
+                        </tr>
+                        <th>Uploaded Attached File</th>
+                        <td>
+                            <div id="attachedFileList" th:each="attachedFile : *{attachedFileList}">
+                                <span th:attr="onclick=|location.href='http://localhost:8081/api/attachedFiles/download/${attachedFile.savedFileName}'|"
+                                      th:text="${attachedFile.fileName} + ',&nbsp;' + 'File size: ' + ${attachedFile.fileSize}"></span>
+                            </div>
+                        </td>
+                        <td>
+                            <img th:if="*{attachedFileList.size()} == 0" th:attr="src=@{/images/no-preview-available.jpg}" class="album-img-preview"/>
+                            <img th:if="*{attachedFileList.size()} != 0" th:attr="src=@{|http://localhost:8081/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}" class="album-img-preview img-border"/>
+                        </td>
+                        </tr>
+                        <tr>
+                            <th colspan="3" class="sub-item-title">Additional Information</th>
+                        </tr>
+                        <tr>
+                            <th>Active Status</th>
+                            <td colspan="2">
+                                <div>
+                                    <span th:if="*{activeStatus?.name() == 'ACTIVE'}" class="form-control active-status" th:text="Active"> </span>
+                                    <span th:if="*{activeStatus?.name() == 'INACTIVE'}" class="form-control active-status" th:text="Inactive"> </span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Created Date</th>
+                            <td colspan="2"><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Modified Date</th>
+                            <td colspan="2"><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="row justify-content-between mt-5 mb-3">
+                    <div class="col-auto mx-3">
+                        <a href="/album/list" class="btn btn-secondary">Move to List</a>
                     </div>
-                </td>
-                <td>
-                    <img th:if="*{attachedFileList.size()} == 0" th:attr="src=@{/images/no_preview_available.jpg}"
-                         class="album_img_preview"/>
-                    <img th:if="*{attachedFileList.size()} != 0"
-                         th:attr="src=@{|http://localhost:8081/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}"
-                         class="album_img_preview"/>
-                </td>
-            </tr>
-            <tr>
-                <th colspan="3" style="text-align: center"><h5>Additional Information</h5></th>
-            </tr>
-            <tr>
-                <th>Active Status</th>
-                <td colspan="2">
-                    <div>
-                        <span class="col-md-2 form-control" th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active"> </span>
-                        <span class="col-md-2 form-control" th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"> </span>
+                    <div th:if="*{access}" class="col-auto mx-3">
+                        <a th:href="'/album/form?idx='+*{idx}" class="btn btn-info mx-1">Update</a>
+                        <button type="button" class="btn btn-danger mx-1" id="delete">Delete</button>
                     </div>
-                </td>
-            </tr>
-            <tr>
-                <th>Created Date</th>
-                <td colspan="2"><input type="text" class="form-control col-md-3" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
-            </tr>
-            <tr>
-                <th>Modified Date</th>
-                <td colspan="2"><input type="text" class="form-control col-md-3" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
-            </tr>
-        </table>
+                </div>
 
-        <div class="row justify-content-md-between">
-            <a href="/album/list" class="btn btn-secondary">Move to List</a>
-
-            <div th:if="*{access}">
-                <a th:href="'/album/form?idx='+*{idx}" class="btn btn-info">Update</a>
-                <button type="button" class="btn btn-danger" id="delete">Delete</button>
-            </div>
+                <!-- input type="hidden" -->
+                <input type="hidden" name="idx" th:value="*{idx}"/>
+            </form>
         </div>
-
-        <!-- input type="hidden" -->
-        <input type="hidden" name="idx" th:value="*{idx}"/>
-        <input type="hidden" name="createdBy" th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}"
-               th:value="${#authentication.principal.username}"/>
-        <input type="hidden" name="lastModifiedBy"
-               th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}"
-               th:value="${#authentication.principal.username}"/>
-        <input type="hidden" name="activeStatus"
-               th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}"
-               th:value="ACTIVE"/>
-    </form>
+    </div>
 </div>
+
 
 <!-- footer -->
 <div th:replace="layout/footer::footer"></div>

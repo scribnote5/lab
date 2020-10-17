@@ -112,8 +112,15 @@ public class AlbumService {
         return albumDto;
     }
 
-    public AlbumDto findByMainPagePriorityIs (Long mainPagePriority) {
-        return AlbumMapper.INSTANCE.toDto(albumRepository.findByMainPagePriorityIsAndActiveStatusIs(mainPagePriority, ActiveStatus.ACTIVE));
+    public AlbumDto findByMainPagePriorityIs (Long idx, Long mainPagePriority) {
+        AlbumDto albumDto = null;
+
+        // insert하는 경우와 자신의 album mainPagePriority와 저장하는 mainPagePrioirty가 중복 되는 경우는 패스
+        if(idx != null && albumRepository.findById(idx).orElse(new Album()).getMainPagePriority() != mainPagePriority) {
+            albumDto = AlbumMapper.INSTANCE.toDto(albumRepository.findByMainPagePriorityIsAndActiveStatusIs(mainPagePriority, ActiveStatus.ACTIVE));
+        }
+
+        return albumDto;
     }
 
     @Transactional

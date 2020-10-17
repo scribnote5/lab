@@ -7,149 +7,145 @@
     <title>Album Form</title>
 </head>
 <body>
-<!-- header -->
-<div th:replace="layout/header::header"></div>
+<div class="d-flex" id="wrapper">
+    <!-- sidebar -->
+    <div th:replace="layout/sidebar::sidebar"></div>
 
-<div class="container-md">
-    <form name="form" id="form" th:object="${albumDto}" action="#">
-        <div class="page-header">
-            <h1 th:if="!*{idx}">Album Register</h1>
-            <h1 th:if="*{idx}">Album Update</h1>
+    <div id="page-content-wrapper">
+        <!-- header -->
+        <div th:replace="layout/header::header"></div>
+
+        <div class="container-fluid">
+            <form name="form" id="form" th:object="${albumDto}" action="#">
+                <div class="page-header">
+                    <h1 th:if="!*{idx}">Album Register</h1>
+                    <h1 th:if="*{idx}">Album Update</h1>
+                </div>
+
+                <div class="mt-5">
+                    <table class="table">
+                        <colgroup>
+                            <col width="15%"/>
+                            <col width="50%"/>
+                            <col width="35%"/>
+                        </colgroup>
+                        <tr>
+                            <th colspan="3" class="sub-item-title">Album Information</th>
+                        </tr>
+                        <tr>
+                            <th>Title</th>
+                            <td colspan="2"><input type="text" name="title" id="title" class="form-control" th:value="*{title}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Photo Taken Date</th>
+                            <td colspan="2"><input type="date" name="photoTakenDate" id="photoTakenDate" class="form-control" th:value="*{photoTakenDate}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Main Page Priority</th>
+                            <td colspan="2">
+                                <div class="mb-3">
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <input type="radio" id="mainPageNonCheck" name="mainPage" class="custom-control-input" th:checked="*{mainPagePriority == -1 ||  mainPagePriority == null}">
+                                        <label class="custom-control-label" for="mainPageNonCheck"><strong>Don't show main page.</strong></label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <input type="radio" id="mainPageCheck" name="mainPage" class="custom-control-input" th:checked="*{mainPagePriority >= 0}">
+                                        <label class="custom-control-label" for="mainPageCheck"><strong>Show main page and set priority.</strong></label>
+                                    </div>
+                                </div>
+                                <select class="custom-select main-page-priority" name="mainPagePriority" th:field="*{mainPagePriority}" th:style="*{mainPagePriority >= 0} ? 'display: inline;' : 'display: none'">
+                                    <option th:value="-1" th:text="'Don\'t show main page.'" th:style="'display: none;'" selected></option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Hash Tags</th>
+                            <td id="hashTagsTd" colspan="2">
+                                <input th:if="!*{idx}" type="text" id="hashTag" class="form-control" placeholder="#Hash Tag ↵ (Special character is not available.)"/>
+                                <input th:if="*{idx}" type="text" id="hashTag" class="form-control" placeholder="#Hash Tag ↵ (Special character is not available.)"/>
+                                <input type="hidden" name="hashTags" id="hashTags" class="form-control" readonly/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Attached File</th>
+                            <td>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="file" name="file">
+                                    <label class="custom-file-label" for="file">Choose file.</label>
+                                </div>
+                                <div id="fileDrop" class="fileDrop">
+                                    <strong>Drop files here.</strong>
+                                </div>
+                            </td>
+                            <td>
+                                <img th:if="*{attachedFileList.size()} == 0" id="imgPreview" class="album-img-preview img-border" th:attr="src=@{/images/no-preview-available.jpg}"/>
+                                <img th:if="*{attachedFileList.size()} != 0" id="imgPreview" class="album-img-preview img-border" th:attr="src=@{|http://localhost:8081/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Total file size</th>
+                            <td colspan="2">
+                                <div><span id="totalFileSize"> 0 MB</span>, Up to 20 MB</div>
+                            </td>
+                        <tr>
+                            <th>Upload Attached File</th>
+                            <td colspan="2">
+                                <div id="attachedFileList"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Uploaded Attached File</th>
+                            <td colspan="2">
+                                <div id="uploadedAttachedFileList" th:each="attachedFile : *{attachedFileList}">
+                                    <div th:id="imgData + ${attachedFileStat.index}">
+                                        <span th:text="${attachedFile.fileName} + ',&nbsp;' + 'File Size: ' + ${attachedFile.fileSize}"></span>
+                                        <img th:attr="src=@{|/images/cancel-icon.png|}, onclick=|deleteFile('${attachedFileStat.index}','${attachedFile.idx}','${attachedFile.savedFileName}')|" class="cancel-icon"/>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Additional Information</th>
+                        </tr>
+                        <tr>
+                            <th>Active Status</th>
+                            <td colspan="2">
+                                <div class="pull-left">
+                                    <select class="custom-select active-status" name="activeStatus" th:field="*{activeStatus}">
+                                        <option th:value="ACTIVE">Active</option>
+                                        <option th:value="INACTIVE">Inactive</option>
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Created Date</th>
+                            <td colspan="2"><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Modified Date</th>
+                            <td colspan="2"><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="row justify-content-between mt-5 mb-3">
+                    <div class="col-auto mx-3">
+                        <a href="/album/list" class="btn btn-secondary">Move to List</a>
+                    </div>
+                    <div class="col-auto mx-3">
+                        <button th:if="!*{idx}" id="insert" type="button" class="btn btn-primary">Register</button>
+                        <button th:if="*{idx}" id="update" type="button" class="btn btn-info">Update</button>
+                    </div>
+                </div>
+
+                <!-- input type="hidden" -->
+                <input type="hidden" name="idx" th:value="*{idx}"/>
+                <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
+                <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
+            </form>
         </div>
-        <br/>
-        <table class="table">
-            <colgroup>
-                <col width="20%"/>
-                <col width="50%"/>
-                <col width="30%"/>
-            </colgroup>
-            <tr>
-                <th colspan="3" style="text-align: center"><h5>Album Information</h5></th>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td colspan="2"><input type="text" name="title" id="title" class="form-control" th:value="*{title}"/></td>
-            </tr>
-            <tr>
-                <th>Photo Taken Date</th>
-                <td colspan="2"><input type="date" name="photoTakenDate" id="photoTakenDate" class="form-control" th:value="*{photoTakenDate}"/></td>
-            </tr>
-            <tr>
-                <th>Main Page Priority</th>
-                <td colspan="2">
-                    <div style="margin-bottom: 10px;">
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="mainPageNonCheck" name="mainPage" class="custom-control-input" th:checked="*{mainPagePriority == -1 ||  mainPagePriority == null}">
-                            <label class="custom-control-label" for="mainPageNonCheck"><strong>Don't show main page.</strong></label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="mainPageCheck" name="mainPage" class="custom-control-input" th:checked="*{mainPagePriority >= 0}">
-                            <label class="custom-control-label" for="mainPageCheck"><strong>Show main page and set priority.</strong></label>
-                        </div>
-                    </div>
-
-                    <select class="custom-select col-md-5" name="mainPagePriority" th:field="*{mainPagePriority}" th:style="*{mainPagePriority >= 0} ? 'display: inline;' : 'display: none'"><option th:value="-1" th:text="'Don\'t show main page.'" th:style="'display: none;'" selected></option></select>
-                </td>
-            </tr>
-            <tr>
-                <th>Hash Tag Input</th>
-                <td colspan="2">
-                    <input th:if="!*{idx}" type="text" id="hashTag" class="form-control" placeholder="#Hash Tag ↵ (Special character is not available.)"/>
-                    <input th:if="*{idx}" type="text" id="hashTag" class="form-control" placeholder="#Hash Tag ↵ (Special character is not available.)"/>
-                </td>
-            </tr>
-            <tr>
-                <th>Hash Tags</th>
-                <td id="hashTagsTd" colspan="2">
-                    <input type="hidden" name="hashTags" id="hashTags" class="form-control" readonly/>
-                </td>
-            </tr>
-            <tr>
-                <th>Attached File</th>
-                <td>
-                    <div class="custom-file py-md-4">
-                        <input type="file" class="custom-file-input" id="file" name="file">
-                        <label class="custom-file-label" for="file">Choose file.</label>
-                    </div>
-                    <div id="fileDrop" class="fileDrop">
-                        <strong>Drop files here.</strong>
-                    </div>
-                </td>
-                <td>
-                    <img id="imgPreview" th:if="*{attachedFileList.size()} == 0" class="album_img_preview"
-                         th:attr="src=@{/images/no_preview_available.jpg}" />
-                    <img id="imgPreview" th:if="*{attachedFileList.size()} != 0" class="album_img_preview"
-                         th:attr="src=@{|http://localhost:8081/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}"
-                    />
-                </td>
-            </tr>
-            <tr>
-                <th>Total file size</th>
-                <td colspan="2">
-                    <div><span id="totalFileSize"> 0 MB</span>, Up to 20 MB</div>
-                </td>
-            <tr>
-                <th>Upload Attached File</th>
-                <td colspan="2">
-                    <div id="attachedFileList"></div>
-                </td>
-            </tr>
-            <tr>
-                <th>Uploaded Attached File</th>
-                <td colspan="2">
-                    <div id="uploadedAttachedFileList" th:each="attachedFile : *{attachedFileList}">
-                        <div th:id="imgData + ${attachedFileStat.index}">
-                            <span th:text="${attachedFile.fileName} + ',&nbsp;' + 'File Size: ' + ${attachedFile.fileSize}"></span>
-                            <img th:attr="src=@{|/images/cancel.png|}, onclick=|deleteFile('${attachedFileStat.index}','${attachedFile.idx}','${attachedFile.savedFileName}')|"
-                                 class="cancel_icon"/>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <th colspan="2" style="text-align: center"><h5>Additional Information</h5></th>
-            </tr>
-            <tr>
-                <th>Active Status</th>
-                <td colspan="2">
-                    <div class="pull-left">
-                        <select class="custom-select col-md-2" name="activeStatus" th:field="*{activeStatus}">
-                            <option th:value="ACTIVE">Active</option>
-                            <option th:value="INACTIVE">Inactive</option>
-                        </select>
-                    </div>
-                </td>
-            </tr>
-            <tr th:if="*{idx}">
-                <th>Created Date</th>
-                <td colspan="2"><input type="text" class="form-control col-md-3" readonly="readonly"
-                           th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
-            </tr>
-            <tr th:if="*{idx}">
-                <th>Modified Date</th>
-                <td colspan="2"><input type="text" class="form-control col-md-3" readonly="readonly"
-                           th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td colspan="2"></td>
-            </tr>
-        </table>
-
-        <div class="row justify-content-md-between">
-            <a href="/album/list" class="btn btn-secondary col-md-auto">Move to List</a>
-
-            <button th:if="!*{idx}" id="insert" type="button" class="btn btn-primary col-md-auto">Register</button>
-            <button th:if="*{idx}" id="update" type="button" class="btn btn-info col-md-auto">Update</button>
-        </div>
-
-        <!-- input type="hidden" -->
-        <input type="hidden" name="idx" th:value="*{idx}"/>
-        <input type="hidden" name="createdBy"
-               th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
-        <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
-
-    </form>
+    </div>
 </div>
 
 <!-- footer -->
@@ -184,18 +180,18 @@
         var albumDtoList = [[${albumDtoList}]];
         var albumDto = [[${albumDto}]];
 
-        for(var i = 0; i < 25; i++) {
+        for (var i = 0; i < 25; i++) {
             var option = document.createElement("option");
-            option.text = i+1;
-            option.value = i+1;
-            mainPagePrioritySelect.options.add(option, i+1);
+            option.text = i + 1;
+            option.value = i + 1;
+            mainPagePrioritySelect.options.add(option, i + 1);
         }
 
-        for(var i = 0; i < albumDtoList.length; i++) {
+        for (var i = 0; i < albumDtoList.length; i++) {
             var mainPagePriority = albumDtoList[i].mainPagePriority;
 
             // 현재 album의 mainPagePriority인 경우(select)
-            if(mainPagePriority == albumDto.mainPagePriority) {
+            if (mainPagePriority == albumDto.mainPagePriority) {
                 mainPagePrioritySelect.options.item(mainPagePriority).selected = true;
             }
             // 다른 album의 mainPagePriority인 경우(disable)
@@ -224,7 +220,7 @@
                 $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
                     + '<span>'
                     + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size)
-                    + '<img src="/images/cancel.png" class="cancel_icon" onClick="cancelFile(' + imgDataId + ')"/>'
+                    + '<img src="/images/cancel-icon.png" class="cancel-icon" onClick="cancelFile(' + imgDataId + ')"/>'
                     + '</span>'
                     + '</div>');
 
@@ -259,7 +255,7 @@
                 $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
                     + '<span>'
                     + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size)
-                    + '<img src="/images/cancel.png" class="cancel_icon" onClick="cancelFile(' + imgDataId + ')" />'
+                    + '<img src="/images/cancel-icon.png" class="cancel-icon" onClick="cancelFile(' + imgDataId + ')" />'
                     + '</span>'
                     + '</div>');
 
@@ -305,7 +301,7 @@
         insertFileArray[fileId] = null;
 
         document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
-        document.getElementById("imgPreview").src = "/images/no_preview_available.jpg";
+        document.getElementById("imgPreview").src = "/images/no-preview-available.jpg";
     }
 
     // 기존 업로드한 파일을 삭제하는 경우
@@ -313,7 +309,7 @@
         $('#imgData' + fileId).remove();
 
         deleteFileArray.push(idx);
-        document.getElementById("imgPreview").src = "/images/no_preview_available.jpg";
+        document.getElementById("imgPreview").src = "/images/no-preview-available.jpg";
     }
 
     function deleteAlbum(albumIdx) {
@@ -339,9 +335,9 @@
         var hashTag = document.getElementById("hashTag").value;
 
         if (regExp.test(hashTag)) {
-            $("#hashTagsTd").append('<span id="hashTagData' + hashTagId + '" class="hashTag">'
+            $("#hashTagsTd").append('<span id="hashTagData' + hashTagId + '" class="hash-tag mt-2">'
                 + hashTag
-                + '<img src="/images/cancel.png" class="cancel_icon" onClick="cancelHashTag(' + hashTagId + ')" />'
+                + '<img src="/images/cancel-icon.png" class="cancel-icon" onClick="cancelHashTag(' + hashTagId + ')" />'
                 + '</span>');
 
             document.getElementById("hashTag").value = "";
@@ -356,7 +352,7 @@
 
     // Main Page Priority 변경
     $("#mainPageNonCheck").on("change", function () {
-        document.getElementsByName("mainPagePriority")[0].style.display ="none";
+        document.getElementsByName("mainPagePriority")[0].style.display = "none";
         document.getElementsByName("mainPagePriority")[0].value = -1;
     });
 
@@ -366,7 +362,7 @@
 
 
         // register || update 일 때의 mainPagePriority
-        if(!(albumDto.mainPagePriority == null || albumDto.mainPagePriority == -1)) {
+        if (!(albumDto.mainPagePriority == null || albumDto.mainPagePriority == -1)) {
             document.getElementsByName("mainPagePriority")[0].options.item(albumDto.mainPagePriority - 1).selected = true;
         }
     });
@@ -453,9 +449,9 @@
     document.getElementsByName("hashTags")[0].value = "";
 
     for (var i = 1; i < hashTagArray.length; i++) {
-        $("#hashTagsTd").append('<span id="hashTagData' + hashTagId + '" class="hashTag">'
+        $("#hashTagsTd").append('<span id="hashTagData' + hashTagId + '" class="hash-tag mt-2">'
             + '#' + hashTagArray[i]
-            + '<img src="/images/cancel.png" class="cancel_icon" onClick="cancelHashTag(' + hashTagId + ')" />'
+            + '<img src="/images/cancel-icon.png" class="cancel-icon" onClick="cancelHashTag(' + hashTagId + ')" />'
             + '</span>');
 
         hashTagId++;

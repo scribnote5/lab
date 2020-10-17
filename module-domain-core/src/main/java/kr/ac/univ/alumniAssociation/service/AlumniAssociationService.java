@@ -1,5 +1,8 @@
 package kr.ac.univ.alumniAssociation.service;
 
+import kr.ac.univ.album.domain.Album;
+import kr.ac.univ.album.dto.AlbumDto;
+import kr.ac.univ.album.dto.mapper.AlbumMapper;
 import kr.ac.univ.alumniAssociation.domain.AlumniAssociation;
 import kr.ac.univ.alumniAssociation.dto.AlumniAssociationDto;
 import kr.ac.univ.alumniAssociation.dto.mapper.AlumniAssociationMapper;
@@ -109,8 +112,15 @@ public class AlumniAssociationService {
         return alumniAssociationDto;
     }
 
-    public AlumniAssociationDto findByMainPagePriorityIs(Long mainPagePriority) {
-        return AlumniAssociationMapper.INSTANCE.toDto(alumniAssociationRepository.findByMainPagePriorityIsAndActiveStatusIs(mainPagePriority, ActiveStatus.ACTIVE));
+    public AlumniAssociationDto findByMainPagePriorityIs(Long idx, Long mainPagePriority) {
+        AlumniAssociationDto alumniAssociationDto = null;
+
+        // insert하는 경우와 자신의 album mainPagePriority와 저장하는 mainPagePrioirty가 중복 되는 경우는 패스
+        if (idx != null && alumniAssociationRepository.findById(idx).orElse(new AlumniAssociation()).getMainPagePriority() != mainPagePriority) {
+            alumniAssociationDto = AlumniAssociationMapper.INSTANCE.toDto(alumniAssociationRepository.findByMainPagePriorityIsAndActiveStatusIs(mainPagePriority, ActiveStatus.ACTIVE));
+        }
+
+        return alumniAssociationDto;
     }
 
     @Transactional

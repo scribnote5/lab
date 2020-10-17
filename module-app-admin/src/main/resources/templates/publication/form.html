@@ -7,180 +7,178 @@
     <title>Publication Form</title>
 </head>
 <body>
-<!-- header -->
-<div th:replace="layout/header::header"></div>
+<div class="d-flex" id="wrapper">
+    <!-- sidebar -->
+    <div th:replace="layout/sidebar::sidebar"></div>
 
-<div class="container-md">
-    <form name="form" id="form" th:object="${publicationDto}" action="#">
-        <div class="page-header">
-            <h1 th:if="!*{idx}">Publication Register</h1>
-            <h1 th:if="*{idx}">Publication Update</h1>
+    <div id="page-content-wrapper">
+        <!-- header -->
+        <div th:replace="layout/header::header"></div>
+
+        <div class="container-fluid">
+            <form name="form" id="form" th:object="${publicationDto}" action="#">
+                <div class="page-header">
+                    <h1 th:if="!*{idx}">Publication Register</h1>
+                    <h1 th:if="*{idx}">Publication Update</h1>
+                </div>
+
+                <div class="mt-5">
+                    <table class="table">
+                        <colgroup>
+                            <col width="15%"/>
+                            <col width="85%"/>
+                        </colgroup>
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Publication Information</th>
+                        </tr>
+                        <tr>
+                            <th>Title</th>
+                            <td><input type="text" name="title" class="form-control" th:value="*{title}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Authors</th>
+                            <td><input type="text" name="authors" class="form-control" th:value="*{authors}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Publication Type</th>
+                            <td>
+                                <select class="custom-select" name="publicationType" th:field="*{publicationType}">
+                                    <option th:value="JOURNAL">Journal</option>
+                                    <option th:value="POSTER">Poster</option>
+                                    <option th:value="REGULAR">Regular</option>
+                                    <option th:value="DEMO">Demo</option>
+                                    <option th:value="WORKSHOP">Workshop</option>
+                                    <option th:value="WORKINPROCESS">Work in Process</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Publishing Area</th>
+                            <td>
+                                <select class="custom-select" name="publishingArea" th:field="*{publishingArea}">
+                                    <option th:value="DOMESTIC">Domestic</option>
+                                    <option th:value="INTERNATIONAL">International</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Published In</th>
+                            <td><input type="text" class="form-control" name="publishedIn" th:value="*{publishedIn}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Impact Factor(SCIE)</th>
+                            <td><input type="text" name="impactFactor" class="form-control" th:placeholder="*{#strings.isEmpty(impactFactor)} ? 'ex) IF: 0.861' : ''" th:value="*{impactFactor}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Published Date</th>
+                            <td><input type="date" name="publishedDate" class="form-control published-date" th:value="*{publishedDate}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Pages</th>
+                            <td><input type="text" name="pages" class="form-control pages-volume-number" th:value="*{pages}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Volume</th>
+                            <td><input type="text" name="volume" class="form-control pages-volume-number" th:value="*{volume}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Number</th>
+                            <td><input type="text" name="number" class="form-control pages-volume-number" th:value="*{number}"/></td>
+                        </tr>
+                        <tr>
+                            <th>DOI</th>
+                            <td><input type="text" name="doi" class="form-control" th:value="*{doi}"/></td>
+                        </tr>
+                        <tr>
+                            <th>URI</th>
+                            <td><input type="text" name="uri" class="form-control" th:value="*{uri}"/></td>
+                        </tr>
+                        <tr>
+                            <th>ISBN/ISSN</th>
+                            <td><input type="text" name="isbnIssn" class="form-control" th:value="*{isbnIssn}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Remark</th>
+                            <td><input type="text" name="remark" class="form-control" th:value="*{remark}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Attached File</th>
+                            <td>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="file" name="file">
+                                    <label class="custom-file-label" for="file">Choose file.</label>
+                                </div>
+                                <div id="fileDrop" class="fileDrop">
+                                    <strong>Drop files here.</strong>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Total file size</th>
+                            <td>
+                                <div><span id="totalFileSize"> 0 MB</span>, Up to 20 MB</div>
+                            </td>
+                        <tr>
+                            <th>Upload Attached File</th>
+                            <td>
+                                <div id="attachedFileList"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Uploaded Attached File</th>
+                            <td>
+                                <div id="uploadedAttachedFileList" th:each="attachedFile : *{attachedFileList}">
+                                    <div th:id="imgData + ${attachedFileStat.index}">
+                                        <span th:text="${attachedFile.fileName} + ',&nbsp;' + 'File Size: ' + ${attachedFile.fileSize} + '&nbsp;'"></span>
+                                        <img th:attr="src=@{|/images/cancel-icon.png|}, onclick=|deleteFile('${attachedFileStat.index}','${attachedFile.idx}','${attachedFile.savedFileName}')|"
+                                             class="cancel-icon"/>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Additional Information</th>
+                        </tr>
+                        <tr>
+                            <th>Active Status</th>
+                            <td>
+                                <div class="pull-left">
+                                    <select class="custom-select active-status" name="activeStatus" th:field="*{activeStatus}">
+                                        <option th:value="ACTIVE">Active</option>
+                                        <option th:value="INACTIVE">Inactive</option>
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Created Date</th>
+                            <td><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Modified Date</th>
+                            <td><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="row justify-content-between mt-5 mb-3">
+                    <div class="col-auto mx-3">
+                        <a href="/publication/list" class="btn btn-secondary">Move to List</a>
+                    </div>
+                    <div class="col-auto mx-3">
+                        <button th:if="!*{idx}" id="insert" type="button" class="btn btn-primary">Register</button>
+                        <button th:if="*{idx}" id="update" type="button" class="btn btn-info">Update</button>
+                    </div>
+                </div>
+
+                <!-- input type="hidden" -->
+                <input type="hidden" name="idx" th:value="*{idx}"/>
+                <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
+                <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
+            </form>
         </div>
-        <br/>
-        <table class="table">
-            <colgroup>
-                <col width="20%"/>
-                <col width="80%"/>
-            </colgroup>
-            <tr>
-                <th colspan="2" style="text-align: center"><h5>Publication Information</h5></th>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td><input type="text" name="title" class="form-control" th:value="*{title}"/></td>
-            </tr>
-            <tr>
-                <th>Authors</th>
-                <td><input type="text" name="authors" class="form-control " th:value="*{authors}"/>
-                </td>
-            </tr>
-            <tr>
-                <th>Publication Type</th>
-                <td>
-                    <select class="custom-select col-md-3" name="publicationType" th:field="*{publicationType}">
-                        <option th:value="JOURNAL">Journal</option>
-                        <option th:value="POSTER">Poster</option>
-                        <option th:value="REGULAR">Regular</option>
-                        <option th:value="DEMO">Demo</option>
-                        <option th:value="WORKSHOP">Workshop</option>
-                        <option th:value="WORKINPROCESS">Work in Process</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <th>Publishing Area</th>
-                <td>
-                    <select class="custom-select col-md-3" name="publishingArea" th:field="*{publishingArea}">
-                        <option th:value="DOMESTIC">Domestic</option>
-                        <option th:value="INTERNATIONAL">International</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <th>Published In</th>
-                <td><input type="text" class="form-control" name="publishedIn"
-                           th:value="*{publishedIn}"/></td>
-            </tr>
-            <tr>
-                <th>Impact Factor(SCIE)</th>
-                <td><input type="text" name="impactFactor" class="form-control col-md-3"
-                           th:placeholder="*{#strings.isEmpty(impactFactor)} ? 'ex) IF: 0.861' : ''"
-                           th:value="*{impactFactor}"/></td>
-            </tr>
-            <tr>
-                <th>Published Date</th>
-                <td><input type="date" name="publishedDate" class="form-control col-md-3"
-                           th:value="*{publishedDate}"/></td>
-            </tr>
-            <tr>
-                <th>Pages</th>
-                <td><input type="text" name="pages" class="col-md-1 form-control " th:value="*{pages}"/></td>
-            </tr>
-            <tr>
-                <th>Volume</th>
-                <td><input type="text" name="volume" class="col-md-1 form-control " th:value="*{volume}"/></td>
-            </tr>
-            <tr>
-                <th>Number</th>
-                <td><input type="text" name="number" class="col-md-1 form-control " th:value="*{number}"/></td>
-            </tr>
-            <tr>
-                <th>DOI</th>
-                <td><input type="text" name="doi" class="form-control " th:value="*{doi}"/></td>
-            </tr>
-            <tr>
-                <th>URI</th>
-                <td><input type="text" name="uri" class="form-control " th:value="*{uri}"/></td>
-            </tr>
-            <tr>
-                <th>ISBN/ISSN</th>
-                <td><input type="text" name="isbnIssn" class="col-md-3 form-control " th:value="*{isbnIssn}"/></td>
-            </tr>
-            <tr>
-                <th>Remark</th>
-                <td><input type="text" name="remark" class="form-control " th:value="*{remark}"/></td>
-            </tr>
-            <tr>
-                <th>Attached File</th>
-                <td>
-                    <div class="custom-file py-md-4">
-                        <input type="file" class="custom-file-input" id="file" name="file">
-                        <label class="custom-file-label" for="file">Choose file.</label>
-                    </div>
-                    <div id="fileDrop" class="fileDrop">
-                        <strong>Drop files here.</strong>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <th>Total file size</th>
-                <td>
-                    <div><span id="totalFileSize"> 0 MB</span>, Up to 20 MB</div>
-                </td>
-            <tr>
-                <th>Upload Attached File</th>
-                <td>
-                    <div id="attachedFileList"></div>
-                </td>
-            </tr>
-            <tr>
-                <th>Uploaded Attached File</th>
-                <td>
-                    <div id="uploadedAttachedFileList" th:each="attachedFile : *{attachedFileList}">
-                        <div th:id="imgData + ${attachedFileStat.index}">
-                            <span th:text="${attachedFile.fileName} + ',&nbsp;' + 'File Size: ' + ${attachedFile.fileSize} + '&nbsp;'"></span>
-                            <img th:attr="src=@{|/images/cancel.png|}, onclick=|deleteFile('${attachedFileStat.index}','${attachedFile.idx}','${attachedFile.savedFileName}')|"
-                                 class="cancel_icon"/>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <th colspan="2" style="text-align: center"><h5>Additional Information</h5></th>
-            </tr>
-            <tr>
-                <th>Active Status</th>
-                <td>
-                    <div class="pull-left">
-                        <select class="custom-select col-md-2" name="activeStatus" th:field="*{activeStatus}">
-                            <option th:value="ACTIVE">Active</option>
-                            <option th:value="INACTIVE">Inactive</option>
-                        </select>
-                    </div>
-                </td>
-            </tr>
-            <tr th:if="*{idx}">
-                <th>Created Date</th>
-                <td><input type="text" class="form-control col-md-3" readonly="readonly"
-                           th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
-            </tr>
-            <tr th:if="*{idx}">
-                <th>Modified Date</th>
-                <td><input type="text" class="form-control col-md-3" readonly="readonly"
-                           th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-            </tr>
-        </table>
-
-        <div class="row justify-content-md-between">
-            <a href="/publication/list" class="btn btn-secondary col-md-auto">Move to List</a>
-
-            <button th:if="!*{idx}" id="insert" type="button" class="btn btn-primary col-md-auto">Register</button>
-            <button th:if="*{idx}" id="update" type="button" class="btn btn-info col-md-auto">Update</button>
-        </div>
-
-        <!-- input type="hidden" -->
-        <input type="hidden" name="idx" th:value="*{idx}"/>
-        <input type="hidden" name="createdBy"
-               th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
-        <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
-
-    </form>
+    </div>
 </div>
-
 <!-- footer -->
 <div th:replace="layout/footer::footer"></div>
 
@@ -214,7 +212,7 @@
                 $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
                     + '<span>'
                     + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size)
-                    + '<img src="/images/cancel.png" class="cancel_icon" onClick="cancelFile(' + imgDataId + ')" />'
+                    + '<img src="/images/cancel-icon.png" class="cancel-icon" onClick="cancelFile(' + imgDataId + ')" />'
                     + '</span>'
                     + '</div>');
 
@@ -241,7 +239,7 @@
                 $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
                     + '<span>'
                     + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size)
-                    + '<img src="/images/cancel.png" class="cancel_icon" onClick="cancelFile(' + imgDataId + ')" />'
+                    + '<img src="/images/cancel-icon.png" class="cancel-icon" onClick="cancelFile(' + imgDataId + ')" />'
                     + '</span>'
                     + '</div>');
 
@@ -390,7 +388,7 @@
             return true;
         }
 
-        // 파일 삭제  
+        // 파일 삭제
         if (deleteFileArray.length > 0) {
             $.ajax({
                 url: "http://localhost:8081/api/publications/attachedFile",

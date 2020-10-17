@@ -45,14 +45,13 @@ public class UserController {
     public String login(@AuthenticationPrincipal UserPrincipal userPrincipal) {
         String returnPage = null;
 
-        // 사용자가 로그인 안된 경우 login 페이지로 이동
+        // 사용자가 로그인 안된 경우 /login 페이지로 이동
         if(EmptyUtil.isEmpty(userPrincipal)) {
             returnPage = "/user/login";
         }
-        // 사용자가 로그인한 경우 index 페이지로 이동
+        // 사용자가 로그인한 경우 /main/home 페이지로 이동
         else {
-            log.info("User login: " + userPrincipal.toString());
-            returnPage = "user/index";
+            returnPage = "/main/home";
         }
 
         return returnPage;

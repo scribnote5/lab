@@ -7,7 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Getter
 @NoArgsConstructor
@@ -20,7 +22,6 @@ public class NoticeBoard extends CommonAudit {
 
     @Column
     private String content;
-
 
     @Column
     private Long views = 0L;

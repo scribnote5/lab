@@ -22,7 +22,7 @@ public class AlumniAssociationRestController {
 
     @PostMapping
     public ResponseEntity<?> postAlumniAssociation(@RequestBody @Valid AlumniAssociationDto alumniAssociationDto) {
-        if (alumniAssociationDto.getMainPagePriority() != -1 && !EmptyUtil.isEmpty(alumniAssociationService.findByMainPagePriorityIs(alumniAssociationDto.getMainPagePriority()))) {
+        if (alumniAssociationDto.getMainPagePriority() != -1 && !EmptyUtil.isEmpty(alumniAssociationService.findByMainPagePriorityIs(alumniAssociationDto.getIdx(), alumniAssociationDto.getMainPagePriority()))) {
             throw new BusinessException(ErrorCode.MAIN_PAGE_PRIORITY_DUPLICATE);
         }
 
@@ -33,7 +33,7 @@ public class AlumniAssociationRestController {
 
     @PutMapping("/{idx}")
     public ResponseEntity<?> putAlumniAssociation(@PathVariable("idx") Long idx, @RequestBody @Valid AlumniAssociationDto alumniAssociationDto) {
-        if (alumniAssociationDto.getMainPagePriority() != -1 && !EmptyUtil.isEmpty(alumniAssociationService.findByMainPagePriorityIs(alumniAssociationDto.getMainPagePriority()))) {
+        if (alumniAssociationDto.getMainPagePriority() != -1 && !EmptyUtil.isEmpty(alumniAssociationService.findByMainPagePriorityIs(alumniAssociationDto.getIdx(), alumniAssociationDto.getMainPagePriority()))) {
             throw new BusinessException(ErrorCode.MAIN_PAGE_PRIORITY_DUPLICATE);
         }
 

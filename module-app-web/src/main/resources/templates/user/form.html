@@ -62,7 +62,7 @@
                 </td>
                 <td>
                     <img id="imgPreview" th:if="*{attachedFileList.size()} == 0"
-                         th:attr="src=@{/images/no_preview_available.jpg}" width="150px" height="150px"/>
+                         th:attr="src=@{/images/no-preview-available.jpg}" width="150px" height="150px"/>
                     <img id="imgPreview" th:if="*{attachedFileList.size()} != 0"
                          th:attr="src=@{|http://localhost:8081/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}"
                          width="150px" height="150px"/>

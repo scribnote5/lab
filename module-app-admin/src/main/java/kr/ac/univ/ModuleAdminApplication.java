@@ -51,7 +51,7 @@ public class ModuleAdminApplication {
             /* userRepository.deleteAll(); */
 
             /* 사용자 생성 */
-            /* userRepository.save(User.builder()
+             /*userRepository.save(User.builder()
                     .username("root")
                     .password(passwordEncoder.encode("123123123"))
                     .userType(UserType.PART_TIME_MS)
@@ -103,8 +103,7 @@ public class ModuleAdminApplication {
                     .authorityType(AuthorityType.NON_USER)
                     .activeStatus(ActiveStatus.ACTIVE)
                     .createdBy("non_user")
-                    .build());
-            */
+                    .build());*/
 
             /* 논문 모두 삭제 */
             /* publicationRepositroy.deleteAll(); */
