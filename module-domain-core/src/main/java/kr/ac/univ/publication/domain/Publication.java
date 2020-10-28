@@ -3,17 +3,14 @@ package kr.ac.univ.publication.domain;
 
 import java.time.LocalDate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 
 import kr.ac.univ.common.domain.CommonAudit;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.publication.domain.enums.PublicationType;
 import kr.ac.univ.publication.domain.enums.PublishingArea;
+import kr.ac.univ.publication.listener.PublicationListener;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +21,7 @@ import lombok.ToString;
 @Entity
 @Table
 @ToString
+@EntityListeners(PublicationListener.class)
 public class Publication extends CommonAudit {
     @Column
     private String title;

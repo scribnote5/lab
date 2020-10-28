@@ -1,6 +1,7 @@
 package kr.ac.univ.alumniAssociation.domain;
 
 import kr.ac.univ.alumniAssociation.domain.enums.TitleType;
+import kr.ac.univ.alumniAssociation.listener.AlumniAssociationListener;
 import kr.ac.univ.common.domain.CommonAudit;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import lombok.Builder;
@@ -15,6 +16,7 @@ import javax.persistence.*;
 @Entity
 @Table
 @ToString
+@EntityListeners(AlumniAssociationListener.class)
 public class AlumniAssociation extends CommonAudit {
     @Column
     private String title;

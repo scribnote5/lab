@@ -1,17 +1,13 @@
 package kr.ac.univ.researchField.service;
 
-import kr.ac.univ.category.dto.CategoryDto;
-import kr.ac.univ.category.dto.mapper.CategoryMapper;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.SearchDto;
 import kr.ac.univ.researchField.domain.ResearchField;
 import kr.ac.univ.researchField.dto.ResearchFieldDto;
 import kr.ac.univ.researchField.dto.mapper.ResearchFieldMapper;
 import kr.ac.univ.researchField.repository.ResearchFieldRepository;
-import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.AccessCheck;
 import kr.ac.univ.util.NewIconCheck;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 

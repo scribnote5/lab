@@ -16,8 +16,222 @@
         <!-- header -->
         <div th:replace="layout/header::header"></div>
 
-        <div class="container-fluid">
-            내용입니다.
+        <div class="container-fluid container-main">
+            <h1>Dashboard</h1>
+
+            <div class="float-right url-icon-area" style="margin-top: -2.5rem;">
+                <img src="/images/external-link.svg" class="url-icon"/>
+                <span class="external-link">External Link</span>
+                <img src="/images/small-logo.png" title="Link user page." class="url-icon"/>
+                <img src="/images/google-analytics.png" title="Link google analytics." class="url-icon"/>
+                <img src="/images/github.svg" title="Link github." class="url-icon"/>
+            </div>
+
+            <div class="row mt-4">
+                <div class="card col ml-md-3 mr-md-3" style="border-left: .75rem solid #4e73df; border-radius: .75rem;">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            <img src="/images/users.svg" class="main-icon"/>
+                            Total User
+                        </h6>
+                        <div class="statics-count">
+                            <span th:text="${userCount}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card col ml-md-3 mr-md-3" style="border-left: .75rem solid #1cc88a; border-radius: .75rem;">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            <img src="/images/post.svg" class="main-icon"/>
+                            Total Post
+                        </h6>
+                        <div class="statics-count">
+                            <span th:text="${dataHistoryCount}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card col ml-md-3 mr-md-3" style="border-left: .75rem solid #36b9cc; border-radius: .75rem;">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            <div class="dropdown">
+                                <img src="/images/calendar.svg" class="main-icon"/>
+                                <!-- button text responsive -->
+                                <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 0rem; white-space: normal;">
+                                    Statics
+                                </button>
+                                <div id="dropdownStatics" class="dropdown-menu">
+                                    <a class="dropdown-item" href="#">Login User Last 1 day</a>
+                                    <a class="dropdown-item" href="#">Login User Last 7 days</a>
+                                    <a class="dropdown-item" href="#">Login User Last 28 days</a>
+                                    <a class="dropdown-item" href="#">Registered Post Last 1 day</a>
+                                    <a class="dropdown-item" href="#">Registered Post Last 7 days</a>
+                                    <a class="dropdown-item" href="#">Registered Post Last 28 days</a>
+                                </div>
+                            </div>
+                        </h6>
+                        <div class="statics-count">
+                            <span id="staticsCount">-</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card col ml-md-3 mr-md-3" style="border-left: .75rem solid #f6c23e; border-radius: .75rem;">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            <img src="/images/database.svg" class="main-icon"/>
+                            Memory Storage
+                        </h6>
+                        <div>
+                            <div th:each="diskInfo : ${diskInfoList}">
+                                <span th:text="${diskInfo.driverName} + '  '" class="disk-name"></span>
+                                <span th:text="${diskInfo.totalSize} + ' of ' + ${diskInfo.useSize} + ' used.'" class="disk-space"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="card col table-card">
+                    <div class="card-header table-card-header">
+                        <h4>Alarm List</h4>
+                        <div class="text-right" style="margin-top: -2rem;">
+                            <a href="/data-history/list" class="more ml-3"> more...</a>
+                        </div>
+                    </div>
+
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th style="width: 10%">No.</th>
+                            <th style="width: 45%">Title</th>
+                            <th style="width: 20%">ID</th>
+                            <th style="width: 25%">Created Date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card col table-card">
+                    <div class="card-header table-card-header">
+                        <h4>NoticeBoard List</h4>
+                        <div class="text-right" style="margin-top: -2rem;">
+                            <a href="/notice-board/list" class="more"> more...</a>
+                        </div>
+                    </div>
+
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th style="width: 10%">No.</th>
+                            <th style="width: 45%">Title</th>
+                            <th style="width: 20%">ID</th>
+                            <th style="width: 25%">Created Date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="noticeBoardDto : ${noticeBoardDtoList}">
+                            <td th:text="${noticeBoardDto.idx}"></td>
+
+                            <td>
+                                <a th:href="'/notice-board?idx='+${noticeBoardDto.idx}" th:text="${noticeBoardDto.title}"></a>
+                                <img th:if="${noticeBoardDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
+                            </td>
+
+                            <td th:text="${noticeBoardDto.createdBy}"></td>
+                            <td th:text="${#temporals.format(noticeBoardDto.createdDate,'yyyy-MM-dd')}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="card col table-card">
+                    <div class="card-header table-card-header">
+                        <h4>Data History List</h4>
+                        <div class="text-right" style="margin-top: -2rem;">
+                            <a href="/data-history/list" class="more"> more...</a>
+                        </div>
+                    </div>
+
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th style="width: 5%">No.</th>
+                            <th style="width: 40%">Aud Message</th>
+                            <th style="width: 15%">Aud Class</th>
+                            <th style="width: 10%">Aud Type</th>
+                            <th style="width: 15%">ID</th>
+                            <th style="width: 15%">Created Date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="dataHistoryDto : ${dataHistoryDtoList}">
+                            <td th:text="${dataHistoryDto.idx}"></td>
+                            <td>
+                                <a th:href="'/data-history?idx='+${dataHistoryDto.idx}" th:text="${dataHistoryDto.audMessage}"></a>
+                                <img th:if="${dataHistoryDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
+                            </td>
+
+                            <td th:text="${dataHistoryDto.audClass}"></td>
+
+                            <td th:if="${dataHistoryDto.audType?.name() == 'INSERT'}" th:text="Insert"></td>
+                            <td th:if="${dataHistoryDto.audType?.name() == 'UPDATE'}" th:text="Update"></td>
+                            <td th:if="${dataHistoryDto.audType?.name() == 'DELETE'}" th:text="Delete"></td>
+
+                            <td th:text="${dataHistoryDto.createdBy}"></td>
+                            <td th:text="${#temporals.format(dataHistoryDto.createdDate,'yyyy-MM-dd HH:mm')}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="card col table-card">
+                    <div class="card-header table-card-header">
+                        <h4>Login History List</h4>
+                        <div class="text-right" style="margin-top: -2rem;">
+                            <a href="/login-history/list" class="more"> more...</a>
+                        </div>
+                    </div>
+
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th style="width: 5%">No.</th>
+                            <th style="width: 45%">Aud Message</th>
+                            <th style="width: 20%">Login Result Type</th>
+                            <th style="width: 15%">ID</th>
+                            <th style="width: 15%">Created Date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="loginHistoryDto : ${loginHistoryDtoList}">
+                            <td th:text="${loginHistoryDto.idx}"></td>
+                            <td>
+                                <a th:href="'/login-history?idx='+${loginHistoryDto.idx}" th:text="${loginHistoryDto.audMessage}"></a>
+                                <img th:if="${loginHistoryDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
+                            </td>
+
+                            <td th:if="${loginHistoryDto.audLoginResultType?.name() == 'SUCCESS'}" th:text="Success"></td>
+                            <td th:if="${loginHistoryDto.audLoginResultType?.name() == 'FAIL'}" th:text="Fail"></td>
+
+                            <td th:text="${loginHistoryDto.createdBy}"></td>
+                            <td th:text="${#temporals.format(loginHistoryDto.createdDate,'yyyy-MM-dd HH:mm')}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
         </div>
     </div>
     <!-- /#page-content-wrapper -->
@@ -29,6 +243,48 @@
 
 <!-- script file -->
 <th:block th:replace="layout/script.html"></th:block>
+
+<script th:inline="javascript">
+    $(document).ready(function () {
+        $("#dropdownStatics a").on("click", function () {
+            switch ($(this).text()) {
+                case "Login User Last 1 day":
+                    document.getElementById("staticsCount").innerText = [[${countLoginUserBeforeOneday}]];
+                    document.getElementById("dropdownMenuButton").innerText = "Login User Last 1 day";
+                    document.getElementById("dropdownMenuButton").style.fontSize = 0.85 + "rem";
+                    break;
+                case "Login User Last 7 days":
+                    document.getElementById("staticsCount").innerText = [[${countLoginUserBeforeSevenDays}]];
+                    document.getElementById("dropdownMenuButton").innerText = "Login User Last 7 days";
+                    document.getElementById("dropdownMenuButton").style.fontSize = 0.85 + "rem";
+                    break;
+                case "Login User Last 28 days":
+                    document.getElementById("staticsCount").innerText = [[${countLoginUserBeforeTwentyEightDays}]];
+                    document.getElementById("dropdownMenuButton").innerText = "Login User Last 28 days";
+                    document.getElementById("dropdownMenuButton").style.fontSize = 0.85 + "rem";
+                    break;
+                case "Registered Post Last 1 day":
+                    document.getElementById("staticsCount").innerText = [[${countDataHistoryBeforeOneday}]];
+                    document.getElementById("dropdownMenuButton").innerText = "Registered Post Last 1 day";
+                    document.getElementById("dropdownMenuButton").style.fontSize = 0.85 + "rem";
+                    break;
+                case "Registered Post Last 7 days":
+                    document.getElementById("staticsCount").innerText = [[${countDataHistoryBeforeSevenDays}]];
+                    document.getElementById("dropdownMenuButton").innerText = "Registered Post Last 7 days";
+                    document.getElementById("dropdownMenuButton").style.fontSize = 0.85 + "rem";
+                    break;
+                case "Registered Post Last 28 days":
+                    document.getElementById("staticsCount").innerText = [[${countDataHistoryBeforeTwentyEightDays}]];
+                    document.getElementById("dropdownMenuButton").innerText = "Registered Post Last 28 days";
+                    document.getElementById("dropdownMenuButton").style.fontSize = 0.85 +"rem";
+                    break;
+                default:
+                    document.getElementById("staticsCount").innerText = "Error occurred.";
+                    break;
+            }
+        });
+    });
+</script>
 
 </body>
 </html>

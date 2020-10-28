@@ -6,7 +6,7 @@
     --thin-font-weight: 100;
 
     /* font-size */
-    --largest-font-size: 1.2rem;
+    --largest-font-size: 1.6rem;
     --larger-font-size: 1.1rem;
     --large-font-size: 1rem;
     --regular-font-size: .9rem;
@@ -16,19 +16,23 @@
     /* color */
     --black: rgb(0, 0, 0);
 
-    --main-black: rgb(32, 32, 32);
+    --main-black: rgb(36, 36, 36);
     --light-black: rgb(48, 48, 48);
     --lighter-black: rgb(64, 64, 64);
 
+    --darker-grey: rgb(84, 84, 84);
     --dark-grey: rgb(96, 96, 96);
     --main-grey: rgb(128, 128, 128);
     --light-grey: rgb(160, 160, 160);
     --lighter-grey: rgb(192, 192, 192);
     --lightest-grey: rgb(224, 224, 224);
 
+    --dark-white: rgb(240, 240, 240);
     --white: rgb(255, 255, 255);
 
     --light-red: rgb(186, 44, 48);
     --main-red: rgb(158, 37, 41);
     --dark-red: rgb(126, 35, 29);
+
+    --lightest-blue: rgb(245, 245, 250);
 }

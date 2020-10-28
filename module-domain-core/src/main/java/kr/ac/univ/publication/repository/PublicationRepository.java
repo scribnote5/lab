@@ -1,6 +1,5 @@
 package kr.ac.univ.publication.repository;
 
-import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.publication.domain.Publication;
 import kr.ac.univ.publication.domain.enums.PublicationType;
 import kr.ac.univ.publication.domain.enums.PublishingArea;

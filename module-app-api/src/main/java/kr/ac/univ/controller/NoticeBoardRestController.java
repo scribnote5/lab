@@ -1,17 +1,13 @@
 package kr.ac.univ.controller;
 
 import kr.ac.univ.common.validation.FileValidator;
-import kr.ac.univ.error.ErrorCode;
-import kr.ac.univ.error.ErrorResponse;
 import kr.ac.univ.exception.FileTypeException;
 import kr.ac.univ.noticeBoard.dto.NoticeBoardDto;
-import kr.ac.univ.noticeBoard.dto.mapper.NoticeBoardMapper;
 import kr.ac.univ.noticeBoard.service.NoticeBoardAttachedFileService;
 import kr.ac.univ.noticeBoard.service.NoticeBoardService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;

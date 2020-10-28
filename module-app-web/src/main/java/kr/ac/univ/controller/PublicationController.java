@@ -1,16 +1,11 @@
 package kr.ac.univ.controller;
 
-import kr.ac.univ.publication.dto.PublicationDto;
 import kr.ac.univ.publication.dto.PublicationSearchDto;
-import kr.ac.univ.publication.service.PublicationAttachedFileService;
 import kr.ac.univ.publication.service.PublicationService;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/publication")

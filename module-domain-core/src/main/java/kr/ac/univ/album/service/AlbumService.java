@@ -4,8 +4,6 @@ import kr.ac.univ.album.domain.Album;
 import kr.ac.univ.album.dto.AlbumDto;
 import kr.ac.univ.album.dto.mapper.AlbumMapper;
 import kr.ac.univ.album.repository.AlbumRepository;
-import kr.ac.univ.category.dto.CategoryDto;
-import kr.ac.univ.category.dto.mapper.CategoryMapper;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.SearchDto;
 import kr.ac.univ.user.repository.UserRepository;

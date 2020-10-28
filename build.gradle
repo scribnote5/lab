@@ -73,7 +73,7 @@ subprojects {
 // 모듈의 의존성 라이브러리를 선언한다.
 project(":module-system-common") {
     dependencies {
-
+        implementation "javax.mail:mail:1.4.7"
     }
 }
 
@@ -84,13 +84,14 @@ project(":module-domain-core") {
         implementation "org.apache.tika:tika-parsers:1.24.1"
         implementation "com.querydsl:querydsl-core"
         implementation "com.querydsl:querydsl-jpa"
+        implementation "com.maxmind.geoip2:geoip2:2.15.0"
     }
 }
 
 project("module-web-core") {
     dependencies {
         compile project(":module-system-common")
-
+        compile project(":module-domain-core")
     }
 }
 

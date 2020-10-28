@@ -1,7 +1,6 @@
 package kr.ac.univ.seminar.dto.mapper;
 
 import kr.ac.univ.common.dto.mapper.EntityMapper;
-import kr.ac.univ.researchField.domain.ResearchField;
 import kr.ac.univ.seminar.domain.Seminar;
 import kr.ac.univ.seminar.domain.SeminarAttachedFile;
 import kr.ac.univ.seminar.dto.SeminarDto;

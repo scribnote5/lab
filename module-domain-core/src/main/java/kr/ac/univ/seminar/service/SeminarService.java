@@ -1,12 +1,8 @@
 package kr.ac.univ.seminar.service;
 
-import kr.ac.univ.category.domain.Category;
 import kr.ac.univ.category.repository.CategoryRepository;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.SearchDto;
-import kr.ac.univ.researchField.domain.ResearchField;
-import kr.ac.univ.researchField.repository.ResearchFieldRepository;
-import kr.ac.univ.researchField.service.ResearchFieldService;
 import kr.ac.univ.seminar.domain.Seminar;
 import kr.ac.univ.seminar.dto.SeminarDto;
 import kr.ac.univ.seminar.dto.mapper.SeminarMapper;
@@ -20,7 +16,6 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 @Service
 public class SeminarService {

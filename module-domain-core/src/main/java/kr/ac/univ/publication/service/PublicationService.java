@@ -3,21 +3,14 @@ package kr.ac.univ.publication.service;
 
 import java.util.List;
 
-import kr.ac.univ.common.domain.enums.ActiveStatus;
-import kr.ac.univ.common.dto.SearchDto;
-import kr.ac.univ.noticeBoard.domain.NoticeBoard;
-import kr.ac.univ.noticeBoard.dto.NoticeBoardDto;
-import kr.ac.univ.noticeBoard.dto.mapper.NoticeBoardMapper;
 import kr.ac.univ.publication.domain.Publication;
 import kr.ac.univ.publication.domain.enums.PublicationType;
 import kr.ac.univ.publication.domain.enums.PublishingArea;
 import kr.ac.univ.publication.dto.PublicationDto;
 import kr.ac.univ.publication.dto.PublicationSearchDto;
-import kr.ac.univ.publication.dto.enums.PublicationSearchType;
 import kr.ac.univ.publication.dto.mapper.PublicationMapper;
 import kr.ac.univ.publication.repository.PublicationRepository;
 import kr.ac.univ.publication.repository.PublicationRepositoryImpl;
-import kr.ac.univ.user.dto.UserDto;
 import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.AccessCheck;
 import kr.ac.univ.util.NewIconCheck;

@@ -2,6 +2,7 @@ package kr.ac.univ.noticeBoard.domain;
 
 import kr.ac.univ.common.domain.CommonAudit;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
+import kr.ac.univ.noticeBoard.listener.NoticeBoardListener;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Table;
 
 @Getter
@@ -16,6 +18,7 @@ import javax.persistence.Table;
 @Entity
 @Table
 @ToString
+@EntityListeners(NoticeBoardListener.class)
 public class NoticeBoard extends CommonAudit {
     @Column
     private String title;

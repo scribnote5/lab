@@ -2,7 +2,6 @@ package kr.ac.univ.album.dto;
 
 import kr.ac.univ.album.domain.AlbumAttachedFile;
 import kr.ac.univ.common.dto.CommonDto;
-import kr.ac.univ.common.validation.Editor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

@@ -1,6 +1,5 @@
 package kr.ac.univ.introduction.repository;
 
-import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.introduction.domain.Introduction;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

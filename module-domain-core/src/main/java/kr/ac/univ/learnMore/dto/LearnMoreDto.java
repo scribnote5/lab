@@ -1,11 +1,8 @@
 package kr.ac.univ.learnMore.dto;
 
 import kr.ac.univ.common.dto.CommonDto;
-import kr.ac.univ.common.validation.Editor;
-import kr.ac.univ.learnMore.domain.LearnMore;
 import kr.ac.univ.learnMore.domain.LearnMoreAttachedFile;
 import kr.ac.univ.learnMore.domain.enums.DownloadFileType;
-import kr.ac.univ.noticeBoard.domain.NoticeBoardAttachedFile;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

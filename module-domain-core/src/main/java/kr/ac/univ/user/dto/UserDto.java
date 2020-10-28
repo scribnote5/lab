@@ -2,25 +2,17 @@ package kr.ac.univ.user.dto;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.CommonDto;
 import kr.ac.univ.common.validation.Contact;
 import kr.ac.univ.common.validation.Password;
-import kr.ac.univ.user.domain.User;
-import kr.ac.univ.user.domain.User;
 import kr.ac.univ.user.domain.UserAttachedFile;
 import kr.ac.univ.user.domain.enums.AuthorityType;
 import kr.ac.univ.user.domain.enums.GenderType;
 import kr.ac.univ.user.domain.enums.UserStatus;
 import kr.ac.univ.user.domain.enums.UserType;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;

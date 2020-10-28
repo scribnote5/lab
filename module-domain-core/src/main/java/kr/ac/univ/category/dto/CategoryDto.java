@@ -1,7 +1,6 @@
 package kr.ac.univ.category.dto;
 
 import kr.ac.univ.common.dto.CommonDto;
-import kr.ac.univ.common.validation.Editor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

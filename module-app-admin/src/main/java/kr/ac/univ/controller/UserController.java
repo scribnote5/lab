@@ -3,7 +3,6 @@ package kr.ac.univ.controller;
 import kr.ac.univ.common.dto.SearchDto;
 import kr.ac.univ.user.dto.UserDto;
 import kr.ac.univ.user.dto.UserPrincipal;
-import kr.ac.univ.user.dto.mapper.UserMapper;
 import kr.ac.univ.user.service.UserAttachedFileService;
 import kr.ac.univ.user.service.UserService;
 import kr.ac.univ.util.EmptyUtil;
@@ -40,13 +39,13 @@ public class UserController {
         return "/user/index";
     }
 
-    //Login Page
+    // Login Page
     @GetMapping("/login")
     public String login(@AuthenticationPrincipal UserPrincipal userPrincipal) {
         String returnPage = null;
 
         // 사용자가 로그인 안된 경우 /login 페이지로 이동
-        if(EmptyUtil.isEmpty(userPrincipal)) {
+        if (EmptyUtil.isEmpty(userPrincipal)) {
             returnPage = "/user/login";
         }
         // 사용자가 로그인한 경우 /main/home 페이지로 이동
@@ -67,6 +66,7 @@ public class UserController {
     // Logout
     @GetMapping("/logout/success")
     public RedirectView logout(Model model) {
+
         return new RedirectView("/user/login");
     }
 

@@ -3,6 +3,8 @@ package kr.ac.univ.config;
 import kr.ac.univ.handler.CustomAuthenticationEntryPoint;
 import kr.ac.univ.handler.CustomAuthenticationFailureHandler;
 import kr.ac.univ.handler.CustomAuthenticationSuccessHandler;
+import kr.ac.univ.loginHistory.repository.LoginHistoryRepository;
+import kr.ac.univ.loginHistory.service.GeoLocationService;
 import kr.ac.univ.user.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +30,8 @@ import java.util.Arrays;
 @AllArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private UserService userService;
+    private LoginHistoryRepository loginHistoryRepository;
+    private GeoLocationService geoLocationService;
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -39,36 +43,36 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http .authorizeRequests()
-            // 페이지 권한 설정
-            .antMatchers("/**").hasAnyAuthority("root, manager")
-            .antMatchers("/h2-console/**").permitAll() // h2-console 접근 허용
-            .and()
-            .csrf().ignoringAntMatchers("/console/**") // h2-console csrf 제외
-            .and()
-            .headers().addHeaderWriter(new XFrameOptionsHeaderWriter(new WhiteListedAllowFromStrategy(Arrays.asList("localhost")))) // he-console X-Frame-Options 제외
-            .frameOptions().sameOrigin()
-            .and()
-            // 로그인 설정
-            .formLogin()
-            .loginPage("/user/login")   // login 페이지 URL
-            .loginProcessingUrl("/user/login/process")  // login 수행 URL
-            // 사용자 정의 handler
-            .successHandler(CustomAuthenticationSuccessHandler())
-            .failureHandler(CustomAuthenticationFailureHandler())
-            .defaultSuccessUrl("/main/home")   // login 성공 URL
-            .permitAll()
-            .and()
-            // 로그아웃 설정
-            .logout()
-            .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
-            .logoutSuccessUrl("/user/logout/success")
-            .invalidateHttpSession(true)
-            .and()
-            // 예외처리
-            .exceptionHandling()
-            .accessDeniedPage("/user/permission-denied") // 권한이 없는 경우, 403 예외처리
-            .authenticationEntryPoint(new CustomAuthenticationEntryPoint()); // 로그인하지 않은(비인증) 사용자가 접근하는 경우, 401 에러처리
+        http.authorizeRequests()
+                // 페이지 권한 설정
+                .antMatchers("/**").hasAnyAuthority("root, manager")
+                .antMatchers("/h2-console/**").permitAll() // h2-console 접근 허용
+                .and()
+                .csrf().ignoringAntMatchers("/console/**") // h2-console csrf 제외
+                .and()
+                .headers().addHeaderWriter(new XFrameOptionsHeaderWriter(new WhiteListedAllowFromStrategy(Arrays.asList("localhost")))) // he-console X-Frame-Options 제외
+                .frameOptions().sameOrigin()
+                .and()
+                // 로그인 설정
+                .formLogin()
+                .loginPage("/user/login")   // login 페이지 URL
+                .loginProcessingUrl("/user/login/process")  // login 수행 URL
+                // 사용자 정의 handler
+                .successHandler(CustomAuthenticationSuccessHandler())
+                .failureHandler(CustomAuthenticationFailureHandler())
+//                .defaultSuccessUrl("/main/home")   // login 성공 URL
+                .permitAll()
+                .and()
+                // 로그아웃 설정
+                .logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
+                .logoutSuccessUrl("/user/logout/success")
+                .invalidateHttpSession(true)
+                .and()
+                // 예외처리
+                .exceptionHandling()
+                .accessDeniedPage("/user/permission-denied") // 권한이 없는 경우, 403 예외처리
+                .authenticationEntryPoint(new CustomAuthenticationEntryPoint()); // 로그인하지 않은(비인증) 사용자가 접근하는 경우, 401 에러처리
 
     }
 
@@ -95,7 +99,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Bean
     public AuthenticationSuccessHandler CustomAuthenticationSuccessHandler() {
-        return new CustomAuthenticationSuccessHandler();
+        return new CustomAuthenticationSuccessHandler(loginHistoryRepository, geoLocationService);
     }
 
     /**
@@ -105,7 +109,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Bean
     public AuthenticationFailureHandler CustomAuthenticationFailureHandler() {
-        return new CustomAuthenticationFailureHandler();
+        return new CustomAuthenticationFailureHandler(loginHistoryRepository, geoLocationService);
     }
 
     /**

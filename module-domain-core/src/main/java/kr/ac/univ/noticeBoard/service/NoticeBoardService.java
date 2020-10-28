@@ -2,10 +2,10 @@ package kr.ac.univ.noticeBoard.service;
 
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.SearchDto;
-import kr.ac.univ.util.AccessCheck;
-import kr.ac.univ.noticeBoard.domain.NoticeBoard;
 import kr.ac.univ.noticeBoard.dto.NoticeBoardDto;
 import kr.ac.univ.noticeBoard.dto.mapper.NoticeBoardMapper;
+import kr.ac.univ.util.AccessCheck;
+import kr.ac.univ.noticeBoard.domain.NoticeBoard;
 import kr.ac.univ.noticeBoard.repository.NoticeBoardRepository;
 import kr.ac.univ.noticeBoard.repository.NoticeBoardRepositoryImpl;
 import kr.ac.univ.user.repository.UserRepository;
@@ -15,6 +15,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 public class NoticeBoardService {
@@ -76,6 +77,17 @@ public class NoticeBoardService {
         }
 
         noticeBoardDtoList = new PageImpl<NoticeBoardDto>(NoticeBoardMapper.INSTANCE.toDto(noticeBoardList.getContent()), pageable, noticeBoardList.getTotalElements());
+
+        // NewIcon 판별
+        for (NoticeBoardDto noticeBoardDto : noticeBoardDtoList) {
+            noticeBoardDto.setNewIcon(NewIconCheck.isNew(noticeBoardDto.getCreatedDate()));
+        }
+
+        return noticeBoardDtoList;
+    }
+
+    public List<NoticeBoardDto> findNoticeBoardList() {
+        List<NoticeBoardDto> noticeBoardDtoList = NoticeBoardMapper.INSTANCE.toDto(noticeBoardRepository.findTop10ByOrderByIdxDesc());
 
         // NewIcon 판별
         for (NoticeBoardDto noticeBoardDto : noticeBoardDtoList) {

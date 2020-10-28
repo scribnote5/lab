@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface NoticeBoardRepository extends JpaRepository<NoticeBoard, Long> {
     Page<NoticeBoard> findAllByTitleContaining(Pageable pageable, String title);
@@ -16,7 +18,6 @@ public interface NoticeBoardRepository extends JpaRepository<NoticeBoard, Long> 
     Page<NoticeBoard> findAllByCreatedByContaining(Pageable pageable, String username);
 
 
-
     Page<NoticeBoard> findAllByActiveStatusIs(Pageable pageable, ActiveStatus activeStatus);
 
     Page<NoticeBoard> findAllByTitleContainingAndActiveStatusIs(Pageable pageable, String title, ActiveStatus activeStatus);
@@ -24,4 +25,7 @@ public interface NoticeBoardRepository extends JpaRepository<NoticeBoard, Long> 
     Page<NoticeBoard> findAllByContentContainingAndActiveStatusIs(Pageable pageable, String content, ActiveStatus activeStatus);
 
     Page<NoticeBoard> findAllByCreatedByContainingAndActiveStatusIs(Pageable pageable, String username, ActiveStatus activeStatus);
+
+
+    List<NoticeBoard> findTop10ByOrderByIdxDesc();
 }

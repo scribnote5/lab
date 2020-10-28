@@ -1,8 +1,5 @@
 package kr.ac.univ.alumniAssociation.service;
 
-import kr.ac.univ.album.domain.Album;
-import kr.ac.univ.album.dto.AlbumDto;
-import kr.ac.univ.album.dto.mapper.AlbumMapper;
 import kr.ac.univ.alumniAssociation.domain.AlumniAssociation;
 import kr.ac.univ.alumniAssociation.dto.AlumniAssociationDto;
 import kr.ac.univ.alumniAssociation.dto.mapper.AlumniAssociationMapper;

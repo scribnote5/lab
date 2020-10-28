@@ -3,6 +3,7 @@ package kr.ac.univ.learnMore.domain;
 import kr.ac.univ.common.domain.CommonAudit;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.learnMore.domain.enums.DownloadFileType;
+import kr.ac.univ.learnMore.listener.LearnMoreListener;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Table;
 
 @Getter
@@ -17,6 +19,7 @@ import javax.persistence.Table;
 @Entity
 @Table
 @ToString
+@EntityListeners(LearnMoreListener.class)
 public class LearnMore extends CommonAudit {
     @Column
     private String title;

@@ -3,7 +3,6 @@ package kr.ac.univ.controller;
 import kr.ac.univ.common.dto.SearchDto;
 import kr.ac.univ.user.dto.UserDto;
 import kr.ac.univ.user.dto.UserPrincipal;
-import kr.ac.univ.user.dto.mapper.UserMapper;
 import kr.ac.univ.user.service.UserAttachedFileService;
 import kr.ac.univ.user.service.UserService;
 import kr.ac.univ.util.EmptyUtil;

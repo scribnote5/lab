@@ -3,6 +3,8 @@ package kr.ac.univ.config;
 import kr.ac.univ.handler.CustomAuthenticationEntryPoint;
 import kr.ac.univ.handler.CustomAuthenticationFailureHandler;
 import kr.ac.univ.handler.CustomAuthenticationSuccessHandler;
+import kr.ac.univ.loginHistory.repository.LoginHistoryRepository;
+import kr.ac.univ.loginHistory.service.GeoLocationService;
 import kr.ac.univ.user.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +30,8 @@ import java.util.Arrays;
 @AllArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private UserService userService;
+    private LoginHistoryRepository loginHistoryRepository;
+    private GeoLocationService geoLocationService;
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -96,7 +100,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Bean
     public AuthenticationSuccessHandler CustomAuthenticationSuccessHandler() {
-        return new CustomAuthenticationSuccessHandler();
+        return new CustomAuthenticationSuccessHandler(loginHistoryRepository, geoLocationService);
     }
 
     /**
@@ -106,7 +110,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Bean
     public AuthenticationFailureHandler CustomAuthenticationFailureHandler() {
-        return new CustomAuthenticationFailureHandler();
+        return new CustomAuthenticationFailureHandler(loginHistoryRepository, geoLocationService);
     }
 
     /**

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- css -->
+    <th:block th:replace="layout/css.html"></th:block>
+
+    <title>Email Form</title>
+</head>
+<body>
+<div class="d-flex" id="wrapper">
+    <!-- sidebar -->
+    <div th:replace="layout/sidebar::sidebar"></div>
+
+    <div id="page-content-wrapper">
+        <!-- header -->
+        <div th:replace="layout/header::header"></div>
+
+        <div class="container-fluid">
+            <form name="form" id="form" th:object="${emailDto}" action="#">
+                <div class="page-header">
+                    <h1 th:if="!*{idx}">Email Register</h1>
+                    <h1 th:if="*{idx}">Email Update</h1>
+                </div>
+
+                <div class="mt-5">
+                    <table class="table">
+                        <colgroup>
+                            <col width="15%"/>
+                            <col width="85%"/>
+                        </colgroup>
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Email Information</th>
+                        </tr>
+                        <tr>
+                            <th>Email Address</th>
+                            <td><input type="text" name="emailAddress" id="emailAddress" class="form-control" th:value="*{emailAddress}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Receiver Type</th>
+                            <td>
+                                <div class="pull-left">
+                                    <select class="custom-select active-status" name="receiverType" th:field="*{receiverType}">
+                                        <option th:value="ADMIN">Admin</option>
+                                        <option th:value="DEVELOPER">Developer</option>
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Note</th>
+                            <td><input type="text" name="note" id="note" class="form-control" th:value="*{note}"/></td>
+                        </tr>
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Additional Information</th>
+                        </tr>
+                        <tr>
+                            <th>Active Status</th>
+                            <td>
+                                <div class="pull-left">
+                                    <select class="custom-select active-status" name="activeStatus" th:field="*{activeStatus}">
+                                        <option th:value="ACTIVE">Active</option>
+                                        <option th:value="INACTIVE">Inactive</option>
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Created Date</th>
+                            <td><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Modified Date</th>
+                            <td><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="row justify-content-between mt-5 mb-3">
+                    <div class="col-auto mx-3">
+                        <a href="/email/list" class="btn btn-secondary">Move to List</a>
+                    </div>
+                    <div class="col-auto mx-3">
+                        <button th:if="!*{idx}" id="insert" type="button" class="btn btn-primary">Register</button>
+                        <button th:if="*{idx}" id="update" type="button" class="btn btn-info">Update</button>
+                    </div>
+                </div>
+
+                <!-- input type="hidden" -->
+                <input type="hidden" name="idx" th:value="*{idx}"/>
+                <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
+                <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- footer -->
+<div th:replace="layout/footer::footer"></div>
+
+<!-- script file -->
+<th:block th:replace="layout/script.html"></th:block>
+
+<!-- javascript -->
+<script>
+    function deleteEmail(emailIdx) {
+        // 게시글 삭제
+        $.ajax({
+            url: "http://localhost:8081/api/emails/" + emailIdx,
+            type: "delete",
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+
+            })
+            .fail(function (msg) {
+                console.log("Delete notice board is fail.");
+            });
+    }
+</script>
+
+<script th:if="!${emailDto?.idx}">
+    $('#insert').click(function () {
+        // (input tag mame, length or size, message)
+        if (!validateBySize("note", 255, "note")) {
+            return false;
+        }
+
+        var jsonData = $("#form").serializeObject();
+
+        // 게시글 업로드
+        $.ajax({
+            url: "http://localhost:8081/api/emails",
+            type: "post",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                location.href = "/email?idx=" + msg;
+            })
+            .fail(function (msg) {
+                paraseErrorMsg(msg);
+                console.log("Update email is fail.");
+            });
+    });
+</script>
+
+<script th:if="${emailDto?.idx}" th:inline="javascript">
+    $('#update').click(function () {
+        // (input tag mame, length or size, message)
+        if (!validateBySize("note", 255, "note")) {
+            return false;
+        }
+
+        var jsonData = $("#form").serializeObject();
+        var emailIdx = document.getElementsByName("idx")[0].value;
+
+        // 게시글 수정
+        $.ajax({
+            url: "http://localhost:8081/api/emails/" + emailIdx,
+            type: "put",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                location.href = "/email?idx=" + emailIdx;
+            })
+            .fail(function (msg) {
+                paraseErrorMsg(msg);
+                console.log("Update email is fail.");
+                exit = true;
+            });
+
+    });
+</script>
+
+</body>
+</html>

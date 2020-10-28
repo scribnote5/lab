@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import kr.ac.univ.publication.domain.Publication;
 import kr.ac.univ.publication.domain.PublicationAttachedFile;
 import kr.ac.univ.publication.domain.QPublicationAttachedFile;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;

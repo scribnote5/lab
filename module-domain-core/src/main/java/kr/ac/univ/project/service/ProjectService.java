@@ -7,8 +7,6 @@ import kr.ac.univ.project.dto.ProjectDto;
 import kr.ac.univ.project.dto.mapper.ProjectMapper;
 import kr.ac.univ.project.repository.ProjectRepository;
 import kr.ac.univ.project.repository.ProjectRepositoryImpl;
-import kr.ac.univ.researchField.domain.ResearchField;
-import kr.ac.univ.researchField.repository.ResearchFieldRepository;
 import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.AccessCheck;
 import kr.ac.univ.util.NewIconCheck;

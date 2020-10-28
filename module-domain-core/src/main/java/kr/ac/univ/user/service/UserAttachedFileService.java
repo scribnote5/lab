@@ -6,8 +6,6 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
-import kr.ac.univ.noticeBoard.dto.NoticeBoardDto;
-import kr.ac.univ.noticeBoard.dto.mapper.NoticeBoardMapper;
 import kr.ac.univ.user.domain.UserAttachedFile;
 import kr.ac.univ.user.dto.UserDto;
 import kr.ac.univ.user.dto.mapper.UserMapper;

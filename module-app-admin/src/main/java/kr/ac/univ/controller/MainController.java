@@ -1,17 +1,10 @@
 package kr.ac.univ.controller;
 
-import kr.ac.univ.album.service.AlbumAttachedFileService;
-import kr.ac.univ.album.service.AlbumService;
-import kr.ac.univ.common.dto.SearchDto;
-import kr.ac.univ.user.domain.UserAttachedFile;
-import kr.ac.univ.user.dto.UserDto;
-import kr.ac.univ.user.service.UserAttachedFileService;
+import kr.ac.univ.dataHistory.service.DataHistoryService;
+import kr.ac.univ.loginHistory.service.LoginHistoryService;
+import kr.ac.univ.noticeBoard.service.NoticeBoardService;
 import kr.ac.univ.user.service.UserService;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import kr.ac.univ.util.FileUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,25 +13,37 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/main")
 public class MainController {
+    private final DataHistoryService dataHistoryService;
+    private final LoginHistoryService loginHistoryService;
+    private final NoticeBoardService noticeBoardService;
     private final UserService userService;
-    private final UserAttachedFileService userAttachedFileService;
 
-    public MainController(UserService userService, UserAttachedFileService userAttachedFileService) {
+    public MainController(DataHistoryService dataHistoryService, LoginHistoryService loginHistoryService, NoticeBoardService noticeBoardService, UserService userService) {
+        this.dataHistoryService = dataHistoryService;
+        this.loginHistoryService = loginHistoryService;
+        this.noticeBoardService = noticeBoardService;
         this.userService = userService;
-        this.userAttachedFileService = userAttachedFileService;
     }
 
     // Home
     @GetMapping("/home")
-    public String home( Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-//        UserDto userDto = userService.findUserByUsername(userDetails.getUsername());
+    public String home(Model model) {
+        model.addAttribute("dataHistoryDtoList", dataHistoryService.findDataHistoryList());
+        model.addAttribute("loginHistoryDtoList", loginHistoryService.findLoginHistoryList());
+        model.addAttribute("noticeBoardDtoList", noticeBoardService.findNoticeBoardList());
 
-//        userAttachedFileService.findAttachedFileByUserIdx(userDto.getIdx());
+        model.addAttribute("userCount", userService.countUser());
+        model.addAttribute("dataHistoryCount", dataHistoryService.countDataHistory());
 
+        model.addAttribute("countLoginUserBeforeOneday", loginHistoryService.countLoginHistoryByDays(1L));
+        model.addAttribute("countLoginUserBeforeSevenDays", loginHistoryService.countLoginHistoryByDays(7L));
+        model.addAttribute("countLoginUserBeforeTwentyEightDays", loginHistoryService.countLoginHistoryByDays(7L));
 
+        model.addAttribute("countDataHistoryBeforeOneday", dataHistoryService.countLoginHistoryByDays(1L));
+        model.addAttribute("countDataHistoryBeforeSevenDays", dataHistoryService.countLoginHistoryByDays(7L));
+        model.addAttribute("countDataHistoryBeforeTwentyEightDays", dataHistoryService.countLoginHistoryByDays(28L));
 
+        model.addAttribute("diskInfoList", FileUtil.getDiskInfo());
 
         return "/main/home";
     }

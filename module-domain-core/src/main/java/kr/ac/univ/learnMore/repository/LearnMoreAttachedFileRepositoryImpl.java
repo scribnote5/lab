@@ -2,7 +2,6 @@ package kr.ac.univ.learnMore.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.ac.univ.learnMore.domain.LearnMoreAttachedFile;
-import kr.ac.univ.learnMore.domain.QLearnMoreAttachedFile;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 

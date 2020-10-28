@@ -2,11 +2,9 @@ package kr.ac.univ.publication.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.Table;
 
 import kr.ac.univ.common.domain.AttachedFileAudit;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -1,10 +1,9 @@
 package kr.ac.univ.user.service;
 
 
-import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.SearchDto;
-import kr.ac.univ.noticeBoard.dto.NoticeBoardDto;
-import kr.ac.univ.noticeBoard.dto.mapper.NoticeBoardMapper;
+import kr.ac.univ.loginHistory.repository.LoginHistoryRepository;
+import kr.ac.univ.loginHistory.service.GeoLocationService;
 import kr.ac.univ.user.domain.User;
 import kr.ac.univ.user.domain.enums.AuthorityType;
 import kr.ac.univ.user.dto.UserDto;
@@ -15,11 +14,7 @@ import kr.ac.univ.util.AccessCheck;
 import kr.ac.univ.util.EmptyUtil;
 import kr.ac.univ.util.NewIconCheck;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.data.domain.*;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,16 +22,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 public class UserService implements UserDetailsService {
     @Value("${module.name}")
     private String moduleName;
+    private final LoginHistoryRepository loginHistoryRepository;
     private final UserRepository userRepository;
+    private final GeoLocationService geoLocationService;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, LoginHistoryRepository loginHistoryRepository, GeoLocationService geoLocationService) {
         this.userRepository = userRepository;
+        this.loginHistoryRepository = loginHistoryRepository;
+        this.geoLocationService = geoLocationService;
     }
 
     public Page<UserDto> findUserList(Pageable pageable, SearchDto searchDto) {
@@ -68,6 +65,10 @@ public class UserService implements UserDetailsService {
         }
 
         return userDtoList;
+    }
+
+    public Long countUser() {
+        return userRepository.countAllBy();
     }
 
     /**
@@ -107,8 +108,28 @@ public class UserService implements UserDetailsService {
             user = null;
         }
 
+        // User 아이디가 없는 경우, 로그인 실패
         if (EmptyUtil.isEmpty(user)) {
-            throw new BadCredentialsException(null);
+            System.out.println("EmptyUtil.isEmpty(user): " + username);
+
+//            // ip 주소: ip 주소를 받기 위한 HttpServletRequest 객체
+//            String ip = IpUtil.getClientIP(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest());
+//            // GeoLite2를 사용한 location 조회
+//            String location = geoLocationService.getLocationByIp(ip);
+//
+//            loginHistoryRepository.save(LoginHistory.builder()
+//                    .createdDate(LocalDateTime.now())
+//                    .lastModifiedDate(LocalDateTime.now())
+//                    .createdBy(username)
+//                    .lastModifiedBy(username)
+//                    .activeStatus(ActiveStatus.ACTIVE)
+//                    .audIdx(null)
+//                    .audIp(ip)
+//                    .audLocation(location)
+//                    .audMessage("The ID does not matched.")
+//                    .audLoginResultType(LoginResultType.FAIL).build());
+
+            throw new UsernameNotFoundException(null);
         }
 
         userPrincipal = new UserPrincipal(user);
@@ -143,7 +164,7 @@ public class UserService implements UserDetailsService {
         return userDto;
     }
 
-        @Transactional
+    @Transactional
     public Long updateUser(Long idx, UserDto userDto) {
         User persistUser = userRepository.getOne(idx);
         User user = UserMapper.INSTANCE.toEntity(userDto);

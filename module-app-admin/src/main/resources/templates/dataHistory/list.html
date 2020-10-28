@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- css -->
+    <th:block th:replace="layout/css.html"></th:block>
+
+    <title>Data History List</title>
+</head>
+<body>
+
+<div class="d-flex" id="wrapper">
+    <!-- sidebar -->
+    <div th:replace="layout/sidebar::sidebar"></div>
+
+    <div id="page-content-wrapper">
+        <!-- header -->
+        <div th:replace="layout/header::header"></div>
+
+        <div class="container-fluid">
+            <form name="form" id="form" th:object="${searchDto}" action="#">
+                <div class="page-header">
+                    <h1>Data History List</h1>
+                </div>
+
+                <div class="row justify-content-end mt-3">
+                    <div class="col-auto px-1">
+                        <select class="custom-select" name="searchType" id="searchType" th:field="*{searchType}">
+                            <option th:value="AUD_MESSAGE">Aud Message</option>
+                            <option th:value="AUD_CLASS">Aud Class</option>
+                            <option th:value="AUD_TYPE">Aud Type</option>
+                            <option th:value="ID">ID</option>
+                        </select>
+                    </div>
+                    <div class="col-auto px-1">
+                        <input th:disabled="*{#strings.equals(searchType, 'AUD_TYPE')}"
+                               th:style="*{#strings.equals(searchType, 'AUD_TYPE')} ? 'display:none' : 'display:inline'"
+                               type="text"
+                               name="keyword" id="keywordInputText" class="form-control"
+                               th:value="${searchDto?.keyword}"/>
+                        <select th:disabled="!*{#strings.equals(searchType, 'AUD_TYPE')}"
+                                th:style="!*{#strings.equals(searchType, 'AUD_TYPE')} ? 'display:none' : 'display:inline'"
+                                name="keyword" id="keywordSelect" class="custom-select"
+                                th:field="*{keyword}">
+                            <option th:each="audType : ${T(kr.ac.univ.dataHistory.domain.enums.AudType).values()}"
+                                    th:value="${audType}" th:text="${audType.getAudType()}"></option>
+                        </select>
+                    </div>
+                    <div class="col-auto px-3">
+                        <button id="search" type="button" class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+
+                <div class="mt-5">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th style="width: 5%">No.</th>
+                            <th style="width: 25%">Aud Message</th>
+                            <th style="width: 10%">Aud Class</th>
+                            <th style="width: 10%">Aud Type</th>
+                            <th style="width: 10%">ID</th>
+                            <th style="width: 15%">Created Date</th>
+                            <th style="width: 15%">Modified Date</th>
+                            <th style="width: 5%">Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="dataHistoryDto : ${dataHistoryDtoList}">
+                            <td th:text="${dataHistoryDto.idx}"></td>
+                            <td>
+                                <a th:href="'/data-history?idx='+${dataHistoryDto.idx}" th:text="${dataHistoryDto.audMessage}"></a>
+                                <img th:if="${dataHistoryDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
+                            </td>
+
+                            <td th:text="${dataHistoryDto.audClass}"></td>
+
+                            <td th:if="${dataHistoryDto.audType?.name() == 'INSERT'}" th:text="Insert"> </td>
+                            <td th:if="${dataHistoryDto.audType?.name() == 'UPDATE'}" th:text="Update"> </td>
+                            <td th:if="${dataHistoryDto.audType?.name() == 'DELETE'}" th:text="Delete"> </td>
+
+                            <td th:text="${dataHistoryDto.createdBy}">></td>
+                            <td th:text="${#temporals.format(dataHistoryDto.createdDate,'yyyy-MM-dd HH:mm')}"></td>
+                            <td th:text="${#temporals.format(dataHistoryDto.lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
+
+                            <td th:if="${dataHistoryDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active"></td>
+                            <td th:if="${dataHistoryDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="row justify-content-end mt-5 mb-3"></div>
+
+                <!-- Pagination -->
+                <div class="row justify-content-center" aria-label="Page navigation">
+                    <ul class="pagination "
+                        th:with="startNumber=${T(Math).floor(dataHistoryDtoList.number/10)}*10+1, endNumber=(${dataHistoryDtoList.totalPages} > ${startNumber}+9) ? ${startNumber}+9 : (${dataHistoryDtoList.totalPages} == 0 ? 1 : ${dataHistoryDtoList.totalPages})">
+                        <li class="page-item">
+                            <a class="page-link" aria-label="Previous" th:href="@{/data-history/list(page=1,searchType=*{searchType},keyword=*{keyword})}">&laquo;</a>
+                        </li>
+                        <li class="page-item" th:style="${dataHistoryDtoList.first} ? 'display:none'">
+                            <a class="page-link" th:href="@{/data-history/list(page=${dataHistoryDtoList.number},searchType=*{searchType},keyword=*{keyword})}">&lsaquo;</a>
+                        </li>
+                        <li th:each="page :${#numbers.sequence(startNumber, endNumber)}"
+                            th:class="(${page} == ${dataHistoryDtoList.number}+1) ? 'page-item active'">
+                            <a class="page-link" th:href="@{/data-history/list(page=${page},searchType=*{searchType},keyword=*{keyword})}" th:text="${page}"><span class="sr-only"></span></a>
+                        </li>
+                        <li class="page-item" th:style="${dataHistoryDtoList.last} ? 'display:none'">
+                            <a class="page-link"
+                               th:href="@{/data-history/list(page=${dataHistoryDtoList.number}+2,searchType=*{searchType},keyword=*{keyword})}">&rsaquo;</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" aria-label="Next" th:href="@{/data-history/list(page=${dataHistoryDtoList.totalPages},searchType=*{searchType},keyword=*{keyword})}">&raquo;</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /Pagination -->
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- footer -->
+<div th:replace="layout/footer::footer"></div>
+
+<!-- script file -->
+<th:block th:replace="layout/script.html"></th:block>
+
+<script th:inline="javascript">
+    /* input tag event */
+    $("#searchType").change(function () {
+        var keywordSelect = document.getElementById("keywordSelect");
+        var keywordInputText = document.getElementById("keywordInputText");
+
+        if (document.getElementsByName("searchType")[0].value == "AUD_TYPE") {
+            keywordSelect.style.display = "inline";
+            keywordSelect.disabled = false;
+            keywordInputText.style.display = "none";
+            keywordInputText.disabled = true;
+        } else {
+            keywordSelect.style.display = "none";
+            keywordSelect.disabled = true;
+            keywordInputText.style.display = "inline";
+            keywordInputText.disabled = false;
+            keywordInputText.value = "";
+        }
+    });
+
+    $('#search').click(function () {
+        document.form.action = "/data-history/list";
+        document.form.method = "get";
+        document.form.submit();
+    });
+</script>
+
+</body>
+</html>

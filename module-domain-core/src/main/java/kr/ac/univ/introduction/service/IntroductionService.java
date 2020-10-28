@@ -1,15 +1,12 @@
 package kr.ac.univ.introduction.service;
 
-import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.SearchDto;
 import kr.ac.univ.introduction.domain.Introduction;
 import kr.ac.univ.introduction.dto.IntroductionDto;
 import kr.ac.univ.introduction.dto.mapper.IntroductionMapper;
 import kr.ac.univ.introduction.repository.IntroductionRepository;
-import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.AccessCheck;
 import kr.ac.univ.util.NewIconCheck;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 

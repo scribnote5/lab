@@ -1,16 +1,12 @@
 package kr.ac.univ.controller;
 
-import kr.ac.univ.common.validation.FileValidator;
-import kr.ac.univ.exception.FileTypeException;
 import kr.ac.univ.researchField.dto.ResearchFieldDto;
 import kr.ac.univ.researchField.service.ResearchFieldService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/research-fields")

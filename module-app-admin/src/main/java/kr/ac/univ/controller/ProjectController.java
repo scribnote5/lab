@@ -4,7 +4,6 @@ import kr.ac.univ.common.dto.SearchDto;
 import kr.ac.univ.project.dto.ProjectDto;
 import kr.ac.univ.project.service.ProjectAttachedFileService;
 import kr.ac.univ.project.service.ProjectService;
-import kr.ac.univ.researchField.domain.ResearchField;
 import kr.ac.univ.researchField.service.ResearchFieldService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -13,8 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/project")

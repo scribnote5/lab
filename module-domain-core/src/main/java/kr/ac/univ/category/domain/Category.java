@@ -1,5 +1,6 @@
 package kr.ac.univ.category.domain;
 
+import kr.ac.univ.category.listener.CategoryListener;
 import kr.ac.univ.common.domain.CommonAudit;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import lombok.Builder;
@@ -9,6 +10,7 @@ import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Table;
 
 @Getter
@@ -16,6 +18,7 @@ import javax.persistence.Table;
 @Entity
 @Table
 @ToString
+@EntityListeners(CategoryListener.class)
 public class Category extends CommonAudit {
     @Column
     private String title;

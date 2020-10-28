@@ -2,6 +2,7 @@ package kr.ac.univ.introduction.domain;
 
 import kr.ac.univ.common.domain.CommonAudit;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
+import kr.ac.univ.introduction.listener.IntroductionListener;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Table;
 
 @Getter
@@ -16,6 +18,7 @@ import javax.persistence.Table;
 @Entity
 @Table
 @ToString
+@EntityListeners(IntroductionListener.class)
 public class Introduction extends CommonAudit {
     @Column
     private String title;

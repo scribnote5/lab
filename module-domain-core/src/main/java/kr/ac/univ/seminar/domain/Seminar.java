@@ -4,6 +4,7 @@ import kr.ac.univ.common.domain.CommonAudit;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.researchField.domain.ResearchField;
 import kr.ac.univ.seminar.domain.enums.SeminarType;
+import kr.ac.univ.seminar.listener.SeminarListener;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table
 @ToString
+@EntityListeners(SeminarListener.class)
 public class Seminar extends CommonAudit {
     @Column
     private String title;

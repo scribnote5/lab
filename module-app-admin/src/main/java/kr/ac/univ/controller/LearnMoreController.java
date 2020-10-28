@@ -5,7 +5,6 @@ import kr.ac.univ.exception.BusinessException;
 import kr.ac.univ.learnMore.dto.LearnMoreDto;
 import kr.ac.univ.learnMore.service.LearnMoreAttachedFileService;
 import kr.ac.univ.learnMore.service.LearnMoreService;
-import kr.ac.univ.util.EmptyUtil;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
@@ -13,8 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/learn-more")

@@ -6,7 +6,7 @@ import kr.ac.univ.user.domain.enums.AuthorityType;
 import kr.ac.univ.user.domain.enums.GenderType;
 import kr.ac.univ.user.domain.enums.UserStatus;
 import kr.ac.univ.user.domain.enums.UserType;
-import kr.ac.univ.util.EmptyUtil;
+import kr.ac.univ.user.listener.UserListener;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +21,7 @@ import java.time.LocalDate;
 @Entity
 @Table
 @ToString
+@EntityListeners(UserListener.class)
 public class User extends CommonAudit {
     /* 기본 정보 */
     @Column

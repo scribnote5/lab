@@ -1,5 +1,6 @@
 package kr.ac.univ.album.domain;
 
+import kr.ac.univ.album.listener.AlbumListener;
 import kr.ac.univ.common.domain.CommonAudit;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import lombok.Builder;
@@ -9,6 +10,7 @@ import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Table;
 import java.time.LocalDate;
 
@@ -17,6 +19,7 @@ import java.time.LocalDate;
 @Entity
 @Table
 @ToString
+@EntityListeners(AlbumListener.class)
 public class Album extends CommonAudit {
     @Column
     private String title;

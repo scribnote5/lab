@@ -1,6 +1,5 @@
 package kr.ac.univ.learnMore.repository;
 
-import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.learnMore.domain.LearnMore;
 import kr.ac.univ.learnMore.domain.enums.DownloadFileType;
 import org.springframework.data.domain.Page;

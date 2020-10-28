@@ -53,6 +53,15 @@
     width: 11.5rem !important;
 }
 
+.created-modified-by {
+    width: 17rem !important;
+}
+
+.aud-message {
+    height: 5rem !important;
+}
+
+
 .main-page-priority {
     width: 20rem !important;
 }

@@ -2,7 +2,6 @@ package kr.ac.univ.project.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.ac.univ.project.domain.Project;
-import kr.ac.univ.project.domain.QProject;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
