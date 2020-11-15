@@ -7,9 +7,9 @@ function validateByWhiteSpace(str) {
     }
 }
 
-/* 공백 문자 및 공란 검사 */
+/* 공백 문자(글자 내 공백 허용) 및 공란 검사 */
 function validateByEmpty(str) {
-    if (str.search(/\s/) != -1 || str.length == 0) {
+    if (str.search(/^\s+|\s+$/g) != -1 || str.length == 0) {
         return true;
     } else {
         return false;

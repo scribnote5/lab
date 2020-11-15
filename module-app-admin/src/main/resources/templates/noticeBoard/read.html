@@ -35,7 +35,7 @@
                             <td><span id="title" class="form-control" th:text="*{title}"></span></td>
                         </tr>
                         <tr>
-                            <td colspan="2"><span id="content" class="form-control content"></span></td>
+                            <td colspan="2"><span id="content" class="form-control content" th:utext="*{content}"></span></td>
                         </tr>
                         <tr>
                             <th>Uploaded Attached File</th>
@@ -168,10 +168,6 @@
 <th:block th:replace="layout/script.html"></th:block>
 
 <script th:inline="javascript">
-    $(document).ready(function () {
-        document.getElementById("content").innerHTML = [[${noticeBoardDto.content}]];
-    });
-
     $("#delete").click(function () {
         if (!confirm("Do you want to delete post?")) {
             return true;

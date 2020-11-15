@@ -1,5 +1,7 @@
 package kr.ac.univ.controller;
 
+import kr.ac.univ.common.domain.enums.ActiveStatus;
+import kr.ac.univ.exception.BusinessException;
 import kr.ac.univ.introduction.dto.IntroductionDto;
 import kr.ac.univ.introduction.service.IntroductionService;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,10 @@ public class IntroductionRestController {
 
     @PostMapping
     public ResponseEntity<?> postIntroduction(@RequestBody @Valid IntroductionDto introductionDto) {
+        if (introductionDto.getActiveStatus() == ActiveStatus.ACTIVE && introductionService.countAllByActiveStatus() > 0) {
+            throw new BusinessException("Only one introduction can be activate.");
+        }
+
         Long idx = introductionService.insertIntroduction(introductionDto);
 
         return new ResponseEntity<>(idx, HttpStatus.CREATED);
@@ -26,6 +32,10 @@ public class IntroductionRestController {
 
     @PutMapping("/{idx}")
     public ResponseEntity<?> putIntroduction(@PathVariable("idx") Long idx, @RequestBody @Valid IntroductionDto introductionDto) {
+        if (introductionDto.getActiveStatus() == ActiveStatus.ACTIVE && introductionService.countAllByActiveStatus() > 1) {
+            throw new BusinessException("Only one introduction can be activate.");
+        }
+
         introductionService.updateIntroduction(idx, introductionDto);
 
         return new ResponseEntity<>("{}", HttpStatus.OK);

@@ -3,6 +3,8 @@ package kr.ac.univ.seminar.service;
 import kr.ac.univ.category.repository.CategoryRepository;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.SearchDto;
+import kr.ac.univ.noticeBoard.dto.NoticeBoardDto;
+import kr.ac.univ.noticeBoard.dto.mapper.NoticeBoardMapper;
 import kr.ac.univ.seminar.domain.Seminar;
 import kr.ac.univ.seminar.dto.SeminarDto;
 import kr.ac.univ.seminar.dto.mapper.SeminarMapper;
@@ -16,6 +18,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 public class SeminarService {
@@ -71,6 +74,17 @@ public class SeminarService {
         }
 
         seminarDtoList = new PageImpl<SeminarDto>(SeminarMapper.INSTANCE.toDto(seminarList.getContent()), pageable, seminarList.getTotalElements());
+
+        // NewIcon 판별
+        for (SeminarDto seminarDto : seminarDtoList) {
+            seminarDto.setNewIcon(NewIconCheck.isNew(seminarDto.getCreatedDate()));
+        }
+
+        return seminarDtoList;
+    }
+
+    public List<SeminarDto> findSeminarList() {
+        List<SeminarDto> seminarDtoList = SeminarMapper.INSTANCE.toDto(seminarRepository.findTop10ByOrderByIdxDesc());
 
         // NewIcon 판별
         for (SeminarDto seminarDto : seminarDtoList) {

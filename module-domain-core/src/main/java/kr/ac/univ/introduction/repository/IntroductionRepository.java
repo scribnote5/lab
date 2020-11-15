@@ -1,5 +1,6 @@
 package kr.ac.univ.introduction.repository;
 
+import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.introduction.domain.Introduction;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,4 +14,8 @@ public interface IntroductionRepository extends JpaRepository<Introduction, Long
     Page<Introduction> findAllByContentContaining(Pageable pageable, String content);
 
     Page<Introduction> findAllByCreatedByContaining(Pageable pageable, String username);
+
+    Introduction findByActiveStatusIs(ActiveStatus activeStatus);
+
+    Long countAllByActiveStatus(ActiveStatus activeStatus);
 }

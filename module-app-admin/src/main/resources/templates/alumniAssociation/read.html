@@ -47,7 +47,7 @@
                             <td colspan="2"><span id="mainPagePriority" class="form-control main-page-priority" th:text="*{mainPagePriority == -1} ? 'This post is not shown on the main page.' : *{mainPagePriority}"/></td>
                         </tr>
                         <tr>
-                            <td colspan="2"><span class="form-control overflow-auto content" id="content"></span></td>
+                            <td colspan="2"><span class="form-control overflow-auto content" id="content" th:utext="*{content}"></span></td>
                         </tr>
                         <tr>
                             <th colspan="2" class="sub-item-title"><h5>Additional Information</h5></th>
@@ -97,10 +97,6 @@
 <th:block th:replace="layout/script.html"></th:block>
 
 <script th:inline="javascript">
-    $(document).ready(function () {
-        document.getElementById("content").innerHTML = [[${alumniAssociationDto.content}]];
-    });
-
     $("#delete").click(function () {
         if (!confirm("Do you want to delete post?")) {
             return true;

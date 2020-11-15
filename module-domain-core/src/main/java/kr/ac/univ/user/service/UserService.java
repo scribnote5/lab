@@ -1,6 +1,7 @@
 package kr.ac.univ.user.service;
 
 
+import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.SearchDto;
 import kr.ac.univ.loginHistory.repository.LoginHistoryRepository;
 import kr.ac.univ.loginHistory.service.GeoLocationService;
@@ -26,35 +27,55 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService implements UserDetailsService {
     @Value("${module.name}")
     private String moduleName;
-    private final LoginHistoryRepository loginHistoryRepository;
-    private final UserRepository userRepository;
-    private final GeoLocationService geoLocationService;
 
-    public UserService(UserRepository userRepository, LoginHistoryRepository loginHistoryRepository, GeoLocationService geoLocationService) {
+    private final UserRepository userRepository;
+
+
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.loginHistoryRepository = loginHistoryRepository;
-        this.geoLocationService = geoLocationService;
+
     }
 
     public Page<UserDto> findUserList(Pageable pageable, SearchDto searchDto) {
         Page<User> userList = null;
         Page<UserDto> userDtoList = null;
 
-        pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1, pageable.getPageSize(), Sort.Direction.DESC, "idx");
+        if ("module-app-admin".equals(moduleName)) {
+            pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1, pageable.getPageSize(), Sort.Direction.DESC, "idx");
 
-        switch (searchDto.getSearchType()) {
-            case "USER_ID":
-                userList = userRepository.findAllByUsernameContaining(pageable, searchDto.getKeyword());
-                break;
-            case "KOREAN_NAME":
-                userList = userRepository.findAllByKoreanNameContaining(pageable, searchDto.getKeyword());
-                break;
-            case "Email":
-                userList = userRepository.findAllByEmailContaining(pageable, searchDto.getKeyword());
-                break;
-            default:
-                userList = userRepository.findAll(pageable);
-                break;
+            switch (searchDto.getSearchType()) {
+                case "USER_ID":
+                    userList = userRepository.findAllByUsernameContaining(pageable, searchDto.getKeyword());
+                    break;
+                case "KOREAN_NAME":
+                    userList = userRepository.findAllByKoreanNameContaining(pageable, searchDto.getKeyword());
+                    break;
+                case "Email":
+                    userList = userRepository.findAllByEmailContaining(pageable, searchDto.getKeyword());
+                    break;
+                default:
+                    userList = userRepository.findAll(pageable);
+                    break;
+            }
+        } else if ("module-app-web".equals(moduleName)) {
+            pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1, 12, Sort.Direction.DESC, "idx");
+
+            switch (searchDto.getSearchType()) {
+                case "USER_ID":
+                    userList = userRepository.findAllByUsernameNotAndUsernameContainingAndActiveStatusIs(pageable, "root", searchDto.getKeyword(), ActiveStatus.ACTIVE);
+                    break;
+                case "KOREAN_NAME":
+                    userList = userRepository.findAllByUsernameNotAndKoreanNameContainingAndActiveStatusIs(pageable, "root", searchDto.getKeyword(), ActiveStatus.ACTIVE);
+                    break;
+                case "Email":
+                    userList = userRepository.findAllByUsernameNotAndEmailContainingAndActiveStatusIs(pageable, "root", searchDto.getKeyword(), ActiveStatus.ACTIVE);
+                    break;
+                default:
+                    userList = userRepository.findAllByUsernameNotAndActiveStatusIs(pageable, "root", ActiveStatus.ACTIVE);
+                    break;
+            }
+        } else {
+            userList = null;
         }
 
         userDtoList = new PageImpl<UserDto>(UserMapper.INSTANCE.toDto(userList.getContent()), pageable, userList.getTotalElements());
@@ -110,25 +131,6 @@ public class UserService implements UserDetailsService {
 
         // User 아이디가 없는 경우, 로그인 실패
         if (EmptyUtil.isEmpty(user)) {
-            System.out.println("EmptyUtil.isEmpty(user): " + username);
-
-//            // ip 주소: ip 주소를 받기 위한 HttpServletRequest 객체
-//            String ip = IpUtil.getClientIP(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest());
-//            // GeoLite2를 사용한 location 조회
-//            String location = geoLocationService.getLocationByIp(ip);
-//
-//            loginHistoryRepository.save(LoginHistory.builder()
-//                    .createdDate(LocalDateTime.now())
-//                    .lastModifiedDate(LocalDateTime.now())
-//                    .createdBy(username)
-//                    .lastModifiedBy(username)
-//                    .activeStatus(ActiveStatus.ACTIVE)
-//                    .audIdx(null)
-//                    .audIp(ip)
-//                    .audLocation(location)
-//                    .audMessage("The ID does not matched.")
-//                    .audLoginResultType(LoginResultType.FAIL).build());
-
             throw new UsernameNotFoundException(null);
         }
 

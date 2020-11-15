@@ -26,6 +26,7 @@ public class ProjectRestController {
 
     @PostMapping
     public ResponseEntity<?> postProject(@RequestBody @Valid ProjectDto projectDto) {
+        System.out.println(projectDto);
         Long idx = projectService.insertProject(projectDto);
 
         return new ResponseEntity<>(idx, HttpStatus.CREATED);

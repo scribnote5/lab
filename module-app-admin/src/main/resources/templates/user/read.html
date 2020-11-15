@@ -115,7 +115,7 @@
                             <td colspan="2"></td>
                         </tr>
                         <tr>
-                            <td colspan="4"><span id="introduction" class=" form-control content" th:text="*{introduction}"></span></td>
+                            <td colspan="4"><span id="introduction" class=" form-control content" th:utext="*{introduction}"></span></td>
                         </tr>
                         <tr>
                             <th colspan="4" class="sub-item-title">Additional Information</th>
@@ -131,8 +131,18 @@
                             <td colspan="2"></td>
                         </tr>
                         <tr>
-                            <th>Web Page</th>
-                            <td><span class=" form-control" th:text="*{webPage}"> </span></td>
+                            <th>Github</th>
+                            <td><span class=" form-control" th:text="*{github}"> </span></td>
+                            <td colspan="2"></td>
+                        </tr>
+                        <tr>
+                            <th>Linked In</th>
+                            <td><span class=" form-control" th:text="*{linkedIn}"> </span></td>
+                            <td colspan="2"></td>
+                        </tr>
+                        <tr>
+                            <th>External Web Page</th>
+                            <td><span class=" form-control" th:text="*{externalWebPage}"> </span></td>
                             <td colspan="2"></td>
                         </tr>
                         <tr>
@@ -197,10 +207,6 @@
 
 <!-- javascript -->
 <script th:inline="javascript">
-    $(document).ready(function () {
-        document.getElementById("introduction").innerHTML = [[${userDto.introduction}]];
-    });
-
     $('#delete').click(function () {
         if (!confirm("Do you want to delete user?")) {
             return true;

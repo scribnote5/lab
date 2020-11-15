@@ -1,7 +1,11 @@
 package kr.ac.univ;
 
+import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.noticeBoard.repository.NoticeBoardRepository;
 import kr.ac.univ.publication.repository.PublicationRepository;
+import kr.ac.univ.user.domain.User;
+import kr.ac.univ.user.domain.enums.AuthorityType;
+import kr.ac.univ.user.domain.enums.UserType;
 import kr.ac.univ.user.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -39,7 +43,7 @@ public class ModuleAdminApplication {
             /* userRepository.deleteAll(); */
 
             /* 사용자 생성 */
-             /*userRepository.save(User.builder()
+            /* userRepository.save(User.builder()
                     .username("root")
                     .password(passwordEncoder.encode("123123123"))
                     .userType(UserType.PART_TIME_MS)
@@ -91,7 +95,7 @@ public class ModuleAdminApplication {
                     .authorityType(AuthorityType.NON_USER)
                     .activeStatus(ActiveStatus.ACTIVE)
                     .createdBy("non_user")
-                    .build());*/
+                    .build()); */
 
             /* 논문 모두 삭제 */
             /* publicationRepositroy.deleteAll(); */

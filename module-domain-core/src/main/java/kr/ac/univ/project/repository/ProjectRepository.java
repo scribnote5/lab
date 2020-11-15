@@ -2,10 +2,13 @@ package kr.ac.univ.project.repository;
 
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.project.domain.Project;
+import kr.ac.univ.project.domain.enums.ProjectStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Long> {
@@ -17,11 +20,5 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
 
 
-    Page<Project> findAllByActiveStatusIs(Pageable pageable, ActiveStatus activeStatus);
-
-    Page<Project> findAllByTitleContainingAndActiveStatusIs(Pageable pageable, String title, ActiveStatus activeStatus);
-
-    Page<Project> findAllByContentContainingAndActiveStatusIs(Pageable pageable, String content, ActiveStatus activeStatus);
-
-    Page<Project> findAllByCreatedByContainingAndActiveStatusIs(Pageable pageable, String username, ActiveStatus activeStatus);
+    List<Project> findAllByProjectStatusIsAndActiveStatusIs(ProjectStatus projectStatus, ActiveStatus activeStatus);
 }

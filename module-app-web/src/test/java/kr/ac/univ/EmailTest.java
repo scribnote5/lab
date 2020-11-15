@@ -1,4 +1,4 @@
-package kr.ac.univ.univ;
+package kr.ac.univ;
 
 import kr.ac.univ.util.EmailUtil;
 import lombok.extern.slf4j.Slf4j;

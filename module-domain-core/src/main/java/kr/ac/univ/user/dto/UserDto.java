@@ -54,7 +54,9 @@ public class UserDto extends CommonDto  {
     private LocalDate admissionDate;
     private LocalDate graduatedDate;
     private String workplace;
-    private String webPage;
+    private String externalWebPage;
+    private String github;
+    private String linkedIn;
 
     /* 관리자가 수정하는 정보 */
     private AuthorityType authorityType;

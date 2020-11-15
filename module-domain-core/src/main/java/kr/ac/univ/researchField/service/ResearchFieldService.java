@@ -54,10 +54,8 @@ public class ResearchFieldService {
         return researchFieldDtoList;
     }
 
-    public List<ResearchField> findResearchFieldListByActiveStatusIs() {
-        List<ResearchField> researchFieldList = researchFieldRepository.findAllByActiveStatusIs(ActiveStatus.ACTIVE);
-
-        return researchFieldList;
+    public List<ResearchFieldDto> findResearchFieldListByActiveStatusIs() {
+        return ResearchFieldMapper.INSTANCE.toDto(researchFieldRepository.findAllByActiveStatusIs(ActiveStatus.ACTIVE));
     }
     
     public Long insertResearchField(ResearchFieldDto researchFieldDto) {

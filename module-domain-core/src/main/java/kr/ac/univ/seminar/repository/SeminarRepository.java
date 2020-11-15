@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface SeminarRepository extends JpaRepository<Seminar, Long> {
     Page<Seminar> findAllByTitleContaining(Pageable pageable, String title);
@@ -21,4 +23,7 @@ public interface SeminarRepository extends JpaRepository<Seminar, Long> {
     Page<Seminar> findAllByPresenterContainingAndActiveStatusIs(Pageable pageable, String presenter, ActiveStatus activeStatus);
 
     Page<Seminar> findAllByCreatedByContainingAndActiveStatusIs(Pageable pageable, String username, ActiveStatus activeStatus);
+
+
+    List<Seminar> findTop10ByOrderByIdxDesc();
 }

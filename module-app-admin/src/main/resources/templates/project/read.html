@@ -43,6 +43,27 @@
                             </td>
                         </tr>
                         <tr>
+                            <th>Research Establishment</th>
+                            <td><span name="researchEstablishment" id="researchEstablishment" class="form-control" th:text="*{researchEstablishment}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Project Status</th>
+                            <td>
+                                <div>
+                                    <span th:if="*{projectStatus?.name() == 'CURRENT'}" class="form-control active-status" th:text="Current"> </span>
+                                    <span th:if="*{projectStatus?.name() == 'PREVIOUS'}" class="form-control active-status" th:text="Previous"> </span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Start Date</th>
+                            <td><span id="startDate" class="form-control" th:text="*{startDate}"></span></td>
+                        </tr>
+                        <tr th:if="*{projectStatus?.name() == 'PREVIOUS'}">
+                            <th>End Date</th>
+                            <td><span id="endDate" class="form-control" th:text="*{endDate}"></span></td>
+                        </tr>
+                        <tr>
                             <td colspan="2"><span class="form-control overflow-auto content" id="content"></span></td>
                         </tr>
                         <tr>

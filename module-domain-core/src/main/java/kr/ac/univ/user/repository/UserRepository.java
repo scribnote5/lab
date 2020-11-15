@@ -1,5 +1,6 @@
 package kr.ac.univ.user.repository;
 
+import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.user.domain.User;
 import kr.ac.univ.user.domain.enums.AuthorityType;
 import org.springframework.data.domain.Page;
@@ -15,11 +16,19 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByUsernameAndAuthorityTypeIn(String username, AuthorityType[] authorityType);
 
+    Long countAllBy();
+
     Page<User> findAllByUsernameContaining(Pageable pageable, String username);
 
     Page<User> findAllByKoreanNameContaining(Pageable pageable, String koreanName);
 
     Page<User> findAllByEmailContaining(Pageable pageable, String email);
 
-    Long countAllBy();
+    Page<User> findAllByUsernameNotAndActiveStatusIs(Pageable pageable, String rootName, ActiveStatus activeStatus);
+
+    Page<User> findAllByUsernameNotAndUsernameContainingAndActiveStatusIs(Pageable pageable, String rootName, String username, ActiveStatus activeStatus);
+
+    Page<User> findAllByUsernameNotAndKoreanNameContainingAndActiveStatusIs(Pageable pageable, String rootName, String koreanName, ActiveStatus activeStatus);
+
+    Page<User> findAllByUsernameNotAndEmailContainingAndActiveStatusIs(Pageable pageable, String rootName, String email, ActiveStatus activeStatus);
 }

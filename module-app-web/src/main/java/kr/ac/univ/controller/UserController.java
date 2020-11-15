@@ -1,5 +1,6 @@
 package kr.ac.univ.controller;
 
+import kr.ac.univ.album.dto.AlbumDto;
 import kr.ac.univ.common.dto.SearchDto;
 import kr.ac.univ.user.dto.UserDto;
 import kr.ac.univ.user.dto.UserPrincipal;
@@ -7,6 +8,7 @@ import kr.ac.univ.user.service.UserAttachedFileService;
 import kr.ac.univ.user.service.UserService;
 import kr.ac.univ.util.EmptyUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,8 +18,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -38,20 +42,20 @@ public class UserController {
         return "/user/index";
     }
 
-    //Login Page
+    // Login Page
     @GetMapping("/login")
     public String login(@AuthenticationPrincipal UserPrincipal userPrincipal) {
         String returnPage = null;
 
-        // 사용자가 로그인 안된 경우 login 페이지로 이동
-        if(EmptyUtil.isEmpty(userPrincipal)) {
+        // 사용자가 로그인 안된 경우 /login 페이지로 이동
+        if (EmptyUtil.isEmpty(userPrincipal)) {
+            System.out.println("/user/login");
             returnPage = "/user/login";
         }
-        // 사용자가 로그인한 경우 index 페이지로 이동
+        // 사용자가 로그인한 경우 /main/home 페이지로 이동
         else {
-
-            log.info("User login: " + userPrincipal.toString());
-            returnPage = "user/index";
+            System.out.println("/");
+            returnPage = "/";
         }
 
         return returnPage;
@@ -59,16 +63,16 @@ public class UserController {
 
     // Login Fail
     @PostMapping("/login/fail")
-    public String loginFail(HttpServletRequest request, String errormsg) {
+    public String loginFail(HttpServletRequest request) {
 
         return "/user/login";
     }
 
     // Logout
     @GetMapping("/logout/success")
-    public String logout() {
+    public RedirectView logout(Model model) {
 
-        return "/user/logoutSuccess";
+        return new RedirectView("/");
     }
 
     // Permission Denied
@@ -80,7 +84,7 @@ public class UserController {
 
     // Anonymous User Permission Denied
     @GetMapping("/anonymous-user-permission-denied")
-    public String anonymousUserPermissionDenied()   {
+    public String anonymousUserPermissionDenied() {
 
         return "/user/anonymous-user-permission-denied";
     }
@@ -88,7 +92,12 @@ public class UserController {
     // List
     @GetMapping("/list")
     public String noticeBoardList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
-        model.addAttribute("userDtoList", userService.findUserList(pageable, searchDto));
+        Page<UserDto> userDtoList = userService.findUserList(pageable, searchDto);
+        for(UserDto userDto: userDtoList) {
+            userAttachedFileService.findAttachedFileByUserIdx(userDto.getIdx(), userDto);
+        }
+
+        model.addAttribute("userDtoList", userDtoList);
 
         return "/user/list";
     }
@@ -117,19 +126,10 @@ public class UserController {
     @GetMapping({"", "/"})
     public String noticeBoardRead(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
         UserDto userDto = userService.findUserByIdx(idx);
-        String returnPage = null;
+        userDto = userAttachedFileService.findAttachedFileByUserIdx(idx, userDto);
 
-        // 권한 확인
-        if (userDto.isAccess()) {
-            userDto = userAttachedFileService.findAttachedFileByUserIdx(idx, userDto);
+        model.addAttribute("userDto", userDto);
 
-            model.addAttribute("userDto", userDto);
-
-            returnPage = "/user/read";
-        } else {
-            returnPage = "/user/permission-denied";
-        }
-
-        return returnPage;
+        return "/user/read";
     }
 }

@@ -29,29 +29,29 @@
 
             <div class="row mt-4">
                 <div class="card col ml-md-3 mr-md-3" style="border-left: .75rem solid #4e73df; border-radius: .75rem;">
-                    <div class="card-body">
+                    <div class="card-body static-card-body">
                         <h6 class="card-title">
                             <img src="/images/users.svg" class="main-icon"/>
                             Total User
                         </h6>
-                        <div class="statics-count">
-                            <span th:text="${userCount}"></span>
+                        <div class="text-center">
+                            <span class="statics-count" th:text="${userCount}"></span>
                         </div>
                     </div>
                 </div>
                 <div class="card col ml-md-3 mr-md-3" style="border-left: .75rem solid #1cc88a; border-radius: .75rem;">
-                    <div class="card-body">
+                    <div class="card-body static-card-body">
                         <h6 class="card-title">
                             <img src="/images/post.svg" class="main-icon"/>
                             Total Post
                         </h6>
-                        <div class="statics-count">
-                            <span th:text="${dataHistoryCount}"></span>
+                        <div class="text-center">
+                            <span class="statics-count" th:text="${dataHistoryCount}"></span>
                         </div>
                     </div>
                 </div>
                 <div class="card col ml-md-3 mr-md-3" style="border-left: .75rem solid #36b9cc; border-radius: .75rem;">
-                    <div class="card-body">
+                    <div class="card-body static-card-body">
                         <h6 class="card-title">
                             <div class="dropdown">
                                 <img src="/images/calendar.svg" class="main-icon"/>
@@ -69,13 +69,13 @@
                                 </div>
                             </div>
                         </h6>
-                        <div class="statics-count">
-                            <span id="staticsCount">-</span>
+                        <div class="text-center">
+                            <span class="statics-count" id="staticsCount">-</span>
                         </div>
                     </div>
                 </div>
                 <div class="card col ml-md-3 mr-md-3" style="border-left: .75rem solid #f6c23e; border-radius: .75rem;">
-                    <div class="card-body">
+                    <div class="card-body static-card-body">
                         <h6 class="card-title">
                             <img src="/images/database.svg" class="main-icon"/>
                             Memory Storage
@@ -90,7 +90,7 @@
                 </div>
             </div>
 
-            <div class="row mt-2">
+            <div class="row mt-3">
                 <div class="card col table-card">
                     <div class="card-header table-card-header">
                         <h4>Alarm List</h4>

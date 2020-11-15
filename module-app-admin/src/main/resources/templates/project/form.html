@@ -47,6 +47,29 @@
                             </td>
                         </tr>
                         <tr>
+                            <th>Research Establishment</th>
+                            <td><input type="text" name="researchEstablishment" id="researchEstablishment" class="form-control" th:value="*{researchEstablishment}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Project Status</th>
+                            <td>
+                                <div class="pull-left">
+                                    <select class="custom-select active-status" name="projectStatus" id="projectStatus" th:field="*{projectStatus}">
+                                        <option th:value="CURRENT">Current</option>
+                                        <option th:value="PREVIOUS">Previous</option>
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Start Date</th>
+                            <td><input type="date" name="startDate" id="startDate" class="form-control" th:value="*{startDate}"/></td>
+                        </tr>
+                        <tr id="endDateTr" style="display: none;">
+                            <th>End Date</th>
+                            <td><input type="date" name="endDate" id="endDate" class="form-control" th:value="*{endDate}"/></td>
+                        </tr>
+                        <tr>
                             <td colspan="2"><textarea name="content" id="summernote" class="summernote" th:text="*{content}"></textarea></td>
                         </tr>
                         <tr>
@@ -156,6 +179,20 @@
         $("#fileDrop").on("dragenter dragover", function (event) {
             event.preventDefault(); // 기본 이벤트 발생을 막음
         });
+    });
+
+    $("#projectStatus").change(function () {
+        var endDateTr = document.getElementById("endDateTr");
+        var endDate = document.getElementById("endDate");
+
+        if (document.getElementsByName("projectStatus")[0].value == "CURRENT") {
+            endDateTr.style.display = "none";
+            endDate.disabled = true;
+            endDate.value = "";
+        } else {
+            endDateTr.style.display = "table-row";
+            endDate.disabled = false;
+        }
     });
 
     /* input tag event */

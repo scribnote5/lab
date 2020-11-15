@@ -5,8 +5,8 @@ html {
 
 * {
     font-family: 'Spoqa Han Sans', san-serif;
-    font-weight: var(--regualr-font-weight);
-    font-size: var(--regualr-font-size);
+    font-weight: var(--regular-font-weight);
+    font-size: var(--regular-font-size);
 }
 
 body .container-fluid {
@@ -18,6 +18,5 @@ label {
 }
 
 table th {
-    font-size: var(--large-font-size);
     font-weight: var(--strong-font-weight);
 }

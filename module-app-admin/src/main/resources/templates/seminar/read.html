@@ -60,7 +60,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2"><span class="form-control overflow-auto content" id="content"></span></td>
+                            <td colspan="2"><span class="form-control overflow-auto content" id="content" th:utext="*{content}"></span></td>
                         </tr>
                         <tr>
                             <th>Uploaded Attached File</th>
@@ -118,11 +118,6 @@
 <th:block th:replace="layout/script.html"></th:block>
 
 <script th:inline="javascript">
-    $(document).ready(function () {
-        document.getElementById("content").innerHTML = [[${seminarDto.content}]];
-    });
-
-
     $("#delete").click(function () {
         if (!confirm("Do you want to delete post?")) {
             return true;

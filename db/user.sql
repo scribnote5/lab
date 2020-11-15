@@ -23,7 +23,9 @@ CREATE TABLE user
     user_type          varchar(255)     null,
     messenger_id       varchar(255)     null,
     password           varchar(255)     null,
-    web_page           varchar(255)     null,
+    github             varchar(255)     null,
+    linked_in          varchar(255)     null,
+    external_web_page  varchar(255)     null,
     workplace          varchar(255)     null
 );
 

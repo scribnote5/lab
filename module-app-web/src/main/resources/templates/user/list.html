@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- css -->
+    <th:block th:replace="layout/css.html"></th:block>
+
+    <title>Member List</title>
+</head>
+<body>
+<div id="page-content-wrapper">
+    <!-- header -->
+    <div th:replace="layout/header::header"></div>
+
+    <div class="container">
+        <form name="form" id="form" th:object="${searchDto}" action="#">
+            <div class="page-header page-title" data-aos="fade-up" data-aos-delay="100">
+                <h1>Member List</h1>
+            </div>
+
+            <div class="row justify-content-end mt-3" data-aos="fade-up" data-aos-delay="100">
+                <div>
+                    <select name="searchType" th:field="*{searchType}" class="form-control">
+                        <option th:value="USER_ID">User ID</option>
+                        <option th:value="KOREAN_NAME">Korean Name</option>
+                        <option th:value="Email">Email</option>
+                    </select>
+                </div>
+
+                <div class="col-auto px-1">
+                    <input type="text" name="keyword" class="form-control" th:value="${searchDto?.keyword}"/>
+                </div>
+                <div class="col-auto px-3">
+                    <button id="search" type="button" class="btn-main">Search</button>
+                </div>
+            </div>
+
+            <div class="row mt-5" data-aos="fade-up" data-aos-delay="150">
+                <div th:each="userDto : ${userDtoList}" class="col-lg-3 col-md-6 d-flex mb-5">
+                    <div class="member">
+                        <div class="member-img">
+                            <img th:if="${userDto.attachedFileList.size()} == 0" th:attr="src=@{/images/avatar.png}" class="member-portrait img-thumbnail"/>
+                            <img th:if="${userDto.attachedFileList.size()} != 0" th:attr="src=@{|http://localhost:8081/api/attachedFiles/download/${userDto.attachedFileList[0].savedFileName}|}" class="member-portrait img-thumbnail"/>
+
+                            <div th:if="${userDto.attachedFileList.size()} != 0" class="social">
+                                <a th:href="'mailto:' + ${userDto.privateEmail}"><img src="/images/mail-grey.svg"></a>
+                                <a th:href="${userDto.github}"><img src="/images/github-grey.svg"></a>
+                                <a th:href="${userDto.linkedIn}"><img src="/images/linkedin-grey.svg"></a>
+                                <a th:href="${userDto.externalWebPage}"><img src="/images/external-link-grey.svg"></a>
+                            </div>
+                        </div>
+                        <div class="member-info">
+                            <a th:href="'/user?idx='+${userDto.idx}"><h4 th:text="${userDto.englishName}"></h4></a>
+
+                            <div th:if="${userDto.userStatus?.name() == 'ATTENDING'}">
+                                <h6 class="text-right" th:if="${userDto.userType?.name() == 'FACULTY'}" th:text="Faculty"></h6>
+                                <h6 class="text-right" th:if="${userDto.userType?.name() == 'FULL_TIME_PhD'}" th:text="'Ph.D. ' + ' - ' + 'Full Time'"></h6>
+                                <h6 class="text-right" th:if="${userDto.userType?.name() == 'PART_TIME_PhD'}" th:text="'Ph.D. ' + ' - ' + 'Part Time'"></h6>
+                                <h6 class="text-right" th:if="${userDto.userType?.name() == 'FULL_TIME_MS'}" th:text="'M.S.' + ' - ' + 'Full Time'"></h6>
+                                <h6 class="text-right" th:if="${userDto.userType?.name() == 'PART_TIME_MS'}" th:text="'M.S.' + '-' + 'Part Time'"></h6>
+                                <h6 class="text-right" th:if="${userDto.userType?.name() == 'BS'}" th:text="'B.S.'"></h6>
+                            </div>
+                            <div th:if="${userDto.userStatus?.name() == 'GRADUATED'}">
+                                <h6 class="text-right" th:if="${userDto.userType?.name() == 'FACULTY'}" th:text="Faculty"></h6>
+                                <h6 class="text-right" th:if="${userDto.userType?.name() == 'FULL_TIME_PhD'}" th:text="'Alumni' + '(Ph.D. ' + ' - ' +   + ${#temporals.format(userDto.graduatedDate,'yy-MM')} + ')'"></h6>
+                                <h6 class="text-right" th:if="${userDto.userType?.name() == 'PART_TIME_PhD'}"
+                                    th:text="'Alumni' + '(Ph.D. ' + ' - ' + 'Part Time, ' + ${#temporals.format(userDto.graduatedDate,'yy-MM')} + ')'"></h6>
+                                <h6 class="text-right" th:if="${userDto.userType?.name() == 'FULL_TIME_MS'}"
+                                    th:text="'Alumni' + '(M.S.' + ' - ' + 'Full Time, ' + ${#temporals.format(userDto.graduatedDate,'yy-MM')} + ')'"></h6>
+                                <h6 class="text-right" th:if="${userDto.userType?.name() == 'PART_TIME_MS'}" th:text="'Alumni' + '(M.S.' + '-' + 'Part Time, ' + ${#temporals.format(userDto.graduatedDate,'yy-MM')} + ')'"></h6>
+                                <h6 class="text-right" th:if="${userDto.userType?.name() == 'BS'}" th:text="'B.S.'"></h6>
+
+                                <h6 class="text-right" th:text="${userDto.workplace}"></h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="row justify-content-center" aria-label="Page navigation">
+                <ul class="pagination"
+                    th:with="startNumber=${T(Math).floor(userDtoList.number/10)}*10+1, endNumber=(${userDtoList.totalPages} > ${startNumber}+9) ? ${startNumber}+9 : (${userDtoList.totalPages} == 0 ? 1 : ${userDtoList.totalPages})">
+                    <li class="page-item">
+                        <a class="page-link" aria-label="Previous" th:href="@{/user/list(page=1,searchType=*{searchType},keyword=*{keyword})}">&laquo;</a>
+                    </li>
+                    <li class="page-item" th:style="${userDtoList.first} ? 'display:none'">
+                        <a class="page-link" th:href="@{/user/list(page=${userDtoList.number},searchType=*{searchType},keyword=*{keyword})}">&lsaquo;</a>
+                    </li>
+                    <li th:each="page :${#numbers.sequence(startNumber, endNumber)}" th:class="(${page} == ${userDtoList.number}+1) ? 'page-item active'">
+                        <a class="page-link" th:href="@{/user/list(page=${page},searchType=*{searchType},keyword=*{keyword})}" th:text="${page}"><span class="sr-only"></span></a>
+                    </li>
+                    <li class="page-item" th:style="${userDtoList.last} ? 'display:none'">
+                        <a th:href="@{/user/list(page=${userDtoList.number}+2,searchType=*{searchType},keyword=*{keyword})}">&rsaquo;</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" aria-label="Next" th:href="@{/user/list(page=${userDtoList.totalPages},searchType=*{searchType},keyword=*{keyword})}">&raquo;</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /Pagination -->
+        </form>
+    </div>
+</div>
+
+<!-- footer -->
+<div th:replace="layout/footer::footer"></div>
+
+<!-- script file -->
+<th:block th:replace="layout/script.html"></th:block>
+
+<script>
+    $('#search').click(function () {
+        document.form.action = '/user/list';
+        document.form.method = 'get';
+        document.form.submit();
+    });
+</script>
+
+</body>
+</html>

@@ -37,7 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         // static 디렉터리의 하위 파일 목록은 인증 무시 ( = 항상통과 )
         web.ignoring().antMatchers("/css/**", "/js/**", "/images/**", "/summernote/**", "/font/**", "/icons/**");
-        // logout 페이지는 인증 무시
+        // logout 페이지는 인증 무시(authenticationEntryPoint 비인증 사용자 enrty point에서 제외)
         web.ignoring().antMatchers("/user/logout/success");
     }
 
@@ -45,7 +45,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 // 페이지 권한 설정
-                .antMatchers("/user/list").hasAuthority("root")
                 .antMatchers("/**/form").hasAnyAuthority("root, manager, general")
                 .antMatchers("/h2-console/**").permitAll() // h2-console 접근 허용
                 .antMatchers("/**").permitAll()
@@ -62,7 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 사용자 정의 handler
                 .successHandler(CustomAuthenticationSuccessHandler())
                 .failureHandler(CustomAuthenticationFailureHandler())
-                .defaultSuccessUrl("/user/index")   // login 성공 URL
+//                .defaultSuccessUrl("/user/index")   // login 성공 URL
                 .permitAll()
                 .and()
                 // 로그아웃 설정

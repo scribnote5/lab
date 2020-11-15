@@ -1,5 +1,6 @@
 package kr.ac.univ.learnMore.service;
 
+import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.SearchDto;
 import kr.ac.univ.learnMore.domain.LearnMore;
 import kr.ac.univ.learnMore.domain.enums.DownloadFileType;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 public class LearnMoreService {
@@ -55,8 +57,11 @@ public class LearnMoreService {
         return learnMoreDtoList;
     }
 
-    public Long insertLearnMore(LearnMoreDto learnMoreDto) {
+    public List<LearnMoreDto> findAllByActiveStatusIs() {
+        return LearnMoreMapper.INSTANCE.toDto(learnMoreRepository.findAllByActiveStatusIs(ActiveStatus.ACTIVE));
+    }
 
+    public Long insertLearnMore(LearnMoreDto learnMoreDto) {
         return learnMoreRepository.save(LearnMoreMapper.INSTANCE.toEntity(learnMoreDto)).getIdx();
     }
 

@@ -30,9 +30,13 @@
     --dark-white: rgb(240, 240, 240);
     --white: rgb(255, 255, 255);
 
-    --light-red: rgb(186, 44, 48);
+    --lightest-red: rgba(233, 37, 47);
+    --lighter-red: rgb(208, 37, 47);
+    --light-red: rgb(183, 37, 47);
     --main-red: rgb(158, 37, 41);
-    --dark-red: rgb(126, 35, 29);
+    --dark-red: rgb(133, 37, 47);
+    --darker-red: rgb(108, 37, 47);
+    --darkest-red: rgb(83, 37, 47);
 
     --lightest-blue: rgb(245, 245, 250);
 }

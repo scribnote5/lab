@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- css -->
+    <th:block th:replace="layout/css.html"></th:block>
+
+    <title>Seminar Form</title>
+</head>
+<body>
+<div id="page-content-wrapper">
+    <!-- header -->
+    <div th:replace="layout/header::header"></div>
+
+    <div class="container">
+        <form name="form" id="form" th:object="${seminarDto}" action="#">
+            <div class="page-header page-title" data-aos="fade-up" data-aos-delay="100">
+                <h1 th:if="!*{idx}">Seminar Register</h1>
+                <h1 th:if="*{idx}">Seminar Update</h1>
+            </div>
+
+            <div class="row mt-5" data-aos="fade-up" data-aos-delay="150">
+                <table class="table">
+                    <colgroup>
+                        <col width="15%"/>
+                        <col width="85%"/>
+                    </colgroup>
+                    <tr>
+                        <th colspan="2" class="sub-item-title">Seminar Information</th>
+                    </tr>
+                    <tr>
+                        <th>Title</th>
+                        <td><input type="text" name="title" id="title" class="form-control" th:value="*{title}"/></td>
+                    </tr>
+                    <tr>
+                        <th>Presenter</th>
+                        <td><input type="text" name="presenter" id="presenter" class="form-control" th:value="*{presenter}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Presentation Date</th>
+                        <td><input type="datetime-local" name="presentationDate" id="presentationDate" class="form-control presentation-date" th:value="*{presentationDate}"/></td>
+                    </tr>
+                    <tr>
+                        <th>Place</th>
+                        <td><input type="text" name="place" id="place" class="form-control" th:value="*{place}"/></td>
+                    </tr>
+                    <tr>
+                        <th>Seminar Type</th>
+                        <td>
+                            <select class="custom-select" name="seminarType" th:field="*{seminarType}">
+                                <option th:each="seminarType : ${T(kr.ac.univ.seminar.domain.enums.SeminarType).values()}"
+                                        th:value="${seminarType}" th:text="${seminarType.getSeminarType()}"></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Category</th>
+                        <td>
+                            <select class="custom-select" name="categoryIdx" th:field="*{categoryIdx}">
+                                <option th:if="${#strings.isEmpty(categoryDto)} and *{idx}" th:value="-1">This field is inactive or deleted.</option>
+                                <option th:each="categoryDto : ${categoryDtoList}"
+                                        th:value="${categoryDto.idx}" th:text="${categoryDto.title}"></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><textarea name="content" id="summernote" class="summernote"
+                                                  th:text="*{content}"></textarea></td>
+                    </tr>
+                    <tr>
+                        <th>Attached File</th>
+                        <td>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="file" name="file" multiple>
+                                <label class="custom-file-label" for="file">Choose file.</label>
+                            </div>
+                            <div id="fileDrop" class="fileDrop">
+                                <strong>Drop files here.</strong>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Total file size</th>
+                        <td>
+                            <div><span id="totalFileSize"> 0 MB</span>, Up to 20 MB</div>
+                        </td>
+                    <tr>
+                        <th>Upload Attached File</th>
+                        <td>
+                            <div id="attachedFileList"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Uploaded Attached File</th>
+                        <td>
+                            <div id="uploadedAttachedFileList" th:each="attachedFile : *{attachedFileList}">
+                                <div th:id="imgData + ${attachedFileStat.index}">
+                                    <span th:text="${attachedFile.fileName} + ',&nbsp;' + 'File Size: ' + ${attachedFile.fileSize} + '&nbsp;'"></span>
+                                    <img th:attr="src=@{|/images/cancel-icon.png|}, onclick=|deleteFile('${attachedFileStat.index}','${attachedFile.idx}','${attachedFile.savedFileName}')|" class="cancel-icon"/>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2" class="sub-item-title">Additional Information</th>
+                    </tr>
+                    <tr>
+                        <th>Active Status</th>
+                        <td>
+                            <div class="pull-left">
+                                <select class="custom-select active-status" name="activeStatus" th:field="*{activeStatus}">
+                                    <option th:value="ACTIVE">Active</option>
+                                    <option th:value="INACTIVE">Inactive</option>
+                                </select>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:if="*{idx}">
+                        <th>Created Date</th>
+                        <td><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                    </tr>
+                    <tr th:if="*{idx}">
+                        <th>Modified Date</th>
+                        <td><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="row justify-content-between mt-5 mb-3" data-aos="fade-up" data-aos-delay="200">
+                <div class="col-auto mx-3">
+                    <a href="/seminar/list" class="btn btn-secondary col-auto">Move to List</a>
+                </div>
+                <div class="col-auto mx-3">
+                    <button th:if="!*{idx}" id="insert" type="button" class="btn-main">Register</button>
+                    <button th:if="*{idx}" id="update" type="button" class="btn-main">Update</button>
+                </div>
+            </div>
+
+            <!-- input type="hidden" -->
+            <input type="hidden" name="idx" th:value="*{idx}"/>
+            <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
+            <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
+        </form>
+    </div>
+</div>
+
+<!-- footer -->
+<div th:replace="layout/footer::footer"></div>
+
+<!-- script file -->
+<th:block th:replace="layout/script.html"></th:block>
+
+<!-- javascript -->
+<script>
+    var totalFileSize = 0;
+    var insertFileArray = [];
+    var deleteFileArray = [];
+    var imgDataId = 0;
+    var exit = null;
+
+    $(document).ready(function () {
+        <!-- summernote setting -->
+        $('#summernote').summernote({
+            height: 400,	// 에디터 높이
+            minHeight: null,	// 최소 높이
+            maxHeight: null,	// 최대 높이
+            // focus: true,	// 에디터 로딩후 포커스를 맞출지 여부
+            lang: "ko-KR",// 한글 설정
+            placeholder: "The editor's max input size of bytes is 16777215(16 MB)."	//placeholder 설정
+        });
+
+        <!-- File Drop -->
+        $("#fileDrop").on("dragenter dragover", function (event) {
+            event.preventDefault(); // 기본 이벤트 발생을 막음
+        });
+    });
+
+    /* input tag event */
+    $("#file").change(function () {
+        var files = document.getElementsByName("file")[0].files;
+
+        for (var i = 0; i < files.length; i++) {
+            if (validateFile(files[i])) {
+                insertFileArray.push(files[i]);
+                document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
+
+                $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
+                    + '<span>'
+                    + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size)
+                    + '<img src="/images/cancel-icon.png" class="cancel-icon" onClick="cancelFile(' + imgDataId + ')" />'
+                    + '</span>'
+                    + '</div>');
+
+                imgDataId++;
+            } else {
+                return false;
+            }
+        }
+    });
+
+    /* Drag & drop event */
+    $("#fileDrop").on("drop", function (event) {
+        event.preventDefault(); // 기본 효과를 막음
+        document.getElementById("fileDrop").style.opacity = 1;
+
+        // 드래그된 파일의 정보
+        // event : jQuery의 이벤트
+        // originalEvent : javascript의 이벤트
+        var files = event.originalEvent.dataTransfer.files;
+
+        for (var i = 0; i < files.length; i++) {
+            if (validateFile(files[i])) {
+                insertFileArray.push(files[i]);
+                document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
+
+                $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
+                    + '<span>'
+                    + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size)
+                    + '<img src="/images/cancel-icon.png" class="cancel-icon" onClick="cancelFile(' + imgDataId + ')" />'
+                    + '</span>'
+                    + '</div>');
+
+                imgDataId++;
+            } else {
+                return false;
+            }
+        }
+    });
+
+    $("#fileDrop").on("dragover", function (event) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        document.getElementById("fileDrop").style.opacity = 0.25;
+    });
+
+    $("#fileDrop").on("dragleave", function (event) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        document.getElementById("fileDrop").style.opacity = 1;
+    });
+
+    // 새로 업로드한 파일을 취소하는 경우
+    function cancelFile(fileId) {
+        $('#imgData' + fileId).remove();
+
+        totalFileSize -= insertFileArray[fileId].size;
+        insertFileArray[fileId] = null;
+
+        document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
+    }
+
+    // 기존 업로드한 파일을 삭제하는 경우
+    function deleteFile(fileId, idx, savedFileName) {
+        $('#imgData' + fileId).remove();
+
+        deleteFileArray.push(idx);
+    }
+
+    function deleteSeminar(seminarIdx) {
+        // 게시글 삭제
+        $.ajax({
+            url: "http://localhost:8081/api/seminars/" + seminarIdx,
+            type: "delete",
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+
+            })
+            .fail(function (msg) {
+                console.log("Delete notice board is fail.");
+            });
+    }
+</script>
+
+<script th:if="!${seminarDto?.idx}">
+    $('#insert').click(function () {
+        // (input tag mame, length or size, message)
+        if (!(validateByLength("title", 50, "title"))) {
+            return false;
+        }
+
+        var jsonData = $("#form").serializeObject();
+        var seminarIdx;
+
+        // 게시글 업로드
+        $.ajax({
+            url: "http://localhost:8081/api/seminars",
+            type: "post",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                seminarIdx = msg;
+                exit = false;
+            })
+            .fail(function (msg) {
+                paraseErrorMsg(msg);
+                console.log("Update notice board is fail.");
+                exit = true;
+            });
+
+        if (exit) return false;
+
+        // 파일 업로드
+        var formData = new FormData();
+
+        for (var i = 0; i < insertFileArray.length; i++) {
+            formData.append("files", insertFileArray[i]);
+        }
+
+        formData.append("idx", seminarIdx);
+        formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
+
+        $.ajax({
+            url: "http://localhost:8081/api/seminars/attachedFile",
+            type: "post",
+            data: formData,
+            dataType: "text",
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            async: false,
+        })
+            .done(function (msg) {
+                location.href = "/seminar?idx=" + seminarIdx;
+            })
+            .fail(function (msg) {
+                paraseErrorMsg(msg);
+                console.log("Update attached file is fail.");
+                deleteSeminar(seminarIdx);
+            });
+
+    });
+</script>
+
+<script th:if="${seminarDto?.idx}" th:inline="javascript">
+    $('#update').click(function () {
+        // (input tag mame, length or size, message)
+        if (!(validateByLength("title", 50, "title") && validateBySelect("categoryIdx", "category"))) {
+            return false;
+        }
+
+        var jsonData = $("#form").serializeObject();
+        var seminarIdx = document.getElementsByName("idx")[0].value;
+
+        // 게시글 수정
+        $.ajax({
+            url: "http://localhost:8081/api/seminars/" + seminarIdx,
+            type: "put",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                exit = false;
+            })
+            .fail(function (msg) {
+                paraseErrorMsg(msg);
+                console.log("Update notice board is fail.");
+                exit = true;
+            });
+
+        if (exit) return false;
+
+        // 만일 파일이 수정되지 않은 경우 '파일 업로드' 및 '파일 삭제'를 수행하지 않음
+        if (insertFileArray.length == 0 && deleteFileArray.length == 0) {
+            location.href = "/seminar?idx=" + seminarIdx;
+        }
+
+        // 파일 삭제
+        if (deleteFileArray.length > 0) {
+            $.ajax({
+                url: "http://localhost:8081/api/seminars/attachedFile",
+                type: "delete",
+                data: JSON.stringify(deleteFileArray),
+                contentType: "application/json",
+                async: false,
+            })
+                .done(function (msg) {
+                    exit = false;
+                })
+                .fail(function (msg) {
+                    paraseErrorMsg(msg);
+                    console.log("Delete attached file is fail.");
+                    exit = true;
+                });
+        }
+
+        if (exit) return false;
+
+        if (insertFileArray.length <= 0) location.href = "/seminar?idx=" + seminarIdx;
+
+        // 파일 업로드
+        var formData = new FormData();
+
+        for (var i = 0; i < insertFileArray.length; i++) {
+            formData.append("files", insertFileArray[i]);
+        }
+
+        formData.append("idx", seminarIdx);
+        formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
+
+        $.ajax({
+            url: "http://localhost:8081/api/seminars/attachedFile",
+            type: "post",
+            data: formData,
+            dataType: "text",
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            async: false,
+        })
+            .done(function (msg) {
+                location.href = "/seminar?idx=" + seminarIdx;
+            })
+            .fail(function (msg) {
+                paraseErrorMsg(msg);
+                console.log("Upload attached file is fail.");
+                deleteSeminar(seminarIdx);
+            })
+
+    });
+</script>
+
+</body>
+</html>

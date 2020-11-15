@@ -30,8 +30,13 @@
 
 [id^="publicationTitle"].title {
     font-size: 1.5em;
-    color: rgb(154, 27, 31);
+    color: var(--main-red);
     font-weight: 450;
+}
+
+[id^="publicationTitle"].title:hover {
+    text-decoration: none;
+    color: var(--lighter-red);
 }
 
 [id^="publicationAuthors"].authors {
@@ -60,7 +65,6 @@
 .aud-message {
     height: 5rem !important;
 }
-
 
 .main-page-priority {
     width: 20rem !important;

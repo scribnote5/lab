@@ -27,7 +27,6 @@ public class LearnMoreAttachedFileService {
     }
 
     public LearnMoreDto findAttachedFileByLearnMoreIdx(Long learnMoreIdx, LearnMoreDto learnMoreDto) {
-
         return LearnMoreMapper.INSTANCE.toDto(learnMoreDto, learnMoreAttachedFileRepositoryImpl.findAttachedFileByLearnMoreIdx(learnMoreIdx));
     }
 

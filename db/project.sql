@@ -10,7 +10,11 @@ CREATE TABLE project
     content                 longtext            null,
     title                   varchar(255)        null,
     views                   bigint              null,
-    research_field_idx      bigint              null
+    research_field_idx      bigint              null,
+    project_status          varchar(255)        null,
+    research_establishment  varchar(255)        null,
+    start_date              datetime(6)         null,
+    end_date                datetime(6)         null
 );
 
 ALTER TABLE project AUTO_INCREMENT=1;

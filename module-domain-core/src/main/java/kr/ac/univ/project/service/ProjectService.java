@@ -3,6 +3,7 @@ package kr.ac.univ.project.service;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.SearchDto;
 import kr.ac.univ.project.domain.Project;
+import kr.ac.univ.project.domain.enums.ProjectStatus;
 import kr.ac.univ.project.dto.ProjectDto;
 import kr.ac.univ.project.dto.mapper.ProjectMapper;
 import kr.ac.univ.project.repository.ProjectRepository;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 public class ProjectService {
@@ -38,44 +40,31 @@ public class ProjectService {
 
         switch (searchDto.getSearchType()) {
             case "TITLE":
-                if ("module-app-admin".equals(moduleName)) {
-                    projectList = projectRepository.findAllByTitleContaining(pageable, searchDto.getKeyword());
-                } else if ("module-app-web".equals(moduleName)) {
-                    projectList = projectRepository.findAllByTitleContainingAndActiveStatusIs(pageable, searchDto.getKeyword(), ActiveStatus.ACTIVE);
-                } else {
-                    projectList = null;
-                }
+                projectList = projectRepository.findAllByTitleContaining(pageable, searchDto.getKeyword());
                 break;
             case "CONTENT":
-                if ("module-app-admin".equals(moduleName)) {
-                    projectList = projectRepository.findAllByContentContaining(pageable, searchDto.getKeyword());
-                } else if ("module-app-web".equals(moduleName)) {
-                    projectList = projectRepository.findAllByContentContainingAndActiveStatusIs(pageable, searchDto.getKeyword(), ActiveStatus.ACTIVE);
-                } else {
-                    projectList = null;
-                }
+                projectList = projectRepository.findAllByContentContaining(pageable, searchDto.getKeyword());
                 break;
             case "ID":
-                if ("module-app-admin".equals(moduleName)) {
-                    projectList = projectRepository.findAllByCreatedByContaining(pageable, searchDto.getKeyword());
-                } else if ("module-app-web".equals(moduleName)) {
-                    projectList = projectRepository.findAllByCreatedByContainingAndActiveStatusIs(pageable, searchDto.getKeyword(), ActiveStatus.ACTIVE);
-                } else {
-                    projectList = null;
-                }
+                projectList = projectRepository.findAllByCreatedByContaining(pageable, searchDto.getKeyword());
                 break;
             default:
-                if ("module-app-admin".equals(moduleName)) {
-                    projectList = projectRepository.findAll(pageable);
-                } else if ("module-app-web".equals(moduleName)) {
-                    projectList = projectRepository.findAllByActiveStatusIs(pageable, ActiveStatus.ACTIVE);
-                } else {
-                    projectList = null;
-                }
+                projectList = projectRepository.findAll(pageable);
                 break;
         }
 
         projectDtoList = new PageImpl<ProjectDto>(ProjectMapper.INSTANCE.toDto(projectList.getContent()), pageable, projectList.getTotalElements());
+
+        // NewIcon 판별
+        for (ProjectDto projectDto : projectDtoList) {
+            projectDto.setNewIcon(NewIconCheck.isNew(projectDto.getCreatedDate()));
+        }
+
+        return projectDtoList;
+    }
+
+    public List<ProjectDto> findAllByProjectStatusIsAndActiveStatusIs(ProjectStatus projectStatus) {
+        List<ProjectDto> projectDtoList = ProjectMapper.INSTANCE.toDto(projectRepository.findAllByProjectStatusIsAndActiveStatusIs(projectStatus, ActiveStatus.ACTIVE));
 
         // NewIcon 판별
         for (ProjectDto projectDto : projectDtoList) {

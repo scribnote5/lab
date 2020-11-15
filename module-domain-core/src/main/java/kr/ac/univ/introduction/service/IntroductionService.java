@@ -1,5 +1,6 @@
 package kr.ac.univ.introduction.service;
 
+import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.SearchDto;
 import kr.ac.univ.introduction.domain.Introduction;
 import kr.ac.univ.introduction.dto.IntroductionDto;
@@ -51,8 +52,15 @@ public class IntroductionService {
         return introductionDtoList;
     }
 
-    public Long insertIntroduction(IntroductionDto introductionDto) {
+    public IntroductionDto findIntroductionByActiveStatusIs() {
+        return IntroductionMapper.INSTANCE.toDto(introductionRepository.findByActiveStatusIs(ActiveStatus.ACTIVE));
+    }
 
+    public Long countAllByActiveStatus() {
+        return introductionRepository.countAllByActiveStatus(ActiveStatus.ACTIVE);
+    }
+
+    public Long insertIntroduction(IntroductionDto introductionDto) {
         return introductionRepository.save(IntroductionMapper.INSTANCE.toEntity(introductionDto)).getIdx();
     }
 

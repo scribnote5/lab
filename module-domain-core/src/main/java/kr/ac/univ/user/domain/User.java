@@ -74,7 +74,13 @@ public class User extends CommonAudit {
     private LocalDate graduatedDate;
 
     @Column
-    private String webPage;
+    private String externalWebPage;
+
+    @Column
+    private String github;
+
+    @Column
+    private String linkedIn;
 
     @Column
     private String workplace;
@@ -85,7 +91,9 @@ public class User extends CommonAudit {
     private AuthorityType authorityType;
 
     @Builder
-    public User(Long idx, String createdBy, String lastModifiedBy, ActiveStatus activeStatus, String username, String password, String koreanName, String englishName, GenderType gender, LocalDate birthDate, String email, String privateEmail, String messengerId, String contact, UserType userType, UserStatus userStatus, String introduction, LocalDate admissionDate, LocalDate graduatedDate, String webPage, String workplace, AuthorityType authorityType) {
+    public User(Long idx, String createdBy, String lastModifiedBy, ActiveStatus activeStatus, String username, String password, String koreanName, String englishName, GenderType gender, LocalDate birthDate, String email,
+                String privateEmail, String messengerId, String contact, UserType userType, UserStatus userStatus, String introduction, LocalDate admissionDate, LocalDate graduatedDate, String webPage, String workplace,
+                AuthorityType authorityType, String externalWebPage, String github, String linkedIn) {
         setIdx(idx);
         setCreatedBy(createdBy);
         setLastModifiedBy(lastModifiedBy);
@@ -103,7 +111,9 @@ public class User extends CommonAudit {
         this.userType = userType;
         this.userStatus = userStatus;
         this.introduction = introduction;
-        this.webPage = webPage;
+        this.externalWebPage = externalWebPage;
+        this.github = github;
+        this.linkedIn = linkedIn;
         this.workplace = workplace;
         this.admissionDate = admissionDate;
         this.graduatedDate = graduatedDate;
@@ -131,7 +141,9 @@ public class User extends CommonAudit {
         this.userType = user.getUserType();
         this.userStatus = user.getUserStatus();
         this.introduction = user.getIntroduction();
-        this.webPage = user.getWebPage();
+        this.externalWebPage = user.getExternalWebPage();
+        this.github = user.getGithub();
+        this.linkedIn = user.getLinkedIn();
         this.workplace = user.getWorkplace();
         this.admissionDate = user.getAdmissionDate();
         this.graduatedDate = user.getGraduatedDate();
