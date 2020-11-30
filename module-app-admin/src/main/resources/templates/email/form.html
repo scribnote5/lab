@@ -26,20 +26,22 @@
                     <table class="table">
                         <colgroup>
                             <col width="15%"/>
-                            <col width="85%"/>
+                            <col width="45%"/>
+                            <col width="40%"/>
                         </colgroup>
                         <tr>
-                            <th colspan="2" class="sub-item-title">Email Information</th>
+                            <th colspan="3" class="sub-item-title">Email Information</th>
                         </tr>
                         <tr>
                             <th>Email Address</th>
                             <td><input type="text" name="emailAddress" id="emailAddress" class="form-control" th:value="*{emailAddress}"/></td>
+                            <td><span id="emailCheckResult"></span></td>
                         </tr>
                         <tr>
                             <th>Receiver Type</th>
-                            <td>
+                            <td colspan="2">
                                 <div class="pull-left">
-                                    <select class="custom-select active-status" name="receiverType" th:field="*{receiverType}">
+                                    <select class="custom-select" name="receiverType" th:field="*{receiverType}">
                                         <option th:value="ADMIN">Admin</option>
                                         <option th:value="DEVELOPER">Developer</option>
                                     </select>
@@ -48,16 +50,16 @@
                         </tr>
                         <tr>
                             <th>Note</th>
-                            <td><input type="text" name="note" id="note" class="form-control" th:value="*{note}"/></td>
+                            <td colspan="2"><input type="text" name="note" id="note" class="form-control" th:value="*{note}"/></td>
                         </tr>
                         <tr>
-                            <th colspan="2" class="sub-item-title">Additional Information</th>
+                            <th colspan="3" class="sub-item-title">Additional Information</th>
                         </tr>
                         <tr>
                             <th>Active Status</th>
-                            <td>
+                            <td colspan="2">
                                 <div class="pull-left">
-                                    <select class="custom-select active-status" name="activeStatus" th:field="*{activeStatus}">
+                                    <select class="custom-select" name="activeStatus" th:field="*{activeStatus}">
                                         <option th:value="ACTIVE">Active</option>
                                         <option th:value="INACTIVE">Inactive</option>
                                     </select>
@@ -66,11 +68,11 @@
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created Date</th>
-                            <td><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td colspan="2"><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Modified Date</th>
-                            <td><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td colspan="2"><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                     </table>
                 </div>
@@ -80,7 +82,7 @@
                         <a href="/email/list" class="btn btn-secondary">Move to List</a>
                     </div>
                     <div class="col-auto mx-3">
-                        <button th:if="!*{idx}" id="insert" type="button" class="btn btn-primary">Register</button>
+                        <button th:if="!*{idx}" id="insert" type="button" class="btn-main">Register</button>
                         <button th:if="*{idx}" id="update" type="button" class="btn btn-info">Update</button>
                     </div>
                 </div>
@@ -102,6 +104,25 @@
 
 <!-- javascript -->
 <script>
+    var emailVaildation = false;
+
+    /* email 검사 */
+    $("#emailAddress").on("change", function () {
+        var regExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        var email = document.getElementsByName("emailAddress")[0].value;
+
+        if (regExp.test(email)) {
+            document.getElementById("emailCheckResult").innerHTML = "Email format is valid.";
+            document.getElementById("emailCheckResult").style.color = "blue";
+            emailVaildation = true;
+        } else {
+            document.getElementById("emailCheckResult").innerHTML = "Email format is not valid.";
+            document.getElementById("emailCheckResult").style.color = "red";
+            document.getElementsByName("email")[0].value = "";
+            emailVaildation = false;
+        }
+    });
+
     function deleteEmail(emailIdx) {
         // 게시글 삭제
         $.ajax({
@@ -122,6 +143,13 @@
 
 <script th:if="!${emailDto?.idx}">
     $('#insert').click(function () {
+        if (!emailVaildation) {
+            alert("Please check email.");
+            document.getElementById("email").focus();
+
+            return false;
+        }
+
         // (input tag mame, length or size, message)
         if (!validateBySize("note", 255, "note")) {
             return false;
@@ -149,7 +177,16 @@
 </script>
 
 <script th:if="${emailDto?.idx}" th:inline="javascript">
+    emailVaildation = true;
+
     $('#update').click(function () {
+        if (!emailVaildation) {
+            alert("Please check email.");
+            document.getElementById("email").focus();
+
+            return false;
+        }
+
         // (input tag mame, length or size, message)
         if (!validateBySize("note", 255, "note")) {
             return false;

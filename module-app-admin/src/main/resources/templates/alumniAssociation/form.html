@@ -39,37 +39,6 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>Title Type</th>
-                            <td>
-                                <div class="custom-control custom-radio custom-control-inline">
-                                    <input type="radio" class="custom-control-input" name="titleType" id="introduction" th:value="INTRODUCTION" th:checked="*{titleType?.name() == 'INTRODUCTION' ||  titleType?.name() == null}">
-                                    <label class="custom-control-label" th:for="introduction"><strong> Introduction(This title type is placed top.) </strong></label>
-                                </div>
-                                <div class="custom-control custom-radio custom-control-inline">
-                                    <input type="radio" class="custom-control-input" name="titleType" id="activityResult" th:value="ACTIVITY_RESULT" th:checked="*{titleType?.name() == 'ACTIVITY_RESULT'}">
-                                    <label class="custom-control-label" th:for="activityResult"><strong> Activity Result(This title type is placed bottom.) </strong></label>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Main Page Priority</th>
-                            <td>
-                                <div>
-                                    <div class="custom-control custom-radio custom-control-inline">
-                                        <input type="radio" id="mainPageNonCheck" name="mainPage" class="custom-control-input" th:checked="*{mainPagePriority == -1 ||  mainPagePriority == null}">
-                                        <label class="custom-control-label" for="mainPageNonCheck"><strong>Don't show main page.</strong></label>
-                                    </div>
-                                    <div class="custom-control custom-radio custom-control-inline">
-                                        <input type="radio" id="mainPageCheck" name="mainPage" class="custom-control-input" th:checked="*{mainPagePriority >= 0}">
-                                        <label class="custom-control-label" for="mainPageCheck"><strong>Show main page and set priority.</strong></label>
-                                    </div>
-                                </div>
-                                <select class="custom-select main-page-priority mt-3" name="mainPagePriority" th:field="*{mainPagePriority}" th:style="*{mainPagePriority >= 0} ? 'display: inline;' : 'display: none'">
-                                    <option th:value="-1" th:text="'Don\'t show main page.'" th:style="'display: none;'" selected></option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
                             <td colspan="2"><textarea name="content" id="summernote" class="summernote" th:text="*{content}"></textarea></td>
                         </tr>
                         <tr>
@@ -79,7 +48,7 @@
                             <th>Active Status</th>
                             <td>
                                 <div class="pull-left">
-                                    <select class="custom-select active-status" name="activeStatus" th:field="*{activeStatus}">
+                                    <select class="custom-select" name="activeStatus" th:field="*{activeStatus}">
                                         <option th:value="ACTIVE">Active</option>
                                         <option th:value="INACTIVE">Inactive</option>
                                     </select>
@@ -88,11 +57,11 @@
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created Date</th>
-                            <td><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Modified Date</th>
-                            <td><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                     </table>
                 </div>
@@ -102,7 +71,7 @@
                         <a href="/alumni-association/list" class="btn btn-secondary col-auto">Move to List</a>
                     </div>
                     <div class="col-auto mx-3">
-                        <button th:if="!*{idx}" id="insert" type="button" class="btn btn-primary col-auto">Register</button>
+                        <button th:if="!*{idx}" id="insert" type="button" class="btn-main col-auto">Register</button>
                         <button th:if="*{idx}" id="update" type="button" class="btn btn-info col-auto">Update</button>
                     </div>
                 </div>
@@ -134,33 +103,6 @@
             lang: "ko-KR",// 한글 설정
             placeholder: "The editor's max input size of bytes is 16777215(16 MB)."	//placeholder 설정
         });
-
-        <!-- Main Page Priority -->
-        var mainPagePrioritySelect = document.getElementsByName("mainPagePriority")[0];
-        var alumniAssociationDtoList = [[${alumniAssociationDtoList}]];
-        var alumniAssociationDto = [[${alumniAssociationDto}]];
-
-        for (var i = 0; i < 20; i++) {
-            var option = document.createElement("option");
-            option.text = i + 1;
-            option.value = i + 1;
-            mainPagePrioritySelect.options.add(option, i + 1);
-        }
-
-        for (var i = 0; i < alumniAssociationDtoList.length; i++) {
-            var mainPagePriority = alumniAssociationDtoList[i].mainPagePriority;
-
-            // 현재 alumniAssociation의 mainPagePriority인 경우(select)
-            if (mainPagePriority == alumniAssociationDto.mainPagePriority) {
-                mainPagePrioritySelect.options.item(mainPagePriority).selected = true;
-            }
-            // 다른 alumniAssociation의 mainPagePriority인 경우(disable)
-            else {
-                mainPagePrioritySelect.options.item(mainPagePriority).text += " has been set by '" + alumniAssociationDtoList[i].title + "'.(disabled)";
-                mainPagePrioritySelect.options.item(mainPagePriority).className = "disable";
-                mainPagePrioritySelect.options.item(mainPagePriority).disabled = true;
-            }
-        }
     });
 
     function deleteAlumniAssociation(alumniAssociationIdx) {
@@ -179,22 +121,6 @@
                 console.log("Delete notice board is fail.");
             });
     }
-
-    // Main Page Priority 변경
-    $("#mainPageNonCheck").on("change", function () {
-        document.getElementsByName("mainPagePriority")[0].style.display = "none";
-        document.getElementsByName("mainPagePriority")[0].value = -1;
-    });
-
-    $("#mainPageCheck").on("change", function () {
-        var alumniAssociationDto = [[${alumniAssociationDto}]];
-        document.getElementsByName("mainPagePriority")[0].style.display = "inline";
-
-        // register || update 일 때의 mainPagePriority
-        if (!(alumniAssociationDto.mainPagePriority == null || alumniAssociationDto.mainPagePriority == -1)) {
-            document.getElementsByName("mainPagePriority")[0].options.item(alumniAssociationDto.mainPagePriority - 1).selected = true;
-        }
-    });
 </script>
 
 <script th:if="!${alumniAssociationDto?.idx}">

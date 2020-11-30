@@ -33,7 +33,7 @@
                         <input type="text" name="keyword" class="form-control" th:value="${searchDto?.keyword}"/>
                     </div>
                     <div class="col-auto px-3">
-                        <button id="search" type="button" class="btn btn-primary">Search</button>
+                        <button id="search" type="button" class="btn-main">Search</button>
                     </div>
                 </div>
 
@@ -54,9 +54,8 @@
                         <tr th:each="albumDto : ${albumDtoList}">
                             <td th:text="${albumDto.idx}"></td>
                             <td>
-                                <a th:href="'/album?idx='+${albumDto.idx}" th:text="${albumDto.title}"></a>
-                                <img th:if="${albumDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}"
-                                     class="new-icon"/>
+                                <a th:href="'/album?idx='+${albumDto.idx}" th:text="${albumDto.title}" class="link"></a>
+                                <img th:if="${albumDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
 
                             <td><span th:text="${albumDto.mainHashTag}" th:class="hash-tag"></span></td>
@@ -74,7 +73,7 @@
 
                 <div class="row justify-content-end mt-5 mb-3">
                     <div class="col-auto mx-3">
-                        <a href="/album/form" class="btn btn-primary">Register</a>
+                        <a href="/album/form" class="btn-main">Register</a>
                     </div>
                 </div>
 
@@ -89,7 +88,7 @@
                             <a class="page-link" th:href="@{/album/list(page=${albumDtoList.number},searchType=*{searchType},keyword=*{keyword})}">&lsaquo;</a>
                         </li>
 
-                        <li th:each="page :${#numbers.sequence(startNumber, endNumber)}" `th:class="(${page} == ${albumDtoList.number}+1) ? 'page-item active'">
+                        <li th:each="page :${#numbers.sequence(startNumber, endNumber)}" th:class="(${page} == ${albumDtoList.number}+1) ? 'page-item active'">
                             <a class="page-link" th:href="@{/album/list(page=${page},searchType=*{searchType},keyword=*{keyword})}" th:text="${page}"><span class="sr-only"></span></a>
                         </li>
 

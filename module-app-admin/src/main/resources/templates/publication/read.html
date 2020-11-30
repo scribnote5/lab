@@ -31,11 +31,11 @@
                     </tr>
                     <tr>
                         <th>Title</th>
-                        <td><span id="title" class="form-control " th:text="*{title}"></span></td>
+                        <td><span id="title" class="form-control" th:text="*{title}"></span></td>
                     </tr>
                     <tr>
                         <th>Authors</th>
-                        <td><span id="authors" class="form-control " th:text="*{authors}"></span></td>
+                        <td><span id="authors" class="form-control" th:text="*{authors}"></span></td>
                     </tr>
                     <tr>
                         <th>Publication Type</th>
@@ -66,27 +66,27 @@
                     </tr>
                     <tr>
                         <th>Published Date</th>
-                        <td><input type="text" class="form-control published-date" readonly="readonly" th:value="*{#temporals.format(publishedDate,'yyyy-MM-dd')}"/></td>
+                        <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(publishedDate,'yyyy-MM-dd')}"/></td>
                     </tr>
                     <tr>
                         <th>Pages</th>
-                        <td><span id="pages" class="form-control pages-volume-number" th:text="*{pages}"></span></td>
+                        <td><span id="pages" class="form-control" th:text="*{pages}"></span></td>
                     </tr>
                     <tr>
                         <th>Volume</th>
-                        <td><span id="volume" class="form-control pages-volume-number" th:text="*{volume}"></span></td>
+                        <td><span id="volume" class="form-control" th:text="*{volume}"></span></td>
                     </tr>
                     <tr>
                         <th>Number</th>
-                        <td><span id="number" class="form-control pages-volume-number" th:text="*{number}"></span></td>
+                        <td><span id="number" class="form-control" th:text="*{number}"></span></td>
                     </tr>
                     <tr>
                         <th>Doi</th>
-                        <td><span id="Doi" class="form-control " th:text="*{Doi}"></span></td>
+                        <td><span id="Doi" class="form-control" th:text="*{Doi}"></span></td>
                     </tr>
                     <tr>
                         <th>URI</th>
-                        <td><span id="uri" class="form-control " th:text="*{Doi}"></span></td>
+                        <td><span id="uri" class="form-control" th:text="*{Doi}"></span></td>
                     </tr>
                     <tr>
                         <th>ISBN/ISSN</th>
@@ -113,23 +113,22 @@
                         <th>Active Status</th>
                         <td>
                             <div>
-                                <span th:if="*{activeStatus?.name() == 'ACTIVE'}" class="form-control active-status" th:text="Active"> </span>
-                                <span th:if="*{activeStatus?.name() == 'INACTIVE'}" class="form-control active-status" th:text="Inactive"> </span>
+                                <span th:if="*{activeStatus?.name() == 'ACTIVE'}" class="form-control" th:text="Active"> </span>
+                                <span th:if="*{activeStatus?.name() == 'INACTIVE'}" class="form-control" th:text="Inactive"> </span>
                             </div>
                         </td>
                         </td>
                     </tr>
                     <tr th:if="*{idx}">
                         <th>Created Date</th>
-                        <td><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                     </tr>
                     <tr th:if="*{idx}">
                         <th>Modified Date</th>
-                        <td><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
                     </tr>
                 </table>
             </div>
-
 
             <div class="row justify-content-between mt-5 mb-3">
                 <div class="col-auto mx-3">

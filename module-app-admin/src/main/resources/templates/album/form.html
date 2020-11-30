@@ -59,6 +59,10 @@
                             </td>
                         </tr>
                         <tr>
+                            <th>Main Hash Tag</th>
+                            <td colspan="2"><input type="text" name="mainHashTag" id="mainHashTag" class="form-control" th:value="*{mainHashTag}" readonly/></td>
+                        </tr>
+                        <tr>
                             <th>Hash Tags</th>
                             <td id="hashTagsTd" colspan="2">
                                 <input th:if="!*{idx}" type="text" id="hashTag" class="form-control" placeholder="#Hash Tag ↵ (Special character is not available.)"/>
@@ -78,8 +82,8 @@
                                 </div>
                             </td>
                             <td>
-                                <img th:if="*{attachedFileList.size()} == 0" id="imgPreview" class="album-img-preview img-border" th:attr="src=@{/images/no-preview-available.jpg}"/>
-                                <img th:if="*{attachedFileList.size()} != 0" id="imgPreview" class="album-img-preview img-border" th:attr="src=@{|http://localhost:8081/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}"/>
+                                <img th:if="*{attachedFileList.size()} == 0" id="imgPreview" class="album-img-preview img-thumbnail" th:attr="src=@{/images/no-preview-available.jpg}"/>
+                                <img th:if="*{attachedFileList.size()} != 0" id="imgPreview" class="album-img-preview img-thumbnail" th:attr="src=@{|http://localhost:8081/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}"/>
                             </td>
                         </tr>
                         <tr>
@@ -111,7 +115,7 @@
                             <th>Active Status</th>
                             <td colspan="2">
                                 <div class="pull-left">
-                                    <select class="custom-select active-status" name="activeStatus" th:field="*{activeStatus}">
+                                    <select class="custom-select" name="activeStatus" th:field="*{activeStatus}">
                                         <option th:value="ACTIVE">Active</option>
                                         <option th:value="INACTIVE">Inactive</option>
                                     </select>
@@ -120,11 +124,11 @@
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created Date</th>
-                            <td colspan="2"><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td colspan="2"><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Modified Date</th>
-                            <td colspan="2"><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td colspan="2"><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                     </table>
                 </div>
@@ -134,7 +138,7 @@
                         <a href="/album/list" class="btn btn-secondary">Move to List</a>
                     </div>
                     <div class="col-auto mx-3">
-                        <button th:if="!*{idx}" id="insert" type="button" class="btn btn-primary">Register</button>
+                        <button th:if="!*{idx}" id="insert" type="button" class="btn-main">Register</button>
                         <button th:if="*{idx}" id="update" type="button" class="btn btn-info">Update</button>
                     </div>
                 </div>

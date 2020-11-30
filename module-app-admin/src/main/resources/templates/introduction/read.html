@@ -35,7 +35,7 @@
                             <td><span id="title" class="form-control" th:text="*{title}"></span></td>
                         </tr>
                         <tr>
-                            <td colspan="2"><span class="form-control overflow-auto content" id="content" th:utext="*{content}"></span></td>
+                            <td colspan="2"><span class="form-control overflow-auto content" id="content" th:utext=" *{#strings.replace(content, T(System).getProperty('line.separator'), '&lt;br /&gt;')}"></span></td>
                         </tr>
                         <tr>
                             <th colspan="2" class="sub-item-title">Additional Information</th>
@@ -44,18 +44,18 @@
                             <th>Active Status</th>
                             <td>
                                 <div>
-                                    <span th:if="*{activeStatus?.name() == 'ACTIVE'}" class="form-control active-status" th:text="Active"> </span>
-                                    <span th:if="*{activeStatus?.name() == 'INACTIVE'}" class="form-control active-status" th:text="Inactive"> </span>
+                                    <span th:if="*{activeStatus?.name() == 'ACTIVE'}" class="form-control" th:text="Active"> </span>
+                                    <span th:if="*{activeStatus?.name() == 'INACTIVE'}" class="form-control" th:text="Inactive"> </span>
                                 </div>
                             </td>
                         </tr>
                         <tr>
                             <th>Created Date</th>
-                            <td><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr>
                             <th>Modified Date</th>
-                            <td><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                     </table>
                 </div>

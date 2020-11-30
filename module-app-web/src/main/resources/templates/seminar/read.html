@@ -4,7 +4,7 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title>Seminar Read</title>
+    <title>Seminar Detail</title>
 </head>
 <body>
 <div id="page-content-wrapper">
@@ -13,11 +13,18 @@
 
     <div class="container">
         <form name="form" id="form" th:object="${seminarDto}" action="#">
-            <div class="page-header page-title" data-aos="fade-up" data-aos-delay="100">
-                <h1>Seminar Read</h1>
+            <div class="page-header page-title breadcrumbs" data-aos="fade-up" data-aos-delay="100">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2>Seminar Detail</h2>
+                    <ol>
+                        <li>Home</li>
+                        <img src="/images/chevron-right.svg">
+                        <li>Seminar Detail</li>
+                    </ol>
+                </div>
             </div>
 
-            <div class="row mt-3" data-aos="fade-up" data-aos-delay="150">
+            <div class="mt-5" data-aos="fade-up" data-aos-delay="150">
                 <table class="table">
                     <colgroup>
                         <col width="15%"/>
@@ -37,7 +44,7 @@
                     <tr>
                         <th>Presentation Date</th>
                         <td>
-                            <input type="text" name="presentationDate" id="presentationDate" class="form-control presentation-date" th:value="*{#temporals.format(presentationDate,'yyyy-MM-dd HH:mm')}"/>
+                            <input type="text" name="presentationDate" id="presentationDate" class="form-control" th:value="*{#temporals.format(presentationDate,'yyyy-MM-dd HH:mm')}"/>
                         </td>
                     </tr>
                     <tr>
@@ -74,18 +81,18 @@
                         <th>Active Status</th>
                         <td>
                             <div>
-                                <span th:if="*{activeStatus?.name() == 'ACTIVE'}" class="form-control active-status" th:text="Active"> </span>
-                                <span th:if="*{activeStatus?.name() == 'INACTIVE'}" class="form-control active-status" th:text="Inactive"> </span>
+                                <span th:if="*{activeStatus?.name() == 'ACTIVE'}" class="form-control" th:text="Active"> </span>
+                                <span th:if="*{activeStatus?.name() == 'INACTIVE'}" class="form-control" th:text="Inactive"> </span>
                             </div>
                         </td>
                     </tr>
                     <tr>
                         <th>Created Date</th>
-                        <td><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                     </tr>
                     <tr>
                         <th>Modified Date</th>
-                        <td><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
                     </tr>
                 </table>
             </div>

@@ -5,31 +5,30 @@
     <header id="header" class="fixed-top d-flex align-items-center">
         <div class="container d-flex align-items-center">
 
-            <div class="logo mr-auto">
-                 <a href="/"><img src="/images/main-logo.png" class="img-fluid main-logo"></a>
+            <div class="logo mr-auto row align-items-center">
+                <a href="/"><img src="/images/main-logo.png" class="main-logo"></a>
             </div>
 
             <nav class="nav-menu d-none d-lg-block">
                 <ul>
-                    <li><a href="#about">About Us</a></li>
-                    <li><a href="/user/list">Members</a></li>
-                    <li><a href="/publication/list_scroll">Publications</a></li>
-                    <li><a href="/seminar/list">Seminars</a></li>
-                    <li><a href="/project/list">Projects</a></li>
-                    <li class="drop-down"><a href="">More <img src="/images/chevron-down-icon-black.svg/"></a>
+                    <li><a href="/#introduction">About Us</a></li>
+                    <li><a href="/#contact">Contact</a>
+                    <li><a href="/user/list">Member</a></li>
+                    <li><a href="/publication/list_scroll">Publication</a></li>
+                    <li><a href="/seminar/list">Seminar</a></li>
+                    <li><a href="/project/list">Project</a></li>
+                    <li class="drop-down"><a href="">More <img src="/images/chevron-down-icon-black.svg/" style="height: 18px;"></a>
                         <ul>
-                            <li><a href="/notice-board/list">Notice Boards</a></li>
-                            <li><a href="/alumni-association/list">Alumni Associations</a></li>
-                            <li><a href="/album/list">Albums</a></li>
+                            <li><a href="/notice-board/list">Notice Board</a></li>
+                            <li><a href="/alumni-association/list">Alumni Association</a></li>
+                            <li><a href="/album/list">Album</a></li>
                         </ul>
                     </li>
-                    <li><a href="#contact">Contact</a>
 
                     <li sec:authorize="!isAuthenticated()" class="login"><a href="/user/login">Login</a></li>
                     <li sec:authorize="isAuthenticated()" class="login"><a href="/user/logout">Logout</a></li>
                 </ul>
             </nav><!-- .nav-menu -->
-
         </div>
     </header><!-- End Header -->
 </div>

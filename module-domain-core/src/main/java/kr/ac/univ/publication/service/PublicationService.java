@@ -61,10 +61,10 @@ public class PublicationService {
                     break;
             }
         } else {
-            String[] str = publicationSearchDto.getPublicationSearchType().getSearchPublicationType().split(" ");
+            String[] str = publicationSearchDto.getPublicationSearchType().getSearchPublicationType().split("_");
 
             PublishingArea publishingArea = PublishingArea.valueOf(str[0].toUpperCase());
-            PublicationType publicationType = PublicationType.valueOf(str[1].toUpperCase());
+            PublicationType publicationType = PublicationType.valueOf(str[1].toUpperCase().replaceAll(" ", ""));
 
             switch (publicationSearchDto.getSearchType()) {
                 case "TITLE":

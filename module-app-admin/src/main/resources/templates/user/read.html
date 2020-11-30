@@ -47,7 +47,7 @@
                             </td>
                             <td id="imgPreview">
                                 <img th:if="*{attachedFileList.size()} == 0" th:attr="src=@{/images/no-preview-available.jpg}" width="150" height="150"/>
-                                <img th:if="*{attachedFileList.size()} != 0" th:attr="src=@{|http://localhost:8081/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}" class="img-border user-img-preview"/>
+                                <img th:if="*{attachedFileList.size()} != 0" th:attr="src=@{|http://localhost:8081/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}" class="img-thumbnail user-img-preview"/>
                             </td>
                             <td colspan=></td>
                         </tr>
@@ -107,7 +107,7 @@
                             <td colspan="2"></td>
                         </tr>
                         <tr>
-                            <th>Status</th>
+                            <th>User Status</th>
                             <td>
                                 <span class=" form-control" th:if="*{userStatus?.name() == 'ATTENDING'}" th:text="Attending"> </span>
                                 <span class=" form-control" th:if="*{userStatus?.name() == 'GRADUATED'}" th:text="Graduated"> </span>
@@ -131,6 +131,11 @@
                             <td colspan="2"></td>
                         </tr>
                         <tr>
+                            <th>External Web Page</th>
+                            <td><span class=" form-control" th:text="*{externalWebPage}"> </span></td>
+                            <td colspan="2"></td>
+                        </tr>
+                        <tr>
                             <th>Github</th>
                             <td><span class=" form-control" th:text="*{github}"> </span></td>
                             <td colspan="2"></td>
@@ -138,11 +143,6 @@
                         <tr>
                             <th>Linked In</th>
                             <td><span class=" form-control" th:text="*{linkedIn}"> </span></td>
-                            <td colspan="2"></td>
-                        </tr>
-                        <tr>
-                            <th>External Web Page</th>
-                            <td><span class=" form-control" th:text="*{externalWebPage}"> </span></td>
                             <td colspan="2"></td>
                         </tr>
                         <tr>
@@ -163,19 +163,19 @@
                         <tr>
                             <th>Active Status</th>
                             <td>
-                                <span th:if="*{activeStatus?.name() == 'ACTIVE'}" class="form-control active-status" th:text="Active"> </span>
-                                <span th:if="*{activeStatus?.name() == 'INACTIVE'}" class="form-control active-status" th:text="Inactive"> </span>
+                                <span th:if="*{activeStatus?.name() == 'ACTIVE'}" class="form-control" th:text="Active"> </span>
+                                <span th:if="*{activeStatus?.name() == 'INACTIVE'}" class="form-control" th:text="Inactive"> </span>
                             </td>
                             <td colspan="2"></td>
                         </tr>
                         <tr>
                             <th>Created Date</th>
-                            <td><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                             <td colspan="2"></td>
                         </tr>
                         <tr>
                             <th>Modified Date</th>
-                            <td><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
                             <td colspan="2"></td>
                         </tr>
                     </table>

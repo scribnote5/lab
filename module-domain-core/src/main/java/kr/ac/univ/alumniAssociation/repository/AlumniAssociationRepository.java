@@ -20,14 +20,9 @@ public interface AlumniAssociationRepository extends JpaRepository<AlumniAssocia
 
     Page<AlumniAssociation> findAllByActiveStatusIs(Pageable pageable, ActiveStatus activeStatus);
 
-    Page<AlumniAssociation> findAllByTitleContainingAndActiveStatusIs(Pageable pageable, String title, ActiveStatus activeStatus);
+    Page<AlumniAssociation> findAllByTitleContainingAndActiveStatusIs(Pageable pageable, String title, ActiveStatus activeStatus, Long priority);
 
-    Page<AlumniAssociation> findAllByContentContainingAndActiveStatusIs(Pageable pageable, String content, ActiveStatus activeStatus);
+    Page<AlumniAssociation> findAllByContentContainingAndActiveStatusIs(Pageable pageable, String content, ActiveStatus activeStatus, Long priority);
 
-    Page<AlumniAssociation> findAllByCreatedByContainingAndActiveStatusIs(Pageable pageable, String username, ActiveStatus activeStatus);
-
-
-    List<AlumniAssociation> findAllByActiveStatusIsAndMainPagePriorityGreaterThanEqualOrderByMainPagePriorityAsc(ActiveStatus activeStatus, Long mainPagePriority);
-
-    AlumniAssociation findByMainPagePriorityIsAndActiveStatusIs(Long mainPagePriority, ActiveStatus activeStatus);
+    Page<AlumniAssociation> findAllByCreatedByContainingAndActiveStatusIs(Pageable pageable, String username, ActiveStatus activeStatus, Long priority);
 }

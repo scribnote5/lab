@@ -13,8 +13,15 @@
 
     <div class="container">
         <form name="form" id="form" th:object="${searchDto}" action="#">
-            <div class="page-header page-title" data-aos="fade-up" data-aos-delay="100">
-                <h1>Seminar List</h1>
+            <div class="page-header page-title breadcrumbs" data-aos="fade-up" data-aos-delay="100">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2>Seminar List</h2>
+                    <ol>
+                        <li>Home</li>
+                        <img src="/images/chevron-right.svg">
+                        <li>Seminar List</li>
+                    </ol>
+                </div>
             </div>
 
             <div class="row justify-content-end mt-3" data-aos="fade-up" data-aos-delay="100">
@@ -34,16 +41,14 @@
                 </div>
             </div>
 
-            <div class="row mt-5" data-aos="fade-up" data-aos-delay="150">
+            <div class="mt-5" data-aos="fade-up" data-aos-delay="150">
                 <table class="table table-hover">
                     <thead>
                     <tr>
                         <th style="width: 5%">No.</th>
-                        <th style="width: 45%">Title</th>
-                        <th style="width: 10%">ID</th>
+                        <th style="width: 60%">Title</th>
+                        <th style="width: 15%">Created By</th>
                         <th style="width: 15%">Created Date</th>
-                        <th style="width: 15%">Modified Date</th>
-                        <th style="width: 5%">Status</th>
                         <th style="width: 5%">Views</th>
                     </tr>
                     </thead>
@@ -56,10 +61,6 @@
                         </td>
                         <td th:text="${seminarDto.createdBy}">></td>
                         <td th:text="${#temporals.format(seminarDto.createdDate,'yyyy-MM-dd HH:mm')}"></td>
-                        <td th:text="${#temporals.format(seminarDto.lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
-
-                        <td th:if="${seminarDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active"></td>
-                        <td th:if="${seminarDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"></td>
 
                         <td th:text="${seminarDto.views}"></td>
                     </tr>

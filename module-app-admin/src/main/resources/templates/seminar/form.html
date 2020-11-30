@@ -112,7 +112,7 @@
                             <th>Active Status</th>
                             <td>
                                 <div class="pull-left">
-                                    <select class="custom-select active-status" name="activeStatus" th:field="*{activeStatus}">
+                                    <select class="custom-select" name="activeStatus" th:field="*{activeStatus}">
                                         <option th:value="ACTIVE">Active</option>
                                         <option th:value="INACTIVE">Inactive</option>
                                     </select>
@@ -121,11 +121,11 @@
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created Date</th>
-                            <td><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Modified Date</th>
-                            <td><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                     </table>
                 </div>
@@ -135,7 +135,7 @@
                         <a href="/seminar/list" class="btn btn-secondary">Move to List</a>
                     </div>
                     <div class="col-auto mx-3">
-                        <button th:if="!*{idx}" id="insert" type="button" class="btn btn-primary">Register</button>
+                        <button th:if="!*{idx}" id="insert" type="button" class="btn-main">Register</button>
                         <button th:if="*{idx}" id="update" type="button" class="btn btn-info">Update</button>
                     </div>
                 </div>

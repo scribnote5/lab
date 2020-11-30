@@ -33,8 +33,11 @@ public class Album extends CommonAudit {
     @Column
     private String hashTags;
 
+    @Column
+    private String mainHashTag;
+
     @Builder
-    public Album(Long idx, String createdBy, String lastModifiedBy, ActiveStatus activeStatus, String title, String hashTags, LocalDate photoTakenDate, Long mainPagePriority) {
+    public Album(Long idx, String createdBy, String lastModifiedBy, ActiveStatus activeStatus, String title, String hashTags, String mainHashTag, LocalDate photoTakenDate, Long mainPagePriority) {
         setIdx(idx);
         setCreatedBy(createdBy);
         setLastModifiedBy(lastModifiedBy);
@@ -43,6 +46,7 @@ public class Album extends CommonAudit {
         this.photoTakenDate = photoTakenDate;
         this.mainPagePriority = mainPagePriority;
         this.hashTags = hashTags;
+        this.mainHashTag = mainHashTag;
     }
 
     public void update(Album project) {

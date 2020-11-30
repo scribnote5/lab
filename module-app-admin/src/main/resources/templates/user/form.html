@@ -64,8 +64,8 @@
                                       th:text="*{attachedFileList[0].fileName} + ',&nbsp;' + 'File size: ' + *{attachedFileList[0].fileSize}"></span>
                             </td>
                             <td>
-                                <img id="imgPreview" th:if="*{attachedFileList.size()} == 0" class="img-border user-img-preview" th:attr="src=@{/images/no-preview-available.jpg}"/>
-                                <img id="imgPreview" th:if="*{attachedFileList.size()} != 0" class="img-border user-img-preview" th:attr="src=@{|http://localhost:8081/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}"/>
+                                <img id="imgPreview" th:if="*{attachedFileList.size()} == 0" class="img-thumbnail user-img-preview" th:attr="src=@{/images/no-preview-available.jpg}"/>
+                                <img id="imgPreview" th:if="*{attachedFileList.size()} != 0" class="img-thumbnail user-img-preview" th:attr="src=@{|http://localhost:8081/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}"/>
                             </td>
                             <td></td>
                         </tr>
@@ -162,6 +162,11 @@
                             <td colspan="2"></td>
                         </tr>
                         <tr>
+                            <th>Workplace</th>
+                            <td><input type="text" name="workplace" class="form-control" th:value="*{workplace}"/></td>
+                            <td colspan="2"></td>
+                        </tr>
+                        <tr>
                             <th>Github</th>
                             <td><input type="text" name="github" class="form-control" th:value="*{github}"/></td>
                             <td colspan="2"></td>
@@ -174,11 +179,6 @@
                         <tr>
                             <th>External Web Page</th>
                             <td><input type="text" name="externalWebPage" class="form-control" th:value="*{externalWebPage}"/></td>
-                            <td colspan="2"></td>
-                        </tr>
-                        <tr>
-                            <th>Workplace</th>
-                            <td><input type="text" name="workplace" class="form-control" th:value="*{workplace}"/></td>
                             <td colspan="2"></td>
                         </tr>
                         <tr>
@@ -196,7 +196,7 @@
                         <tr>
                             <th>Active Status</th>
                             <td>
-                                <select name="activeStatus active-status" th:field="*{activeStatus}" class="form-control active-status">
+                                <select name="activeStatus" th:field="*{activeStatus}" class="form-control">
                                     <option th:value="ACTIVE">Active</option>
                                     <option th:value="INACTIVE">Inactive</option>
                                 </select>
@@ -205,12 +205,12 @@
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created Date</th>
-                            <td><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                             <td colspan="2"></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Modified Date</th>
-                            <td><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
                             <td colspan="2"></td>
                         </tr>
                     </table>

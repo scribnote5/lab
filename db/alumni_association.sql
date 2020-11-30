@@ -8,8 +8,7 @@ CREATE TABLE alumni_association
     last_modified_date      datetime(6)         null,
     active_status           varchar(255)        null,
     content                 longtext            null,
-    title                   varchar(255)        null,
-    main_page_priority      bigint              null
+    title                   varchar(255)        null
 );
 
 ALTER TABLE alumni_association AUTO_INCREMENT=1;

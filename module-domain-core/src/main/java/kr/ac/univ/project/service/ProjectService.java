@@ -64,7 +64,7 @@ public class ProjectService {
     }
 
     public List<ProjectDto> findAllByProjectStatusIsAndActiveStatusIs(ProjectStatus projectStatus) {
-        List<ProjectDto> projectDtoList = ProjectMapper.INSTANCE.toDto(projectRepository.findAllByProjectStatusIsAndActiveStatusIs(projectStatus, ActiveStatus.ACTIVE));
+        List<ProjectDto> projectDtoList = ProjectMapper.INSTANCE.toDto(projectRepository.findAllByProjectStatusIsAndActiveStatusIsOrderByStartDateDesc(projectStatus, ActiveStatus.ACTIVE));
 
         // NewIcon 판별
         for (ProjectDto projectDto : projectDtoList) {

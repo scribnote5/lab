@@ -13,8 +13,15 @@
 
     <div class="container">
         <form name="form" id="form" th:object="${searchDto}" action="#">
-            <div class="page-header page-title" data-aos="fade-up" data-aos-delay="100">
-                <h1>Member List</h1>
+            <div class="page-header page-title breadcrumbs" data-aos="fade-up" data-aos-delay="100">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2>Member List</h2>
+                    <ol>
+                        <li>Home</li>
+                        <img src="/images/chevron-right.svg">
+                        <li>Member List</li>
+                    </ol>
+                </div>
             </div>
 
             <div class="row justify-content-end mt-3" data-aos="fade-up" data-aos-delay="100">
@@ -34,42 +41,42 @@
                 </div>
             </div>
 
-            <div class="row mt-5" data-aos="fade-up" data-aos-delay="150">
-                <div th:each="userDto : ${userDtoList}" class="col-lg-3 col-md-6 d-flex mb-5">
-                    <div class="member">
-                        <div class="member-img">
-                            <img th:if="${userDto.attachedFileList.size()} == 0" th:attr="src=@{/images/avatar.png}" class="member-portrait img-thumbnail"/>
-                            <img th:if="${userDto.attachedFileList.size()} != 0" th:attr="src=@{|http://localhost:8081/api/attachedFiles/download/${userDto.attachedFileList[0].savedFileName}|}" class="member-portrait img-thumbnail"/>
+            <div class="mt-5" data-aos="fade-up" data-aos-delay="150">
+                <div class="row">
+                    <div th:each="userDto : ${userDtoList}" class="col-lg-3 col-md-6 d-flex mb-5">
+                        <div class="member img-thumbnail">
+                            <div class="member-img">
+                                <img th:if="${userDto.attachedFileList.size()} == 0" th:attr="src=@{/images/avatar.png}" class="member-photo"/>
+                                <img th:if="${userDto.attachedFileList.size()} != 0" th:attr="src=@{|http://localhost:8081/api/attachedFiles/download/${userDto.attachedFileList[0].savedFileName}|}" class="member-photo"/>
 
-                            <div th:if="${userDto.attachedFileList.size()} != 0" class="social">
-                                <a th:href="'mailto:' + ${userDto.privateEmail}"><img src="/images/mail-grey.svg"></a>
-                                <a th:href="${userDto.github}"><img src="/images/github-grey.svg"></a>
-                                <a th:href="${userDto.linkedIn}"><img src="/images/linkedin-grey.svg"></a>
-                                <a th:href="${userDto.externalWebPage}"><img src="/images/external-link-grey.svg"></a>
+                                <div class="social">
+                                    <a th:if="${not #strings.isEmpty(userDto.email)}" th:href="'mailto:' + ${userDto.email}"><img src="/images/mail-grey.svg"></a>
+                                    <a th:if="${not #strings.isEmpty(userDto.github)}" th:href="${userDto.github}"><img src="/images/github-grey.svg"></a>
+                                    <a th:if="${not #strings.isEmpty(userDto.linkedIn)}" th:href="${userDto.linkedIn}"><img src="/images/linkedin-grey.svg"></a>
+                                    <a th:if="${not #strings.isEmpty(userDto.externalWebPage)}" th:href="${userDto.externalWebPage}"><img src="/images/external-link-grey.svg"></a>
+                                  </div>
                             </div>
-                        </div>
-                        <div class="member-info">
-                            <a th:href="'/user?idx='+${userDto.idx}"><h4 th:text="${userDto.englishName}"></h4></a>
+                            <div class="member-info">
+                                <a th:href="'/user?idx='+${userDto.idx}"><h4 th:text="${userDto.englishName}"></h4></a>
 
-                            <div th:if="${userDto.userStatus?.name() == 'ATTENDING'}">
-                                <h6 class="text-right" th:if="${userDto.userType?.name() == 'FACULTY'}" th:text="Faculty"></h6>
-                                <h6 class="text-right" th:if="${userDto.userType?.name() == 'FULL_TIME_PhD'}" th:text="'Ph.D. ' + ' - ' + 'Full Time'"></h6>
-                                <h6 class="text-right" th:if="${userDto.userType?.name() == 'PART_TIME_PhD'}" th:text="'Ph.D. ' + ' - ' + 'Part Time'"></h6>
-                                <h6 class="text-right" th:if="${userDto.userType?.name() == 'FULL_TIME_MS'}" th:text="'M.S.' + ' - ' + 'Full Time'"></h6>
-                                <h6 class="text-right" th:if="${userDto.userType?.name() == 'PART_TIME_MS'}" th:text="'M.S.' + '-' + 'Part Time'"></h6>
-                                <h6 class="text-right" th:if="${userDto.userType?.name() == 'BS'}" th:text="'B.S.'"></h6>
-                            </div>
-                            <div th:if="${userDto.userStatus?.name() == 'GRADUATED'}">
-                                <h6 class="text-right" th:if="${userDto.userType?.name() == 'FACULTY'}" th:text="Faculty"></h6>
-                                <h6 class="text-right" th:if="${userDto.userType?.name() == 'FULL_TIME_PhD'}" th:text="'Alumni' + '(Ph.D. ' + ' - ' +   + ${#temporals.format(userDto.graduatedDate,'yy-MM')} + ')'"></h6>
-                                <h6 class="text-right" th:if="${userDto.userType?.name() == 'PART_TIME_PhD'}"
-                                    th:text="'Alumni' + '(Ph.D. ' + ' - ' + 'Part Time, ' + ${#temporals.format(userDto.graduatedDate,'yy-MM')} + ')'"></h6>
-                                <h6 class="text-right" th:if="${userDto.userType?.name() == 'FULL_TIME_MS'}"
-                                    th:text="'Alumni' + '(M.S.' + ' - ' + 'Full Time, ' + ${#temporals.format(userDto.graduatedDate,'yy-MM')} + ')'"></h6>
-                                <h6 class="text-right" th:if="${userDto.userType?.name() == 'PART_TIME_MS'}" th:text="'Alumni' + '(M.S.' + '-' + 'Part Time, ' + ${#temporals.format(userDto.graduatedDate,'yy-MM')} + ')'"></h6>
-                                <h6 class="text-right" th:if="${userDto.userType?.name() == 'BS'}" th:text="'B.S.'"></h6>
+                                <div th:if="${userDto.userStatus?.name() == 'ATTENDING'}">
+                                    <h6 class="text-right" th:if="${userDto.userType?.name() == 'FACULTY'}" th:text="Faculty"></h6>
+                                    <h6 class="text-right" th:if="${userDto.userType?.name() == 'FULL_TIME_PhD'}" th:text="'Ph.D. Student' + '-' + 'Full Time'"></h6>
+                                    <h6 class="text-right" th:if="${userDto.userType?.name() == 'PART_TIME_PhD'}" th:text="'Ph.D. Student' + '-' + 'Part Time'"></h6>
+                                    <h6 class="text-right" th:if="${userDto.userType?.name() == 'FULL_TIME_MS'}" th:text="'M.S. Student' + '-' + 'Full Time'"></h6>
+                                    <h6 class="text-right" th:if="${userDto.userType?.name() == 'PART_TIME_MS'}" th:text="'M.S. Student' + '-' + 'Part Time'"></h6>
+                                    <h6 class="text-right" th:if="${userDto.userType?.name() == 'BS'}" th:text="'B.S.'"></h6>
+                                </div>
+                                <div th:if="${userDto.userStatus?.name() == 'GRADUATED'}">
+                                    <h6 class="text-right" th:if="${userDto.userType?.name() == 'FACULTY'}" th:text="Faculty"></h6>
+                                    <h6 class="text-right" th:if="${userDto.userType?.name() == 'FULL_TIME_PhD'}" th:text="'Alumni' + '(Ph.D. ' + '-' + 'Full Time, ' + ${#temporals.format(userDto.graduatedDate,'yy-MM')} + ')'"></h6>
+                                    <h6 class="text-right" th:if="${userDto.userType?.name() == 'PART_TIME_PhD'}" th:text="'Alumni' + '(Ph.D. ' + '-' + 'Part Time, ' + ${#temporals.format(userDto.graduatedDate,'yy-MM')} + ')'"></h6>
+                                    <h6 class="text-right" th:if="${userDto.userType?.name() == 'FULL_TIME_MS'}" th:text="'Alumni' + '(M.S.' + '-' + 'Full Time, ' + ${#temporals.format(userDto.graduatedDate,'yy-MM')} + ')'"></h6>
+                                    <h6 class="text-right" th:if="${userDto.userType?.name() == 'PART_TIME_MS'}" th:text="'Alumni' + '(M.S.' + '-' + 'Part Time, ' + ${#temporals.format(userDto.graduatedDate,'yy-MM')} + ')'"></h6>
+                                    <h6 class="text-right" th:if="${userDto.userType?.name() == 'BS'}" th:text="'B.S.'"></h6>
 
-                                <h6 class="text-right" th:text="${userDto.workplace}"></h6>
+                                    <h6 class="text-right" th:text="${userDto.workplace}"></h6>
+                                </div>
                             </div>
                         </div>
                     </div>

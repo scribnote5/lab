@@ -1,0 +1,122 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+* {
+    font-family: 'Spoqa Han Sans', san-serif;
+    font-weight: var(--regular-font-weight);
+    font-size: var(--regular-font-size);
+    color: var(--main-black);
+}
+
+body .container-fluid {
+    padding: 1.5rem;
+}
+
+/*
+ * general layout
+ */
+#wrapper {
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+#page-content-wrapper {
+    min-height: calc(100vh - 4rem);
+}
+
+label {
+    font-weight: var(--light-font-weight);
+}
+
+table th {
+    font-weight: var(--strong-font-weight);
+}
+
+.btn-main {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+
+    background: var(--main-red);
+    color: var(--white);
+}
+
+.btn-main:hover {
+    text-decoration: none;
+    background: var(--lighter-red);
+    color: var(--white);
+}
+
+.link {
+    color: var(--main-red);
+    text-decoration: none;
+}
+
+.link:hover {
+    color: var(--lighter-red);
+    text-decoration: none;
+}
+
+.more {
+    color: var(--main-grey);
+    display: inline-block;
+    font-size: var(--small-font-size);
+}
+
+.more:hover {
+    color: var(--lighter-grey);
+    text-decoration: none;
+}
+
+/*
+ * footer
+ */
+#footer {
+    height: 4rem;
+    position: relative;
+    background: #fff;
+    box-shadow: 2px 2px 1rem rgba(0, 0, 0, 0.2);
+    /*padding: 12.5px 0;*/
+    color: #222222;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#footer .credits {
+    font-size: 13px;
+    padding-top: 5px;
+    color: var(--light-black);
+}
+
+#footer a {
+    color: var(--main-red);
+    text-decoration: none;
+}
+
+#footer a:hover {
+    color: var(--lighter-red);
+    text-decoration: none;
+}
+
+#footer .footer-links a {
+    color: #222222;
+    padding-left: 1rem;
+}
+
+#footer .footer-links a:first-child {
+    padding-left: 0;
+}
+
+#footer .footer-links a:hover {
+    color: var(--main-red);
+}

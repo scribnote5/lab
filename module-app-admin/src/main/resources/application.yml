@@ -11,6 +11,11 @@ spring:
     cache: false
 module:
   name: module-app-admin
+server:
+  servlet:
+    session:
+      cookie:
+        name: module-app-admin
 ---
 spring:
   profiles: test

@@ -4,7 +4,7 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title>Main</title>
+    <title>Dashboard</title>
 </head>
 <body>
 
@@ -19,10 +19,10 @@
         <div class="container-fluid container-main">
             <h1>Dashboard</h1>
 
-            <div class="float-right url-icon-area" style="margin-top: -2.5rem;">
+            <div class="float-right url-icon-area">
                 <img src="/images/external-link.svg" class="url-icon"/>
                 <span class="external-link">External Link</span>
-                <img src="/images/small-logo.png" title="Link user page." class="url-icon"/>
+                <img src="/images/main-logo.png" title="Link user page." class="url-icon"/>
                 <img src="/images/google-analytics.png" title="Link google analytics." class="url-icon"/>
                 <img src="/images/github.svg" title="Link github." class="url-icon"/>
             </div>
@@ -31,7 +31,7 @@
                 <div class="card col ml-md-3 mr-md-3" style="border-left: .75rem solid #4e73df; border-radius: .75rem;">
                     <div class="card-body static-card-body">
                         <h6 class="card-title">
-                            <img src="/images/users.svg" class="main-icon"/>
+                            <img src="/images/users.svg" class="statics-icon"/>
                             Total User
                         </h6>
                         <div class="text-center">
@@ -42,7 +42,7 @@
                 <div class="card col ml-md-3 mr-md-3" style="border-left: .75rem solid #1cc88a; border-radius: .75rem;">
                     <div class="card-body static-card-body">
                         <h6 class="card-title">
-                            <img src="/images/post.svg" class="main-icon"/>
+                            <img src="/images/post.svg" class="statics-icon"/>
                             Total Post
                         </h6>
                         <div class="text-center">
@@ -54,7 +54,7 @@
                     <div class="card-body static-card-body">
                         <h6 class="card-title">
                             <div class="dropdown">
-                                <img src="/images/calendar.svg" class="main-icon"/>
+                                <img src="/images/calendar.svg" class="statics-icon"/>
                                 <!-- button text responsive -->
                                 <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 0rem; white-space: normal;">
                                     Statics
@@ -77,7 +77,7 @@
                 <div class="card col ml-md-3 mr-md-3" style="border-left: .75rem solid #f6c23e; border-radius: .75rem;">
                     <div class="card-body static-card-body">
                         <h6 class="card-title">
-                            <img src="/images/database.svg" class="main-icon"/>
+                            <img src="/images/database.svg" class="statics-icon"/>
                             Memory Storage
                         </h6>
                         <div>
@@ -139,7 +139,7 @@
                             <td th:text="${noticeBoardDto.idx}"></td>
 
                             <td>
-                                <a th:href="'/notice-board?idx='+${noticeBoardDto.idx}" th:text="${noticeBoardDto.title}"></a>
+                                <a th:href="'/notice-board?idx='+${noticeBoardDto.idx}" th:text="${noticeBoardDto.title}" class="link"></a>
                                 <img th:if="${noticeBoardDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
 
@@ -175,7 +175,7 @@
                         <tr th:each="dataHistoryDto : ${dataHistoryDtoList}">
                             <td th:text="${dataHistoryDto.idx}"></td>
                             <td>
-                                <a th:href="'/data-history?idx='+${dataHistoryDto.idx}" th:text="${dataHistoryDto.audMessage}"></a>
+                                <a th:href="'/data-history?idx='+${dataHistoryDto.idx}" th:text="${dataHistoryDto.audMessage}" class="link"></a>
                                 <img th:if="${dataHistoryDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
 
@@ -216,7 +216,7 @@
                         <tr th:each="loginHistoryDto : ${loginHistoryDtoList}">
                             <td th:text="${loginHistoryDto.idx}"></td>
                             <td>
-                                <a th:href="'/login-history?idx='+${loginHistoryDto.idx}" th:text="${loginHistoryDto.audMessage}"></a>
+                                <a th:href="'/login-history?idx='+${loginHistoryDto.idx}" th:text="${loginHistoryDto.audMessage}" class="link"></a>
                                 <img th:if="${loginHistoryDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
 

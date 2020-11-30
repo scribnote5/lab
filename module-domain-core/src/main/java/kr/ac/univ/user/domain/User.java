@@ -92,7 +92,7 @@ public class User extends CommonAudit {
 
     @Builder
     public User(Long idx, String createdBy, String lastModifiedBy, ActiveStatus activeStatus, String username, String password, String koreanName, String englishName, GenderType gender, LocalDate birthDate, String email,
-                String privateEmail, String messengerId, String contact, UserType userType, UserStatus userStatus, String introduction, LocalDate admissionDate, LocalDate graduatedDate, String webPage, String workplace,
+                String privateEmail, String messengerId, String contact, UserType userType, UserStatus userStatus, String introduction, LocalDate admissionDate, LocalDate graduatedDate, String workplace,
                 AuthorityType authorityType, String externalWebPage, String github, String linkedIn) {
         setIdx(idx);
         setCreatedBy(createdBy);

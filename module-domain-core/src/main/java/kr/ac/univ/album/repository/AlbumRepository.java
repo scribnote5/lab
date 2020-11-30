@@ -30,4 +30,7 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
     List<Album> findAllByActiveStatusIsAndMainPagePriorityGreaterThanEqualOrderByMainPagePriorityAsc(ActiveStatus activeStatus, Long mainPagePriority);
 
     Album findByMainPagePriorityIsAndActiveStatusIs(Long mainPagePriority, ActiveStatus activeStatus);
+
+
+    List<Album> findAllByActiveStatusIsOrderByMainHashTagDescIdxDesc(ActiveStatus activeStatus);
 }

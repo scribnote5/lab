@@ -36,7 +36,7 @@
                             <td><input type="text" name="title" id="title" class="form-control" th:value="*{title}"/></td>
                         </tr>
                         <tr>
-                            <td colspan="2"><textarea name="content" id="summernote" class="summernote" th:text="*{content}"></textarea></td>
+                            <td colspan="2"><textarea name="content" th:text="*{content}" class="form-control content"></textarea></td>
                         </tr>
                         <tr>
                             <th colspan="2" class="sub-item-title">Additional Information</th>
@@ -45,7 +45,7 @@
                             <th>Active Status</th>
                             <td>
                                 <div class="pull-left">
-                                    <select class="custom-select active-status" name="activeStatus" th:field="*{activeStatus}">
+                                    <select class="custom-select" name="activeStatus" th:field="*{activeStatus}">
                                         <option th:value="ACTIVE">Active</option>
                                         <option th:value="INACTIVE">Inactive</option>
                                     </select>
@@ -54,11 +54,11 @@
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created Date</th>
-                            <td><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Modified Date</th>
-                            <td><input type="text" class="form-control created-modified-date" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                     </table>
                 </div>
@@ -68,7 +68,7 @@
                         <a href="/introduction/list" class="btn btn-secondary">Move to List</a>
                     </div>
                     <div class="col-auto mx-3">
-                        <button th:if="!*{idx}" id="insert" type="button" class="btn btn-primary">Register</button>
+                        <button th:if="!*{idx}" id="insert" type="button" class="btn-main">Register</button>
                         <button th:if="*{idx}" id="update" type="button" class="btn btn-info">Update</button>
                     </div>
                 </div>
@@ -90,18 +90,6 @@
 
 <!-- javascript -->
 <script>
-    $(document).ready(function () {
-        <!-- summernote setting -->
-        $('#summernote').summernote({
-            height: 400,	// 에디터 높이
-            minHeight: null,	// 최소 높이
-            maxHeight: null,	// 최대 높이
-            // focus: true,	// 에디터 로딩후 포커스를 맞출지 여부
-            lang: "ko-KR",// 한글 설정
-            placeholder: "The editor's max input size of bytes is 16777215(16 MB)."	//placeholder 설정
-        });
-    });
-
     function deleteIntroduction(introductionIdx) {
         // 게시글 삭제
         $.ajax({

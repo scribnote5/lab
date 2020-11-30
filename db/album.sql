@@ -9,6 +9,7 @@ CREATE TABLE album
     active_status           varchar(255)        null,
     title                   varchar(255)        null,
     hash_tags               varchar(255)        null,
+    main_hash_tag           varchar(255)        null,
     photo_taken_date        datetime(6)         null,
     main_page_priority      bigint              null
 );

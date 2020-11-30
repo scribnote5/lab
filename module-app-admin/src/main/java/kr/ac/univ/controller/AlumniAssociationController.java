@@ -37,7 +37,6 @@ public class AlumniAssociationController {
         // 권한 확인
         if (alumniAssociationDto.isAccess()) {
             model.addAttribute("alumniAssociationDto", alumniAssociationDto);
-            model.addAttribute("alumniAssociationDtoList", alumniAssociationService.findAlumniAssociationListByActiveStatusIs());
 
             returnPage = "/alumniAssociation/form";
         } else {

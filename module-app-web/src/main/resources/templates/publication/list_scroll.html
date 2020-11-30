@@ -11,10 +11,17 @@
     <!-- header -->
     <div th:replace="layout/header::header"></div>
 
-    <div class="container">
+    <div class="container publication">
         <form name="form" id="form" th:object="${publicationSearchDto}" action="#">
-            <div class="page-header page-title" data-aos="fade-up" data-aos-delay="100">
-                <h1>Publication List</h1>
+            <div class="page-header page-title breadcrumbs" data-aos="fade-up" data-aos-delay="100">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2>Publication List</h2>
+                    <ol>
+                        <li>Home</li>
+                        <img src="/images/chevron-right.svg">
+                        <li>Publication List</li>
+                    </ol>
+                </div>
             </div>
 
             <div class="row justify-content-end mt-3" data-aos="fade-up" data-aos-delay="100">
@@ -68,31 +75,30 @@
                 </div>
             </div>
 
-            <div class="row mt-5" data-aos="fade-up" data-aos-delay="150">
-                <div class="section-content">
-                    <div th:id="publicationData0" th:each="publicationDto : ${publicationDtoList}" th:class="my-4">
-                        <a th:href="${publicationDto.uri}" th:id="publicationTitle" class="my-1" th:text="${publicationDto.title}" th:class="title"></a><br>
-                        <span th:text="${publicationDto.authors}" th:id="publicationAuthors" class="authors my-1"></span><br>
+            <div class="mt-5" data-aos="fade-up" data-aos-delay="150">
+                <div th:id="publicationData0" th:each="publicationDto : ${publicationDtoList}" class="publication-wrap">
+                    <a th:if="${not #strings.isEmpty(publicationDto.uri)}" th:href="${publicationDto.uri}" th:id="publicationTitle" class="my-1" th:text="${publicationDto.title}" th:class="title"></a><br>
+                    <span th:if="${#strings.isEmpty(publicationDto.uri)}"  th:id="publicationTitle" class="my-1" th:text="${publicationDto.title}" th:class="title"></span><br>
 
-                        <span th:if="!${#strings.isEmpty(publicationDto.publishedIn)}" th:text="${publicationDto.publishedIn}"></span>
-                        <span th:if="!${#strings.isEmpty(publicationDto.publishedDate)}" th:text="', ' + ${#temporals.format(publicationDto.publishedDate, 'MMMM', new java.util.Locale('en', 'EN'))}"></span>
-                        <span th:if="!${#strings.isEmpty(publicationDto.publishedDate)}" th:text="', ' + ${#temporals.format(publicationDto.publishedDate,'yyyy')}"></span>
-                        <span th:if="!${#strings.isEmpty(publicationDto.volume)}" th:text="', Vol. ' + ${publicationDto.volume} "></span>
-                        <span th:if="!${#strings.isEmpty(publicationDto.number)}" th:text="', No. ' + ${publicationDto.number}"></span>
-                        <span th:if="!${#strings.isEmpty(publicationDto.pages)}" th:text="', pp. ' + ${publicationDto.pages}"></span>
-                        <span th:if="!${#strings.isEmpty(publicationDto.isbnIssn)}" th:text="', ' + ${publicationDto.isbnIssn}"></span>
+                    <span th:text="${publicationDto.authors}" th:id="publicationAuthors" class="authors my-1"></span><br>
 
-                        <p class="my-2">
-                            <span th:if="${#strings.equals(publicationDto.publishingArea, 'INTERNATIONAL') && #strings.equals(publicationDto.publicationType, 'JOURNAL')}"
-                                  th:text="${publicationDto.publishingArea.publishingArea} + ' ' + ${publicationDto.publicationType.publicationType} + (${#strings.isEmpty(publicationDto.impactFactor)} ? '' : ${publicationDto.impactFactor})"
-                                  class="btn-primary btn-sm"></span>
-                            <span th:if="${#strings.equals(publicationDto.publishingArea, 'INTERNATIONAL') && !(#strings.equals(publicationDto.publicationType, 'JOURNAL'))}"
-                                  th:text="${publicationDto.publishingArea.publishingArea} + ' ' + ${publicationDto.publicationType.publicationType}" class="btn-info btn-sm"></span>
-                            <span th:if="${#strings.equals(publicationDto.publishingArea, 'DOMESTIC') && #strings.equals(publicationDto.publicationType, 'JOURNAL')}"
-                                  th:text="${publicationDto.publishingArea.publishingArea} + ' ' + ${publicationDto.publicationType.publicationType} " class="btn-success btn-sm"></span>
-                            <span th:if="${#strings.equals(publicationDto.publishingArea, 'DOMESTIC') && !(#strings.equals(publicationDto.publicationType, 'JOURNAL'))}"
-                                  th:text="${publicationDto.publishingArea.publishingArea} + ' ' + ${publicationDto.publicationType.publicationType}" class="btn-warning btn-sm" style="color:white;"></span>
-                        </p>
+                    <span th:if="!${#strings.isEmpty(publicationDto.publishedIn)}" th:text="${publicationDto.publishedIn}"></span>
+                    <span th:if="!${#strings.isEmpty(publicationDto.publishedDate)}" th:text="', ' + ${#temporals.format(publicationDto.publishedDate, 'MMMM', new java.util.Locale('en', 'EN'))}"></span>
+                    <span th:if="!${#strings.isEmpty(publicationDto.publishedDate)}" th:text="', ' + ${#temporals.format(publicationDto.publishedDate,'yyyy')}"></span>
+                    <span th:if="!${#strings.isEmpty(publicationDto.volume)}" th:text="', Vol. ' + ${publicationDto.volume} "></span>
+                    <span th:if="!${#strings.isEmpty(publicationDto.number)}" th:text="', No. ' + ${publicationDto.number}"></span>
+                    <span th:if="!${#strings.isEmpty(publicationDto.pages)}" th:text="', pp. ' + ${publicationDto.pages}"></span>
+                    <span th:if="!${#strings.isEmpty(publicationDto.isbnIssn)}" th:text="', ' + ${publicationDto.isbnIssn}"></span>
+
+                    <div class="mt-2">
+                        <span th:if="${#strings.equals(publicationDto.publishingArea, 'INTERNATIONAL') && #strings.equals(publicationDto.publicationType, 'JOURNAL')}"
+                              th:text="${publicationDto.publishingArea.publishingArea} + ' ' + ${publicationDto.publicationType.publicationType} + (${#strings.isEmpty(publicationDto.impactFactor)} ? '' : ${publicationDto.impactFactor})" class="btn-primary btn-sm"></span>
+                        <span th:if="${#strings.equals(publicationDto.publishingArea, 'INTERNATIONAL') && !(#strings.equals(publicationDto.publicationType, 'JOURNAL'))}"
+                              th:text="${publicationDto.publishingArea.publishingArea} + ' ' + ${publicationDto.publicationType.publicationType}" class="btn-info btn-sm"></span>
+                        <span th:if="${#strings.equals(publicationDto.publishingArea, 'DOMESTIC') && #strings.equals(publicationDto.publicationType, 'JOURNAL')}"
+                              th:text="${publicationDto.publishingArea.publishingArea} + ' ' + ${publicationDto.publicationType.publicationType} " class="btn-success btn-sm"></span>
+                        <span th:if="${#strings.equals(publicationDto.publishingArea, 'DOMESTIC') && !(#strings.equals(publicationDto.publicationType, 'JOURNAL'))}"
+                              th:text="${publicationDto.publishingArea.publishingArea} + ' ' + ${publicationDto.publicationType.publicationType}" class="btn-warning btn-sm" style="color:white;"></span>
                     </div>
                 </div>
 

@@ -1,0 +1,90 @@
+/*
+ * Icon
+ */
+.url-icon {
+    margin: 0 .25rem .125rem .25rem;
+    height: 1.25rem;
+    width: auto;
+}
+
+.sidebar-icon {
+    height: 2.5rem;
+    width: 2.5rem;
+}
+
+.menu-icon {
+    height: 40px;
+    width: 40px;
+}
+
+.statics-icon {
+    margin: 0 .25rem .25rem 0;
+    height: 1.25rem;
+    width: 1.25rem;
+}
+
+.new-icon {
+    margin-left: .25rem;
+    margin-bottom: .1rem;
+    height: 1rem;
+    width: 1rem;
+}
+
+.cancel-icon {
+    margin-left: .25rem;
+    margin-bottom: .1rem;
+    height: 1rem;
+    width: 1rem;
+}
+
+.chevron-down-icon {
+    height: 1.5rem;
+    width: 1.5rem;
+    float: right;
+}
+
+.user-information-icon {
+    border-right: .075rem solid var(--light-grey);
+    padding-right: .2rem;
+    float: left;
+    height: 1.5rem;
+    width: auto;
+}
+
+.logout-icon {
+    border-left: .075rem solid var(--light-grey);
+    padding-left: .2rem;
+    float: right;
+    height: 1.5rem;
+    width: auto;
+    cursor: pointer;
+}
+
+/*
+ * Image
+ */
+.album-img-preview {
+    max-width: 100%;
+    width: auto;
+    height: 13.5rem;
+}
+
+.user-img-preview {
+    width: 10rem;
+    height: 10rem;
+}
+
+.logo {
+    height: 3.25rem;
+    width: auto;
+    object-fit: contain;
+}
+
+.no-preview-available {
+    width: 330px;
+    height: 330px;
+}
+
+.img-thumbnail:hover {
+    box-shadow: 0 0 .05rem .05rem rgb(158, 37, 41);
+}

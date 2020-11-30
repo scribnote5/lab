@@ -75,10 +75,25 @@ public class AlbumService {
 
         albumDtoList = new PageImpl<AlbumDto>(AlbumMapper.INSTANCE.toDto(albumList.getContent()), pageable, albumList.getTotalElements());
 
-        // NewIcon 판별, Main HashTag 설정
+        // NewIcon 판별
         for (AlbumDto albumDto : albumDtoList) {
             albumDto.setNewIcon(NewIconCheck.isNew(albumDto.getCreatedDate()));
-            albumDto.setMainHashTag("#" + (albumDto.getHashTags()).split("#")[1]);
+        }
+
+        return albumDtoList;
+    }
+
+    public List<AlbumDto> findAllByActiveStatusIsOrderByMainHashTagDescIdxDesc() {
+        List<AlbumDto> albumDtoList = AlbumMapper.INSTANCE.toDto(albumRepository.findAllByActiveStatusIsOrderByMainHashTagDescIdxDesc(ActiveStatus.ACTIVE));
+        String mainHashTag = "";
+
+        for(AlbumDto albumDto: albumDtoList) {
+            if(!mainHashTag.equals(albumDto.getMainHashTag())  ) {
+                albumDto.setMainHashTagPrint(true);
+                mainHashTag = albumDto.getMainHashTag();
+            } else {
+                albumDto.setMainHashTagPrint(false);
+            }
         }
 
         return albumDtoList;
@@ -89,6 +104,9 @@ public class AlbumService {
     }
 
     public Long insertAlbum(AlbumDto albumDto) {
+        // mainHashTag 설정
+        albumDto.setMainHashTag("#" + (albumDto.getHashTags()).split("#")[1]);
+
         return albumRepository.save(AlbumMapper.INSTANCE.toEntity(albumDto)).getIdx();
     }
 
@@ -123,6 +141,9 @@ public class AlbumService {
 
     @Transactional
     public Long updateAlbum(Long idx, AlbumDto albumDto) {
+        // mainHashTag 설정
+        albumDto.setMainHashTag("#" + (albumDto.getHashTags()).split("#")[1]);
+
         Album persistAlbum = albumRepository.getOne(idx);
         Album album = AlbumMapper.INSTANCE.toEntity(albumDto);
 

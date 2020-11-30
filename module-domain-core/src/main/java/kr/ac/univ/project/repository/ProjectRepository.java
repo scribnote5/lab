@@ -20,5 +20,5 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
 
 
-    List<Project> findAllByProjectStatusIsAndActiveStatusIs(ProjectStatus projectStatus, ActiveStatus activeStatus);
+    List<Project> findAllByProjectStatusIsAndActiveStatusIsOrderByStartDateDesc(ProjectStatus projectStatus, ActiveStatus activeStatus);
 }

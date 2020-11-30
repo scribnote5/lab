@@ -34,7 +34,7 @@
                         <input type="text" name="keyword" class="form-control" th:value="${searchDto?.keyword}"/>
                     </div>
                     <div class="col-auto px-3">
-                        <button id="search" type="button" class="btn btn-primary">Search</button>
+                        <button id="search" type="button" class="btn-main">Search</button>
                     </div>
                 </div>
 
@@ -54,7 +54,7 @@
                         <tr th:each="introductionDto : ${introductionDtoList}">
                             <td th:text="${introductionDto.idx}"></td>
                             <td>
-                                <a th:href="'/introduction?idx='+${introductionDto.idx}" th:text="${introductionDto.title}"></a>
+                                <a th:href="'/introduction?idx='+${introductionDto.idx}" th:text="${introductionDto.title}" class="link"></a>
                                 <img th:if="${introductionDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
                             <td th:text="${introductionDto.createdBy}">></td>
@@ -70,7 +70,7 @@
 
                 <div class="row justify-content-end mt-5 mb-3">
                     <div class="col-auto mx-3">
-                        <a href="/introduction/form" class="btn btn-primary">Register</a>
+                        <a href="/introduction/form" class="btn-main">Register</a>
                     </div>
                 </div>
 

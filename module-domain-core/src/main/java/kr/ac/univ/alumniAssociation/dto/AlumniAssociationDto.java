@@ -1,6 +1,5 @@
 package kr.ac.univ.alumniAssociation.dto;
 
-import kr.ac.univ.alumniAssociation.domain.enums.TitleType;
 import kr.ac.univ.common.dto.CommonDto;
 import kr.ac.univ.common.validation.Editor;
 import lombok.Getter;
@@ -19,10 +18,6 @@ public class AlumniAssociationDto extends CommonDto {
     @NotBlank(message = "The title must not be blank.")
     private String title;
 
-    private TitleType titleType;
-
     @Editor(max = 16777215, message = "The editor's input size of bytes is exceeded.")
     private String content;
-
-    private Long mainPagePriority;
 }

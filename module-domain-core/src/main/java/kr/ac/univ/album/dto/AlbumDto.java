@@ -33,6 +33,8 @@ public class AlbumDto extends CommonDto {
 
     private String mainHashTag;
 
+    private boolean isMainHashTagPrint;
+
     /* 첨부 파일 */
     private List<AlbumAttachedFile> attachedFileList = new ArrayList<AlbumAttachedFile>();
 }

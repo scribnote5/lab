@@ -3,18 +3,19 @@
 <!--header-->
 <div th:fragment="header">
     <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom" style="min-height: 4.25rem">
-       <div id="menu-toggle">
-            <img src="/images/sidebar.svg" class="sidebar-icon img-border">
-       </div>
-
-        <div class="navbar-toggler" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" style="border: none">
-            <img src="/images/menu.svg" class="menu-icon img-border">
+        <div id="menu-toggle">
+            <img src="/images/sidebar.svg" class="sidebar-icon img-thumbnail">
         </div>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-toggler" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" style="border: none">
+            <img src="/images/menu.svg" class="menu-icon img-thumbnail">
+        </div>
+
+        <div id="navbarSupportedContent" class="collapse navbar-collapse">
             <ul class="navbar-nav ml-auto mt-2">
                 <div class="nav-item user-information">
-                    <a th:href="'/user?idx='+${#authentication.principal.idx}"><img src="/images/user-information-icon.svg" class="user-information-icon">&nbsp; <span th:text="${#authentication.principal.username}"> </span></a>
+                    <a th:href="'/user?idx='+${#authentication.principal.idx}"><img src="/images/user-information-icon.svg" class="user-information-icon"></a>
+                    <span class="username" th:text="${#authentication.principal.username}"> </span>
                     <img src="/images/logout-icon.svg" class="logout-icon" id="logout">
                 </div>
             </ul>

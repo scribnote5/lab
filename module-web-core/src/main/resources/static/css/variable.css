@@ -27,10 +27,11 @@
     --lighter-grey: rgb(192, 192, 192);
     --lightest-grey: rgb(224, 224, 224);
 
-    --dark-white: rgb(240, 240, 240);
+    --darker-white: rgb(240, 240, 240);
+    --dark-white: rgb(248, 248, 248);
     --white: rgb(255, 255, 255);
 
-    --lightest-red: rgba(233, 37, 47);
+    --lightest-red: rgb(233, 37, 47);
     --lighter-red: rgb(208, 37, 47);
     --light-red: rgb(183, 37, 47);
     --main-red: rgb(158, 37, 41);
