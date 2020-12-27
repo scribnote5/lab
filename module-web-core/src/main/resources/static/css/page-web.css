@@ -430,16 +430,29 @@ section {
 /*
  * About Us
  */
-.canvas-wrapper {
-    height: 65%;
+.learn-more-read-wrapper {
     width: 65%;
+    height: 65%;
+    margin: auto;
 }
 
-.video-wrapper {
-    height: 65%;
-    width: 65%;
+.learn-more-read-content {
+    margin-top: .75rem;
+    width: 100%;
+    height: auto;
 }
 
+.learn-more-video-wrapper {
+    width: 65%;
+    height: 65%;
+    margin: auto;
+}
+
+.learn-more-video-content {
+    margin-top: .75rem;
+    width: 100%;
+    height: auto;
+}
 
 /*
  * Member

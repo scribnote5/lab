@@ -22,7 +22,6 @@ public class ResearchFieldDto extends CommonDto {
     @Size(max = 255, message = "The title can be used for less than 50 characters.")
     private String title;
 
-    @NotBlank(message = "The category idx must not be blank.")
     private Long categoryIdx;
 
     @Editor(max = 16777215, message = "The editor's input size of bytes is exceeded.")

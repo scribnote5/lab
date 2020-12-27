@@ -36,18 +36,18 @@
             </div>
         </nav>
         <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active mt-4 canvas-wrapper" id="learn-more-read" role="tabpanel" aria-labelledby="learn-more-read-tab">
-                <div th:if="${not #lists.isEmpty(learnMoreReadDtoList)}">
+            <div class="tab-pane fade show active mt-4 learn-more-read-wrapper" id="learn-more-read" role="tabpanel" aria-labelledby="learn-more-read-tab">
+                <div th:if="!${#lists.isEmpty(learnMoreReadDtoList)}">
                     <div>
-                        button id="prev" class="btn-main">Previous</button>
+                        <button id="prev" class="btn-main">Previous</button>
                         <button id="next" class="btn-main mx-3">Next</button>
                         <span class="float-right"> Page: <span id="page_num"></span> / <span id="page_count"></span> </span>
                     </div>
-                    <canvas id="the-canvas" class="mt-3 img-thumbnail"></canvas>
+                    <canvas id="the-canvas" class="learn-more-read-content img-thumbnail"></canvas>
                 </div>
             </div>
-            <div class="tab-pane fade mt-4 video-wrapper" id="learn-more-video" role="tabpanel" aria-labelledby="learn-more-video-tab">
-                <video controls th:if="${not #lists.isEmpty(learnMoreVideoDtoList)}">
+            <div class="tab-pane fade mt-4 learn-more-video-wrapper" id="learn-more-video" role="tabpanel" aria-labelledby="learn-more-video-tab">
+                <video controls th:if="!${#lists.isEmpty(learnMoreVideoDtoList)}" class="learn-more-video-content">
                     <source th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-video/${learnMoreVideoDtoList[0].attachedFileList[0].savedFileName}|}" type="video/mp4">
                     Sorry, your browser doesn't support embedded videos.
                 </video>

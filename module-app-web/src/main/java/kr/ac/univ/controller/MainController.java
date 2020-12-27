@@ -61,9 +61,6 @@ public class MainController {
             albumAttachedFileService.findAttachedFileByAlbumIdx(albumDto.getIdx(), albumDto);
         }
 
-        System.out.println("introductionImageDtoList");
-        System.out.println(introductionImageDtoList);
-
         model.addAttribute("introductionDto", introductionDto);
         model.addAttribute("introductionImageDtoList", introductionImageDtoList);
         model.addAttribute("researchFieldDtoList", researchFieldService.findResearchFieldListByActiveStatusIs());
