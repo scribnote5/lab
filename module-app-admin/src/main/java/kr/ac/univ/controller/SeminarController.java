@@ -31,7 +31,7 @@ public class SeminarController {
     public String seminarList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
         model.addAttribute("seminarDtoList", seminarService.findSeminarList(pageable, searchDto));
 
-        return "/seminar/list";
+        return "seminar/list";
     }
 
     // Form Update
@@ -48,9 +48,9 @@ public class SeminarController {
             model.addAttribute("categoryDto", categoryService.findCategoryByIdxInActive(seminarDto.getCategoryIdx()));
             model.addAttribute("categoryDtoList", categoryService.findCategoryListByActiveStatusIs());
 
-            returnPage = "/seminar/form";
+            returnPage = "seminar/form";
         } else {
-            returnPage = "/user/permission-denied";
+            returnPage = "user/permission-denied";
         }
 
         return returnPage;
@@ -67,6 +67,6 @@ public class SeminarController {
         model.addAttribute("seminarDto", seminarDto);
         model.addAttribute("categoryDto", categoryService.findCategoryByIdxInActive(seminarDto.getCategoryIdx()));
 
-        return "/seminar/read";
+        return "seminar/read";
     }
 }

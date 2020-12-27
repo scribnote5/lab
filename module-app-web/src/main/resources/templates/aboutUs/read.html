@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- css -->
+    <th:block th:replace="layout/css.html"></th:block>
+
+    <title th:text="${@environment.getProperty('title')} + ' | About Us Detail'"></title>
+</head>
+
+<body>
+<div id="page-content-wrapper">
+    <!-- header -->
+    <div th:replace="layout/header::header"></div>
+
+    <div class="container project">
+        <div class="page-header breadcrumbs" data-aos="fade-up" data-aos-delay="100">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2>About Us</h2>
+                <ol>
+                    <li>Home</li>
+                    <img src="/images/chevron-right.svg">
+                    <li>About Us Detail</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="mt-5" data-aos="fade-up" data-aos-delay="150">
+            <h2 style="font-weight: bold" class="mb-4">Who we are</h2>
+            <span th:utext="${#strings.isEmpty(aboutUsDto)} ? 'No content.' : ${aboutUsDto.content}"></span>
+        </div>
+
+        <nav class="mt-5" data-aos="fade-up" data-aos-delay="200">
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link link-black active" id="learn-more-read-tab" data-toggle="tab" href="#learn-more-read" role="tab" aria-controls="learn-more-read" aria-selected="false">Learn More Read</a>
+                <a class="nav-item nav-link link-black" id="learn-more-video-tab" data-toggle="tab" href="#learn-more-video" role="tab" aria-controls="learn-more-video" aria-selected="false">Learn More Video</a>
+            </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active mt-4 canvas-wrapper" id="learn-more-read" role="tabpanel" aria-labelledby="learn-more-read-tab">
+                <div th:if="${not #lists.isEmpty(learnMoreReadDtoList)}">
+                    <div>
+                        button id="prev" class="btn-main">Previous</button>
+                        <button id="next" class="btn-main mx-3">Next</button>
+                        <span class="float-right"> Page: <span id="page_num"></span> / <span id="page_count"></span> </span>
+                    </div>
+                    <canvas id="the-canvas" class="mt-3 img-thumbnail"></canvas>
+                </div>
+            </div>
+            <div class="tab-pane fade mt-4 video-wrapper" id="learn-more-video" role="tabpanel" aria-labelledby="learn-more-video-tab">
+                <video controls th:if="${not #lists.isEmpty(learnMoreVideoDtoList)}">
+                    <source th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-video/${learnMoreVideoDtoList[0].attachedFileList[0].savedFileName}|}" type="video/mp4">
+                    Sorry, your browser doesn't support embedded videos.
+                </video>
+            </div>
+        </div>
+
+        <div class="mt-5 mb-3"></div>
+    </div>
+</div>
+
+<!-- footer -->
+<div th:replace="layout/footer::footer"></div>
+
+<!-- script file -->
+<th:block th:replace="layout/script.html"></th:block>
+
+<script th:inline="javascript">
+    sweetalertFire("project");
+
+    $("#search").click(function () {
+        document.form.action = "/project/list";
+        document.form.method = "get";
+        document.form.submit();
+    });
+
+    var learnMoreReadDtoList = [[${learnMoreReadDtoList}]];
+
+    if (!isEmpty(learnMoreReadDtoList)) {
+        var url = moduleAppApiAddress + "/api/attachedFiles/view-pdf/" + learnMoreReadDtoList[0].attachedFileList[0].savedFileName;
+
+        // Loaded via <script> tag, create shortcut to access PDF.js exports.
+        var pdfjsLib = window['pdfjs-dist/build/pdf'];
+
+        // The workerSrc property shall be specified.
+        pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdfjs/build/pdf.worker.js';
+
+        var pdfDoc = null,
+            pageNum = 1,
+            pageRendering = false,
+            pageNumPending = null,
+            scale = 2,
+            canvas = document.getElementById("the-canvas"),
+            ctx = canvas.getContext("2d");
+
+        /**
+         * Get page info from document, resize canvas accordingly, and render page.
+         * @param num Page number.
+         */
+        function renderPage(num) {
+            pageRendering = true;
+            // Using promise to fetch the page
+            pdfDoc.getPage(num).then(function (page) {
+                var viewport = page.getViewport({scale: scale});
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                // Render PDF page into canvas context
+                var renderContext = {
+                    canvasContext: ctx,
+                    viewport: viewport
+                };
+                var renderTask = page.render(renderContext);
+
+                // Wait for rendering to finish
+                renderTask.promise.then(function () {
+                    pageRendering = false;
+                    if (pageNumPending !== null) {
+                        // New page rendering is pending
+                        renderPage(pageNumPending);
+                        pageNumPending = null;
+                    }
+                });
+            });
+
+            // Update page counters
+            document.getElementById("page_num").textContent = num;
+        }
+
+        /**
+         * If another page rendering in progress, waits until the rendering is
+         * finised. Otherwise, executes rendering immediately.
+         */
+        function queueRenderPage(num) {
+            if (pageRendering) {
+                pageNumPending = num;
+            } else {
+                renderPage(num);
+            }
+        }
+
+        /**
+         * Displays previous page.
+         */
+        function onPrevPage() {
+            if (pageNum <= 1) {
+                return;
+            }
+            pageNum--;
+            queueRenderPage(pageNum);
+        }
+
+        document.getElementById("prev").addEventListener("click", onPrevPage);
+
+        /**
+         * Displays next page.
+         */
+        function onNextPage() {
+            if (pageNum >= pdfDoc.numPages) {
+                return;
+            }
+            pageNum++;
+            queueRenderPage(pageNum);
+        }
+
+        document.getElementById("next").addEventListener("click", onNextPage);
+
+        /**
+         * Asynchronously downloads PDF.
+         */
+        pdfjsLib.getDocument(url).promise.then(function (pdfDoc_) {
+            pdfDoc = pdfDoc_;
+            document.getElementById("page_count").textContent = pdfDoc.numPages;
+
+            // Initial/first page rendering
+            renderPage(pageNum);
+        });
+    }
+</script>
+</body>
+</html>

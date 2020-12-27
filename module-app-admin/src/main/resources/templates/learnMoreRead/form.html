@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- css -->
+    <th:block th:replace="layout/css.html"></th:block>
+
+    <title th:if="!${learnMoreReadDto.idx}" th:text="${@environment.getProperty('title')} + ' | LearnMore Read Register'"></title>
+    <title th:if="${learnMoreReadDto.idx}" th:text="${@environment.getProperty('title')} + ' | LearnMore Read Update'"></title>
+</head>
+<body>
+<div class="d-flex" id="wrapper">
+    <!-- sidebar -->
+    <div th:replace="layout/sidebar::sidebar"></div>
+
+    <div id="page-content-wrapper">
+        <!-- header -->
+        <div th:replace="layout/header::header"></div>
+
+        <div class="container-fluid">
+            <form name="form" id="form" th:object="${learnMoreReadDto}" action="#">
+                <div class="page-header breadcrumbs">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 th:if="!*{idx}">LearnMore Read Register</h2>
+                        <h2 th:if="*{idx}">LearnMore Read Update</h2>
+
+                        <ol>
+                            <li>Home</li>
+                            <img src="/images/chevron-right.svg">
+                            <li th:if="!*{idx}">LearnMore Read Register</li>
+                            <li th:if="*{idx}">LearnMore Read Update</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="mt-5">
+                    <table class="table">
+                        <colgroup>
+                            <col width="17.5%"/>
+                            <col width="82.5%"/>
+                        </colgroup>
+                        <tr>
+                            <th colspan="2" class="sub-item-title">LearnMore Information</th>
+                        </tr>
+                        <tr>
+                            <th>Title</th>
+                            <td><input type="text" name="title" id="title" class="form-control" th:value="*{title}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Attached File</th>
+                            <td>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="file" name="file">
+                                    <label class="custom-file-label" for="file">Choose file.</label>
+                                </div>
+                                <div id="fileDrop" class="fileDrop">
+                                    <strong>Drop files here.</strong>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Total file size</th>
+                            <td>
+                                <div><span id="totalFileSize"> 0 MB</span>, Up to 20 MB</div>
+                            </td>
+                        <tr>
+                            <th>Upload Attached File</th>
+                            <td>
+                                <div id="attachedFileList"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Uploaded Attached File</th>
+                            <td>
+                                <div id="uploadedAttachedFileList" th:each="attachedFile : *{attachedFileList}">
+                                    <div th:id="imgData + ${attachedFileStat.index}">
+                                        <span th:text="${attachedFile.fileName} + ',&nbsp;' + 'File Size: ' + ${attachedFile.fileSize} + '&nbsp;'"></span>
+                                        <img th:attr="src=@{|/images/cancel-icon.png|}, onclick=|deleteFile('${attachedFileStat.index}','${attachedFile.idx}','${attachedFile.savedFileName}')|" class="cancel-icon"/>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Additional Information</th>
+                        </tr>
+                        <tr>
+                            <th>Active Status</th>
+                            <td>
+                                <div class="pull-left">
+                                    <select class="custom-select" name="activeStatus" th:field="*{activeStatus}">
+                                        <option th:value="ACTIVE">Active</option>
+                                        <option th:value="INACTIVE">Inactive</option>
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Created Date</th>
+                            <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Modified Date</th>
+                            <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="row justify-content-between mt-5 mb-3">
+                    <div class="col-auto mx-3">
+                        <a href="/learn-more-read/list" class="btn btn-secondary col-auto">Move to List</a>
+                    </div>
+                    <div class="col-auto mx-3">
+                        <button th:if="!*{idx}" id="insert" type="button" class="btn-main">Register</button>
+                        <button th:if="*{idx}" id="update" type="button" class="btn btn-info">Update</button>
+                    </div>
+                </div>
+
+                <!-- input type="hidden" -->
+                <input type="hidden" name="idx" th:value="*{idx}"/>
+                <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
+                <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- footer -->
+<div th:replace="layout/footer::footer"></div>
+
+<!-- script file -->
+<th:block th:replace="layout/script.html"></th:block>
+
+<!-- javascript -->
+<script th:inline="javascript">
+    var totalFileSize = 0;
+    var insertFileArray = [];
+    var deleteFileArray = [];
+    var imgDataId = 0;
+    var exit = null;
+
+    // 파일 Number validation
+    var insertFileArrayLength = 0;
+    var deleteFileArrayLength = 0;
+    var uploadedAttachedFileLength = [[${learnMoreReadDto.attachedFileList}]].length;
+
+    $(document).ready(function () {
+        <!-- File Drop -->
+        $("#fileDrop").on("dragenter dragover", function (event) {
+            event.preventDefault(); // 기본 이벤트 발생을 막음
+        });
+    });
+
+    /* input tag event */
+    $("#file").change(function () {
+        var files = document.getElementsByName("file")[0].files;
+
+        // 업로드하는 파일 개수가 number개가 넘어가는 경우, 파일 업로드 불가
+        if (!validateByFileNumber(files, 1)) {
+            return false;
+        }
+
+        for (var i = 0; i < files.length; i++) {
+            if (validatePdfFile(files[i])) {
+                insertFileArray.push(files[i]);
+                document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
+
+                $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
+                    + '<span>'
+                    + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size)
+                    + '<img src="/images/cancel-icon.png" class="cancel-icon" onClick="cancelFile(' + imgDataId + ')" />'
+                    + '</span>'
+                    + '</div>');
+
+                imgDataId++;
+            } else {
+                return false;
+            }
+        }
+    });
+
+    /* Drag & drop event */
+    $("#fileDrop").on("drop", function (event) {
+        event.preventDefault(); // 기본 효과를 막음
+        document.getElementById("fileDrop").style.opacity = 1;
+
+        // 드래그된 파일의 정보
+        // event : jQuery의 이벤트
+        // originalEvent : javascript의 이벤트
+        var files = event.originalEvent.dataTransfer.files;
+
+        // 업로드하는 파일 개수가 number개가 넘어가는 경우, 파일 업로드 불가
+        if (!validateByFileNumber(files, 1)) {
+            return false;
+        }
+
+        for (var i = 0; i < files.length; i++) {
+            if (validatePdfFile(files[i])) {
+                insertFileArray.push(files[i]);
+                document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
+
+                $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
+                    + '<span>'
+                    + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size)
+                    + '<img src="/images/cancel-icon.png" class="cancel-icon" onClick="cancelFile(' + imgDataId + ')" />'
+                    + '</span>'
+                    + '</div>');
+
+                imgDataId++;
+            } else {
+                return false;
+            }
+        }
+    });
+
+    $("#fileDrop").on("dragover", function (event) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        document.getElementById("fileDrop").style.opacity = 0.25;
+    });
+
+    $("#fileDrop").on("dragleave", function (event) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        document.getElementById("fileDrop").style.opacity = 1;
+    });
+
+    // 새로 업로드한 파일을 취소하는 경우
+    function cancelFile(fileId) {
+        $('#imgData' + fileId).remove();
+
+        totalFileSize -= insertFileArray[fileId].size;
+        insertFileArray[fileId] = null;
+
+        document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
+    }
+
+    // 기존 업로드한 파일을 삭제하는 경우
+    function deleteFile(fileId, idx, savedFileName) {
+        $('#imgData' + fileId).remove();
+
+        deleteFileArray.push(idx);
+    }
+
+    function deleteLearnMore(learnMoreReadIdx) {
+        $.ajax({
+            url: moduleAppApiAddress + "/api/learn-more-reads/" + learnMoreReadIdx,
+            type: "delete",
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+            });
+    }
+</script>
+
+<script th:if="!${learnMoreReadDto?.idx}">
+    $('#insert').click(function () {
+        // 배열 요소가 null인 경우를 제외하여 배열 길이를 계산함
+        deleteArrayIndexIsNull();
+
+        // (input tag mame, length or size, message)
+        if (!(validateByLength("title", 255, "title") && validateByFileExist())) {
+            return false;
+        }
+
+        var jsonData = $("#form").serializeObject();
+        var learnMoreReadIdx;
+
+        $.ajax({
+            url: moduleAppApiAddress + "/api/learn-more-reads",
+            type: "post",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                learnMoreReadIdx = msg;
+                exit = false;
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                exit = true;
+            });
+
+        if (exit) return false;
+
+        // 파일 업로드
+        var formData = new FormData();
+
+        for (var i = 0; i < insertFileArray.length; i++) {
+            formData.append("files", insertFileArray[i]);
+        }
+
+        formData.append("idx", learnMoreReadIdx);
+        formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
+
+        $.ajax({
+            url: moduleAppApiAddress + "/api/learn-more-reads/attachedFile",
+            type: "post",
+            data: formData,
+            dataType: "text",
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            async: false,
+        })
+            .done(function (msg) {
+                localStorage.setItem("result", "/learn-more-read/register-success");
+                location.href = "/learn-more-read?idx=" + learnMoreReadIdx;
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                deleteLearnMore(learnMoreReadIdx);
+            });
+    });
+</script>
+
+<script th:if="${learnMoreReadDto?.idx}" th:inline="javascript">
+    $('#update').click(function () {
+        // 배열 요소가 null인 경우를 제외하여 배열 길이를 계산함
+        deleteArrayIndexIsNull();
+
+        // (input tag mame, length or size, message)
+        if (!(validateByLength("title", 255, "title") && validateByFileExist())) {
+            return false;
+        }
+
+        var jsonData = $("#form").serializeObject();
+        var learnMoreReadIdx = document.getElementsByName("idx")[0].value;
+
+        $.ajax({
+            url: moduleAppApiAddress + "/api/learn-more-reads/" + learnMoreReadIdx,
+            type: "put",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                exit = false;
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                exit = true;
+            });
+
+        if (exit) return false;
+
+        // 만일 파일이 수정되지 않은 경우 '파일 업로드' 및 '파일 삭제'를 수행하지 않음
+        if (insertFileArray.length == 0 && deleteFileArray.length == 0) {
+            localStorage.setItem("result", "/learn-more-read/update-success");
+            location.href = "/learn-more-read?idx=" + learnMoreReadIdx;
+        }
+
+        // 파일 삭제
+        if (deleteFileArray.length > 0) {
+            $.ajax({
+                url: moduleAppApiAddress + "/api/learn-more-reads/attachedFile",
+                type: "delete",
+                data: JSON.stringify(deleteFileArray),
+                contentType: "application/json",
+                async: false,
+            })
+                .done(function (msg) {
+                    exit = false;
+                })
+                .fail(function (msg) {
+                    parseErrorMsg(msg);
+                    exit = true;
+                });
+        }
+
+        if (exit) return false;
+
+        if (insertFileArray.length <= 0) {
+            localStorage.setItem("result", "/learn-more-read/update-success");
+            location.href = "/learn-more-read?idx=" + learnMoreReadIdx;
+        }
+
+        // 파일 업로드
+        var formData = new FormData();
+
+        for (var i = 0; i < insertFileArray.length; i++) {
+            formData.append("files", insertFileArray[i]);
+        }
+
+        formData.append("idx", learnMoreReadIdx);
+        formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
+
+        $.ajax({
+            url: moduleAppApiAddress + "/api/learn-more-reads/attachedFile",
+            type: "post",
+            data: formData,
+            dataType: "text",
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            async: false,
+        })
+            .done(function (msg) {
+                localStorage.setItem("result", "/learn-more-read/update-success");
+                location.href = "/learn-more-read?idx=" + learnMoreReadIdx;
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                deleteLearnMore(learnMoreReadIdx);
+            })
+    });
+</script>
+
+</body>
+</html>

@@ -4,7 +4,7 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title>Album List</title>
+    <title th:text="${@environment.getProperty('title')} + ' | Album List'"></title>
 </head>
 <body>
 <div class="d-flex" id="wrapper">
@@ -17,8 +17,15 @@
 
         <div class="container-fluid">
             <form name="form" id="form" th:object="${searchDto}" action="#">
-                <div class="page-header">
-                    <h1>Album List</h1>
+                <div class="page-header breadcrumbs">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2>Album List</h2>
+                        <ol>
+                            <li>Home</li>
+                            <img src="/images/chevron-right.svg">
+                            <li>Album List</li>
+                        </ol>
+                    </div>
                 </div>
 
                 <div class="row justify-content-end mt-3">
@@ -37,7 +44,7 @@
                     </div>
                 </div>
 
-                <div class="mt-5">
+                <div class="mt-5" id="table">
                     <table class="table table-hover">
                         <thead>
                         <tr>
@@ -54,18 +61,20 @@
                         <tr th:each="albumDto : ${albumDtoList}">
                             <td th:text="${albumDto.idx}"></td>
                             <td>
-                                <a th:href="'/album?idx='+${albumDto.idx}" th:text="${albumDto.title}" class="link"></a>
+                                <a th:href="'/album?idx='+${albumDto.idx}" class="link" th:text="${#strings.length(albumDto.title)} < 40 ? ${albumDto.title} : ${#strings.substring(albumDto.title, 0, 40)} + '...'"></a>
                                 <img th:if="${albumDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
-
                             <td><span th:text="${albumDto.mainHashTag}" th:class="hash-tag"></span></td>
-
                             <td th:text="${albumDto.createdBy}"></td>
                             <td th:text="${#temporals.format(albumDto.createdDate,'yyyy-MM-dd HH:mm')}"></td>
                             <td th:text="${#temporals.format(albumDto.lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
-
                             <td th:if="${albumDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active"></td>
                             <td th:if="${albumDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"></td>
+                        </tr>
+                        <tr th:if="${albumDtoList.totalElements == 0}">
+                            <td colspan="10" class="no-posts">
+                                No posts founded.
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -113,7 +122,9 @@
 <th:block th:replace="layout/script.html"></th:block>
 
 <script>
-    $('#search').click(function () {
+    sweetalertFire("album");
+
+    $("#search").click(function () {
         document.form.action = "/album/list";
         document.form.method = "get";
         document.form.submit();

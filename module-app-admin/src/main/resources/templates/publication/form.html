@@ -4,7 +4,8 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title>Publication Form</title>
+    <title th:if="!${publicationDto.idx}" th:text="${@environment.getProperty('title')} + ' | Publication Register'"></title>
+    <title th:if="${publicationDto.idx}" th:text="${@environment.getProperty('title')} + ' | Publication Update'"></title>
 </head>
 <body>
 <div class="d-flex" id="wrapper">
@@ -17,16 +18,24 @@
 
         <div class="container-fluid">
             <form name="form" id="form" th:object="${publicationDto}" action="#">
-                <div class="page-header">
-                    <h1 th:if="!*{idx}">Publication Register</h1>
-                    <h1 th:if="*{idx}">Publication Update</h1>
+                <div class="page-header breadcrumbs">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 th:if="!*{idx}">Publication Register</h2>
+                        <h2 th:if="*{idx}">Publication Update</h2>
+                        <ol>
+                            <li>Home</li>
+                            <img src="/images/chevron-right.svg">
+                            <li th:if="!*{idx}">Publication Register</li>
+                            <li th:if="*{idx}">Publication Update</li>
+                        </ol>
+                    </div>
                 </div>
 
                 <div class="mt-5">
                     <table class="table">
                         <colgroup>
-                            <col width="15%"/>
-                            <col width="85%"/>
+                            <col width="17.5%"/>
+                            <col width="82.5%"/>
                         </colgroup>
                         <tr>
                             <th colspan="2" class="sub-item-title">Publication Information</th>
@@ -268,9 +277,8 @@
     }
 
     function deletePublication(publicationIdx) {
-        // 게시글 삭제
         $.ajax({
-            url: "http://localhost:8081/api/publications/" + publicationIdx,
+            url: moduleAppApiAddress + "/api/publications/" + publicationIdx,
             type: "delete",
             dataType: "text",
             contentType: "application/json",
@@ -280,7 +288,7 @@
 
             })
             .fail(function (msg) {
-                console.log("Delete publication is fail.");
+                parseErrorMsg(msg);
             });
     }
 
@@ -292,16 +300,15 @@
 <script th:if="!${publicationDto?.idx}">
     $("#insert").click(function () {
         // (input tag mame, length or size, message)
-        if (!(validateByLength("title", 50, "title"))) {
+        if (!(validateByLength("title", 255, "title"))) {
             return false;
         }
 
         var jsonData = $("#form").serializeObject();
         var publicationIdx;
 
-        // 게시글 업로드
         $.ajax({
-            url: "http://localhost:8081/api/publications",
+            url: moduleAppApiAddress + "/api/publications",
             type: "post",
             data: JSON.stringify(jsonData),
             dataType: "text",
@@ -313,8 +320,7 @@
                 exit = false;
             })
             .fail(function (msg) {
-                paraseErrorMsg(msg);
-                console.log("Register publication is fail.");
+                parseErrorMsg(msg);
                 exit = true;
             });
 
@@ -331,7 +337,7 @@
         formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
 
         $.ajax({
-            url: "http://localhost:8081/api/publications/attachedFile",
+            url: moduleAppApiAddress + "/api/publications/attachedFile",
             type: "post",
             data: formData,
             dataType: "text",
@@ -341,11 +347,11 @@
             async: false,
         })
             .done(function (msg) {
+                localStorage.setItem("result", "/publication/register-success");
                 location.href = "/publication/list";
             })
             .fail(function (msg) {
-                paraseErrorMsg(msg);
-                console.log("Upload attached file is fail.");
+                parseErrorMsg(msg);
                 deletePublication(publicationIdx);
             });
 
@@ -354,16 +360,15 @@
 <script th:if="${publicationDto?.idx}" th:inline="javascript">
     $("#update").click(function () {
         // (input tag mame, length or size, message)
-        if (!(validateByLength("title", 50, "title"))) {
+        if (!(validateByLength("title", 255, "title"))) {
             return false;
         }
 
         var jsonData = $("#form").serializeObject();
         var publcationIdx = document.getElementsByName("idx")[0].value;
 
-        // 게시글 수정
         $.ajax({
-            url: "http://localhost:8081/api/publications/" + publcationIdx,
+            url: moduleAppApiAddress + "/api/publications/" + publcationIdx,
             type: "put",
             data: JSON.stringify(jsonData),
             dataType: "text",
@@ -374,8 +379,7 @@
                 exit = false;
             })
             .fail(function (msg) {
-                paraseErrorMsg(msg);
-                console.log("Update publication is fail.");
+                parseErrorMsg(msg);
                 exit = true;
             });
 
@@ -383,6 +387,7 @@
 
         // 만일 파일이 수정되지 않은 경우 '파일 업로드' 및 '파일 삭제'를 수행하지 않음
         if (insertFileArray.length == 0 && deleteFileArray.length == 0) {
+            localStorage.setItem("result", "/publication/update-success");
             location.href = "/publication?idx=" + publcationIdx;
 
             return true;
@@ -391,7 +396,7 @@
         // 파일 삭제
         if (deleteFileArray.length > 0) {
             $.ajax({
-                url: "http://localhost:8081/api/publications/attachedFile",
+                url: moduleAppApiAddress + "/api/publications/attachedFile",
                 type: "delete",
                 data: JSON.stringify(deleteFileArray),
                 contentType: "application/json",
@@ -401,15 +406,17 @@
                     exit = false;
                 })
                 .fail(function (msg) {
-                    paraseErrorMsg(msg);
-                    console.log("Delete attached file is fail.");
+                    parseErrorMsg(msg);
                     exit = true;
                 });
         }
 
         if (exit) return false;
 
-        if (insertFileArray.length <= 0) location.href = "/notice-board?idx=" + publcationIdx;
+        if (insertFileArray.length <= 0) {
+            localStorage.setItem("result", "/publication/update-success");
+            location.href = "/publication?idx=" + publcationIdx;
+        }
 
         // 파일 업로드
         var formData = new FormData();
@@ -422,7 +429,7 @@
         formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
 
         $.ajax({
-            url: "http://localhost:8081/api/publications/attachedFile",
+            url: moduleAppApiAddress + "/api/publications/attachedFile",
             type: "post",
             data: formData,
             dataType: "text",
@@ -432,14 +439,13 @@
             async: false,
         })
             .done(function (msg) {
+                localStorage.setItem("result", "/publication/update-success");
                 location.href = "/publication?idx=" + publcationIdx;
             })
             .fail(function (msg) {
-                paraseErrorMsg(msg);
-                console.log("Upload attached file is fail.");
+                parseErrorMsg(msg);
                 deletePublication(publcationIdx);
             })
-
     });
 </script>
 

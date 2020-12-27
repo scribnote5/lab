@@ -4,7 +4,8 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title>Introduction Form</title>
+    <title th:if="!${introductionDto.idx}" th:text="${@environment.getProperty('title')} + ' | Introduction Register'"></title>
+    <title th:if="${introductionDto.idx}" th:text="${@environment.getProperty('title')} + ' | Introduction Update'"></title>
 </head>
 <body>
 <div class="d-flex" id="wrapper">
@@ -17,16 +18,24 @@
 
         <div class="container-fluid">
             <form name="form" id="form" th:object="${introductionDto}" action="#">
-                <div class="page-header">
-                    <h1 th:if="!*{idx}">Introduction Register</h1>
-                    <h1 th:if="*{idx}">Introduction Update</h1>
+                <div class="page-header breadcrumbs">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 th:if="!*{idx}">Introduction Register</h2>
+                        <h2 th:if="*{idx}">Introduction Update</h2>
+                        <ol>
+                            <li>Home</li>
+                            <img src="/images/chevron-right.svg">
+                            <li th:if="!*{idx}">Introduction Register</li>
+                            <li th:if="*{idx}">Introduction Update</li>
+                        </ol>
+                    </div>
                 </div>
 
                 <div class="mt-5">
                     <table class="table">
                         <colgroup>
-                            <col width="15%"/>
-                            <col width="85%"/>
+                            <col width="17.5%"/>
+                            <col width="82.5%"/>
                         </colgroup>
                         <tr>
                             <th colspan="2" class="sub-item-title">Introduction Information</th>
@@ -89,11 +98,17 @@
 <th:block th:replace="layout/script.html"></th:block>
 
 <!-- javascript -->
-<script>
+<script th:inline="javascript">
+    $(document).ready(function () {
+        <!-- File Drop -->
+        $("#fileDrop").on("dragenter dragover", function (event) {
+            event.preventDefault(); // 기본 이벤트 발생을 막음
+        });
+    });
+
     function deleteIntroduction(introductionIdx) {
-        // 게시글 삭제
         $.ajax({
-            url: "http://localhost:8081/api/introductions/" + introductionIdx,
+            url: moduleAppApiAddress + "/api/introductions/" + introductionIdx,
             type: "delete",
             dataType: "text",
             contentType: "application/json",
@@ -103,7 +118,7 @@
 
             })
             .fail(function (msg) {
-                console.log("Delete notice board is fail.");
+                parseErrorMsg(msg);
             });
     }
 </script>
@@ -111,15 +126,14 @@
 <script th:if="!${introductionDto?.idx}">
     $('#insert').click(function () {
         // (input tag mame, length or size, message)
-        if (!(validateByLength("title", 50, "title") && validateBySize("content", 16777215, "content"))) {
+        if (!(validateByLength("title", 255, "title") && validateBySize("content", 16777215, "content"))) {
             return false;
         }
 
         var jsonData = $("#form").serializeObject();
 
-        // 게시글 업로드
         $.ajax({
-            url: "http://localhost:8081/api/introductions",
+            url: moduleAppApiAddress + "/api/introductions",
             type: "post",
             data: JSON.stringify(jsonData),
             dataType: "text",
@@ -127,11 +141,12 @@
             async: false,
         })
             .done(function (msg) {
+                localStorage.setItem("result", "/introduction/register-success");
                 location.href = "/introduction?idx=" + msg;
             })
             .fail(function (msg) {
-                paraseErrorMsg(msg);
-                console.log("Update introduction is fail.");
+                parseErrorMsg(msg);
+
             });
     });
 </script>
@@ -139,16 +154,15 @@
 <script th:if="${introductionDto?.idx}" th:inline="javascript">
     $('#update').click(function () {
         // (input tag mame, length or size, message)
-        if (!(validateByLength("title", 50, "title") && validateBySize("content", 16777215, "content"))) {
+        if (!(validateByLength("title", 255, "title") && validateBySize("content", 16777215, "content"))) {
             return false;
         }
 
         var jsonData = $("#form").serializeObject();
         var introductionIdx = document.getElementsByName("idx")[0].value;
 
-        // 게시글 수정
         $.ajax({
-            url: "http://localhost:8081/api/introductions/" + introductionIdx,
+            url: moduleAppApiAddress + "/api/introductions/" + introductionIdx,
             type: "put",
             data: JSON.stringify(jsonData),
             dataType: "text",
@@ -156,14 +170,12 @@
             async: false,
         })
             .done(function (msg) {
+                localStorage.setItem("result", "/introduction/update-success");
                 location.href = "/introduction?idx=" + introductionIdx;
             })
             .fail(function (msg) {
-                paraseErrorMsg(msg);
-                console.log("Update introduction is fail.");
-                exit = true;
+                parseErrorMsg(msg);
             });
-
     });
 </script>
 

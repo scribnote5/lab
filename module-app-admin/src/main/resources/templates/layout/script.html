@@ -1,11 +1,18 @@
 <script th:src="@{/js/jquery.min.js}"></script>
 <script th:src="@{/js/jquery.serialize-object.min.js}"></script>
-<script th:src="@{/js/fileUtil.js}"></script>
+
+<script th:src="@{/js/sweetalert2.all.min.js}"></script>
+
 <script th:src="@{/js/util.js}"></script>
 <script th:src="@{/js/validation.js}"></script>
+<script th:src="@{/js/alert.js}"></script>
 
 <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/summernote/summernote-bs4.min.js}"></script>
+
+<script>
+    var moduleAppApiAddress = "[[${@environment.getProperty('module-app-api.address')}]]";
+</script>
 
 <script th:inline="javascript">
     var token = $("meta[name='_csrf']").attr("content");
@@ -37,9 +44,16 @@
         });
     }
 
-    $('#logout').click(function () {
-        if(confirm("Do you want to logout?")) {
-            location.href = "/user/logout";
-        }
+    $("#logout").click(function () {
+        Confirm.fire({
+            icon: "warning",
+            title: "Do you want to logout?",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                location.href = "/user/logout";
+            } else {
+                return false;
+            }
+        })
     });
 </script>

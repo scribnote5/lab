@@ -26,7 +26,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Page<User> findAllByUsernameNotAndActiveStatusIs(Pageable pageable, String rootName, ActiveStatus activeStatus);
 
-    Page<User> findAllByUsernameNotAndUsernameContainingAndActiveStatusIs(Pageable pageable, String rootName, String username, ActiveStatus activeStatus);
+    Page<User> findAllByUsernameNotAndEnglishNameContainingAndActiveStatusIs(Pageable pageable, String rootName, String englishName, ActiveStatus activeStatus);
 
     Page<User> findAllByUsernameNotAndKoreanNameContainingAndActiveStatusIs(Pageable pageable, String rootName, String koreanName, ActiveStatus activeStatus);
 

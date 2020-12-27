@@ -83,6 +83,8 @@ public class PublicationRestController {
             lastIdx = publicationService.findMaxPublicationIdx();
         }
 
+        System.out.println(publicationService.findPublicationListScroll(lastIdx, publicationSearchDto));
+
         return new ResponseEntity<>(publicationService.findPublicationListScroll(lastIdx, publicationSearchDto), HttpStatus.OK);
     }
 

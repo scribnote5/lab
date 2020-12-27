@@ -4,7 +4,8 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title>Seminar Form</title>
+    <title th:if="!${seminarDto.idx}" th:text="${@environment.getProperty('title')} + ' | Seminar Register'"></title>
+    <title th:if="${seminarDto.idx}" th:text="${@environment.getProperty('title')} + ' | Seminar Update'"></title>
 </head>
 <body>
 <div class="d-flex" id="wrapper">
@@ -17,16 +18,24 @@
 
         <div class="container-fluid">
             <form name="form" id="form" th:object="${seminarDto}" action="#">
-                <div class="page-header">
-                    <h1 th:if="!*{idx}">Seminar Register</h1>
-                    <h1 th:if="*{idx}">Seminar Update</h1>
+                <div class="page-header breadcrumbs">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 th:if="!*{idx}">Seminar Register</h2>
+                        <h2 th:if="*{idx}">Seminar Update</h2>
+                        <ol>
+                            <li>Home</li>
+                            <img src="/images/chevron-right.svg">
+                            <li th:if="!*{idx}">Seminar Register</li>
+                            <li th:if="*{idx}">Seminar Update</li>
+                        </ol>
+                    </div>
                 </div>
 
                 <div class="mt-5">
                     <table class="table">
                         <colgroup>
-                            <col width="15%"/>
-                            <col width="85%"/>
+                            <col width="17.5%"/>
+                            <col width="82.5%"/>
                         </colgroup>
                         <tr>
                             <th colspan="2" class="sub-item-title">Seminar Information</th>
@@ -147,291 +156,289 @@
                 <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
             </form>
         </div>
+    </div>
+</div>
 
-        <!-- footer -->
-        <div th:replace="layout/footer::footer"></div>
+<!-- footer -->
+<div th:replace="layout/footer::footer"></div>
 
-        <!-- script file -->
-        <th:block th:replace="layout/script.html"></th:block>
+<!-- script file -->
+<th:block th:replace="layout/script.html"></th:block>
 
-        <!-- javascript -->
-        <script>
-            var totalFileSize = 0;
-            var insertFileArray = [];
-            var deleteFileArray = [];
-            var imgDataId = 0;
-            var exit = null;
+<!-- javascript -->
+<script>
+    var totalFileSize = 0;
+    var insertFileArray = [];
+    var deleteFileArray = [];
+    var imgDataId = 0;
+    var exit = null;
 
-            $(document).ready(function () {
-                <!-- summernote setting -->
-                $('#summernote').summernote({
-                    height: 400,	// 에디터 높이
-                    minHeight: null,	// 최소 높이
-                    maxHeight: null,	// 최대 높이
-                    // focus: true,	// 에디터 로딩후 포커스를 맞출지 여부
-                    lang: "ko-KR",// 한글 설정
-                    placeholder: "The editor's max input size of bytes is 16777215(16 MB)."	//placeholder 설정
-                });
+    $(document).ready(function () {
+        <!-- summernote setting -->
+        $('#summernote').summernote({
+            height: 400,	// 에디터 높이
+            minHeight: null,	// 최소 높이
+            maxHeight: null,	// 최대 높이
+            // focus: true,	// 에디터 로딩후 포커스를 맞출지 여부
+            lang: "ko-KR",// 한글 설정
+            placeholder: "The editor's max input size of bytes is 16777215(16 MB)."	//placeholder 설정
+        });
 
-                <!-- File Drop -->
-                $("#fileDrop").on("dragenter dragover", function (event) {
-                    event.preventDefault(); // 기본 이벤트 발생을 막음
-                });
-            });
+        <!-- File Drop -->
+        $("#fileDrop").on("dragenter dragover", function (event) {
+            event.preventDefault(); // 기본 이벤트 발생을 막음
+        });
+    });
 
-            /* input tag event */
-            $("#file").change(function () {
-                var files = document.getElementsByName("file")[0].files;
+    /* input tag event */
+    $("#file").change(function () {
+        var files = document.getElementsByName("file")[0].files;
 
-                for (var i = 0; i < files.length; i++) {
-                    if (validateFile(files[i])) {
-                        insertFileArray.push(files[i]);
-                        document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
-
-                        $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
-                            + '<span>'
-                            + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size)
-                            + '<img src="/images/cancel-icon.png" class="cancel-icon" onClick="cancelFile(' + imgDataId + ')" />'
-                            + '</span>'
-                            + '</div>');
-
-                        imgDataId++;
-                    } else {
-                        return false;
-                    }
-                }
-            });
-
-            /* Drag & drop event */
-            $("#fileDrop").on("drop", function (event) {
-                event.preventDefault(); // 기본 효과를 막음
-                document.getElementById("fileDrop").style.opacity = 1;
-
-                // 드래그된 파일의 정보
-                // event : jQuery의 이벤트
-                // originalEvent : javascript의 이벤트
-                var files = event.originalEvent.dataTransfer.files;
-
-                for (var i = 0; i < files.length; i++) {
-                    if (validateFile(files[i])) {
-                        insertFileArray.push(files[i]);
-                        document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
-
-                        $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
-                            + '<span>'
-                            + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size)
-                            + '<img src="/images/cancel-icon.png" class="cancel-icon" onClick="cancelFile(' + imgDataId + ')" />'
-                            + '</span>'
-                            + '</div>');
-
-                        imgDataId++;
-                    } else {
-                        return false;
-                    }
-                }
-            });
-
-            $("#fileDrop").on("dragover", function (event) {
-                event.stopPropagation();
-                event.preventDefault();
-
-                document.getElementById("fileDrop").style.opacity = 0.25;
-            });
-
-            $("#fileDrop").on("dragleave", function (event) {
-                event.stopPropagation();
-                event.preventDefault();
-
-                document.getElementById("fileDrop").style.opacity = 1;
-            });
-
-            // 새로 업로드한 파일을 취소하는 경우
-            function cancelFile(fileId) {
-                $('#imgData' + fileId).remove();
-
-                totalFileSize -= insertFileArray[fileId].size;
-                insertFileArray[fileId] = null;
-
+        for (var i = 0; i < files.length; i++) {
+            if (validateFile(files[i])) {
+                insertFileArray.push(files[i]);
                 document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
+
+                $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
+                    + '<span>'
+                    + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size)
+                    + '<img src="/images/cancel-icon.png" class="cancel-icon" onClick="cancelFile(' + imgDataId + ')" />'
+                    + '</span>'
+                    + '</div>');
+
+                imgDataId++;
+            } else {
+                return false;
             }
+        }
+    });
 
-            // 기존 업로드한 파일을 삭제하는 경우
-            function deleteFile(fileId, idx, savedFileName) {
-                $('#imgData' + fileId).remove();
+    /* Drag & drop event */
+    $("#fileDrop").on("drop", function (event) {
+        event.preventDefault(); // 기본 효과를 막음
+        document.getElementById("fileDrop").style.opacity = 1;
 
-                deleteFileArray.push(idx);
+        // 드래그된 파일의 정보
+        // event : jQuery의 이벤트
+        // originalEvent : javascript의 이벤트
+        var files = event.originalEvent.dataTransfer.files;
+
+        for (var i = 0; i < files.length; i++) {
+            if (validateFile(files[i])) {
+                insertFileArray.push(files[i]);
+                document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
+
+                $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
+                    + '<span>'
+                    + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size)
+                    + '<img src="/images/cancel-icon.png" class="cancel-icon" onClick="cancelFile(' + imgDataId + ')" />'
+                    + '</span>'
+                    + '</div>');
+
+                imgDataId++;
+            } else {
+                return false;
             }
+        }
+    });
 
-            function deleteSeminar(seminarIdx) {
-                // 게시글 삭제
-                $.ajax({
-                    url: "http://localhost:8081/api/seminars/" + seminarIdx,
-                    type: "delete",
-                    dataType: "text",
-                    contentType: "application/json",
-                    async: false,
-                })
-                    .done(function (msg) {
+    $("#fileDrop").on("dragover", function (event) {
+        event.stopPropagation();
+        event.preventDefault();
 
-                    })
-                    .fail(function (msg) {
-                        console.log("Delete notice board is fail.");
-                    });
-            }
-        </script>
+        document.getElementById("fileDrop").style.opacity = 0.25;
+    });
 
-        <script th:if="!${seminarDto?.idx}">
-            $('#insert').click(function () {
-                // (input tag mame, length or size, message)
-                if (!(validateByLength("title", 50, "title"))) {
-                    return false;
-                }
+    $("#fileDrop").on("dragleave", function (event) {
+        event.stopPropagation();
+        event.preventDefault();
 
-                var jsonData = $("#form").serializeObject();
-                var seminarIdx;
+        document.getElementById("fileDrop").style.opacity = 1;
+    });
 
-                // 게시글 업로드
-                $.ajax({
-                    url: "http://localhost:8081/api/seminars",
-                    type: "post",
-                    data: JSON.stringify(jsonData),
-                    dataType: "text",
-                    contentType: "application/json",
-                    async: false,
-                })
-                    .done(function (msg) {
-                        seminarIdx = msg;
-                        exit = false;
-                    })
-                    .fail(function (msg) {
-                        paraseErrorMsg(msg);
-                        console.log("Update notice board is fail.");
-                        exit = true;
-                    });
+    // 새로 업로드한 파일을 취소하는 경우
+    function cancelFile(fileId) {
+        $('#imgData' + fileId).remove();
 
-                if (exit) return false;
+        totalFileSize -= insertFileArray[fileId].size;
+        insertFileArray[fileId] = null;
 
-                // 파일 업로드
-                var formData = new FormData();
+        document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
+    }
 
-                for (var i = 0; i < insertFileArray.length; i++) {
-                    formData.append("files", insertFileArray[i]);
-                }
+    // 기존 업로드한 파일을 삭제하는 경우
+    function deleteFile(fileId, idx, savedFileName) {
+        $('#imgData' + fileId).remove();
 
-                formData.append("idx", seminarIdx);
-                formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
+        deleteFileArray.push(idx);
+    }
 
-                $.ajax({
-                    url: "http://localhost:8081/api/seminars/attachedFile",
-                    type: "post",
-                    data: formData,
-                    dataType: "text",
-                    enctype: 'multipart/form-data',
-                    processData: false,
-                    contentType: false,
-                    async: false,
-                })
-                    .done(function (msg) {
-                        location.href = "/seminar?idx=" + seminarIdx;
-                    })
-                    .fail(function (msg) {
-                        paraseErrorMsg(msg);
-                        console.log("Update attached file is fail.");
-                        deleteSeminar(seminarIdx);
-                    });
+    function deleteSeminar(seminarIdx) {
+        $.ajax({
+            url: moduleAppApiAddress + "/api/seminars/" + seminarIdx,
+            type: "delete",
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
 
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
             });
-        </script>
+    }
+</script>
 
-        <script th:if="${seminarDto?.idx}" th:inline="javascript">
-            $('#update').click(function () {
-                // (input tag mame, length or size, message)
-                if (!(validateByLength("title", 50, "title") && validateBySelect("categoryIdx", "category"))) {
-                    return false;
-                }
+<script th:if="!${seminarDto?.idx}">
+    $('#insert').click(function () {
+        // (input tag mame, length or size, message)
+        if (!(validateByLength("title", 255, "title"))) {
+            return false;
+        }
 
-                var jsonData = $("#form").serializeObject();
-                var seminarIdx = document.getElementsByName("idx")[0].value;
+        var jsonData = $("#form").serializeObject();
+        var seminarIdx;
 
-                // 게시글 수정
-                $.ajax({
-                    url: "http://localhost:8081/api/seminars/" + seminarIdx,
-                    type: "put",
-                    data: JSON.stringify(jsonData),
-                    dataType: "text",
-                    contentType: "application/json",
-                    async: false,
-                })
-                    .done(function (msg) {
-                        exit = false;
-                    })
-                    .fail(function (msg) {
-                        paraseErrorMsg(msg);
-                        console.log("Update notice board is fail.");
-                        exit = true;
-                    });
-
-                if (exit) return false;
-
-                // 만일 파일이 수정되지 않은 경우 '파일 업로드' 및 '파일 삭제'를 수행하지 않음
-                if (insertFileArray.length == 0 && deleteFileArray.length == 0) {
-                    location.href = "/seminar?idx=" + seminarIdx;
-                }
-
-                // 파일 삭제
-                if (deleteFileArray.length > 0) {
-                    $.ajax({
-                        url: "http://localhost:8081/api/seminars/attachedFile",
-                        type: "delete",
-                        data: JSON.stringify(deleteFileArray),
-                        contentType: "application/json",
-                        async: false,
-                    })
-                        .done(function (msg) {
-                            exit = false;
-                        })
-                        .fail(function (msg) {
-                            paraseErrorMsg(msg);
-                            console.log("Delete attached file is fail.");
-                            exit = true;
-                        });
-                }
-
-                if (exit) return false;
-
-                if (insertFileArray.length <= 0) location.href = "/seminar?idx=" + seminarIdx;
-
-                // 파일 업로드
-                var formData = new FormData();
-
-                for (var i = 0; i < insertFileArray.length; i++) {
-                    formData.append("files", insertFileArray[i]);
-                }
-
-                formData.append("idx", seminarIdx);
-                formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
-
-                $.ajax({
-                    url: "http://localhost:8081/api/seminars/attachedFile",
-                    type: "post",
-                    data: formData,
-                    dataType: "text",
-                    enctype: 'multipart/form-data',
-                    processData: false,
-                    contentType: false,
-                    async: false,
-                })
-                    .done(function (msg) {
-                        location.href = "/seminar?idx=" + seminarIdx;
-                    })
-                    .fail(function (msg) {
-                        paraseErrorMsg(msg);
-                        console.log("Upload attached file is fail.");
-                        deleteSeminar(seminarIdx);
-                    })
-
+        $.ajax({
+            url: moduleAppApiAddress + "/api/seminars",
+            type: "post",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                seminarIdx = msg;
+                exit = false;
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                exit = true;
             });
-        </script>
 
+        if (exit) return false;
+
+        // 파일 업로드
+        var formData = new FormData();
+
+        for (var i = 0; i < insertFileArray.length; i++) {
+            formData.append("files", insertFileArray[i]);
+        }
+
+        formData.append("idx", seminarIdx);
+        formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
+
+        $.ajax({
+            url: moduleAppApiAddress + "/api/seminars/attachedFile",
+            type: "post",
+            data: formData,
+            dataType: "text",
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            async: false,
+        })
+            .done(function (msg) {
+                localStorage.setItem("result", "/seminar/register-success");
+                location.href = "/seminar?idx=" + seminarIdx;
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                deleteSeminar(seminarIdx);
+            });
+
+    });
+</script>
+
+<script th:if="${seminarDto?.idx}" th:inline="javascript">
+    $('#update').click(function () {
+        // (input tag mame, length or size, message)
+        if (!(validateByLength("title", 255, "title") && validateBySelect("categoryIdx", "category"))) {
+            return false;
+        }
+
+        var jsonData = $("#form").serializeObject();
+        var seminarIdx = document.getElementsByName("idx")[0].value;
+
+        $.ajax({
+            url: moduleAppApiAddress + "/api/seminars/" + seminarIdx,
+            type: "put",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                exit = false;
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                exit = true;
+            });
+
+        if (exit) return false;
+
+        // 만일 파일이 수정되지 않은 경우 '파일 업로드' 및 '파일 삭제'를 수행하지 않음
+        if (insertFileArray.length == 0 && deleteFileArray.length == 0) {
+            localStorage.setItem("result", "/seminar/update-success");
+            location.href = "/seminar?idx=" + seminarIdx;
+        }
+
+        // 파일 삭제
+        if (deleteFileArray.length > 0) {
+            $.ajax({
+                url: moduleAppApiAddress + "/api/seminars/attachedFile",
+                type: "delete",
+                data: JSON.stringify(deleteFileArray),
+                contentType: "application/json",
+                async: false,
+            })
+                .done(function (msg) {
+                    exit = false;
+                })
+                .fail(function (msg) {
+                    parseErrorMsg(msg);
+                    exit = true;
+                });
+        }
+
+        if (exit) return false;
+
+        if (insertFileArray.length <= 0) {
+            localStorage.setItem("result", "/seminar/update-success");
+            location.href = "/seminar?idx=" + seminarIdx;
+        }
+
+        // 파일 업로드
+        var formData = new FormData();
+
+        for (var i = 0; i < insertFileArray.length; i++) {
+            formData.append("files", insertFileArray[i]);
+        }
+
+        formData.append("idx", seminarIdx);
+        formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
+
+        $.ajax({
+            url: moduleAppApiAddress + "/api/seminars/attachedFile",
+            type: "post",
+            data: formData,
+            dataType: "text",
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            async: false,
+        })
+            .done(function (msg) {
+                localStorage.setItem("result", "/seminar/update-success");
+                location.href = "/seminar?idx=" + seminarIdx;
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                deleteSeminar(seminarIdx);
+            })
+    });
+</script>
 </body>
 </html>

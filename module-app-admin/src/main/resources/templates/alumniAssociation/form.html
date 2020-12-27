@@ -4,7 +4,8 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title>Alumni Association Form</title>
+    <title th:if="!${alumniAssociationDto.idx}" th:text="${@environment.getProperty('title')} + ' | Alumni Association Register'"></title>
+    <title th:if="${alumniAssociationDto.idx}" th:text="${@environment.getProperty('title')} + ' | Alumni Association Update'"></title>
 </head>
 <body>
 
@@ -18,16 +19,24 @@
 
         <div class="container-fluid">
             <form name="form" id="form" th:object="${alumniAssociationDto}" action="#">
-                <div class="page-header">
-                    <h1 th:if="!*{idx}">Alumni Association Register</h1>
-                    <h1 th:if="*{idx}">Alumni Association Update</h1>
+                <div class="page-header breadcrumbs">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 th:if="!*{idx}">Alumni Association Register</h2>
+                        <h2 th:if="*{idx}">Alumni Association Update></h2>
+                        <ol>
+                            <li>Home</li>
+                            <img src="/images/chevron-right.svg">
+                            <li th:if="!*{idx}">Alumni Association Register</li>
+                            <li th:if="*{idx}">Alumni Association Update></li>
+                        </ol>
+                    </div>
                 </div>
 
                 <div class="mt-5">
                     <table class="table">
                         <colgroup>
-                            <col width="15%"/>
-                            <col width="85%"/>
+                            <col width="17.5%"/>
+                            <col width="82.5%"/>
                         </colgroup>
                         <tr>
                             <th colspan="2" class="sub-item-title"><h5>AlumniAssociation Information</h5></th>
@@ -106,9 +115,8 @@
     });
 
     function deleteAlumniAssociation(alumniAssociationIdx) {
-        // 게시글 삭제
         $.ajax({
-            url: "http://localhost:8081/api/alumni_associations/" + alumniAssociationIdx,
+            url: moduleAppApiAddress + "/api/alumni_associations/" + alumniAssociationIdx,
             type: "delete",
             dataType: "text",
             contentType: "application/json",
@@ -118,7 +126,7 @@
 
             })
             .fail(function (msg) {
-                console.log("Delete notice board is fail.");
+                parseErrorMsg(msg);
             });
     }
 </script>
@@ -126,15 +134,14 @@
 <script th:if="!${alumniAssociationDto?.idx}">
     $('#insert').click(function () {
         // (input tag mame, length or size, message)
-        if (!(validateByLength("title", 50, "title") && validateBySize("content", 16777215, "content"))) {
+        if (!(validateByLength("title", 255, "title") && validateBySize("content", 16777215, "content"))) {
             return false;
         }
 
         var jsonData = $("#form").serializeObject();
 
-        // 게시글 업로드
         $.ajax({
-            url: "http://localhost:8081/api/alumni-associations",
+            url: moduleAppApiAddress + "/api/alumni-associations",
             type: "post",
             data: JSON.stringify(jsonData),
             dataType: "text",
@@ -142,11 +149,11 @@
             async: false,
         })
             .done(function (msg) {
+                localStorage.setItem("result", "/alumni-association/register-success");
                 location.href = "/alumni-association?idx=" + msg;
             })
             .fail(function (msg) {
-                paraseErrorMsg(msg);
-                console.log("Update alumniAssociation is fail.");
+                parseErrorMsg(msg);
             });
     });
 </script>
@@ -154,16 +161,15 @@
 <script th:if="${alumniAssociationDto?.idx}" th:inline="javascript">
     $('#update').click(function () {
         // (input tag mame, length or size, message)
-        if (!(validateByLength("title", 50, "title") && validateBySize("content", 16777215, "content"))) {
+        if (!(validateByLength("title", 255, "title") && validateBySize("content", 16777215, "content"))) {
             return false;
         }
 
         var jsonData = $("#form").serializeObject();
         var alumniAssociationIdx = document.getElementsByName("idx")[0].value;
 
-        // 게시글 수정
         $.ajax({
-            url: "http://localhost:8081/api/alumni-associations/" + alumniAssociationIdx,
+            url: moduleAppApiAddress + "/api/alumni-associations/" + alumniAssociationIdx,
             type: "put",
             data: JSON.stringify(jsonData),
             dataType: "text",
@@ -171,14 +177,13 @@
             async: false,
         })
             .done(function (msg) {
+                localStorage.setItem("result", "/alumni-association/update-success");
                 location.href = "/alumni-association?idx=" + alumniAssociationIdx;
             })
             .fail(function (msg) {
-                paraseErrorMsg(msg);
-                console.log("Update alumniAssociation is fail.");
+                parseErrorMsg(msg);
                 exit = true;
             });
-
     });
 </script>
 

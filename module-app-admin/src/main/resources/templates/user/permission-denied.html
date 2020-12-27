@@ -1,4 +1,13 @@
+<script src="/js/sweetalert2.all.min.js"></script>
+<script src="/js/alert.js"></script>
+
+<body></body>
+
 <script>
-	alert("You do not have permission on access this path.\n" + "Only admin(root or manager authority) can access.");
-	location.href="/user/login";
+    Alert.fire({
+        icon: "error",
+        text: "You do not have permission on access this path.\n" + "Only admin(root or manager authority) can access."
+    }).then((result) => {
+        location.href = "/user/login"
+    });
 </script>

@@ -61,8 +61,8 @@ public class UserService implements UserDetailsService {
             pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1, 12, Sort.Direction.DESC, "idx");
 
             switch (searchDto.getSearchType()) {
-                case "USER_ID":
-                    userList = userRepository.findAllByUsernameNotAndUsernameContainingAndActiveStatusIs(pageable, "root", searchDto.getKeyword(), ActiveStatus.ACTIVE);
+                case "ENGLISH_NAME":
+                    userList = userRepository.findAllByUsernameNotAndEnglishNameContainingAndActiveStatusIs(pageable, "root", searchDto.getKeyword(), ActiveStatus.ACTIVE);
                     break;
                 case "KOREAN_NAME":
                     userList = userRepository.findAllByUsernameNotAndKoreanNameContainingAndActiveStatusIs(pageable, "root", searchDto.getKeyword(), ActiveStatus.ACTIVE);

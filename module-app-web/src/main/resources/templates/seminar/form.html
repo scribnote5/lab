@@ -4,7 +4,8 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title>Seminar Form</title>
+    <title th:if="!${seminarDto.idx}" th:text="${@environment.getProperty('title')} + ' | Seminar Register'"></title>
+    <title th:if="${seminarDto.idx}" th:text="${@environment.getProperty('title')} + ' | Seminar Update'"></title>
 </head>
 <body>
 <div id="page-content-wrapper">
@@ -13,16 +14,24 @@
 
     <div class="container">
         <form name="form" id="form" th:object="${seminarDto}" action="#">
-            <div class="page-header page-title" data-aos="fade-up" data-aos-delay="100">
-                <h1 th:if="!*{idx}">Seminar Register</h1>
-                <h1 th:if="*{idx}">Seminar Update</h1>
+            <div class="page-header breadcrumbs" data-aos="fade-up" data-aos-delay="100">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2 th:if="!*{idx}">Seminar Register</h2>
+                    <h2 th:if="*{idx}">Seminar Update</h2>
+                    <ol>
+                        <li>Home</li>
+                        <img src="/images/chevron-right.svg">
+                        <li th:if="!*{idx}">Seminar Register</li>
+                        <li th:if="!*{idx}">Seminar Update</li>
+                    </ol>
+                </div>
             </div>
 
             <div class="row mt-5" data-aos="fade-up" data-aos-delay="150">
                 <table class="table">
                     <colgroup>
-                        <col width="15%"/>
-                        <col width="85%"/>
+                        <col width="17.5%"/>
+                        <col width="82.5%"/>
                     </colgroup>
                     <tr>
                         <th colspan="2" class="sub-item-title">Seminar Information</th>
@@ -259,9 +268,8 @@
     }
 
     function deleteSeminar(seminarIdx) {
-        // 게시글 삭제
         $.ajax({
-            url: "http://localhost:8081/api/seminars/" + seminarIdx,
+            url: moduleAppApiAddress + "/api/seminars/" + seminarIdx,
             type: "delete",
             dataType: "text",
             contentType: "application/json",
@@ -271,7 +279,7 @@
 
             })
             .fail(function (msg) {
-                console.log("Delete notice board is fail.");
+                parseErrorMsg(msg);
             });
     }
 </script>
@@ -279,16 +287,15 @@
 <script th:if="!${seminarDto?.idx}">
     $('#insert').click(function () {
         // (input tag mame, length or size, message)
-        if (!(validateByLength("title", 50, "title"))) {
+        if (!(validateByLength("title", 255, "title"))) {
             return false;
         }
 
         var jsonData = $("#form").serializeObject();
         var seminarIdx;
 
-        // 게시글 업로드
         $.ajax({
-            url: "http://localhost:8081/api/seminars",
+            url: moduleAppApiAddress + "/api/seminars",
             type: "post",
             data: JSON.stringify(jsonData),
             dataType: "text",
@@ -300,8 +307,7 @@
                 exit = false;
             })
             .fail(function (msg) {
-                paraseErrorMsg(msg);
-                console.log("Update notice board is fail.");
+                parseErrorMsg(msg);
                 exit = true;
             });
 
@@ -318,7 +324,7 @@
         formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
 
         $.ajax({
-            url: "http://localhost:8081/api/seminars/attachedFile",
+            url: moduleAppApiAddress + "/api/seminars/attachedFile",
             type: "post",
             data: formData,
             dataType: "text",
@@ -328,11 +334,11 @@
             async: false,
         })
             .done(function (msg) {
+                localStorage.setItem("result", "/seminar/register-success");
                 location.href = "/seminar?idx=" + seminarIdx;
             })
             .fail(function (msg) {
-                paraseErrorMsg(msg);
-                console.log("Update attached file is fail.");
+                parseErrorMsg(msg);
                 deleteSeminar(seminarIdx);
             });
 
@@ -342,16 +348,15 @@
 <script th:if="${seminarDto?.idx}" th:inline="javascript">
     $('#update').click(function () {
         // (input tag mame, length or size, message)
-        if (!(validateByLength("title", 50, "title") && validateBySelect("categoryIdx", "category"))) {
+        if (!(validateByLength("title", 255, "title") && validateBySelect("categoryIdx", "category"))) {
             return false;
         }
 
         var jsonData = $("#form").serializeObject();
         var seminarIdx = document.getElementsByName("idx")[0].value;
 
-        // 게시글 수정
         $.ajax({
-            url: "http://localhost:8081/api/seminars/" + seminarIdx,
+            url: moduleAppApiAddress + "/api/seminars/" + seminarIdx,
             type: "put",
             data: JSON.stringify(jsonData),
             dataType: "text",
@@ -362,8 +367,7 @@
                 exit = false;
             })
             .fail(function (msg) {
-                paraseErrorMsg(msg);
-                console.log("Update notice board is fail.");
+                parseErrorMsg(msg);
                 exit = true;
             });
 
@@ -371,13 +375,14 @@
 
         // 만일 파일이 수정되지 않은 경우 '파일 업로드' 및 '파일 삭제'를 수행하지 않음
         if (insertFileArray.length == 0 && deleteFileArray.length == 0) {
+            localStorage.setItem("result", "/seminar/update-success");
             location.href = "/seminar?idx=" + seminarIdx;
         }
 
         // 파일 삭제
         if (deleteFileArray.length > 0) {
             $.ajax({
-                url: "http://localhost:8081/api/seminars/attachedFile",
+                url: moduleAppApiAddress + "/api/seminars/attachedFile",
                 type: "delete",
                 data: JSON.stringify(deleteFileArray),
                 contentType: "application/json",
@@ -387,15 +392,17 @@
                     exit = false;
                 })
                 .fail(function (msg) {
-                    paraseErrorMsg(msg);
-                    console.log("Delete attached file is fail.");
+                    parseErrorMsg(msg);
                     exit = true;
                 });
         }
 
         if (exit) return false;
 
-        if (insertFileArray.length <= 0) location.href = "/seminar?idx=" + seminarIdx;
+        if (insertFileArray.length <= 0) {
+            localStorage.setItem("result", "/seminar/update-success");
+            location.href = "/seminar?idx=" + seminarIdx;
+        }
 
         // 파일 업로드
         var formData = new FormData();
@@ -408,7 +415,7 @@
         formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
 
         $.ajax({
-            url: "http://localhost:8081/api/seminars/attachedFile",
+            url: moduleAppApiAddress + "/api/seminars/attachedFile",
             type: "post",
             data: formData,
             dataType: "text",
@@ -418,11 +425,11 @@
             async: false,
         })
             .done(function (msg) {
+                localStorage.setItem("result", "/seminar/update-success");
                 location.href = "/seminar?idx=" + seminarIdx;
             })
             .fail(function (msg) {
-                paraseErrorMsg(msg);
-                console.log("Upload attached file is fail.");
+                parseErrorMsg(msg);
                 deleteSeminar(seminarIdx);
             })
 

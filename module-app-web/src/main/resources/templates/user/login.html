@@ -4,7 +4,7 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title>Login</title>
+    <title th:text="${@environment.getProperty('title')} + ' | Login'"></title>
 </head>
 <body style="background-color: #d0d0ce;">
 <div id="page-content-wrapper">
@@ -20,7 +20,7 @@
 
                         <div class="col-10 card-body">
                             <div class="brand-wrapper">
-                                <img src="/images/logo.png" class="login-logo">
+                                <img src="/images/main-logo.png" class="login-logo">
                             </div>
                             <p class="login-card-description">Sign into your account</p>
 

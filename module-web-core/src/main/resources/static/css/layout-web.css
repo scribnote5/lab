@@ -7,14 +7,16 @@
     }
 }
 
+
 /*
  * Header
  */
 #header {
     z-index: 997;
     transition: all 0.5s;
-    padding: .5rem 0;
+    padding: .75rem 0;
     background-color: var(--white);
+    height: 4.5rem;
 }
 
 #header.header-scrolled {
@@ -24,7 +26,8 @@
 }
 
 #header .logo img {
-    max-height: 40px;
+    max-height: 3.25rem;
+    margin-left: 15px;
 }
 
 @media (max-width: 768px) {
@@ -58,9 +61,9 @@
     position: relative;
     color: var(--main-black);
     font-weight: var(--strong-font-weight);
-    padding: 8px 0 12px 25px;
+    padding: 8px 0 12px 18px;
     transition: 0.3s;
-    font-size: 1rem;
+    font-size: var(--large-font-size);
 }
 
 .nav-menu a:hover, .nav-menu .active > a, .nav-menu li:hover > a {
@@ -68,16 +71,29 @@
     text-decoration: none;
 }
 
-.nav-menu .login a {
+.nav-menu .login {
     background: var(--main-red);
     color: var(--white);
-    border-radius: 1rem;
-    margin: 0 0 0 30px;
-    padding: 7.5px 1.5rem;
+    border-radius: 2rem;
+    margin-left: 1rem;
+    padding: .75rem 1.25rem;
     font-weight: var(--regular-font-weight);
 }
 
-.nav-menu .login a:hover {
+.nav-menu .login:hover {
+    background: var(--lighter-red);
+    color: var(--white);
+}
+
+.nav-menu .logout {
+    background: var(--main-red);
+    color: var(--white);
+    border-radius: 2rem;
+    margin-left: 1rem;
+    padding: .75rem 1.25rem;
+}
+
+.nav-menu .logout:hover {
     background: var(--lighter-red);
     color: var(--white);
 }

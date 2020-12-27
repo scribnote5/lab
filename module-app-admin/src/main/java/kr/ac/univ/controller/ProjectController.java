@@ -31,7 +31,7 @@ public class ProjectController {
     public String projectList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
         model.addAttribute("projectDtoList", projectService.findProjectList(pageable, searchDto));
 
-        return "/project/list";
+        return "project/list";
     }
 
     // Form Update
@@ -48,9 +48,9 @@ public class ProjectController {
             model.addAttribute("researchFieldDto", researchFieldService.findResearchFieldByIdxInActive(projectDto.getResearchFieldIdx()));
             model.addAttribute("researchFieldDtoList", researchFieldService.findResearchFieldListByActiveStatusIs());
 
-            returnPage = "/project/form";
+            returnPage = "project/form";
         } else {
-            returnPage = "/user/permission-denied";
+            returnPage = "user/permission-denied";
         }
 
         return returnPage;
@@ -67,6 +67,6 @@ public class ProjectController {
         model.addAttribute("projectDto", projectDto);
         model.addAttribute("researchFieldDto", researchFieldService.findResearchFieldByIdxInActive(projectDto.getResearchFieldIdx()));
 
-        return "/project/read";
+        return "project/read";
     }
 }

@@ -15,6 +15,7 @@ public class NoticeBoardCommentDto extends CommonDto {
 
     /* 기본 정보 */
     private Long noticeBoardIdx;
+
     private String content;
 
     /* newIcon */

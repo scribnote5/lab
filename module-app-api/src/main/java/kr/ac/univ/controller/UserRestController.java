@@ -27,7 +27,7 @@ public class UserRestController {
     @PostMapping
     public ResponseEntity<?> postUser(@RequestBody @Valid UserDto userDto) {
         // 중복 ID 검사 및 ID 길이 제한
-        if (userService.isDupulicationUserByUsername(userDto.getUsername()) && userDto.getUsername().length() >= 6 && userDto.getUsername().length() <= 16) {
+        if (userService.isDupulicationUserByUsername(userDto.getUsername()) && userDto.getUsername().length() >= 4 && userDto.getUsername().length() <= 16) {
             throw new InvalidUsernameException();
         }
 

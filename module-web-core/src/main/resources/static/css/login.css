@@ -5,10 +5,6 @@
     margin-bottom: 1.5rem;
 }
 
-.brand-wrapper .logo {
-    height: 2.5rem;
-}
-
 .login-card-outline {
     height: 60vh;
     margin-top: 22.5vh;
@@ -16,7 +12,7 @@
 }
 
 .login-card {
-    border: none;
+    border: none !important;
     border-radius: 2rem !important;
     box-shadow: .25rem  1rem 2rem 0 rgba(172, 168, 168, 0.43);
     overflow: hidden;
@@ -27,11 +23,11 @@
 }
 
 .login-card .card-body {
-    padding: 3.75rem 5rem 3.75rem 4rem;
+    padding: 3.5rem 4.5rem 2.5rem 3.5rem;
 }
 
 .login-card .login-logo  {
-    width: 300px;
+    width: 500px;
     height: auto;
 }
 

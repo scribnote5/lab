@@ -14,9 +14,9 @@
 }
 
 #sidebar-wrapper .sidebar-heading {
-    height: 4.25rem;
+    height: 4rem;
     text-decoration: none;
-    padding-left: 0.5rem;
+    padding-left: 0.25rem;
     /* vertical align center */
     display: flex;
     align-items: center;
@@ -52,6 +52,10 @@
     #wrapper.toggled #sidebar-wrapper {
         margin-left: -17.5rem;
     }
+}
+
+.logo {
+    height: 39px;
 }
 
 .dropdown-container {

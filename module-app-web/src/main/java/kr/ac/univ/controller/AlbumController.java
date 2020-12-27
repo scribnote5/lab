@@ -34,6 +34,6 @@ public class AlbumController {
 
         model.addAttribute("albumDtoList", albumDtoList);
 
-        return "/album/list";
+        return "album/list";
     }
 }

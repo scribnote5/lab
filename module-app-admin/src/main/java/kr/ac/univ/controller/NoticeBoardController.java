@@ -34,7 +34,7 @@ public class NoticeBoardController {
     public String noticeBoardList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
         model.addAttribute("noticeBoardDtoList", noticeBoardService.findNoticeBoardList(pageable, searchDto));
 
-        return "/noticeBoard/list";
+        return "noticeBoard/list";
     }
 
     // Form Update
@@ -49,9 +49,9 @@ public class NoticeBoardController {
 
             model.addAttribute("noticeBoardDto", noticeBoardDto);
 
-            returnPage = "/noticeBoard/form";
+            returnPage = "noticeBoard/form";
         } else {
-            returnPage = "/user/permission-denied";
+            returnPage = "user/permission-denied";
         }
 
         return returnPage;
@@ -70,6 +70,6 @@ public class NoticeBoardController {
         model.addAttribute("noticeBoardDto", noticeBoardDto);
         model.addAttribute("noticeBoardCommentDtoList", noticeBoardCommentDtoList);
 
-        return "/noticeBoard/read";
+        return "noticeBoard/read";
     }
 }

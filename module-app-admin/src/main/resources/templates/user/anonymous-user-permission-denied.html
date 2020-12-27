@@ -1,4 +1,13 @@
+<script src="/js/sweetalert2.all.min.js"></script>
+<script src="/js/alert.js"></script>
+
+<body></body>
+
 <script>
-    alert("The login is required to access the page.");
-    location.href = "/user/login"
+    Alert.fire({
+        icon: "error",
+        text: "The login is required to access the page."
+    }).then((result) => {
+        location.href = "/user/login"
+    });
 </script>

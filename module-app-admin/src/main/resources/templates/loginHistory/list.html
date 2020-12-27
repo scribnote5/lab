@@ -4,7 +4,7 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title>Login History List</title>
+    <title th:text="${@environment.getProperty('title')} + ' | Login History List'"></title>
 </head>
 <body>
 
@@ -18,8 +18,15 @@
 
         <div class="container-fluid">
             <form name="form" id="form" th:object="${searchDto}" action="#">
-                <div class="page-header">
-                    <h1>Login History List</h1>
+                <div class="page-header breadcrumbs">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2>Login History List</h2>
+                        <ol>
+                            <li>Home</li>
+                            <img src="/images/chevron-right.svg">
+                            <li>Login History List</li>
+                        </ol>
+                    </div>
                 </div>
 
                 <div class="row justify-content-end mt-3">
@@ -69,21 +76,23 @@
                         <tr th:each="loginHistoryDto : ${loginHistoryDtoList}">
                             <td th:text="${loginHistoryDto.idx}"></td>
                             <td>
-                                <a th:href="'/login-history?idx='+${loginHistoryDto.idx}" th:text="${loginHistoryDto.audMessage}" class="link"></a>
+                                <a th:href="'/login-history?idx='+${loginHistoryDto.idx}" class="link"
+                                   th:text="${#strings.length(loginHistoryDto.audMessage)} < 30 ? ${loginHistoryDto.audMessage} : ${#strings.substring(loginHistoryDto.audMessage, 0, 30)} + '...'"></a>
                                 <img th:if="${loginHistoryDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
-
                             <td th:text="${loginHistoryDto.audIp}"></td>
-
                             <td th:if="${loginHistoryDto.audLoginResultType?.name() == 'SUCCESS'}" th:text="Success"></td>
                             <td th:if="${loginHistoryDto.audLoginResultType?.name() == 'FAIL'}" th:text="Fail"></td>
-
                             <td th:text="${loginHistoryDto.createdBy}">></td>
                             <td th:text="${#temporals.format(loginHistoryDto.createdDate,'yyyy-MM-dd HH:mm')}"></td>
                             <td th:text="${#temporals.format(loginHistoryDto.lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
-
                             <td th:if="${loginHistoryDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active"></td>
                             <td th:if="${loginHistoryDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"></td>
+                        </tr>
+                        <tr th:if="${loginHistoryDtoList.totalElements == 0}">
+                            <td colspan="10" class="no-posts">
+                                No posts founded.
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -127,6 +136,8 @@
 <th:block th:replace="layout/script.html"></th:block>
 
 <script th:inline="javascript">
+    sweetalertFire("login-history");
+
     /* input tag event */
     $("#searchType").change(function () {
         var keywordSelect = document.getElementById("keywordSelect");

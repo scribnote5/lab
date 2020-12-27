@@ -10,6 +10,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ public class SeminarDto extends CommonDto {
 
     /* 기본 정보 */
     @NotBlank(message = "The title must not be blank.")
+    @Size(max = 255, message = "The title can be used for less than 50 characters.")
     private String title;
 
     private SeminarType seminarType;

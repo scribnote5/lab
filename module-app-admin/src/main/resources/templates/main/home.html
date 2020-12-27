@@ -4,7 +4,7 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title>Dashboard</title>
+    <title th:text="${@environment.getProperty('title')} + ' | Home'"></title>
 </head>
 <body>
 
@@ -22,7 +22,7 @@
             <div class="float-right url-icon-area">
                 <img src="/images/external-link.svg" class="url-icon"/>
                 <span class="external-link">External Link</span>
-                <img src="/images/main-logo.png" title="Link user page." class="url-icon"/>
+                <img src="/images/small-logo.png" title="Link user page." class="url-icon"/>
                 <img src="/images/google-analytics.png" title="Link google analytics." class="url-icon"/>
                 <img src="/images/github.svg" title="Link github." class="url-icon"/>
             </div>
@@ -137,12 +137,11 @@
                         <tbody>
                         <tr th:each="noticeBoardDto : ${noticeBoardDtoList}">
                             <td th:text="${noticeBoardDto.idx}"></td>
-
                             <td>
-                                <a th:href="'/notice-board?idx='+${noticeBoardDto.idx}" th:text="${noticeBoardDto.title}" class="link"></a>
+                                <a th:href="'/notice-board?idx='+${noticeBoardDto.idx}" class="link"
+                                   th:text="${#strings.length(noticeBoardDto.title)} < 20 ? ${noticeBoardDto.title} : ${#strings.substring(noticeBoardDto.title, 0, 20)} + '...'"></a>
                                 <img th:if="${noticeBoardDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
-
                             <td th:text="${noticeBoardDto.createdBy}"></td>
                             <td th:text="${#temporals.format(noticeBoardDto.createdDate,'yyyy-MM-dd')}"></td>
                         </tr>
@@ -175,16 +174,14 @@
                         <tr th:each="dataHistoryDto : ${dataHistoryDtoList}">
                             <td th:text="${dataHistoryDto.idx}"></td>
                             <td>
-                                <a th:href="'/data-history?idx='+${dataHistoryDto.idx}" th:text="${dataHistoryDto.audMessage}" class="link"></a>
+                                <a th:href="'/data-history?idx='+${dataHistoryDto.idx}" class="link"
+                                   th:text="${#strings.length(dataHistoryDto.audMessage)} < 20 ? ${dataHistoryDto.audMessage} : ${#strings.substring(dataHistoryDto.audMessage, 0, 20)} + '...'"></a>
                                 <img th:if="${dataHistoryDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
-
                             <td th:text="${dataHistoryDto.audClass}"></td>
-
                             <td th:if="${dataHistoryDto.audType?.name() == 'INSERT'}" th:text="Insert"></td>
                             <td th:if="${dataHistoryDto.audType?.name() == 'UPDATE'}" th:text="Update"></td>
                             <td th:if="${dataHistoryDto.audType?.name() == 'DELETE'}" th:text="Delete"></td>
-
                             <td th:text="${dataHistoryDto.createdBy}"></td>
                             <td th:text="${#temporals.format(dataHistoryDto.createdDate,'yyyy-MM-dd HH:mm')}"></td>
                         </tr>
@@ -216,13 +213,12 @@
                         <tr th:each="loginHistoryDto : ${loginHistoryDtoList}">
                             <td th:text="${loginHistoryDto.idx}"></td>
                             <td>
-                                <a th:href="'/login-history?idx='+${loginHistoryDto.idx}" th:text="${loginHistoryDto.audMessage}" class="link"></a>
+                                <a th:href="'/login-history?idx='+${loginHistoryDto.idx}" class="link"
+                                   th:text="${#strings.length(loginHistoryDto.audMessage)} < 20 ? ${loginHistoryDto.audMessage} : ${#strings.substring(loginHistoryDto.audMessage, 0, 20)} + '...'"></a>
                                 <img th:if="${loginHistoryDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
-
                             <td th:if="${loginHistoryDto.audLoginResultType?.name() == 'SUCCESS'}" th:text="Success"></td>
                             <td th:if="${loginHistoryDto.audLoginResultType?.name() == 'FAIL'}" th:text="Fail"></td>
-
                             <td th:text="${loginHistoryDto.createdBy}"></td>
                             <td th:text="${#temporals.format(loginHistoryDto.createdDate,'yyyy-MM-dd HH:mm')}"></td>
                         </tr>
@@ -276,7 +272,7 @@
                 case "Registered Post Last 28 days":
                     document.getElementById("staticsCount").innerText = [[${countDataHistoryBeforeTwentyEightDays}]];
                     document.getElementById("dropdownMenuButton").innerText = "Registered Post Last 28 days";
-                    document.getElementById("dropdownMenuButton").style.fontSize = 0.85 +"rem";
+                    document.getElementById("dropdownMenuButton").style.fontSize = 0.85 + "rem";
                     break;
                 default:
                     document.getElementById("staticsCount").innerText = "Error occurred.";

@@ -51,6 +51,12 @@
     width: auto;
 }
 
+.user-information-black-icon {
+    margin-left: .25rem !important;
+    height: 18px;
+}
+
+
 .logout-icon {
     border-left: .075rem solid var(--light-grey);
     padding-left: .2rem;
@@ -72,12 +78,6 @@
 .user-img-preview {
     width: 10rem;
     height: 10rem;
-}
-
-.logo {
-    height: 3.25rem;
-    width: auto;
-    object-fit: contain;
 }
 
 .no-preview-available {

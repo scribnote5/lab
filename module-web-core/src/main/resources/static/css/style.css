@@ -10,15 +10,30 @@
     border-radius: 1rem;
 }
 
+/*
+ * Board
+ */
 .sub-item-title {
     font-weight: var(--strong-font-weight);
     font-size: var(--larger-font-size);
     text-align: center;
 }
 
+.date {
+    font-size: var(--small-font-size);
+    color: var(--lighter-black);
+}
+
+.content-small {
+    overflow: auto;
+    min-height: 12.5rem;
+    height: auto;
+    resize: none;
+}
+
 .content {
     overflow: auto;
-    min-height: 25rem;
+    min-height: 32.5rem;
     height: auto;
     resize: none;
 }

@@ -21,6 +21,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
 
+        // 동일 도메인에서 iframe 접근이 가능하도록 X-Frame-Options을 변경한다.
+        http.headers().frameOptions().disable();
+
         http.httpBasic()
                 .and().authorizeRequests()
                 .anyRequest().permitAll()

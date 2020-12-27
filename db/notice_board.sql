@@ -14,5 +14,3 @@ CREATE TABLE notice_board
 
 ALTER TABLE notice_board AUTO_INCREMENT=1;
 DROP TABLE notice_board;
-
-show tables;

@@ -13,8 +13,6 @@ import java.util.List;
 public interface ResearchFieldRepository extends JpaRepository<ResearchField, Long> {
     Page<ResearchField> findAllByTitleContaining(Pageable pageable, String title);
 
-    Page<ResearchField> findAllBySubTitleContaining(Pageable pageable, String content);
-
     Page<ResearchField> findAllByCreatedByContaining(Pageable pageable, String username);
 
     List<ResearchField> findAllByActiveStatusIs(ActiveStatus activeStatus);

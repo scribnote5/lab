@@ -57,3 +57,19 @@ spring:
     driver-class-name: org.mariadb.jdbc.Driver
 server:
   port: 8081
+---
+spring:
+  profiles: dev
+  #  jpa:
+  #    hibernate:
+  #      ddl-auto: create
+  datasource:
+    # test는 DB 이름으로서 생성한 DB 이름으로 변경 필요하다.
+    url: jdbc:mariadb://127.0.0.1:3306/lab
+    # 개인 아이디로 변경 필요하다.
+    username: scribnote5
+    # 개인 비밀번호로 변경 필요하다.
+    password: 123123123
+    driver-class-name: org.mariadb.jdbc.Driver
+server:
+  port: 8081

@@ -9,9 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
-@RequestMapping("/main")
 public class MainController {
     private final DataHistoryService dataHistoryService;
     private final LoginHistoryService loginHistoryService;
@@ -25,8 +25,15 @@ public class MainController {
         this.userService = userService;
     }
 
+    // /
+    @GetMapping("/")
+    public RedirectView redirectUserLogin(Model model) {
+
+        return new RedirectView("/user/login");
+    }
+
     // Home
-    @GetMapping("/home")
+    @GetMapping("/main/home")
     public String home(Model model) {
         model.addAttribute("dataHistoryDtoList", dataHistoryService.findDataHistoryList());
         model.addAttribute("loginHistoryDtoList", loginHistoryService.findLoginHistoryList());
@@ -45,6 +52,6 @@ public class MainController {
 
         model.addAttribute("diskInfoList", FileUtil.getDiskInfo());
 
-        return "/main/home";
+        return "main/home";
     }
 }

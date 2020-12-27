@@ -1,6 +1,10 @@
 package kr.ac.univ;
 
+import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.noticeBoard.repository.NoticeBoardRepository;
+import kr.ac.univ.publication.domain.Publication;
+import kr.ac.univ.publication.domain.enums.PublicationType;
+import kr.ac.univ.publication.domain.enums.PublishingArea;
 import kr.ac.univ.publication.repository.PublicationRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -10,6 +14,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.ac.univ.user.repository.UserRepository;
+
+import java.time.LocalDate;
+import java.util.stream.IntStream;
 
 @RestController
 @SpringBootApplication
@@ -32,7 +39,7 @@ public class ModuleWebApplication {
                 noticeBoardRepository.save(NoticeBoard.builder()
                     .title("게시글" + index)
                     .content("컨텐츠" + index)
-                    .activeStatus(ActiveStatus.ACTIVEx)
+                    .activeStatus(ActiveStatus.ACTIVE)
                     .createdBy("root")
                     .build()));
             */

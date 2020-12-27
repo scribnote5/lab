@@ -4,7 +4,7 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title>History Read</title>
+    <title th:text="${@environment.getProperty('title')} + ' | Login History Read'"></title>
 </head>
 <body>
 
@@ -18,26 +18,33 @@
 
         <div class="container-fluid">
             <form name="form" id="form" th:object="${loginHistoryDto}" action="#">
-                <div class="page-header">
-                    <h1>History Read</h1>
+                <div class="page-header breadcrumbs">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2>Login History Read</h2>
+                        <ol>
+                            <li>Home</li>
+                            <img src="/images/chevron-right.svg">
+                            <li>Login History Read</li>
+                        </ol>
+                    </div>
                 </div>
 
                 <div class="mt-5">
                     <table class="table">
                         <colgroup>
-                            <col width="15%"/>
-                            <col width="85%"/>
+                            <col width="17.5%"/>
+                            <col width="82.5%"/>
                         </colgroup>
                         <tr>
                             <th colspan="2" class="sub-item-title">Login History Information</th>
                         </tr>
                         <tr>
                             <th>Aud Ip</th>
-                            <td><span id="audIp" class="form-control" th:text="*{audIp}"></span></td>
+                            <td><span id="audIp" th:text="*{audIp}"></span></td>
                         </tr>
                         <tr>
                             <th>Aud Location</th>
-                            <td><span id="audLocation" class="form-control" th:text="*{audLocation}"></span></td>
+                            <td><span id="audLocation" th:text="*{audLocation}"></span></td>
                         </tr>
                         <tr>
                             <th>Aud Message</th>
@@ -51,8 +58,8 @@
                             <th>Aud Login Result Type</th>
                             <td>
                                 <div>
-                                    <span class="form-control" th:if="*{audLoginResultType?.name() == 'SUCCESS'}" th:text="Success"> </span>
-                                    <span class="form-control" th:if="*{audLoginResultType?.name() == 'FAIL'}" th:text="Fail"> </span>
+                                    <span th:if="*{audLoginResultType?.name() == 'SUCCESS'}" th:text="Success"> </span>
+                                    <span th:if="*{audLoginResultType?.name() == 'FAIL'}" th:text="Fail"> </span>
                                 </div>
                             </td>
                         </tr>
@@ -64,8 +71,8 @@
                             <th>Active Status</th>
                             <td>
                                 <div>
-                                    <span th:if="*{activeStatus?.name() == 'ACTIVE'}" class="form-control" th:text="Active"> </span>
-                                    <span th:if="*{activeStatus?.name() == 'INACTIVE'}" class="form-control" th:text="Inactive"> </span>
+                                    <span th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active"> </span>
+                                    <span th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"> </span>
                                 </div>
                             </td>
                         </tr>
@@ -80,11 +87,11 @@
 
                         <tr>
                             <th>Created Date</th>
-                            <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr>
                             <th>Modified Date</th>
-                            <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><span th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                     </table>
                 </div>
@@ -114,56 +121,67 @@
 <!-- script file -->
 <th:block th:replace="layout/script.html"></th:block>
 <script>
+    sweetalertFire("login-history");
+
     $("#active").click(function () {
-        if (!confirm("Do you want to change active status?")) {
-            return true;
-        }
+        Confirm.fire({
+            icon: "warning",
+            title: "Do you want to update?",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var changedActiveStatus;
 
-        var changedActiveStatus;
+                if (document.getElementsByName("activeStatus")[0].value === "ACTIVE") {
+                    changedActiveStatus = "INACTIVE";
+                } else {
+                    changedActiveStatus = "ACTIVE";
+                }
 
-        if (document.getElementsByName("activeStatus")[0].value === "ACTIVE") {
-            changedActiveStatus = "INACTIVE";
-        } else {
-            changedActiveStatus = "ACTIVE";
-        }
-
-        // activeStatus 수정
-        $.ajax({
-            url: "http://localhost:8081/api/login-historys/" + document.getElementsByName("idx")[0].value + "/" + changedActiveStatus,
-            type: "put",
-            loginType: "text",
-            contentType: "application/json",
-            async: false,
+                // activeStatus 수정
+                $.ajax({
+                    url: moduleAppApiAddress + "/api/login-historys/" + document.getElementsByName("idx")[0].value + "/" + changedActiveStatus,
+                    type: "put",
+                    loginType: "text",
+                    contentType: "application/json",
+                    async: false,
+                })
+                    .done(function (msg) {
+                        localStorage.setItem("result", "/login-history/update-success");
+                        location.href = "/login-history?idx=" + document.getElementsByName("idx")[0].value;
+                    })
+                    .fail(function (msg) {
+                        parseErrorMsg(msg);
+                    })
+            } else {
+                return false;
+            }
         })
-            .done(function (msg) {
-                location.href = "/login-history?idx=" + document.getElementsByName("idx")[0].value;
-            })
-            .fail(function (msg) {
-                paraseErrorMsg(msg);
-                console.log("Update loginHistory is fail.");
-            })
     });
 
     $("#delete").click(function () {
-        if (!confirm("Do you want to delete post?")) {
-            return true;
-        }
-
-        // 게시글 삭제
-        $.ajax({
-            url: "http://localhost:8081/api/login-historys/" + document.getElementsByName("idx")[0].value,
-            type: "delete",
-            loginType: "text",
-            contentType: "application/json",
-            async: false,
+        Confirm.fire({
+            icon: "warning",
+            title: "Do you want to update?",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: moduleAppApiAddress + "/api/login-historys/" + document.getElementsByName("idx")[0].value,
+                    type: "delete",
+                    loginType: "text",
+                    contentType: "application/json",
+                    async: false,
+                })
+                    .done(function (msg) {
+                        localStorage.setItem("result", "/login-history/update-success");
+                        location.href = "/login-history/list";
+                    })
+                    .fail(function (msg) {
+                        parseErrorMsg(msg);
+                    })
+            } else {
+                return false;
+            }
         })
-            .done(function (msg) {
-                location.href = "/login-history/list";
-            })
-            .fail(function (msg) {
-                paraseErrorMsg(msg);
-                console.log("Delete loginHistory is fail.");
-            })
     });
 </script>
 

@@ -4,7 +4,7 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title>NoticeBoard List</title>
+    <title th:text="${@environment.getProperty('title')} + ' | NoticeBoard List'"></title>
 </head>
 <body>
 <div id="page-content-wrapper">
@@ -13,7 +13,7 @@
 
     <div class="container">
         <form name="form" id="form" th:object="${searchDto}" action="#">
-            <div class="page-header page-title breadcrumbs" data-aos="fade-up" data-aos-delay="100">
+            <div class="page-header breadcrumbs" data-aos="fade-up" data-aos-delay="100">
                 <div class="d-flex justify-content-between align-items-center">
                     <h2>NoticeBoard List</h2>
                     <ol>
@@ -44,8 +44,7 @@
                 <table class="table table-hover">
                     <thead>
                     <tr>
-                        <th style="width: 5%">No.</th>
-                        <th style="width: 60%">Title</th>
+                        <th style="width: 65%">Title</th>
                         <th style="width: 15%">Created By</th>
                         <th style="width: 15%">Created Date</th>
                         <th style="width: 5%">Views</th>
@@ -53,19 +52,24 @@
                     </thead>
                     <tbody>
                     <tr th:each="noticeBoardDto : ${noticeBoardDtoList}">
-                        <td th:text="${noticeBoardDto.idx}"></td>
                         <td>
-                            <a th:href="'/notice-board?idx='+${noticeBoardDto.idx}" th:text="${noticeBoardDto.title}" class="link"></a>
+                            <a th:href="'/notice-board?idx='+${noticeBoardDto.idx}" class="link"
+                               th:text="${#strings.length(noticeBoardDto.title)} < 40 ? ${noticeBoardDto.title} : ${#strings.substring(noticeBoardDto.title, 0, 40)} + '...'"></a>
                             <img th:if="${noticeBoardDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                         </td>
                         <td th:text="${noticeBoardDto.createdBy}">></td>
                         <td th:text="${#temporals.format(noticeBoardDto.createdDate,'yyyy-MM-dd HH:mm')}"></td>
-
                         <td th:text="${noticeBoardDto.views}"></td>
+                    </tr>
+                    <tr th:if="${noticeBoardDtoList.totalElements == 0}">
+                        <td colspan="10" class="no-posts">
+                            No posts founded.
+                        </td>
                     </tr>
                     </tbody>
                 </table>
             </div>
+
 
             <div class="row justify-content-end mt-5 mb-3"></div>
 
@@ -102,7 +106,9 @@
 <th:block th:replace="layout/script.html"></th:block>
 
 <script>
-    $('#search').click(function () {
+    sweetalertFire("notice-board");
+
+    $("#search").click(function () {
         document.form.action = "/notice-board/list";
         document.form.method = "get";
         document.form.submit();

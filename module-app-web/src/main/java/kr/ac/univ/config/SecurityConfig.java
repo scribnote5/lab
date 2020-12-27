@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         // static 디렉터리의 하위 파일 목록은 인증 무시 ( = 항상통과 )
-        web.ignoring().antMatchers("/css/**", "/js/**", "/images/**", "/summernote/**", "/font/**", "/icons/**");
+        web.ignoring().antMatchers("/css/**", "/js/**", "/images/**", "/summernote/**", "/font/**", "/icons/**", "/pdfjs/**");
         // logout 페이지는 인증 무시(authenticationEntryPoint 비인증 사용자 enrty point에서 제외)
         web.ignoring().antMatchers("/user/logout/success");
     }
