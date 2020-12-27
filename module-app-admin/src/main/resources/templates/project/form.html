@@ -4,7 +4,8 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title>Project Form</title>
+    <title th:if="!${projectDto.idx}" th:text="${@environment.getProperty('title')} + ' | Project Register'"></title>
+    <title th:if="${projectDto.idx}" th:text="${@environment.getProperty('title')} + ' | Project Update'"></title>
 </head>
 <body>
 <div class="d-flex" id="wrapper">
@@ -17,16 +18,24 @@
 
         <div class="container-fluid">
             <form name="form" id="form" th:object="${projectDto}" action="#">
-                <div class="page-header">
-                    <h1 th:if="!*{idx}">Project Register</h1>
-                    <h1 th:if="*{idx}">Project Update</h1>
+                <div class="page-header breadcrumbs">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 th:if="!*{idx}">Project Register</h2>
+                        <h2 th:if="*{idx}">Project Update</h2>
+                        <ol>
+                            <li>Home</li>
+                            <img src="/images/chevron-right.svg">
+                            <li th:if="!*{idx}">Project Register</li>
+                            <li th:if="*{idx}">Project Update</li>
+                        </ol>
+                    </div>
                 </div>
 
                 <div class="mt-5">
                     <table class="table">
                         <colgroup>
-                            <col width="15%"/>
-                            <col width="85%"/>
+                            <col width="17.5%"/>
+                            <col width="82.5%"/>
                         </colgroup>
                         <tr>
                             <th colspan="2" class="sub-item-title">Project Information</th>
@@ -42,7 +51,7 @@
                                     <option th:if="${#strings.isEmpty(researchFieldDto)} and *{idx}" th:value="-1">This field is inactive or deleted.</option>
                                     <option th:each="researchFieldDto : ${researchFieldDtoList}"
                                             th:value="${researchFieldDto.idx}"
-                                            th:text="${researchFieldDto.title}+' - '+${researchFieldDto.subTitle}"></option>
+                                            th:text="${researchFieldDto.title}"></option>
                                 </select>
                             </td>
                         </tr>
@@ -62,11 +71,11 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>Start Date</th>
+                            <th>Start Date<span class="required-field">*</span></th>
                             <td><input type="date" name="startDate" id="startDate" class="form-control" th:value="*{startDate}"/></td>
                         </tr>
-                        <tr id="endDateTr" style="display: none;">
-                            <th>End Date</th>
+                        <tr>
+                            <th>End Date<span class="required-field">*</span></th>
                             <td><input type="date" name="endDate" id="endDate" class="form-control" th:value="*{endDate}"/></td>
                         </tr>
                         <tr>
@@ -181,20 +190,6 @@
         });
     });
 
-    $("#projectStatus").change(function () {
-        var endDateTr = document.getElementById("endDateTr");
-        var endDate = document.getElementById("endDate");
-
-        if (document.getElementsByName("projectStatus")[0].value == "CURRENT") {
-            endDateTr.style.display = "none";
-            endDate.disabled = true;
-            endDate.value = "";
-        } else {
-            endDateTr.style.display = "table-row";
-            endDate.disabled = false;
-        }
-    });
-
     /* input tag event */
     $("#file").change(function () {
         var files = document.getElementsByName("file")[0].files;
@@ -279,9 +274,8 @@
     }
 
     function deleteProject(projectIdx) {
-        // 게시글 삭제
         $.ajax({
-            url: "http://localhost:8081/api/projects/" + projectIdx,
+            url: moduleAppApiAddress + "/api/projects/" + projectIdx,
             type: "delete",
             dataType: "text",
             contentType: "application/json",
@@ -291,24 +285,23 @@
 
             })
             .fail(function (msg) {
-                console.log("Delete notice board is fail.");
+                parseErrorMsg(msg);
             });
     }
 </script>
 
 <script th:if="!${projectDto?.idx}">
-    $('#insert').click(function () {
+    $("#insert").click(function () {
         // (input tag mame, length or size, message)
-        if (!(validateByLength("title", 50, "title") && validateBySize("content", 16777215, "content"))) {
+        if (!(validateByLength("title", 255, "title") && validateBySize("content", 16777215, "content") && validateByBlank("startDate", "Start Date") && validateByBlank("endDate", "End Date"))) {
             return false;
         }
 
         var jsonData = $("#form").serializeObject();
         var projectIdx;
 
-        // 게시글 업로드
         $.ajax({
-            url: "http://localhost:8081/api/projects",
+            url: moduleAppApiAddress + "/api/projects",
             type: "post",
             data: JSON.stringify(jsonData),
             dataType: "text",
@@ -320,8 +313,7 @@
                 exit = false;
             })
             .fail(function (msg) {
-                paraseErrorMsg(msg);
-                console.log("Update notice board is fail.");
+                parseErrorMsg(msg);
                 exit = true;
             });
 
@@ -338,7 +330,7 @@
         formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
 
         $.ajax({
-            url: "http://localhost:8081/api/projects/attachedFile",
+            url: moduleAppApiAddress + "/api/projects/attachedFile",
             type: "post",
             data: formData,
             dataType: "text",
@@ -349,10 +341,10 @@
         })
             .done(function (msg) {
                 location.href = "/project?idx=" + projectIdx;
+                localStorage.setItem("result", "/project/register-success");
             })
             .fail(function (msg) {
-                paraseErrorMsg(msg);
-                console.log("Update attached file is fail.");
+                parseErrorMsg(msg);
                 deleteProject(projectIdx);
             });
 
@@ -360,18 +352,17 @@
 </script>
 
 <script th:if="${projectDto?.idx}" th:inline="javascript">
-    $('#update').click(function () {
+    $("#update").click(function () {
         // (input tag mame, length or size, message)
-        if (!(validateByLength("title", 50, "title") && validateBySize("content", 16777215, "content") && validateBySelect("researchFieldIdx", "Research Field"))) {
+        if (!(validateByLength("title", 255, "title") && validateBySize("content", 16777215, "content") && validateByBlank("startDate", "Start Date") && validateByBlank("endDate", "End Date"))) {
             return false;
         }
 
         var jsonData = $("#form").serializeObject();
         var projectIdx = document.getElementsByName("idx")[0].value;
 
-        // 게시글 수정
         $.ajax({
-            url: "http://localhost:8081/api/projects/" + projectIdx,
+            url: moduleAppApiAddress + "/api/projects/" + projectIdx,
             type: "put",
             data: JSON.stringify(jsonData),
             dataType: "text",
@@ -382,8 +373,7 @@
                 exit = false;
             })
             .fail(function (msg) {
-                paraseErrorMsg(msg);
-                console.log("Update notice board is fail.");
+                parseErrorMsg(msg);
                 exit = true;
             });
 
@@ -391,13 +381,14 @@
 
         // 만일 파일이 수정되지 않은 경우 '파일 업로드' 및 '파일 삭제'를 수행하지 않음
         if (insertFileArray.length == 0 && deleteFileArray.length == 0) {
+            localStorage.setItem("result", "/project/update-success");
             location.href = "/project?idx=" + projectIdx;
         }
 
         // 파일 삭제
         if (deleteFileArray.length > 0) {
             $.ajax({
-                url: "http://localhost:8081/api/projects/attachedFile",
+                url: moduleAppApiAddress + "/api/projects/attachedFile",
                 type: "delete",
                 data: JSON.stringify(deleteFileArray),
                 contentType: "application/json",
@@ -407,15 +398,17 @@
                     exit = false;
                 })
                 .fail(function (msg) {
-                    paraseErrorMsg(msg);
-                    console.log("Delete attached file is fail.");
+                    parseErrorMsg(msg);
                     exit = true;
                 });
         }
 
         if (exit) return false;
 
-        if (insertFileArray.length <= 0) location.href = "/project?idx=" + projectIdx;
+        if (insertFileArray.length <= 0) {
+            localStorage.setItem("result", "/project/update-success");
+            location.href = "/project?idx=" + projectIdx;
+        }
 
         // 파일 업로드
         var formData = new FormData();
@@ -428,7 +421,7 @@
         formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
 
         $.ajax({
-            url: "http://localhost:8081/api/projects/attachedFile",
+            url: moduleAppApiAddress + "/api/projects/attachedFile",
             type: "post",
             data: formData,
             dataType: "text",
@@ -438,14 +431,13 @@
             async: false,
         })
             .done(function (msg) {
+                localStorage.setItem("result", "/project/update-success");
                 location.href = "/project?idx=" + projectIdx;
             })
             .fail(function (msg) {
-                paraseErrorMsg(msg);
-                console.log("Upload attached file is fail.");
+                parseErrorMsg(msg);
                 deleteProject(projectIdx);
             })
-
     });
 </script>
 

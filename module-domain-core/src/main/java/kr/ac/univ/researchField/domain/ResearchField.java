@@ -24,26 +24,26 @@ public class ResearchField extends CommonAudit {
     private String title;
 
     @Column
-    private String subTitle;
+    private Long categoryIdx = 0L;
 
     @Column
     private String content;
     
     @Builder
-    public ResearchField(Long idx, String createdBy, String lastModifiedBy, ActiveStatus activeStatus, String title, String subTitle, String content) {
+    public ResearchField(Long idx, String createdBy, String lastModifiedBy, ActiveStatus activeStatus, String title, Long categoryIdx, String content) {
         setIdx(idx);
         setCreatedBy(createdBy);
         setLastModifiedBy(lastModifiedBy);
         setActiveStatus(activeStatus);
         this.title = title;
-        this.subTitle = subTitle;
+        this.categoryIdx = categoryIdx;
         this.content = content;
     }
 
-    public void update(ResearchField subTtitle) {
-        setActiveStatus(subTtitle.getActiveStatus());
-        this.title = subTtitle.getTitle();
-        this.subTitle = subTtitle.getSubTitle();
-        this.content = subTtitle.getContent();
+    public void update(ResearchField researchField) {
+        setActiveStatus(researchField.getActiveStatus());
+        this.title = researchField.getTitle();
+        this.categoryIdx = researchField.getCategoryIdx();
+        this.content = researchField.getContent();
     }
 }

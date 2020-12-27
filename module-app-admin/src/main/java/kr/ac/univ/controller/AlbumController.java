@@ -28,7 +28,7 @@ public class AlbumController {
     public String albumList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
         model.addAttribute("albumDtoList", albumService.findAlbumList(pageable, searchDto));
 
-        return "/album/list";
+        return "album/list";
     }
 
     // Form Update
@@ -44,9 +44,9 @@ public class AlbumController {
             model.addAttribute("albumDto", albumDto);
             model.addAttribute("albumDtoList", albumService.findAlbumListByActiveStatusIs());
 
-            returnPage = "/album/form";
+            returnPage = "album/form";
         } else {
-            returnPage = "/user/permission-denied";
+            returnPage = "user/permission-denied";
         }
 
         return returnPage;
@@ -62,6 +62,6 @@ public class AlbumController {
 
         model.addAttribute("albumDto", albumDto);
 
-        return "/album/read";
+        return "album/read";
     }
 }

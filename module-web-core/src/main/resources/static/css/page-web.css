@@ -1,4 +1,20 @@
 /*
+ * Breadcrumbs
+ */
+.breadcrumbs {
+    padding: 1rem;
+    background: var(--darker-white);
+    min-height: 40px;
+    margin-top: 5.5rem;
+}
+
+@media (max-width: 992px) {
+    .breadcrumbs {
+        margin-top: 4rem;
+    }
+}
+
+/*
  * Section
  */
 section {
@@ -68,11 +84,11 @@ section {
 }
 
 .section-title h2::before {
-    margin: 0 .8rem .8rem 0;
+    margin: 0 .6rem .6rem 0;
 }
 
 .section-title h2::after {
-    margin: 0 0 .8rem .8rem;
+    margin: 0 0 .6rem .6rem;
 }
 
 .section-title h3 {
@@ -93,27 +109,80 @@ section {
  */
 .introduction {
     width: 100%;
-    height: 75vh;
-    margin-top: 3rem;
+    height: 65vh;
+    margin-top: 70px;
 }
 
-.introduction .section-title h1 {
-    margin-top: 3rem;
-    text-align: left;
-    color: var(--darker-white);
+.introduction h1 {
+    margin: 0 0 10px 0;
+    font-size: 2.5rem;
+    font-weight: var(--strong-font-weight);
+    line-height: 3.25rem;
 }
 
-.introduction .section-content h5 {
-    color: var(--darker-white);
+.introduction h2 {
+    color: var(--lighter-black);
+    margin-bottom: 2rem;
+    font-size: 1.5rem;
+    line-height: 2.25rem;
 }
 
-.introduction .intro-image {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url("/images/embedded-system.jpg");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    object-fit: cover;
-    height: 67.5vh;
+.btn-main-about-us {
+    font-family: "Raleway", sans-serif;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    user-select: none;
+    border: 2px solid var(--main-red);
+    padding: .5rem 1.5rem;
+    font-size: 1.25rem;
+    font-weight: var(--strong-font-weight);
+    line-height: 2rem;
+    border-radius: 2rem;
+    transition: 0.5s;
+    background: var(--white);
+    color: var(--main-red);
+}
+
+.btn-main-about-us:hover {
+    text-decoration: none;
+    background: var(--main-red);
+    color: var(--white);
+}
+
+.introduction .introduction-image-carousel .owl-nav, .introduction .introduction-image-carousel .owl-dots {
+    margin-top: 5px;
+    text-align: center;
+}
+
+.introduction .introduction-image-carousel .owl-dot {
+    display: inline-block;
+    margin: 0 5px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--lighter-grey) !important;
+}
+
+.introduction .introduction-image-carousel .owl-dot.active {
+    background-color: var(--main-red) !important;
+}
+
+.introduction .introduction-image-carousel {
+    width: 420px !important;
+    height: 300px !important;
+    float: right;
+}
+
+.introduction .introduction-image-carousel img {
+    width: 420px !important;
+    height: 300px !important;
+}
+
+@media (min-width: 1024px) {
+    .introduction {
+        background-attachment: fixed;
+    }
 }
 
 @media (max-width: 991px) {
@@ -121,75 +190,70 @@ section {
         height: 100vh;
     }
 
-    .introduction .section-title {
-        padding-bottom: 1rem;
+    .introduction .animated {
+        -webkit-animation: none;
+        animation: none;
     }
 
-    .introduction .section-title h1 {
-        margin-top: 2.5rem;
-        font-size: 2.5rem;
-        line-height: 2.5rem;
+    .introduction .introduction-image-carousel {
+        width: 300px !important;
+        height: 220px !important;
+        float: none;
+
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
     }
 
-    .introduction .section-content h4 {
-        font-size: 1.15rem;
-        margin-bottom: 1.15rem;
-    }
-
-    .introduction .intro-image {
-        height: 90vh;
+    .introduction .introduction-image-carousel img {
+        width: 300px !important;
+        height: 220px !important;
     }
 }
 
 @media (max-width: 768px) {
-    .introduction .section-title {
-        padding-bottom: .5rem;
+    .introduction {
+        margin-top: 4.5rem;
     }
 
-    .introduction .section-title h1 {
-        margin-top: 2rem;
-        font-size: 2rem;
-        line-height: 2rem;
+    .introduction h1 {
+        font-size: 3rem;
+        line-height: 4.5rem;
     }
 
-    .introduction .section-content h4 {
+    .introduction h2 {
         font-size: 1rem;
-        margin-bottom: 1rem;
+        line-height: 1.5rem;
+        margin-bottom: 30px;
+    }
+
+    .introduction .introduction-img img {
+        width: 70%;
     }
 }
 
 @media (max-width: 575px) {
-    .introduction .section-title {
-        padding-bottom: .25rem;
-    }
-
-    .introduction .section-title h1 {
-        margin-top: 1.5rem;
-        font-size: 1.5rem;
-        line-height: 1.5rem;
-    }
-
-    .introduction .section-content h4 {
-        font-size: .85rem;
-        margin-bottom: .85rem;
+    .introduction .introduction-img img {
+        width: 80%;
     }
 }
 
 @-webkit-keyframes up-down {
     0% {
-        transform: translateY(.75rem);
+        transform: translateY(10px);
     }
     100% {
-        transform: translateY(-.75rem);
+        transform: translateY(-10px);
     }
 }
 
 @keyframes up-down {
     0% {
-        transform: translateY(.75rem);
+        transform: translateY(10px);
     }
     100% {
-        transform: translateY(-.75rem);
+        transform: translateY(-10px);
     }
 }
 
@@ -198,9 +262,12 @@ section {
  */
 
 .divider {
+    padding: 0 !important;
+}
+
+.divider .divider-line {
     background: var(--main-red);
-    padding: .5rem 0;
-    text-align: center;
+    padding: .25rem 0;
 }
 
 /*
@@ -330,14 +397,14 @@ section {
     font-weight: var(--strong-font-weight);
 }
 
-.contact h5 a {
-    font-size: 1.1rem;
+.contact h6 a {
+    font-size: 1rem;
     color: var(--main-red);
     text-decoration: none;
 }
 
-.contact h5 a:hover {
-    font-size: 1.1rem;
+.contact h6 a:hover {
+    font-size: 1rem;
     color: var(--lighter-red);
     text-decoration: none;
 }
@@ -361,70 +428,18 @@ section {
 }
 
 /*
- * Breadcrumbs
+ * About Us
  */
-.breadcrumbs {
-    padding: 1rem;
-    background: #f8f8f8;
-    min-height: 40px;
-    margin-top: 6rem;
-
+.canvas-wrapper {
+    height: 65%;
+    width: 65%;
 }
 
-.breadcrumbs h2 {
-    font-weight: var(--strong-font-weight);
+.video-wrapper {
+    height: 65%;
+    width: 65%;
 }
 
-@media (max-width: 992px) {
-    .breadcrumbs {
-        margin-top: 4rem;
-    }
-}
-
-.breadcrumbs ol {
-    display: flex;
-    flex-wrap: wrap;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    font-size: 1rem;
-}
-
-@media (max-width: 992px) {
-    .breadcrumbs ol {
-        margin-top: .75rem;
-    }
-}
-
-.breadcrumbs ol li + li {
-    padding-left: .75rem;
-}
-
-.breadcrumbs ol li + li::before {
-    display: inline-block;
-    padding-right: .75rem;
-    color: #3c3c3c;
-}
-
-@media (max-width: 768px) {
-    .breadcrumbs .d-flex {
-        display: block !important;
-    }
-
-    .breadcrumbs ol {
-        display: block;
-    }
-
-    .breadcrumbs ol li {
-        display: inline-block;
-    }
-}
-
-.breadcrumbs img {
-    width: 1rem;
-    height: 1rem;
-    margin: .25rem;
-}
 
 /*
  * Member
@@ -527,6 +542,7 @@ section {
  */
 .publication .publication-wrap {
     margin: 0 1rem;
+    word-break: break-all;
 }
 
 .publication .publication-wrap .title {
@@ -549,10 +565,6 @@ section {
 /*
  * project
  */
-.project {
-    margin-top: 4rem;
-}
-
 .project h4 {
     margin-bottom: 1.5rem;
     font-weight: var(--strong-font-weight);

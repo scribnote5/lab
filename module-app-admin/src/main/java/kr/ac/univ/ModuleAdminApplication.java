@@ -1,6 +1,7 @@
 package kr.ac.univ;
 
 import kr.ac.univ.common.domain.enums.ActiveStatus;
+import kr.ac.univ.noticeBoard.domain.NoticeBoard;
 import kr.ac.univ.noticeBoard.repository.NoticeBoardRepository;
 import kr.ac.univ.publication.repository.PublicationRepository;
 import kr.ac.univ.user.domain.User;
@@ -13,6 +14,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.stream.IntStream;
 
 @RestController
 @SpringBootApplication
@@ -37,7 +40,7 @@ public class ModuleAdminApplication {
                     .activeStatus(ActiveStatus.ACTIVE)
                     .createdBy("root")
                     .build()));
-             */
+            */
 
             /* 사용자 모두 삭제 */
             /* userRepository.deleteAll(); */

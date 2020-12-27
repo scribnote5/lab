@@ -28,12 +28,6 @@ public class GeoLocationService {
             String country = (cityResponse.getCountry() != null) ? cityResponse.getCountry().getName() : "";
             String city = cityResponse.getCity().getName();
 
-            System.out.println("=getIpLocation=");
-            System.out.println(continent);
-            System.out.println(country);
-            System.out.println(city);
-            System.out.println();
-
             location = country + ": " + city;
         }
         // localhost에서 테스트하는 경우 예외처리

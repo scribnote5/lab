@@ -4,7 +4,8 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title>Email Form</title>
+    <title th:if="!${emailDto.idx}" th:text="${@environment.getProperty('title')} + ' | Email Register'"></title>
+    <title th:if="${emailDto.idx}" th:text="${@environment.getProperty('title')} + ' | Email Update'"></title>
 </head>
 <body>
 <div class="d-flex" id="wrapper">
@@ -17,17 +18,25 @@
 
         <div class="container-fluid">
             <form name="form" id="form" th:object="${emailDto}" action="#">
-                <div class="page-header">
-                    <h1 th:if="!*{idx}">Email Register</h1>
-                    <h1 th:if="*{idx}">Email Update</h1>
+                <div class="page-header breadcrumbs">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 th:if="!*{idx}">Email Register</h2>
+                        <h2 th:if="*{idx}">Email Update</h2>
+                        <ol>
+                            <li>Home</li>
+                            <img src="/images/chevron-right.svg">
+                            <li th:if="!*{idx}">Email Register</li>
+                            <li th:if="*{idx}">Email Update</li>
+                        </ol>
+                    </div>
                 </div>
 
                 <div class="mt-5">
                     <table class="table">
                         <colgroup>
-                            <col width="15%"/>
-                            <col width="45%"/>
-                            <col width="40%"/>
+                            <col width="17.5%"/>
+                            <col width="47.5%"/>
+                            <col width="35%"/>
                         </colgroup>
                         <tr>
                             <th colspan="3" class="sub-item-title">Email Information</th>
@@ -124,9 +133,8 @@
     });
 
     function deleteEmail(emailIdx) {
-        // 게시글 삭제
         $.ajax({
-            url: "http://localhost:8081/api/emails/" + emailIdx,
+            url: moduleAppApiAddress + "/api/emails/" + emailIdx,
             type: "delete",
             dataType: "text",
             contentType: "application/json",
@@ -136,7 +144,7 @@
 
             })
             .fail(function (msg) {
-                console.log("Delete notice board is fail.");
+                parseErrorMsg(msg);
             });
     }
 </script>
@@ -144,8 +152,12 @@
 <script th:if="!${emailDto?.idx}">
     $('#insert').click(function () {
         if (!emailVaildation) {
-            alert("Please check email.");
-            document.getElementById("email").focus();
+            Alert.fire({
+                icon: "error",
+                text: "Please check email."
+            }).then((result) => {
+                document.getElementById("email").focus();
+            });
 
             return false;
         }
@@ -157,9 +169,8 @@
 
         var jsonData = $("#form").serializeObject();
 
-        // 게시글 업로드
         $.ajax({
-            url: "http://localhost:8081/api/emails",
+            url: moduleAppApiAddress + "/api/emails",
             type: "post",
             data: JSON.stringify(jsonData),
             dataType: "text",
@@ -167,11 +178,11 @@
             async: false,
         })
             .done(function (msg) {
+                localStorage.setItem("result", "/email/register-success");
                 location.href = "/email?idx=" + msg;
             })
             .fail(function (msg) {
-                paraseErrorMsg(msg);
-                console.log("Update email is fail.");
+                parseErrorMsg(msg);
             });
     });
 </script>
@@ -181,9 +192,12 @@
 
     $('#update').click(function () {
         if (!emailVaildation) {
-            alert("Please check email.");
-            document.getElementById("email").focus();
-
+            Alert.fire({
+                icon: "error",
+                text: "Please check email."
+            }).then((result) => {
+                document.getElementById("email").focus();
+            })
             return false;
         }
 
@@ -195,9 +209,8 @@
         var jsonData = $("#form").serializeObject();
         var emailIdx = document.getElementsByName("idx")[0].value;
 
-        // 게시글 수정
         $.ajax({
-            url: "http://localhost:8081/api/emails/" + emailIdx,
+            url: moduleAppApiAddress + "/api/emails/" + emailIdx,
             type: "put",
             data: JSON.stringify(jsonData),
             dataType: "text",
@@ -205,11 +218,11 @@
             async: false,
         })
             .done(function (msg) {
+                localStorage.setItem("result", "/email/update-success");
                 location.href = "/email?idx=" + emailIdx;
             })
             .fail(function (msg) {
-                paraseErrorMsg(msg);
-                console.log("Update email is fail.");
+                parseErrorMsg(msg);
                 exit = true;
             });
 

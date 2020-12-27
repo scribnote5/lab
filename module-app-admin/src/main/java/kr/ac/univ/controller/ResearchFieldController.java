@@ -1,5 +1,6 @@
 package kr.ac.univ.controller;
 
+import kr.ac.univ.category.service.CategoryService;
 import kr.ac.univ.common.dto.SearchDto;
 import kr.ac.univ.researchField.dto.ResearchFieldDto;
 import kr.ac.univ.researchField.service.ResearchFieldService;
@@ -15,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/research-field")
 public class ResearchFieldController {
     private final ResearchFieldService researchFieldService;
+    private final CategoryService categoryService;
 
-    public ResearchFieldController(ResearchFieldService researchFieldService) {
+    public ResearchFieldController(ResearchFieldService researchFieldService, CategoryService categoryService) {
         this.researchFieldService = researchFieldService;
+        this.categoryService = categoryService;
     }
 
     // List
@@ -25,7 +28,7 @@ public class ResearchFieldController {
     public String researchFieldList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
         model.addAttribute("researchFieldDtoList", researchFieldService.findResearchFieldList(pageable, searchDto));
 
-        return "/researchField/list";
+        return "researchField/list";
     }
 
     // Form Update
@@ -37,10 +40,12 @@ public class ResearchFieldController {
         // 권한 확인
         if (researchFieldDto.isAccess()) {
             model.addAttribute("researchFieldDto", researchFieldDto);
+            model.addAttribute("categoryDto", categoryService.findCategoryByIdxInActive(researchFieldDto.getCategoryIdx()));
+            model.addAttribute("categoryDtoList", categoryService.findCategoryListByActiveStatusIs());
 
-            returnPage = "/researchField/form";
+            returnPage = "researchField/form";
         } else {
-            returnPage = "/user/permission-denied";
+            returnPage = "user/permission-denied";
         }
 
         return returnPage;
@@ -52,7 +57,8 @@ public class ResearchFieldController {
         ResearchFieldDto researchFieldDto = researchFieldService.findResearchFieldByIdx(idx);
 
         model.addAttribute("researchFieldDto", researchFieldDto);
+        model.addAttribute("categoryDto", categoryService.findCategoryByIdxInActive(researchFieldDto.getCategoryIdx()));
 
-        return "/researchField/read";
+        return "researchField/read";
     }
 }

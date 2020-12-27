@@ -4,7 +4,7 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title>Publication List</title>
+    <title th:text="${@environment.getProperty('title')} + ' | Publication List'"></title>
 </head>
 <body>
 <div id="page-content-wrapper">
@@ -13,7 +13,7 @@
 
     <div class="container publication">
         <form name="form" id="form" th:object="${publicationSearchDto}" action="#">
-            <div class="page-header page-title breadcrumbs" data-aos="fade-up" data-aos-delay="100">
+            <div class="page-header breadcrumbs" data-aos="fade-up" data-aos-delay="100">
                 <div class="d-flex justify-content-between align-items-center">
                     <h2>Publication List</h2>
                     <ol>
@@ -75,10 +75,10 @@
                 </div>
             </div>
 
-            <div class="mt-5" data-aos="fade-up" data-aos-delay="150">
-                <div th:id="publicationData0" th:each="publicationDto : ${publicationDtoList}" class="publication-wrap">
-                    <a th:if="${not #strings.isEmpty(publicationDto.uri)}" th:href="${publicationDto.uri}" th:id="publicationTitle" class="my-1" th:text="${publicationDto.title}" th:class="title"></a><br>
-                    <span th:if="${#strings.isEmpty(publicationDto.uri)}"  th:id="publicationTitle" class="my-1" th:text="${publicationDto.title}" th:class="title"></span><br>
+            <div id="publications" class="mt-5" data-aos="fade-up" data-aos-delay="150">
+                <div th:id="publicationData0" th:each="publicationDto : ${publicationDtoList}" class="publication-wrap mt-4">
+                    <a th:if="${not #strings.isEmpty(publicationDto.uri)}" th:href="${publicationDto.uri}" th:id="publicationTitle" class="my-1" th:text="${publicationDto.title}" th:class="title" target="_blank"></a>
+                    <span th:if="${#strings.isEmpty(publicationDto.uri)}" th:id="publicationTitle" class="my-1" th:text="${publicationDto.title}" th:class="title"></span><br>
 
                     <span th:text="${publicationDto.authors}" th:id="publicationAuthors" class="authors my-1"></span><br>
 
@@ -92,20 +92,31 @@
 
                     <div class="mt-2">
                         <span th:if="${#strings.equals(publicationDto.publishingArea, 'INTERNATIONAL') && #strings.equals(publicationDto.publicationType, 'JOURNAL')}"
-                              th:text="${publicationDto.publishingArea.publishingArea} + ' ' + ${publicationDto.publicationType.publicationType} + (${#strings.isEmpty(publicationDto.impactFactor)} ? '' : ${publicationDto.impactFactor})" class="btn-primary btn-sm"></span>
+                              th:text="${publicationDto.publishingArea.publishingArea} + ' ' + ${publicationDto.publicationType.publicationType} + (${#strings.isEmpty(publicationDto.impactFactor)} ? '' : ${publicationDto.impactFactor})"
+                              class="btn-primary btn-sm"></span>
                         <span th:if="${#strings.equals(publicationDto.publishingArea, 'INTERNATIONAL') && !(#strings.equals(publicationDto.publicationType, 'JOURNAL'))}"
-                              th:text="${publicationDto.publishingArea.publishingArea} + ' ' + ${publicationDto.publicationType.publicationType}" class="btn-info btn-sm"></span>
+                              th:text="${publicationDto.publishingArea.publishingArea} + ' ' + ${publicationDto.publicationType.publicationType}"
+                              class="btn-info btn-sm"></span>
                         <span th:if="${#strings.equals(publicationDto.publishingArea, 'DOMESTIC') && #strings.equals(publicationDto.publicationType, 'JOURNAL')}"
-                              th:text="${publicationDto.publishingArea.publishingArea} + ' ' + ${publicationDto.publicationType.publicationType} " class="btn-success btn-sm"></span>
+                              th:text="${publicationDto.publishingArea.publishingArea} + ' ' + ${publicationDto.publicationType.publicationType} "
+                              class="btn-success btn-sm"></span>
                         <span th:if="${#strings.equals(publicationDto.publishingArea, 'DOMESTIC') && !(#strings.equals(publicationDto.publicationType, 'JOURNAL'))}"
-                              th:text="${publicationDto.publishingArea.publishingArea} + ' ' + ${publicationDto.publicationType.publicationType}" class="btn-warning btn-sm" style="color:white;"></span>
+                              th:text="${publicationDto.publishingArea.publishingArea} + ' ' + ${publicationDto.publicationType.publicationType}"
+                              class="btn-warning btn-sm"></span>
+                    </div>
+                </div>
+                <div th:if="${#lists.size(publicationDtoList) == 0}">
+                    <div class="no-posts">
+                        No posts founded.
                     </div>
                 </div>
 
-                <div id="loading">
+                <div id="loading" class="row justify-content-center">
                     <img th:src="@{/images/loading.gif}" alt="Loading…"/>
                 </div>
             </div>
+
+            <div class="row justify-content-end mt-5 mb-3"></div>
         </form>
     </div>
 </div>
@@ -143,6 +154,7 @@
                     $('#loading').hide();
                     return;
                 }
+                console.log("lastIdx: " + lastIdx);
 
                 $('#loading').show();
 
@@ -151,7 +163,7 @@
 
                 // URI 생성
                 Object.assign(uri, getUriParams());
-                uri = makeGetUri("http://175.213.188.61:8081/api/publications/list_scroll", uri);
+                uri = makeGetUri(moduleAppApiAddress + "/api/publications/list_scroll", uri);
 
                 $.ajax({
                     url: uri,
@@ -171,15 +183,13 @@
                         // 다음 발생하는 scroll event에서 데이터를 가져오는 기준이 된다.(마지막 배열 요소의 idx)
                         lastIdx = (JSON.parse(msg))[(JSON.parse(msg)).length - 1].idx;
 
-                        setTimeout(function () {
-                            $('#loading').hide();
-                        }, 2500);
-
-                        // ajax를 통하여 받은 데이터를 html에 출력한다.
                         var monthNames = ["January", "February", "March", "April", "May", "June",
                             "July", "August", "September", "October", "November", "December"
                         ];
 
+                        $("#loading").hide();
+
+                        // ajax를 통하여 받은 데이터를 html에 출력한다.
                         for (var i = 0; i < publicationList.length; i++) {
                             var str = null;
                             var publishedDate = publicationList[i].publishedDate.split('-');
@@ -197,7 +207,8 @@
                                 str = "";
                             }
 
-                            $("#main").append('<div id="publicationData' + publicationId + ' class="my-4">'
+                            $("#publications").append(
+                                '<div id="publicationData' + publicationId + '" class="publication-wrap mt-4">'
                                 + '<a id="publicationTitle"' + publicationId + ' href="publicationList[i].uri" class="my-1 title">' + publicationList[i].title + '</a><br>'
                                 + '<span id="publicationAuthors"' + publicationId + ' class="authors my-1">' + publicationList[i].authors + '</span><br>'
                                 + '<span>' + publicationList[i].publishedIn + '</span>'
@@ -207,19 +218,16 @@
                                 + '<span>, No. ' + publicationList[i].number + '</span>'
                                 + '<span>, pp. ' + publicationList[i].pages + '</span>'
                                 + '<span>, ' + publicationList[i].isbnIssn + '</span>'
-                                + '<p class="my-2">'
+                                + '<div class="mt-2">'
                                 + str
-                                + '</p>'
                                 + '</div>'
-                                + '<br>');
+                                + '</div>');
 
                             publicationId++;
                         }
-
-
                     })
                     .fail(function (msg) {
-                        console.log("Fail to get data.");
+                        searchFail();
                         $('#loading').hide();
                     })
             }

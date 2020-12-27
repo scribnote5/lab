@@ -28,7 +28,7 @@ public class PublicationController {
     public String publicationList(@PageableDefault Pageable pageable, PublicationSearchDto publicationSearchDto, Model model) {
         model.addAttribute("publicationDtoList", publicationService.findPublicationList(pageable, publicationSearchDto));
 
-        return "/publication/list";
+        return "publication/list";
     }
 
     // Form Update
@@ -43,9 +43,9 @@ public class PublicationController {
 
             model.addAttribute("publicationDto", publicationDto);
 
-            returnPage = "/publication/form";
+            returnPage = "publication/form";
         } else {
-            returnPage = "/user/permission-denied";
+            returnPage = "user/permission-denied";
         }
 
         return returnPage;
@@ -61,7 +61,7 @@ public class PublicationController {
 
         model.addAttribute("publicationDto", publicationDto);
 
-        return "/publication/read";
+        return "publication/read";
     }
 
 }

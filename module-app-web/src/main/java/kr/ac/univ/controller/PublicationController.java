@@ -24,6 +24,6 @@ public class PublicationController {
 
         model.addAttribute("publicationDtoList", publicationService.findPublicationListScroll(lastIdx, publicationSearchDto));
 
-        return "/publication/list_scroll";
+        return "publication/list_scroll";
     }
 }

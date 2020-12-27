@@ -48,9 +48,6 @@ public class LoginHistoryService {
                 loginHistoryList = loginHistoryRepository.findAllByCreatedByContaining(pageable, searchDto.getKeyword());
                 break;
             case "AUD_LOGIN_RESULT_TYPE":
-                System.out.println("======");
-                System.out.println(AudLoginResultType.valueOf(searchDto.getKeyword()));
-                System.out.println(searchDto.getKeyword());
                 loginHistoryList = loginHistoryRepository.findAllByAudLoginResultTypeIs(pageable, AudLoginResultType.valueOf(searchDto.getKeyword()));
                 break;
             default:

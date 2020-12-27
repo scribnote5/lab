@@ -53,8 +53,6 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
             errorMsg = "Please contact admin.";
         }
 
-        System.out.println("로그인 실패!");
-
         loginHistoryRepository.save(LoginHistory.builder()
                 .createdDate(LocalDateTime.now())
                 .lastModifiedDate(LocalDateTime.now())

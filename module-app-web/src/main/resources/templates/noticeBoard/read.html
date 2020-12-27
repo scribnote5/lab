@@ -4,7 +4,7 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title>NoticeBoard Detail</title>
+    <title th:text="${@environment.getProperty('title')} + ' | NoticeBoard Detail'"></title>
 </head>
 <body>
 <div id="page-content-wrapper">
@@ -13,7 +13,7 @@
 
     <div class="container">
         <form name="form" id="form" th:object="${noticeBoardDto}" action="#">
-            <div class="page-header page-title breadcrumbs" data-aos="fade-up" data-aos-delay="100">
+            <div class="page-header breadcrumbs" data-aos="fade-up" data-aos-delay="100">
                 <div class="d-flex justify-content-between align-items-center">
                     <h2>NoticeBoard Detail</h2>
                     <ol>
@@ -24,50 +24,35 @@
                 </div>
             </div>
 
-            <div class="mt-5" data-aos="fade-up" data-aos-delay="150">
+            <div class="mt-4" data-aos="fade-up" data-aos-delay="150">
+                <div class="mb-2 text-right">
+                    <strong class="date">&nbsp;&nbsp;Created Date: </strong>
+                    <span class="date" th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/> </span><br>
+
+                    <strong class="date">Modified Date: </strong>
+                    <span class="date" th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></span>
+                </div>
+
                 <table class="table">
                     <colgroup>
-                        <col width="15%"/>
-                        <col width="85%"/>
+                        <col width="17.5%"/>
+                        <col width="82.5%"/>
                     </colgroup>
                     <tr>
-                        <th colspan="2" class="sub-item-title">NoticeBoard Information</th>
-                    </tr>
-                    <tr>
                         <th>Title</th>
-                        <td><span id="title" class="form-control" th:text="*{title}"></span></td>
+                        <td><span id="title" th:text="*{title}"></span></td>
                     </tr>
                     <tr>
                         <td colspan="2"><span id="content" class="form-control content" th:utext="*{content}"></span></td>
                     </tr>
-                    <tr>
+                    <tr th:if="!*{#lists.isEmpty(attachedFileList)}">
                         <th>Uploaded Attached File</th>
                         <td>
                             <div id="attachedFileList" th:each="attachedFile : *{attachedFileList}">
-                                <span th:attr="onclick=|location.href='http://localhost:8081/api/attachedFiles/download/${attachedFile.savedFileName}'|"
+                                <span th:attr="onclick=|location.href='${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/${attachedFile.savedFileName}'|"
                                       th:text="${attachedFile.fileName} + ',&nbsp;' + 'File size: ' + ${attachedFile.fileSize}"></span>
                             </div>
                         </td>
-                    </tr>
-                    <tr>
-                        <th colspan="2" class="sub-item-title">Additional Information</th>
-                    </tr>
-                    <tr>
-                        <th>Active Status</th>
-                        <td>
-                            <div>
-                                <span th:if="*{activeStatus?.name() == 'ACTIVE'}" class="form-control" th:text="Active"> </span>
-                                <span th:if="*{activeStatus?.name() == 'INACTIVE'}" class="form-control" th:text="Inactive"> </span>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Created Date</th>
-                        <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
-                    </tr>
-                    <tr>
-                        <th>Modified Date</th>
-                        <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
                     </tr>
                 </table>
             </div>
@@ -75,19 +60,16 @@
             <div class="mt-3">
                 <table class="table">
                     <colgroup>
-                        <col width="15%"/>
-                        <col width="85%"/>
+                        <col width="17.5%"/>
+                        <col width="82.5%"/>
                     </colgroup>
                     <tr>
                         <th colspan="2" class="sub-item-title">Comments</th>
                     </tr>
                     <tr th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}">
                         <td colspan="2">
-                                <textarea class="form-control comment" name="content"
-                                          id="comment"></textarea>
-                            <button type="button" class="btn btn-primary mt-3"
-                                    id="insertComment">Register
-                            </button>
+                            <textarea class="form-control comment" name="content" id="comment"></textarea>
+                            <button type="button" class="btn btn-primary mt-3" id="insertComment">Register</button>
                         </td>
                     </tr>
                 </table>
@@ -96,8 +78,8 @@
             <div th:if="!${#lists.isEmpty(noticeBoardCommentDtoList)}" class="mt-3">
                 <table class="table table-hover">
                     <colgroup>
-                        <col width="15%"/>
-                        <col width="85%"/>
+                        <col width="17.5%"/>
+                        <col width="82.5%"/>
                     </colgroup>
                     <tr th:each="noticeBoardCommentDto : ${noticeBoardCommentDtoList}">
                         <td colspan="2">
@@ -148,10 +130,6 @@
                 <div class="col-auto mx-3">
                     <a href="/notice-board/list" class="btn btn-secondary">Move to List</a>
                 </div>
-                <div th:if="*{access}" class="col-auto mx-3">
-                    <a th:href="'/notice-board/form?idx='+*{idx}" class="btn btn-info mx-1">Update</a>
-                    <button type="button" id="delete" class="btn btn-danger mx-1">Delete</button>
-                </div>
             </div>
 
             <!-- input type="hidden" -->
@@ -170,28 +148,7 @@
 <th:block th:replace="layout/script.html"></th:block>
 
 <script th:inline="javascript">
-    $("#delete").click(function () {
-        if (!confirm("Do you want to delete post?")) {
-            return true;
-        }
-
-        // 게시글 삭제
-        $.ajax({
-            url: "http://localhost:8081/api/notice-boards/" + document.getElementsByName("idx")[0].value,
-            type: "delete",
-            dataType: "text",
-            contentType: "application/json",
-            async: false,
-        })
-            .done(function (msg) {
-                location.href = "/notice-board/list";
-            })
-            .fail(function (msg) {
-                paraseErrorMsg(msg);
-                console.log("Delete notice board is fail.");
-            })
-
-    });
+    sweetalertFire("notice-board");
 
     $("#insertComment").click(function () {
         var jsonData =
@@ -203,9 +160,8 @@
                 content: document.getElementsByName("content")[0].value
             }
 
-        // 댓글 등록
         $.ajax({
-            url: "http://localhost:8081/api/notice-boards-comments/",
+            url: moduleAppApiAddress + "/api/notice-boards-comments/",
             type: "post",
             data: JSON.stringify(jsonData),
             dataType: "text",
@@ -213,10 +169,11 @@
             async: false,
         })
             .done(function (msg) {
+                localStorage.setItem("result", "/notice-board/register-success");
                 location.href = "/notice-board?idx=" + document.getElementsByName("idx")[0].value;
             })
             .fail(function (msg) {
-                console.log("Register comment is fail.");
+                parseErrorMsg(msg);
             })
     });
 
@@ -231,9 +188,8 @@
                 content: document.getElementsByName("updateContent")[commentId].value
             }
 
-        // 댓글 수정
         $.ajax({
-            url: "http://localhost:8081/api/notice-boards-comments/" + idx,
+            url: moduleAppApiAddress + "/api/notice-boards-comments/" + idx,
             type: "put",
             data: JSON.stringify(jsonData),
             dataType: "text",
@@ -241,33 +197,38 @@
             async: false,
         })
             .done(function (msg) {
+                localStorage.setItem("result", "/notice-board/update-success");
                 location.href = "/notice-board?idx=" + document.getElementsByName("idx")[0].value;
             })
             .fail(function (msg) {
-                console.log("Update comment is fail.");
+                parseErrorMsg(msg);
             })
     }
 
     function deleteComment(idx, commentId) {
-        if (!confirm("Do you want to delete comment?")) {
-
-            return true;
-        }
-
-        // 댓글 삭제
-        $.ajax({
-            url: "http://localhost:8081/api/notice-boards-comments/" + idx,
-            type: "delete",
-            dataType: "text",
-            contentType: "application/json",
-            async: false,
+        Confirm.fire({
+            icon: "warning",
+            title: "Do you want to delete?",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: moduleAppApiAddress + "/api/notice-boards-comments/" + idx,
+                    type: "delete",
+                    dataType: "text",
+                    contentType: "application/json",
+                    async: false,
+                })
+                    .done(function (msg) {
+                        localStorage.setItem("result", "/notice-board/delete-success");
+                        location.href = "/notice-board?idx=" + document.getElementsByName("idx")[0].value;
+                    })
+                    .fail(function (msg) {
+                        parseErrorMsg(msg);
+                    })
+            } else {
+                return false;
+            }
         })
-            .done(function (msg) {
-                location.href = "/notice-board?idx=" + document.getElementsByName("idx")[0].value;
-            })
-            .fail(function (msg) {
-                console.log("Delete comment is fail.");
-            })
     }
 
     function displayComment(index) {

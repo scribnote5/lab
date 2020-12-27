@@ -4,7 +4,7 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title>Seminar Read</title>
+    <title th:text="${@environment.getProperty('title')} + ' | Seminar Read'"></title>
 </head>
 <body>
 <div class="d-flex" id="wrapper">
@@ -17,46 +17,53 @@
 
         <div class="container-fluid">
             <form name="form" id="form" th:object="${seminarDto}" action="#">
-                <div class="page-header">
-                    <h1>Seminar Read</h1>
+                <div class="page-header breadcrumbs">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2>Seminar Read</h2>
+                        <ol>
+                            <li>Home</li>
+                            <img src="/images/chevron-right.svg">
+                            <li>Seminar Read</li>
+                        </ol>
+                    </div>
                 </div>
 
                 <div class="mt-5">
                     <table class="table">
                         <colgroup>
-                            <col width="15%"/>
-                            <col width="85%"/>
+                            <col width="17.5%"/>
+                            <col width="82.5%"/>
                         </colgroup>
                         <tr>
                             <th colspan="2" class="sub-item-title">Seminar Information</th>
                         </tr>
                         <tr>
                             <th>Title</th>
-                            <td><span id="title" class="form-control" th:text="*{title}"></span></td>
+                            <td><span id="title" th:text="*{title}"></span></td>
                         </tr>
                         <tr>
                             <th>Presenter</th>
-                            <td><span id="presenter" class="form-control" th:text="*{presenter}"></span></td>
+                            <td><span id="presenter" th:text="*{presenter}"></span></td>
                         </tr>
                         <tr>
                             <th>Presentation Date</th>
                             <td>
-                                <input type="text" name="presentationDate" id="presentationDate" class="form-control presentation-date" th:value="*{#temporals.format(presentationDate,'yyyy-MM-dd HH:mm')}"/>
+                                <span name="presentationDate" id="presentationDate" th:text="*{#temporals.format(presentationDate,'yyyy-MM-dd HH:mm')}"/>
                             </td>
                         </tr>
                         <tr>
                             <th>Place</th>
-                            <td><span id="place" class="form-control" th:text="*{place}"></span></td>
+                            <td><span id="place" th:text="*{place}"></span></td>
                         </tr>
                         <tr>
                             <th>Seminar Type</th>
-                            <td><span id="seminarType" class="form-control" th:text="*{seminarType.seminarType}"></span></td>
+                            <td><span id="seminarType" th:text="*{seminarType.seminarType}"></span></td>
                         </tr>
                         <tr>
                             <th>Category</th>
                             <td>
-                                <span th:if="!${#strings.isEmpty(categoryDto)}" id="category" class="form-control" th:text="${categoryDto.title}"></span>
-                                <span th:if="${#strings.isEmpty(categoryDto)}" id="category" class="form-control" th:text="'This field is inactive or deleted.'"></span>
+                                <span th:if="!${#strings.isEmpty(categoryDto)}" id="category" th:text="${categoryDto.title}"></span>
+                                <span th:if="${#strings.isEmpty(categoryDto)}" id="category" th:text="'This field is inactive or deleted.'"></span>
                             </td>
                         </tr>
                         <tr>
@@ -66,7 +73,7 @@
                             <th>Uploaded Attached File</th>
                             <td>
                                 <div id="attachedFileList" th:each="attachedFile : *{attachedFileList}">
-                                <span th:attr="onclick=|location.href='http://localhost:8081/api/attachedFiles/download/${attachedFile.savedFileName}'|"
+                                <span th:attr="onclick=|location.href='${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/${attachedFile.savedFileName}'|"
                                       th:text="${attachedFile.fileName} + ',&nbsp;' + 'File size: ' + ${attachedFile.fileSize}"></span>
                                 </div>
                             </td>
@@ -78,18 +85,18 @@
                             <th>Active Status</th>
                             <td>
                                 <div>
-                                    <span th:if="*{activeStatus?.name() == 'ACTIVE'}" class="form-control" th:text="Active"> </span>
-                                    <span th:if="*{activeStatus?.name() == 'INACTIVE'}" class="form-control" th:text="Inactive"> </span>
+                                    <span th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active"> </span>
+                                    <span th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"> </span>
                                 </div>
                             </td>
                         </tr>
                         <tr>
                             <th>Created Date</th>
-                            <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr>
                             <th>Modified Date</th>
-                            <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><span th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                     </table>
                 </div>
@@ -118,27 +125,32 @@
 <th:block th:replace="layout/script.html"></th:block>
 
 <script th:inline="javascript">
+    sweetalertFire("seminar");
+
     $("#delete").click(function () {
-        if (!confirm("Do you want to delete post?")) {
-            return true;
-        }
-
-        // 게시글 삭제
-        $.ajax({
-            url: "http://localhost:8081/api/seminars/" + document.getElementsByName("idx")[0].value,
-            type: "delete",
-            dataType: "text",
-            contentType: "application/json",
-            async: false,
+        Confirm.fire({
+            icon: "warning",
+            title: "Do you want to delete?",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: moduleAppApiAddress + "/api/seminars/" + document.getElementsByName("idx")[0].value,
+                    type: "delete",
+                    dataType: "text",
+                    contentType: "application/json",
+                    async: false,
+                })
+                    .done(function (msg) {
+                        localStorage.setItem("result", "/seminar/delete-success");
+                        location.href = "/seminar/list";
+                    })
+                    .fail(function (msg) {
+                        parseErrorMsg(msg);
+                    })
+            } else {
+                return false;
+            }
         })
-            .done(function (msg) {
-                location.href = "/seminar/list";
-            })
-            .fail(function (msg) {
-                paraseErrorMsg(msg);
-                console.log("Delete notice board is fail.");
-            })
-
     });
 </script>
 

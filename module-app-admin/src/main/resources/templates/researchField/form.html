@@ -4,7 +4,8 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title>ResearchField Form</title>
+    <title th:if="!${researchFieldDto.idx}" th:text="${@environment.getProperty('title')} + ' | ResearchField Register'"></title>
+    <title th:if="${researchFieldDto.idx}" th:text="${@environment.getProperty('title')} + ' | ResearchField Update'"></title>
 </head>
 <body>
 <div class="d-flex" id="wrapper">
@@ -17,16 +18,24 @@
 
         <div class="container-fluid">
             <form name="form" id="form" th:object="${researchFieldDto}" action="#">
-                <div class="page-header">
-                    <h1 th:if="!*{idx}">ResearchField Register</h1>
-                    <h1 th:if="*{idx}">ResearchField Update</h1>
+                <div class="page-header breadcrumbs">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 th:if="!*{idx}">ResearchField Register</h2>
+                        <h2 th:if="*{idx}">ResearchField Update></h2>
+                        <ol>
+                            <li>Home</li>
+                            <img src="/images/chevron-right.svg">
+                            <li th:if="!*{idx}">ResearchField Register</li>
+                            <li th:if="*{idx}">ResearchField Update></li>
+                        </ol>
+                    </div>
                 </div>
 
                 <div class="mt-5">
                     <table class="table">
                         <colgroup>
-                            <col width="15%"/>
-                            <col width="85%"/>
+                            <col width="17.5%"/>
+                            <col width="82.5%"/>
                         </colgroup>
                         <tr>
                             <th colspan="2" class="sub-item-title">ResearchField Information</th>
@@ -36,8 +45,15 @@
                             <td><input type="text" name="title" id="title" class="form-control" th:value="*{title}"/></td>
                         </tr>
                         <tr>
-                            <th>Sub Title</th>
-                            <td><input type="text" name="subTitle" id="subTitle" class="form-control" th:value="*{subTitle}"/></td>
+                            <th>Research Field</th>
+                            <td>
+                                <select class="custom-select" name="categoryIdx" th:field="*{categoryIdx}">
+                                    <option th:if="${#strings.isEmpty(categoryDto)} and *{idx}" th:value="-1">This field is inactive or deleted.</option>
+                                    <option th:each="categoryDto : ${categoryDtoList}"
+                                            th:value="${categoryDto.idx}"
+                                            th:text="${categoryDto.title}"></option>
+                                </select>
+                            </td>
                         </tr>
                         <tr>
                             <td colspan="2"><textarea name="content" id="summernote" class="summernote" th:text="*{content}"></textarea></td>
@@ -111,16 +127,15 @@
 <script th:if="!${researchFieldDto?.idx}">
     $('#insert').click(function () {
         // (input tag mame, length or size, message)
-        if (!(validateByLength("title", 50, "title") && validateByLength("subTitle", 50, "subtitle") && validateBySize("content", 16777215, "content"))) {
+        if (!(validateByLength("title", 255, "title") && validateByLength("subTitle", 50, "subtitle") && validateBySize("content", 16777215, "content"))) {
             return false;
         }
 
         var jsonData = $("#form").serializeObject();
         var researchFieldIdx;
 
-        // 게시글 업로드
         $.ajax({
-            url: "http://localhost:8081/api/research-fields",
+            url: moduleAppApiAddress + "/api/research-fields",
             type: "post",
             data: JSON.stringify(jsonData),
             dataType: "text",
@@ -129,13 +144,11 @@
         })
             .done(function (msg) {
                 researchFieldIdx = msg;
+                localStorage.setItem("result", "/research-field/update-success");
                 location.href = "/research-field?idx=" + researchFieldIdx;
-
             })
             .fail(function (msg) {
-                paraseErrorMsg(msg);
-                console.log("Update notice board is fail.");
-
+                parseErrorMsg(msg);
             });
     });
 </script>
@@ -143,16 +156,15 @@
 <script th:if="${researchFieldDto?.idx}" th:inline="javascript">
     $('#update').click(function () {
         // (input tag mame, length or size, message)
-        if (!(validateByLength("title", 50, "title") && validateByLength("subTitle", 50, "sub title") && validateBySize("content", 16777215, "content"))) {
+        if (!(validateByLength("title", 255, "title") && validateByLength("subTitle", 50, "sub title") && validateBySize("content", 16777215, "content"))) {
             return false;
         }
 
         var jsonData = $("#form").serializeObject();
         var researchFieldIdx = document.getElementsByName("idx")[0].value;
 
-        // 게시글 수정
         $.ajax({
-            url: "http://localhost:8081/api/research-fields/" + researchFieldIdx,
+            url: moduleAppApiAddress + "/api/research-fields/" + researchFieldIdx,
             type: "put",
             data: JSON.stringify(jsonData),
             dataType: "text",
@@ -160,11 +172,11 @@
             async: false,
         })
             .done(function (msg) {
+                localStorage.setItem("result", "/research-field/update-success");
                 location.href = "/research-field?idx=" + researchFieldIdx;
             })
             .fail(function (msg) {
-                paraseErrorMsg(msg);
-                console.log("Update research field is fail.");
+                parseErrorMsg(msg);
             });
     });
 </script>

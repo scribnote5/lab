@@ -36,7 +36,7 @@ public class UserController {
     @GetMapping("/index")
     public String index(Model model) {
 
-        return "/user/index";
+        return "user/index";
     }
 
     // Login Page
@@ -46,11 +46,11 @@ public class UserController {
 
         // 사용자가 로그인 안된 경우 /login 페이지로 이동
         if (EmptyUtil.isEmpty(userPrincipal)) {
-            returnPage = "/user/login";
+            returnPage = "user/login";
         }
         // 사용자가 로그인한 경우 /main/home 페이지로 이동
         else {
-            returnPage = "/main/home";
+            returnPage = "main/home";
         }
 
         return returnPage;
@@ -60,28 +60,28 @@ public class UserController {
     @PostMapping("/login/fail")
     public String loginFail(HttpServletRequest request) {
 
-        return "/user/login";
+        return "user/login";
     }
 
     // Logout
     @GetMapping("/logout/success")
-    public RedirectView logout(Model model) {
+    public RedirectView  logout(Model model) {
 
-        return new RedirectView("/user/login");
+        return new RedirectView ("/user/login");
     }
 
     // Permission Denied
     @GetMapping("/permission-denied")
     public String permissionDenied() {
 
-        return "/user/permission-denied";
+        return "user/permission-denied";
     }
 
     // Anonymous User Permission Denied
     @GetMapping("/anonymous-user-permission-denied")
     public String anonymousUserPermissionDenied() {
 
-        return "/user/anonymous-user-permission-denied";
+        return "user/anonymous-user-permission-denied";
     }
 
     // List
@@ -89,7 +89,7 @@ public class UserController {
     public String noticeBoardList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
         model.addAttribute("userDtoList", userService.findUserList(pageable, searchDto));
 
-        return "/user/list";
+        return "user/list";
     }
 
     // Form Update
@@ -104,9 +104,9 @@ public class UserController {
 
             model.addAttribute("userDto", userDto);
 
-            returnPage = "/user/form";
+            returnPage = "user/form";
         } else {
-            returnPage = "/user/permission-denied";
+            returnPage = "user/permission-denied";
         }
 
         return returnPage;
@@ -124,9 +124,9 @@ public class UserController {
 
             model.addAttribute("userDto", userDto);
 
-            returnPage = "/user/read";
+            returnPage = "user/read";
         } else {
-            returnPage = "/user/permission-denied";
+            returnPage = "user/permission-denied";
         }
 
         return returnPage;

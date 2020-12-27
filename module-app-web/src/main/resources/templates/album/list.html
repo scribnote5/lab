@@ -4,7 +4,7 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title>Album List</title>
+    <title th:text="${@environment.getProperty('title')} + ' | Album List'"></title>
 </head>
 <body>
 
@@ -32,14 +32,15 @@
                     </div>
 
                     <div class="album-wrap" style="width: 600px">
-                        <img th:attr="src=@{|http://localhost:8081/api/attachedFiles/download/${albumDto.attachedFileList[0].savedFileName}|}" style="width: 600px; height: auto"/>
+                        <img th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/${albumDto.attachedFileList[0].savedFileName}|}" style="width: 600px; height: auto"/>
 
                         <div class="album-info">
-                            <h5 th:text="${albumDto.title}"></h5>
+                            <h5 th:text="${#strings.length(albumDto.title)} < 20 ? ${albumDto.title} : ${#strings.substring(albumDto.title, 0, 20)} + '...'"></h5>
                             <span th:each="hashTag : ${#strings.arraySplit(albumDto.hashTags,'#')}" th:text="'#' + ${hashTag}"></span>
-
+                            
                             <div class="album-links">
-                                <a th:href="@{'http://localhost:8081/api/attachedFiles/download/' + ${albumDto.attachedFileList[0].savedFileName}}" data-gall="portfolioGallery" class="venobox" th:title="${albumDto.title}">
+                                <a th:href="@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/${albumDto.attachedFileList[0].savedFileName}|}" data-gall="portfolioGallery" class="venobox"
+                                   th:title="${albumDto.title}">
                                     <img src="/images/plus.svg"/>
                                 </a>
                             </div>
@@ -49,11 +50,7 @@
             </div>
         </div>
 
-        <div class="row justify-content-end mt-5 mb-3">
-            <div class="col-auto mx-3">
-                <a href="/album/form" class="btn btn-primary">Register</a>
-            </div>
-        </div>
+        <div class="row justify-content-end mt-5 mb-3"></div>
     </div>
 </div>
 

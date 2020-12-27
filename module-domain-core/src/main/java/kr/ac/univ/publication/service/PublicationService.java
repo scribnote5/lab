@@ -139,7 +139,15 @@ public class PublicationService {
 
 
     public Long findMaxPublicationIdx() {
-        return publicationRepositoryImpl.findMaxPublicationIdx().getIdx();
+        Long lastIdx = 0L;
+
+        try {
+            lastIdx = publicationRepositoryImpl.findMaxPublicationIdx().getIdx();
+        } catch (NullPointerException e) {
+            lastIdx = 0L;
+        }
+
+        return lastIdx;
     }
 
     public void deletePublicationByIdx(Long idx) {

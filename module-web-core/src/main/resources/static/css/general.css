@@ -27,14 +27,27 @@ body .container-fluid {
 }
 
 label {
-    font-weight: var(--light-font-weight);
+    font-weight: var(--strong-font-weight);
 }
 
 table th {
     font-weight: var(--strong-font-weight);
 }
 
+table td {
+    word-break:break-all;
+}
+
+.no-posts {
+    text-align: center;
+    vertical-align: middle !important;
+    height: 7.5rem !important;
+    color: var(--dark-grey);
+    font-size: var(--larger-font-size);
+}
+
 .btn-main {
+    font-family: "Raleway", sans-serif;
     display: inline-block;
     text-align: center;
     vertical-align: middle;
@@ -44,7 +57,7 @@ table th {
     font-size: 1rem;
     line-height: 1.5;
     border-radius: .25rem;
-
+    transition: 0.5s;
     background: var(--main-red);
     color: var(--white);
 }
@@ -65,6 +78,16 @@ table th {
     text-decoration: none;
 }
 
+.link-black {
+    color: var(--darker-grey);
+    text-decoration: none;
+}
+
+.link-black:hover {
+    color: var(--main-black);
+    text-decoration: none;
+}
+
 .more {
     color: var(--main-grey);
     display: inline-block;
@@ -76,12 +99,83 @@ table th {
     text-decoration: none;
 }
 
+
+
+/*
+ * Breadcrumbs
+ */
+.breadcrumbs h2 {
+    font-weight: var(--strong-font-weight);
+}
+
+.breadcrumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 1rem;
+}
+
+@media (max-width: 992px) {
+    .breadcrumbs ol {
+        margin-top: .75rem;
+    }
+}
+
+.breadcrumbs ol li + li {
+    padding-left: .75rem;
+}
+
+.breadcrumbs ol li + li::before {
+    display: inline-block;
+    padding-right: .75rem;
+    color: #3c3c3c;
+}
+
+@media (max-width: 768px) {
+    .breadcrumbs .d-flex {
+        display: block !important;
+    }
+
+    .breadcrumbs ol {
+        display: block;
+    }
+
+    .breadcrumbs ol li {
+        display: inline-block;
+    }
+}
+
+.breadcrumbs img {
+    width: 1rem;
+    height: 1rem;
+    margin: .25rem;
+}
+
+/*
+ * sweetalert2
+ */
+
+.page-header {
+    position: relative;
+}
+
+.position-absolute {
+    position: absolute;
+}
+
 /*
  * footer
  */
 #footer {
     height: 4rem;
     position: relative;
+    left: 0;
+    bottom: 0;
+
+    width: 100%;
+
     background: #fff;
     box-shadow: 2px 2px 1rem rgba(0, 0, 0, 0.2);
     /*padding: 12.5px 0;*/

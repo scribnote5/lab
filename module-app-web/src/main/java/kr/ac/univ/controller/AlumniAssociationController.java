@@ -25,7 +25,7 @@ public class AlumniAssociationController {
     public String alumniAssociationList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
         model.addAttribute("alumniAssociationDtoList", alumniAssociationService.findAlumniAssociationList(pageable, searchDto));
 
-        return "/alumniAssociation/list";
+        return "alumniAssociation/list";
     }
 
     // Read
@@ -37,6 +37,6 @@ public class AlumniAssociationController {
 
         model.addAttribute("alumniAssociationDto", alumniAssociationDto);
 
-        return "/alumniAssociation/read";
+        return "alumniAssociation/read";
     }
 }

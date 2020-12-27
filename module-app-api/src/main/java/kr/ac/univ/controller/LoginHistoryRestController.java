@@ -17,9 +17,6 @@ public class LoginHistoryRestController {
 
     @PutMapping("/{idx}/{activeStatus}")
     public ResponseEntity<?> putLoginHistory(@PathVariable("idx") Long idx, @PathVariable("activeStatus") ActiveStatus activeStatus) {
-        System.out.println("=ActiveStatus=");
-        System.out.println(activeStatus);
-
         loginHistoryService.updateLoginHistory(idx, activeStatus);
 
         return new ResponseEntity<>("{}", HttpStatus.OK);

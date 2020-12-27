@@ -25,7 +25,7 @@ public class AlumniAssociationController {
     public String alumniAssociationList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
         model.addAttribute("alumniAssociationDtoList", alumniAssociationService.findAlumniAssociationList(pageable, searchDto));
 
-        return "/alumniAssociation/list";
+        return "alumniAssociation/list";
     }
 
     // Form Update
@@ -38,9 +38,9 @@ public class AlumniAssociationController {
         if (alumniAssociationDto.isAccess()) {
             model.addAttribute("alumniAssociationDto", alumniAssociationDto);
 
-            returnPage = "/alumniAssociation/form";
+            returnPage = "alumniAssociation/form";
         } else {
-            returnPage = "/user/permission-denied";
+            returnPage = "user/permission-denied";
         }
 
         return returnPage;
@@ -55,6 +55,6 @@ public class AlumniAssociationController {
 
         model.addAttribute("alumniAssociationDto", alumniAssociationDto);
 
-        return "/alumniAssociation/read";
+        return "alumniAssociation/read";
     }
 }

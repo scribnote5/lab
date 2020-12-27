@@ -25,7 +25,7 @@ public class EmailController {
     public String emailList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
         model.addAttribute("emailDtoList", emailService.findEmailList(pageable, searchDto));
 
-        return "/email/list";
+        return "email/list";
     }
 
     // Form Update
@@ -38,9 +38,9 @@ public class EmailController {
         if (emailDto.isAccess()) {
             model.addAttribute("emailDto", emailDto);
 
-            returnPage = "/email/form";
+            returnPage = "email/form";
         } else {
-            returnPage = "/user/permission-denied";
+            returnPage = "user/permission-denied";
         }
 
         return returnPage;
@@ -53,6 +53,6 @@ public class EmailController {
 
         model.addAttribute("emailDto", emailDto);
 
-        return "/email/read";
+        return "email/read";
     }
 }

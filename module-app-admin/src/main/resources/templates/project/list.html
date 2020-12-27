@@ -4,7 +4,7 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title>Project List</title>
+    <title th:text="${@environment.getProperty('title')} + ' | Project List'"></title>
 </head>
 <body>
 <div class="d-flex" id="wrapper">
@@ -17,8 +17,15 @@
 
         <div class="container-fluid">
             <form name="form" id="form" th:object="${searchDto}" action="#">
-                <div class="page-header">
-                    <h1>Project List</h1>
+                <div class="page-header breadcrumbs">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2>Project List</h2>
+                        <ol>
+                            <li>Home</li>
+                            <img src="/images/chevron-right.svg">
+                            <li>Project List</li>
+                        </ol>
+                    </div>
                 </div>
 
                 <div class="row justify-content-end mt-3">
@@ -54,17 +61,20 @@
                         <tr th:each="projectDto : ${projectDtoList}">
                             <td th:text="${projectDto.idx}"></td>
                             <td>
-                                <a th:href="'/project?idx='+${projectDto.idx}" th:text="${projectDto.title}" class="link"></a>
+                                <a th:href="'/project?idx='+${projectDto.idx}" class="link" th:text="${#strings.length(projectDto.title)} < 40 ? ${projectDto.title} : ${#strings.substring(projectDto.title, 0, 40)} + '...'"></a>
                                 <img th:if="${projectDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
                             <td th:text="${projectDto.createdBy}">></td>
                             <td th:text="${#temporals.format(projectDto.createdDate,'yyyy-MM-dd HH:mm')}"></td>
                             <td th:text="${#temporals.format(projectDto.lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
-
                             <td th:if="${projectDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active"></td>
                             <td th:if="${projectDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"></td>
-
                             <td th:text="${projectDto.views}"></td>
+                        </tr>
+                        <tr th:if="${projectDtoList.totalElements == 0}">
+                            <td colspan="10" class="no-posts">
+                                No posts founded.
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -113,7 +123,9 @@
 <th:block th:replace="layout/script.html"></th:block>
 
 <script>
-    $('#search').click(function () {
+    sweetalertFire("project");
+
+    $("#search").click(function () {
         document.form.action = "/project/list";
         document.form.method = "get";
         document.form.submit();

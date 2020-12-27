@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -16,6 +17,7 @@ import javax.validation.constraints.NotBlank;
 public class AlumniAssociationDto extends CommonDto {
     /* CommonDto: JPA Audit */
     @NotBlank(message = "The title must not be blank.")
+    @Size(max = 255, message = "The title can be used for less than 50 characters.")
     private String title;
 
     @Editor(max = 16777215, message = "The editor's input size of bytes is exceeded.")

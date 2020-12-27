@@ -4,7 +4,7 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title>Album Read</title>
+    <title th:text="${@environment.getProperty('title')} + ' | Album List'"></title>
 </head>
 <body>
 <div class="d-flex" id="wrapper">
@@ -17,15 +17,22 @@
 
         <div class="container-fluid">
             <form name="form" id="form" th:object="${albumDto}" action="#">
-                <div class="page-header">
-                    <h1>Album Read</h1>
+                <div class="page-header breadcrumbs">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2>Album Read</h2>
+                        <ol>
+                            <li>Home</li>
+                            <img src="/images/chevron-right.svg">
+                            <li>Album Read</li>
+                        </ol>
+                    </div>
                 </div>
 
                 <div class="mt-5">
                     <table class="table">
                         <colgroup>
-                            <col width="15%"/>
-                            <col width="50%"/>
+                            <col width="17.5%"/>
+                            <col width="47.5%"/>
                             <col width="35%"/>
                         </colgroup>
                         <tr>
@@ -33,11 +40,11 @@
                         </tr>
                         <tr>
                             <th>Title</th>
-                            <td colspan="2"><span id="title" class="form-control" th:text="*{title}"></span></td>
+                            <td colspan="2"><span id="title" th:text="*{title}"></span></td>
                         </tr>
                         <tr>
                             <th>Photo Taken Date</th>
-                            <td colspan="2"><span type="date" id="photoTakenDate" class="form-control" th:text="*{#temporals.format(photoTakenDate,'yyyy-MM-dd')}"/></td>
+                            <td colspan="2"><span type="date" id="photoTakenDate" th:text="*{#temporals.format(photoTakenDate,'yyyy-MM-dd')}"/></td>
                         </tr>
                         <tr>
                             <th>Main Page Priority</th>
@@ -45,7 +52,7 @@
                         </tr>
                         <tr>
                             <th>Main Hash Tag</th>
-                            <td colspan="2"><span id="mainHashTag" class="form-control" th:text="*{mainHashTag}"></span></td>
+                            <td colspan="2"><span id="mainHashTag" th:text="*{mainHashTag}"></span></td>
                         </tr>
                         <tr>
                             <th>Hash Tags</th>
@@ -58,13 +65,14 @@
                         <th>Uploaded Attached File</th>
                         <td>
                             <div id="attachedFileList" th:each="attachedFile : *{attachedFileList}">
-                                <span th:attr="onclick=|location.href='http://localhost:8081/api/attachedFiles/download/${attachedFile.savedFileName}'|"
+                                <span th:attr="onclick=|location.href='${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/${attachedFile.savedFileName}'|"
                                       th:text="${attachedFile.fileName} + ',&nbsp;' + 'File size: ' + ${attachedFile.fileSize}"></span>
                             </div>
                         </td>
                         <td>
                             <img th:if="*{attachedFileList.size()} == 0" th:attr="src=@{/images/no-preview-available.jpg}" class="album-img-preview"/>
-                            <img th:if="*{attachedFileList.size()} != 0" th:attr="src=@{|http://localhost:8081/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}" class="album-img-preview img-thumbnail"/>
+                            <img th:if="*{attachedFileList.size()} != 0" th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}"
+                                 class="album-img-preview img-thumbnail"/>
                         </td>
                         </tr>
                         <tr>
@@ -74,18 +82,18 @@
                             <th>Active Status</th>
                             <td colspan="2">
                                 <div>
-                                    <span th:if="*{activeStatus?.name() == 'ACTIVE'}" class="form-control" th:text="Active"> </span>
-                                    <span th:if="*{activeStatus?.name() == 'INACTIVE'}" class="form-control" th:text="Inactive"> </span>
+                                    <span th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active"> </span>
+                                    <span th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"> </span>
                                 </div>
                             </td>
                         </tr>
                         <tr>
                             <th>Created Date</th>
-                            <td colspan="2"><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td colspan="2"><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr>
                             <th>Modified Date</th>
-                            <td colspan="2"><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td colspan="2"><span th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                     </table>
                 </div>
@@ -115,27 +123,32 @@
 <th:block th:replace="layout/script.html"></th:block>
 
 <script th:inline="javascript">
+    sweetalertFire("album");
+
     $("#delete").click(function () {
-        if (!confirm("Do you want to delete post?")) {
-            return true;
-        }
-
-        // 게시글 삭제
-        $.ajax({
-            url: "http://localhost:8081/api/albums/" + document.getElementsByName("idx")[0].value,
-            type: "delete",
-            dataType: "text",
-            contentType: "application/json",
-            async: false,
+        Confirm.fire({
+            icon: "warning",
+            title: "Do you want to delete?",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: moduleAppApiAddress + "/api/albums/" + document.getElementsByName("idx")[0].value,
+                    type: "delete",
+                    dataType: "text",
+                    contentType: "application/json",
+                    async: false,
+                })
+                    .done(function (msg) {
+                        localStorage.setItem("result", "/album/delete-success");
+                        location.href = "/album/list";
+                    })
+                    .fail(function (msg) {
+                        parseErrorMsg(msg);
+                    })
+            } else {
+                return false;
+            }
         })
-            .done(function (msg) {
-                location.href = "/album/list";
-            })
-            .fail(function (msg) {
-                paraseErrorMsg(msg);
-                console.log("Delete notice board is fail.");
-            })
-
     });
 </script>
 

@@ -1,13 +1,10 @@
 package kr.ac.univ.controller;
 
-import kr.ac.univ.common.dto.SearchDto;
 import kr.ac.univ.project.domain.enums.ProjectStatus;
 import kr.ac.univ.project.dto.ProjectDto;
 import kr.ac.univ.project.service.ProjectAttachedFileService;
 import kr.ac.univ.project.service.ProjectService;
 import kr.ac.univ.researchField.service.ResearchFieldService;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +30,7 @@ public class ProjectController {
         model.addAttribute("currentProjectDtoList", projectService.findAllByProjectStatusIsAndActiveStatusIs(ProjectStatus.CURRENT));
         model.addAttribute("previousProjectDtoList", projectService.findAllByProjectStatusIsAndActiveStatusIs(ProjectStatus.PREVIOUS));
 
-        return "/project/list";
+        return "project/list";
     }
 
     // Read
@@ -47,6 +44,6 @@ public class ProjectController {
         model.addAttribute("projectDto", projectDto);
         model.addAttribute("researchFieldDto", researchFieldService.findResearchFieldByIdxInActive(projectDto.getResearchFieldIdx()));
 
-        return "/project/read";
+        return "project/read";
     }
 }

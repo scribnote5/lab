@@ -25,7 +25,7 @@ public class DataHistoryController {
     public String dataHistoryList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
         model.addAttribute("dataHistoryDtoList", dataHistoryService.findDataHistoryList(pageable, searchDto));
 
-        return "/dataHistory/list";
+        return "dataHistory/list";
     }
 
     // Read
@@ -35,6 +35,6 @@ public class DataHistoryController {
 
         model.addAttribute("dataHistoryDto", dataHistoryDto);
 
-        return "/dataHistory/read";
+        return "dataHistory/read";
     }
 }

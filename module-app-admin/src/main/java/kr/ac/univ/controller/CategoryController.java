@@ -25,7 +25,7 @@ public class CategoryController {
     public String categoryList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
         model.addAttribute("categoryDtoList", categoryService.findCategoryList(pageable, searchDto));
 
-        return "/category/list";
+        return "category/list";
     }
 
     // Form Update
@@ -38,9 +38,9 @@ public class CategoryController {
         if (categoryDto.isAccess()) {
             model.addAttribute("categoryDto", categoryDto);
 
-            returnPage = "/category/form";
+            returnPage = "category/form";
         } else {
-            returnPage = "/user/permission-denied";
+            returnPage = "user/permission-denied";
         }
 
         return returnPage;
@@ -53,6 +53,6 @@ public class CategoryController {
 
         model.addAttribute("categoryDto", categoryDto);
 
-        return "/category/read";
+        return "category/read";
     }
 }

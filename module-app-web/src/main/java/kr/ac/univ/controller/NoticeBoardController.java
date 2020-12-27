@@ -34,7 +34,7 @@ public class NoticeBoardController {
     public String noticeBoardList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
         model.addAttribute("noticeBoardDtoList", noticeBoardService.findNoticeBoardList(pageable, searchDto));
 
-        return "/noticeBoard/list";
+        return "noticeBoard/list";
     }
 
     // Read
@@ -50,6 +50,6 @@ public class NoticeBoardController {
         model.addAttribute("noticeBoardDto", noticeBoardDto);
         model.addAttribute("noticeBoardCommentDtoList", noticeBoardCommentDtoList);
 
-        return "/noticeBoard/read";
+        return "noticeBoard/read";
     }
 }

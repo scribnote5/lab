@@ -25,7 +25,7 @@ public class LoginHistoryController {
     public String loginHistoryList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
         model.addAttribute("loginHistoryDtoList", loginHistoryService.findLoginHistoryList(pageable, searchDto));
 
-        return "/loginHistory/list";
+        return "loginHistory/list";
     }
 
     // Read
@@ -35,6 +35,6 @@ public class LoginHistoryController {
 
         model.addAttribute("loginHistoryDto", loginHistoryDto);
 
-        return "/loginHistory/read";
+        return "loginHistory/read";
     }
 }

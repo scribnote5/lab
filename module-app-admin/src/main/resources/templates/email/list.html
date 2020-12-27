@@ -4,7 +4,7 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title>Email List</title>
+    <title th:text="${@environment.getProperty('title')} + ' | Email List'"></title>
 </head>
 <body>
 <div class="d-flex" id="wrapper">
@@ -18,8 +18,15 @@
         <div class="container-fluid">
 
             <form name="form" id="form" th:object="${searchDto}" action="#">
-                <div class="page-header">
-                    <h1>Email List</h1>
+                <div class="page-header breadcrumbs">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2>Email List</h2>
+                        <ol>
+                            <li>Home</li>
+                            <img src="/images/chevron-right.svg">
+                            <li>Email List</li>
+                        </ol>
+                    </div>
                 </div>
 
                 <div class="row justify-content-end mt-3">
@@ -55,19 +62,22 @@
                         <tr th:each="emailDto : ${emailDtoList}">
                             <td th:text="${emailDto.idx}"></td>
                             <td>
-                                <a th:href="'/email?idx='+${emailDto.idx}" th:text="${emailDto.emailAddress}" class="link"></a>
+                                <a th:href="'/email?idx='+${emailDto.idx}" class="link"
+                                   th:text="${#strings.length(emailDto.title)} < 40 ? ${emailDto.title} : ${#strings.substring(emailDto.title, 0, 40)} + '...'"></a>
                                 <img th:if="${emailDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
-
                             <td th:if="${emailDto.receiverType?.name() == 'ADMIN'}" th:text="Admin"></td>
                             <td th:if="${emailDto.receiverType?.name() == 'DEVELOPER'}" th:text="Developer"></td>
-
                             <td th:text="${emailDto.createdBy}">></td>
                             <td th:text="${#temporals.format(emailDto.createdDate,'yyyy-MM-dd HH:mm')}"></td>
                             <td th:text="${#temporals.format(emailDto.lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
-
                             <td th:if="${emailDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active"></td>
                             <td th:if="${emailDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"></td>
+                        </tr>
+                        <tr th:if="${emailDtoList.totalElements == 0}">
+                            <td colspan="10" class="no-posts">
+                                No posts founded.
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -115,7 +125,9 @@
 <th:block th:replace="layout/script.html"></th:block>
 
 <script>
-    $('#search').click(function () {
+    sweetalertFire("email");
+
+    $("#search").click(function () {
         document.form.action = "/email/list";
         document.form.method = "get";
         document.form.submit();

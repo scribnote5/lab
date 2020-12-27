@@ -4,7 +4,7 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title>User Read</title>
+    <title th:text="${@environment.getProperty('title')} + ' | User Read'"></title>
 </head>
 <body>
 <div class="d-flex" id="wrapper">
@@ -17,15 +17,22 @@
 
         <div class="container-fluid">
             <form name="form" id="form" th:object="${userDto}" action="#">
-                <div class="page-header">
-                    <h1>User Read</h1>
+                <div class="page-header breadcrumbs">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2>User Read</h2>
+                        <ol>
+                            <li>Home</li>
+                            <img src="/images/chevron-right.svg">
+                            <li>User Read</li>
+                        </ol>
+                    </div>
                 </div>
 
                 <div class="mt-5">
                     <table class="table">
                         <colgroup>
-                            <col width="15%"/>
-                            <col width="45%"/>
+                            <col width="17.5%"/>
+                            <col width="42.5%"/>
                             <col width="15%"/>
                             <col width="25%"/>
                         </colgroup>
@@ -34,7 +41,7 @@
                         </tr>
                         <tr>
                             <th>Id</th>
-                            <td><span id="username" class="form-control" th:text="*{username}"></span></td>
+                            <td><span id="username" th:text="*{username}"></span></td>
                             <td colspan="2"></td>
                         </tr>
                         <tr>
@@ -42,30 +49,31 @@
                             <td id="imgData">
                                 Uploaded Photo File:<br>
                                 <span th:if="*{attachedFileList.size()} == 0" th:text="No + ' ' + file."></span>
-                                <span th:if="*{attachedFileList.size()} != 0" th:attr="onclick=|location.href='http://localhost:8081/api/attachedFiles/download/*{attachedFileList[0].savedFileName}'|"
+                                <span th:if="*{attachedFileList.size()} != 0" th:attr="onclick=|location.href='${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/*{attachedFileList[0].savedFileName}'|"
                                       th:text="*{attachedFileList[0].fileName} + ',&nbsp;' + 'File size: ' + *{attachedFileList[0].fileSize}"></span>
                             </td>
                             <td id="imgPreview">
                                 <img th:if="*{attachedFileList.size()} == 0" th:attr="src=@{/images/no-preview-available.jpg}" width="150" height="150"/>
-                                <img th:if="*{attachedFileList.size()} != 0" th:attr="src=@{|http://localhost:8081/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}" class="img-thumbnail user-img-preview"/>
+                                <img th:if="*{attachedFileList.size()} != 0" th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}"
+                                     class="img-thumbnail user-img-preview"/>
                             </td>
                             <td colspan=></td>
                         </tr>
                         <tr>
                             <th>Korean Name</th>
-                            <td><span id="koreanName" class="form-control" th:text="*{koreanName}"></span></td>
+                            <td><span id="koreanName" th:text="*{koreanName}"></span></td>
                             <td colspan="2"></td>
                         </tr>
                         <tr>
                             <th>English Name</th>
-                            <td><span id="EnglishName" class="form-control" th:text="*{englishName}"></span></td>
+                            <td><span id="EnglishName" th:text="*{englishName}"></span></td>
                             <td colspan="2"></td>
                         </tr>
                         <tr>
                             <th>Gender</th>
                             <td>
-                                <span class="form-control" th:if="*{gender?.name() == 'MALE'}" th:text="Male"> </span>
-                                <span class="form-control" th:if="*{gender?.name() == 'FEMALE'}" th:text="Female"> </span>
+                                <span th:if="*{gender?.name() == 'MALE'}" th:text="Male"> </span>
+                                <span th:if="*{gender?.name() == 'FEMALE'}" th:text="Female"> </span>
                             </td>
                             <td colspan="2"></td>
                         </tr>
@@ -76,106 +84,106 @@
                         </tr>
                         <tr>
                             <th>Email</th>
-                            <td><span class="form-control" th:text="*{email}"> </span></td>
+                            <td><span th:text="*{email}"> </span></td>
                             <td colspan="2"></td>
                         </tr>
                         <tr>
                             <th>Private Email</th>
-                            <td><span class="form-control" th:text="*{privateEmail}"> </span></td>
+                            <td><span th:text="*{privateEmail}"> </span></td>
                             <td colspan="2"></td>
                         </tr>
                         <tr>
                             <th>Messenger Id</th>
-                            <td><span class="form-control" th:text="*{messengerId}"> </span></td>
+                            <td><span th:text="*{messengerId}"> </span></td>
                             <td colspan="2"></td>
                         </tr>
                         <tr>
                             <th>Contact</th>
-                            <td><span class="form-control" th:text="*{contact}"> </span></td>
+                            <td><span th:text="*{contact}"> </span></td>
                             <td colspan="2"></td>
                         </tr>
                         <tr>
                             <th>User Type</th>
                             <td>
-                                <span class="form-control" th:if="*{userType?.name() == 'FACULTY'}" th:text="Faculty"> </span>
-                                <span class="form-control" th:if="*{userType?.name() == 'FULL_TIME_PhD'}" th:text="'Ph.D. ' + ' - ' + 'Full Time'"> </span>
-                                <span class="form-control" th:if="*{userType?.name() == 'PART_TIME_PhD'}" th:text="'Ph.D. ' + ' - ' + 'Part Time'"> </span>
-                                <span class=" form-control" th:if="*{userType?.name() == 'FULL_TIME_MS'}" th:text="'M.S.' + ' - ' + 'Full Time'"> </span>
-                                <span class=" form-control" th:if="*{userType?.name() == 'PART_TIME_MS'}" th:text="'M.S.' + '-' + 'Part Time'"> </span>
-                                <span class=" form-control" th:if="*{userType?.name() == 'BS'}" th:text="B.S."> </span>
+                                <span th:if="*{userType?.name() == 'FACULTY'}" th:text="Faculty"> </span>
+                                <span th:if="*{userType?.name() == 'FULL_TIME_PhD'}" th:text="'Ph.D. ' + ' - ' + 'Full Time'"> </span>
+                                <span th:if="*{userType?.name() == 'PART_TIME_PhD'}" th:text="'Ph.D. ' + ' - ' + 'Part Time'"> </span>
+                                <span th:if="*{userType?.name() == 'FULL_TIME_MS'}" th:text="'M.S.' + ' - ' + 'Full Time'"> </span>
+                                <span th:if="*{userType?.name() == 'PART_TIME_MS'}" th:text="'M.S.' + '-' + 'Part Time'"> </span>
+                                <span th:if="*{userType?.name() == 'BS'}" th:text="B.S."> </span>
                             </td>
                             <td colspan="2"></td>
                         </tr>
                         <tr>
                             <th>User Status</th>
                             <td>
-                                <span class=" form-control" th:if="*{userStatus?.name() == 'ATTENDING'}" th:text="Attending"> </span>
-                                <span class=" form-control" th:if="*{userStatus?.name() == 'GRADUATED'}" th:text="Graduated"> </span>
+                                <span th:if="*{userStatus?.name() == 'ATTENDING'}" th:text="Attending"> </span>
+                                <span th:if="*{userStatus?.name() == 'GRADUATED'}" th:text="Graduated"> </span>
                             </td>
                             <td colspan="2"></td>
                         </tr>
                         <tr>
-                            <td colspan="4"><span id="introduction" class=" form-control content" th:utext="*{introduction}"></span></td>
+                            <td colspan="4"><span id="introduction" class="content" th:utext="*{introduction}"></span></td>
                         </tr>
                         <tr>
                             <th colspan="4" class="sub-item-title">Additional Information</th>
                         </tr>
                         <tr>
                             <th>Admission Date</th>
-                            <td><span class=" form-control" th:text="*{admissionDate}"> </span></td>
+                            <td><span th:text="*{admissionDate}"> </span></td>
                             <td colspan="2"></td>
                         </tr>
                         <tr>
                             <th>Graduated Date</th>
-                            <td><span class=" form-control" th:text="*{graduatedDate}"> </span></td>
+                            <td><span th:text="*{graduatedDate}"> </span></td>
                             <td colspan="2"></td>
                         </tr>
                         <tr>
                             <th>External Web Page</th>
-                            <td><span class=" form-control" th:text="*{externalWebPage}"> </span></td>
+                            <td><span th:text="*{externalWebPage}"> </span></td>
                             <td colspan="2"></td>
                         </tr>
                         <tr>
                             <th>Github</th>
-                            <td><span class=" form-control" th:text="*{github}"> </span></td>
+                            <td><span th:text="*{github}"> </span></td>
                             <td colspan="2"></td>
                         </tr>
                         <tr>
                             <th>Linked In</th>
-                            <td><span class=" form-control" th:text="*{linkedIn}"> </span></td>
+                            <td><span th:text="*{linkedIn}"> </span></td>
                             <td colspan="2"></td>
                         </tr>
                         <tr>
                             <th>Workplace</th>
-                            <td><span class=" form-control" th:text="*{workplace}"> </span></td>
+                            <td><span th:text="*{workplace}"> </span></td>
                             <td colspan="2"></td>
                         </tr>
                         <tr>
                             <th>Authority Type</th>
                             <td>
-                                <span class=" form-control authority-type" th:if="*{authorityType?.name() == 'ROOT'}" th:text="root"> </span>
-                                <span class=" form-control authority-type" th:if="*{authorityType?.name() == 'MANAGER'}" th:text="manager"> </span>
-                                <span class=" form-control authority-type" th:if="*{authorityType?.name() == 'GENERAL'}" th:text="general"> </span>
-                                <span class=" form-control authority-type" th:if="*{authorityType?.name() == 'NON_USER'}" th:text="Non + ' ' + User"> </span>
+                                <span th:if="*{authorityType?.name() == 'ROOT'}" th:text="root"> </span>
+                                <span th:if="*{authorityType?.name() == 'MANAGER'}" th:text="manager"> </span>
+                                <span th:if="*{authorityType?.name() == 'GENERAL'}" th:text="general"> </span>
+                                <span th:if="*{authorityType?.name() == 'NON_USER'}" th:text="Non + ' ' + User"> </span>
                             </td>
                             <td colspan="2"></td>
                         </tr>
                         <tr>
                             <th>Active Status</th>
                             <td>
-                                <span th:if="*{activeStatus?.name() == 'ACTIVE'}" class="form-control" th:text="Active"> </span>
-                                <span th:if="*{activeStatus?.name() == 'INACTIVE'}" class="form-control" th:text="Inactive"> </span>
+                                <span th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active"> </span>
+                                <span th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"> </span>
                             </td>
                             <td colspan="2"></td>
                         </tr>
                         <tr>
                             <th>Created Date</th>
-                            <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                             <td colspan="2"></td>
                         </tr>
                         <tr>
                             <th>Modified Date</th>
-                            <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><span th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
                             <td colspan="2"></td>
                         </tr>
                     </table>
@@ -207,25 +215,32 @@
 
 <!-- javascript -->
 <script th:inline="javascript">
-    $('#delete').click(function () {
-        if (!confirm("Do you want to delete user?")) {
-            return true;
-        }
+    sweetalertFire("user");
 
-        // 회원 삭제
-        $.ajax({
-            url: "http://localhost:8081/api/users/" + document.getElementsByName("idx")[0].value,
-            type: "delete",
-            dataType: "text",
-            contentType: "application/json",
-            async: false,
+    $("#delete").click(function () {
+        Confirm.fire({
+            icon: "warning",
+            title: "Do you want to delete?",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: moduleAppApiAddress + "/api/users/" + document.getElementsByName("idx")[0].value,
+                    type: "delete",
+                    dataType: "text",
+                    contentType: "application/json",
+                    async: false,
+                })
+                    .done(function (msg) {
+                        localStorage.setItem("result", "/user/delete-success");
+                        location.href = "/user/list";
+                    })
+                    .fail(function (msg) {
+                        parseErrorMsg(msg);
+                    });
+            } else {
+                return false;
+            }
         })
-            .done(function (msg) {
-                location.href = "/user/list";
-            })
-            .fail(function (msg) {
-                console.log("Delete user is fail.");
-            });
     });
 </script>
 </body>

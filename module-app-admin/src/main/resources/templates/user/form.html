@@ -4,7 +4,8 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title>User Form</title>
+    <title th:if="!${userDto.idx}" th:text="${@environment.getProperty('title')} + ' | User Register'"></title>
+    <title th:if="${userDto.idx}" th:text="${@environment.getProperty('title')} + ' | User Update'"></title>
 </head>
 <body>
 <div class="d-flex" id="wrapper">
@@ -17,16 +18,24 @@
 
         <div class="container-fluid">
             <form name="form" id="form" th:object="${userDto}" action="#">
-                <div class="page-header">
-                    <h1 th:if="!*{idx}">User Register</h1>
-                    <h1 th:if="*{idx}">User Update</h1>
+                <div class="page-header breadcrumbs">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 th:if="!*{idx}">User Register</h2>
+                        <h2 th:if="*{idx}">User Update</h2>
+                        <ol>
+                            <li>Home</li>
+                            <img src="/images/chevron-right.svg">
+                            <li th:if="!*{idx}">User Register</li>
+                            <li th:if="*{idx}">User Update</li>
+                        </ol>
+                    </div>
                 </div>
 
                 <div class="mt-5">
                     <table class="table">
                         <colgroup>
-                            <col width="15%"/>
-                            <col width="45%"/>
+                            <col width="17.5%"/>
+                            <col width="42.5%"/>
                             <col width="15%"/>
                             <col width="25%"/>
                         </colgroup>
@@ -60,12 +69,14 @@
                                 </div>
                                 Uploaded Photo File: <br>
                                 <span id="imgData" th:if="*{attachedFileList.size()} == 0" th:text="No + ' ' + file."></span>
-                                <span id="imgData" th:if="*{attachedFileList.size()} != 0" th:attr="onclick=|location.href='http://localhost:8081/api/attachedFiles/download/*{attachedFileList[0].savedFileName}'|"
+                                <span id="imgData" th:if="*{attachedFileList.size()} != 0"
+                                      th:attr="onclick=|location.href='${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/*{attachedFileList[0].savedFileName}'|"
                                       th:text="*{attachedFileList[0].fileName} + ',&nbsp;' + 'File size: ' + *{attachedFileList[0].fileSize}"></span>
                             </td>
                             <td>
                                 <img id="imgPreview" th:if="*{attachedFileList.size()} == 0" class="img-thumbnail user-img-preview" th:attr="src=@{/images/no-preview-available.jpg}"/>
-                                <img id="imgPreview" th:if="*{attachedFileList.size()} != 0" class="img-thumbnail user-img-preview" th:attr="src=@{|http://localhost:8081/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}"/>
+                                <img id="imgPreview" th:if="*{attachedFileList.size()} != 0" class="img-thumbnail user-img-preview"
+                                     th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}"/>
                             </td>
                             <td></td>
                         </tr>
@@ -267,7 +278,7 @@
     function deleteUser(userIdx) {
         // 회원 삭제
         $.ajax({
-            url: "http://localhost:8081/api/users/" + document.getElementsByName("idx")[0].value,
+            url: moduleAppApiAddress +"/api/users/" + document.getElementsByName("idx")[0].value,
             type: "delete",
             dataType: "text",
             contentType: "application/json",
@@ -277,18 +288,22 @@
 
             })
             .fail(function (msg) {
-                console.log("Delete user is fail.");
+                parseErrorMsg(msg);
             });
     }
 
     /* username 검사 */
     $("#username").on("change", function () {
         if (!validateById(document.getElementsByName("username")[0].value)) {
-            alert("The ID can be used for only lower case letters and numbers are available, more than 6 characters and less than 16 characters." +
-                "\n(Number of characters currently entered: " + document.getElementsByName("username")[0].value.length + ").");
-            document.getElementsByName("username")[0].focus();
-            document.getElementsByName("username")[0].value = "";
-            document.getElementById("usernameCheckResult").innerHTML = "";
+            Alert.fire({
+                icon: "error",
+                text: "The ID can be used for only lower case letters and numbers are available, more than 4 characters and less than 16 characters." +
+                    "\n(Number of characters currently entered: " + document.getElementsByName("username")[0].value.length + ")."
+            }).then((result) => {
+                document.getElementsByName("username")[0].focus();
+                document.getElementsByName("username")[0].value = "";
+                document.getElementById("usernameCheckResult").innerHTML = "";
+            })
 
             return false;
         } else {
@@ -299,7 +314,7 @@
     /* username 중복 검사 */
     $("#validationUsername").click(function () {
         $.ajax({
-            url: "http://localhost:8081/api/users/validation/username/" + document.getElementsByName("username")[0].value,
+            url: moduleAppApiAddress + "/api/users/validation/username/" + document.getElementsByName("username")[0].value,
             type: "get",
             dataType: "text",
             contentType: "application/json",
@@ -317,7 +332,7 @@
                 }
             })
             .fail(function (msg) {
-                alert("Duplicate check is fail.");
+                parseErrorMsg(msg);
             })
     });
 
@@ -341,10 +356,14 @@
                 passwordVaildation = false;
             }
         } else {
-            alert("The password can be used for more than 6 characters and less than 16 characters.");
-            password = "";
-            checkPassword = "";
-            document.getElementById("passwordCheckResult").innerHTML = "";
+            Alert.fire({
+                icon: "error",
+                text: "The password can be used for more than 6 characters and less than 16 characters."
+            }).then((result) => {
+                password = "";
+                checkPassword = "";
+                document.getElementById("passwordCheckResult").innerHTML = "";
+            });
         }
     }
 
@@ -425,50 +444,86 @@
     $("#insert").click(function () {
         // validation
         if (!usernameVaildation) {
-            alert("Please check ID duplication.");
-            document.getElementById("username").focus();
+            Alert.fire({
+                icon: "error",
+                text: "Please check ID duplication."
+            }).then((result) => {
+                document.getElementById("username").focus();
 
-            return false;
+                return false;
+            });
         } else if (!passwordVaildation) {
-            alert("Please check password.");
-            document.getElementById("password").focus();
+            Alert.fire({
+                icon: "error",
+                text: "Please check password."
+            }).then((result) => {
+                document.getElementById("password").focus();
 
-            return false;
+                return false;
+            });
         } else if (validateByEmpty(document.getElementsByName("koreanName")[0].value)) {
-            alert("Please check korean name.");
-            document.getElementById("koreanName").focus();
+            Alert.fire({
+                icon: "error",
+                text: "Please check korean name."
+            }).then((result) => {
+                document.getElementById("koreanName").focus();
 
-            return false;
+                return false;
+            });
         } else if (validateByEmpty(document.getElementsByName("englishName")[0].value)) {
-            alert("Please check english name.");
-            document.getElementById("englishName").focus();
+            Alert.fire({
+                icon: "error",
+                text: "Please check english name."
+            }).then((result) => {
+                document.getElementById("englishName").focus();
 
-            return false;
+                return false;
+            });
         } else if (validateByEmpty(document.getElementsByName("birthDate")[0].value)) {
-            alert("Please check birth date.");
-            document.getElementById("birthDate").focus();
+            Alert.fire({
+                icon: "error",
+                text: "Please check birth date."
+            }).then((result) => {
+                document.getElementById("birthDate").focus();
 
-            return false;
+                return false;
+            });
         } else if (!emailVaildation) {
-            alert("Please check email.");
-            document.getElementById("email").focus();
+            Alert.fire({
+                icon: "error",
+                text: "Please check email."
+            }).then((result) => {
+                document.getElementById("email").focus();
 
-            return false;
+                return false;
+            });
         } else if (!privateEmailVaildation) {
-            alert("Please check private email.");
-            document.getElementById("privateEmail").focus();
+            Alert.fire({
+                icon: "error",
+                text: "Please check private email."
+            }).then((result) => {
+                document.getElementById("privateEmail").focus();
 
-            return false;
+                return false;
+            });
         } else if (validateByEmpty(document.getElementsByName("messengerId")[0].value)) {
-            alert("Please check messenger id.");
-            document.getElementById("messengerId").focus();
+            Alert.fire({
+                icon: "error",
+                text: "Please check messenger ID."
+            }).then((result) => {
+                document.getElementById("messengerId").focus();
 
-            return false;
+                return false;
+            });
         } else if (!contactVaildation) {
-            alert("Please check contact.");
-            document.getElementById("contact").focus();
+            Alert.fire({
+                icon: "error",
+                text: "Please check contact."
+            }).then((result) => {
+                document.getElementById("contact").focus();
 
-            return false;
+                return false;
+            });
         }
 
         // 회원 업로드
@@ -476,7 +531,7 @@
         var userIdx = 0;
 
         $.ajax({
-            url: "http://localhost:8081/api/users",
+            url: moduleAppApiAddress + "/api/users",
             type: "post",
             data: JSON.stringify(jsonData),
             dataType: "json",
@@ -488,8 +543,7 @@
                 exit = false;
             })
             .fail(function (msg) {
-                paraseErrorMsg(msg);
-                console.log("Register user is fail.");
+                parseErrorMsg(msg);
                 exit = true;
             });
 
@@ -503,7 +557,7 @@
         formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
 
         $.ajax({
-            url: "http://localhost:8081/api/users/attachedFile",
+            url: moduleAppApiAddress + "/api/users/attachedFile",
             type: "post",
             data: formData,
             dataType: "text",
@@ -513,11 +567,11 @@
             async: false,
         })
             .done(function (msg) {
+                localStorage.setItem("result", "/user/register-success");
                 location.href = "/user?idx=" + userIdx;
             })
             .fail(function (msg) {
-                paraseErrorMsg(msg);
-                console.log("Upload attached file is fail.");
+                parseErrorMsg(msg);
                 deleteUser(userIdx);
             });
 
@@ -536,50 +590,86 @@
         var oriPassword = [[${userDto.password}]];
 
         if ((document.getElementsByName("username")[0].value != oriUsername) && !usernameVaildation) {
-            alert("Please check ID duplication.");
-            document.getElementById("username").focus();
+            Alert.fire({
+                icon: "error",
+                text: "Please check ID duplication."
+            }).then((result) => {
+                document.getElementById("username").focus();
 
-            return false;
+                return false;
+            });
         } else if ((document.getElementsByName("password")[0].value != oriPassword) && !passwordVaildation) {
-            alert("Please check password.");
-            document.getElementById("password").focus();
+            Alert.fire({
+                icon: "error",
+                text: "Please check password."
+            }).then((result) => {
+                document.getElementById("password").focus();
 
-            return false;
+                return false;
+            });
         } else if (validateByEmpty(document.getElementsByName("koreanName")[0].value)) {
-            alert("Please check korean name.");
-            document.getElementById("koreanName").focus();
+            Alert.fire({
+                icon: "error",
+                text: "Please check korean name."
+            }).then((result) => {
+                document.getElementById("koreanName").focus();
 
-            return false;
+                return false;
+            });
         } else if (validateByEmpty(document.getElementsByName("englishName")[0].value)) {
-            alert("Please check english name.");
-            document.getElementById("englishName").focus();
+            Alert.fire({
+                icon: "error",
+                text: "Please check english name."
+            }).then((result) => {
+                document.getElementById("englishName").focus();
 
-            return false;
+                return false;
+            });
         } else if (validateByEmpty(document.getElementsByName("birthDate")[0].value)) {
-            alert("Please check birth date.");
-            document.getElementById("birthDate").focus();
+            Alert.fire({
+                icon: "error",
+                text: "Please check birth date."
+            }).then((result) => {
+                document.getElementById("birthDate").focus();
 
-            return false;
+                return false;
+            });
         } else if (!emailVaildation) {
-            alert("Please check email.");
-            document.getElementById("email").focus();
+            Alert.fire({
+                icon: "error",
+                text: "Please check email."
+            }).then((result) => {
+                document.getElementById("email").focus();
 
-            return false;
+                return false;
+            });
         } else if (!privateEmailVaildation) {
-            alert("Please check private email.");
-            document.getElementById("privateEmail").focus();
+            Alert.fire({
+                icon: "error",
+                text: "Please check private email."
+            }).then((result) => {
+                document.getElementById("privateEmail").focus();
 
-            return false;
+                return false;
+            });
         } else if (validateByEmpty(document.getElementsByName("messengerId")[0].value)) {
-            alert("Please check messenger id.");
-            document.getElementById("messengerId").focus();
+            Alert.fire({
+                icon: "error",
+                text: "Please check messenger ID."
+            }).then((result) => {
+                document.getElementById("messengerId").focus();
 
-            return false;
+                return false;
+            });
         } else if (!contactVaildation) {
-            alert("Please check contact.");
-            document.getElementById("contact").focus();
+            Alert.fire({
+                icon: "error",
+                text: "Please check contact."
+            }).then((result) => {
+                document.getElementById("contact").focus();
 
-            return false;
+                return false;
+            });
         }
 
         // 회원 수정
@@ -587,7 +677,7 @@
         var userIdx = +document.getElementsByName("idx")[0].value;
 
         $.ajax({
-            url: "http://localhost:8081/api/users/" + userIdx,
+            url: moduleAppApiAddress + "/api/users/" + userIdx,
             type: "put",
             data: JSON.stringify(jsonData),
             dataType: "json",
@@ -597,6 +687,7 @@
             .done(function (msg) {
                 // 만일 첨부 파일이 수정되지 않은 경우 '파일 업로드' 및 '파일 삭제'를 수행하지 않음
                 if (typeof document.getElementsByName("file")[0].files[0] == "undefined") {
+                    localStorage.setItem("result", "/user/update-success");
                     location.href = "/user?idx=" + userIdx;
                     exit = true;
                 } else {
@@ -604,8 +695,7 @@
                 }
             })
             .fail(function (msg) {
-                paraseErrorMsg(msg);
-                console.log("Update user is fail.");
+                parseErrorMsg(msg);
                 exit = true;
             })
 
@@ -613,7 +703,7 @@
 
         // 파일 삭제
         $.ajax({
-            url: "http://localhost:8081/api/users/attachedFile/" + userIdx,
+            url: moduleAppApiAddress + "/api/users/attachedFile/" + userIdx,
             type: "delete",
             contentType: "application/json",
             async: false,
@@ -622,8 +712,7 @@
                 exit = false;
             })
             .fail(function (msg) {
-                paraseErrorMsg(msg);
-                console.log("Delete attached file is fail.");
+                parseErrorMsg(msg);
                 exit = true;
             });
 
@@ -637,7 +726,7 @@
         formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
 
         $.ajax({
-            url: "http://localhost:8081/api/users/attachedFile",
+            url: moduleAppApiAddress + "/api/users/attachedFile",
             type: "post",
             data: formData,
             dataType: "text",
@@ -646,11 +735,11 @@
             contentType: false,
         })
             .done(function (msg) {
+                localStorage.setItem("result", "/user/update-success");
                 location.href = "/user?idx=" + userIdx;
             })
             .fail(function (msg) {
-                paraseErrorMsg(msg);
-                console.log("Upload attached file is fail.");
+                parseErrorMsg(msg);
                 deleteUser(userIdx);
             });
 

@@ -9,7 +9,7 @@ CREATE TABLE research_field
     active_status           varchar(255)        null,
     content                 longtext            null,
     title                   varchar(255)        null,
-    sub_title               varchar(255)        null
+    research_field_idx      bigint              null
 );
 
 ALTER TABLE research_field AUTO_INCREMENT=1;

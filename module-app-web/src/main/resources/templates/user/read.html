@@ -4,7 +4,7 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title>Member Detail</title>
+    <title th:text="${@environment.getProperty('title')} + ' | Member Detail'"></title>
 </head>
 <body>
 <div class="d-flex" id="wrapper">
@@ -13,7 +13,7 @@
 
     <div class="container">
         <form name="form" id="form" th:object="${userDto}" action="#">
-            <div class="page-header page-title breadcrumbs" data-aos="fade-up" data-aos-delay="100">
+            <div class="page-header breadcrumbs" data-aos="fade-up" data-aos-delay="100">
                 <div class="d-flex justify-content-between align-items-center">
                     <h2>Member Detail</h2>
                     <ol>
@@ -27,23 +27,18 @@
             <div class="mt-5" data-aos="fade-up" data-aos-delay="150">
                 <table class="table">
                     <colgroup>
-                        <col width="15%"/>
-                        <col width="50%"/>
+                        <col width="17.5%"/>
+                        <col width="47.5%"/>
                         <col width="35%"/>
                     </colgroup>
                     <tr>
                         <th>Korean Name</th>
-                        <td><span id="koreanName" class="form-control" th:text="*{koreanName}"></span></td>
+                        <td><span id="koreanName" th:text="*{koreanName}"></span></td>
                         <td rowspan="5">
-                            <div class="member-img float-right img-thumbnail">
-                                <img th:if="*{attachedFileList.size()} == 0" th:attr="src=@{/images/no-preview-available.jpg}" class="member-photo"/>
-                                <img th:if="*{attachedFileList.size()} != 0" th:attr="src=@{|http://localhost:8081/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}" class="member-photo"/>
-
-                                <div class="social">
-                                    <a th:if="${not #strings.isEmpty(userDto.email)}" th:href="'mailto:' + ${userDto.email}"><img src="/images/mail-grey.svg"></a>
-                                    <a th:if="${not #strings.isEmpty(userDto.github)}" th:href="${userDto.github}"><img src="/images/github-grey.svg"></a>
-                                    <a th:if="${not #strings.isEmpty(userDto.linkedIn)}" th:href="${userDto.linkedIn}"><img src="/images/linkedin-grey.svg"></a>
-                                    <a th:if="${not #strings.isEmpty(userDto.externalWebPage)}" th:href="${userDto.externalWebPage}"><img src="/images/external-link-grey.svg"></a>
+                            <div class="member img-thumbnail float-right">
+                                <div class="member-img">
+                                    <img th:if="*{attachedFileList.size()} == 0" th:attr="src=@{/images/no-preview-available.jpg}" class="member-photo"/>
+                                    <img th:if="*{attachedFileList.size()} != 0" th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}" class="member-photo"/>
                                 </div>
                             </div>
                         </td>
@@ -51,49 +46,55 @@
                     </tr>
                     <tr>
                         <th>English Name</th>
-                        <td><span id="EnglishName" class="form-control" th:text="*{englishName}"></span></td>
+                        <td><span id="EnglishName" th:text="*{englishName}"></span></td>
                     </tr>
                     <tr>
                         <th>Member Type</th>
                         <td>
-                            <span class="form-control" th:if="*{userType?.name() == 'FACULTY'}" th:text="Faculty"> </span>
-                            <span class="form-control" th:if="*{userType?.name() == 'FULL_TIME_PhD'}" th:text="'Ph.D. ' + ' - ' + 'Full Time'"> </span>
-                            <span class="form-control" th:if="*{userType?.name() == 'PART_TIME_PhD'}" th:text="'Ph.D. ' + ' - ' + 'Part Time'"> </span>
-                            <span class=" form-control" th:if="*{userType?.name() == 'FULL_TIME_MS'}" th:text="'M.S.' + ' - ' + 'Full Time'"> </span>
-                            <span class=" form-control" th:if="*{userType?.name() == 'PART_TIME_MS'}" th:text="'M.S.' + '-' + 'Part Time'"> </span>
-                            <span class=" form-control" th:if="*{userType?.name() == 'BS'}" th:text="B.S."> </span>
+                            <span th:if="*{userType?.name() == 'FACULTY'}" th:text="Faculty"> </span>
+                            <span th:if="*{userType?.name() == 'FULL_TIME_PhD'}" th:text="'Ph.D. ' + ' - ' + 'Full Time'"> </span>
+                            <span th:if="*{userType?.name() == 'PART_TIME_PhD'}" th:text="'Ph.D. ' + ' - ' + 'Part Time'"> </span>
+                            <span th:if="*{userType?.name() == 'FULL_TIME_MS'}" th:text="'M.S.' + ' - ' + 'Full Time'"> </span>
+                            <span th:if="*{userType?.name() == 'PART_TIME_MS'}" th:text="'M.S.' + '-' + 'Part Time'"> </span>
+                            <span th:if="*{userType?.name() == 'BS'}" th:text="B.S."> </span>
                         </td>
                     </tr>
                     <tr>
                         <th>Member Status</th>
                         <td>
-                            <span class=" form-control" th:if="*{userStatus?.name() == 'ATTENDING'}" th:text="Attending"> </span>
-                            <span class=" form-control" th:if="*{userStatus?.name() == 'GRADUATED'}" th:text="Graduated"> </span>
+                            <span th:if="*{userStatus?.name() == 'ATTENDING'}" th:text="Attending"> </span>
+                            <span th:if="*{userStatus?.name() == 'GRADUATED'}" th:text="'Graduated, ' + *{graduatedDate}"> </span>
                         </td>
-                    </tr>
-                    <tr th:if="*{userStatus?.name() == 'GRADUATED'}">
-                        <th>Graduated Date</th>
-                        <td><span class=" form-control" th:text="*{graduatedDate}"> </span></td>
                     </tr>
                     <tr>
                         <th>Workplace</th>
-                        <td><span class=" form-control" th:text="*{workplace}"> </span></td>
+                        <td><span th:text="*{workplace}"> </span></td>
                     </tr>
-                    <tr>
-                        <td colspan="4"><span id="introduction" class=" form-control content" th:utext="*{introduction}"></span></td>
-                    </tr>
-
                 </table>
+
+                <nav class="mt-5" data-aos="fade-up" data-aos-delay="200">
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link link-black active" id="general-tab" data-toggle="tab" href="#general" role="tab" aria-controls="general" aria-selected="false">General</a>
+                        <a class="nav-item nav-link link-black" id="contact-information-tab" data-toggle="tab" href="#contact-information" role="tab" aria-controls="contact-information" aria-selected="false">Contact Information</a>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active mt-4 content-small" id="general" role="tabpanel" aria-labelledby="general-tab">
+                        <span id="introduction" class="" th:utext="*{introduction}"></span></td>
+                    </div>
+
+                    <div class="tab-pane fade mt-4 content-small" id="contact-information" role="tabpanel" aria-labelledby="contact-information-tab">
+                        <p>Email: <a th:if="!*{#strings.isEmpty(email)}" th:href="'mailto:' + *{email}" th:text="*{email}" class="link"></a></p>
+                        <p>Github: <a th:if="!*{#strings.isEmpty(github)}" th:href="*{github}" th:text="*{github}" class="link"></a></p>
+                        <p>Linked In: <a th:if=!"*{#strings.isEmpty(linkedIn)}" th:href="*{linkedIn}" th:text="*{linkedIn}" class="link"></a></p>
+                        <p>External Web Page: <a th:if="!*{#strings.isEmpty(externalWebPage)}" th:href="*{externalWebPage}" th:text="*{externalWebPage}" class="link"></a></p>
+                    </div>
+                </div>
             </div>
 
-            <div class="row justify-content-between">
+            <div class="row justify-content-between mt-5 mb-3">
                 <div class="col-auto mx-3">
                     <a href="/user/list" class="btn btn-secondary">Move to List</a>
-                </div>
-
-                <div th:if="*{access}" class="col-auto mx-3">
-                    <a th:href="'/user/form?idx='+*{idx}" class="btn btn-info mx-1">Update</a>
-                    <button type="button" class="btn btn-danger mx-1" id="delete">Delete</button>
                 </div>
             </div>
 

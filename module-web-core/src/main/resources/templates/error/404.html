@@ -10,25 +10,29 @@
 <!-- header -->
 <div th:replace="layout/header::header"></div>
 
-<div class="container-md">
-    <div class="row justify-content-md-center">
-        <p class="error">
-            404 ERROR
-        </p>
+<div class="container">
+    <div class="page-header error">
+        <div class="d-flex justify-content-center align-items-center">
+            <div class="error-code">
+                404 ERROR
+            </div>
+        </div>
     </div>
 
-    <div class="row justify-content-md-center">
-        <p class="error-msg">
+    <div class="d-flex justify-content-center">
+        <div class="error-msg mt-4">
             The requested page could not be found.
-        </p>
+        </div>
     </div>
-
-    <div class="row justify-content-md-center mt-md-3">
-        <img src="/images/error.png" width="250px" height="250px"/>
+    <div class="d-flex justify-content-center">
+        <div class="mt-4">
+            <img src="/images/error.png" width="250px" height="250px"/>
+        </div>
     </div>
-
-    <div class="row justify-content-md-center mt-md-3">
-        <button class="btn btn-secondary" onclick="loginHistory.back();" title="back" alt="back">Return to the previous page.</button>
+    <div class="d-flex justify-content-center">
+        <div class="mt-4">
+            <button class="btn-main back-to-page" onclick="history.back();" title="back" alt="back">Return to the previous page.</button>
+        </div>
     </div>
 </div>
 </body>

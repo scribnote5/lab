@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- css -->
+    <th:block th:replace="layout/css.html"></th:block>
+
+    <title>Error Page</title>
+</head>
+<body>
+<!-- header -->
+<div th:replace="layout/header::header"></div>
+
+<div class="container">
+    <div class="page-header error">
+        <div class="d-flex justify-content-center align-items-center">
+            <div class="error-code">
+                500 ERROR
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center">
+        <div class="error-msg mt-4">
+            Internal server errors are occurred.
+        </div>
+    </div>
+    <div class="d-flex justify-content-center">
+        <div class="mt-4">
+            <img src="/images/error.png" width="250px" height="250px"/>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center">
+        <div class="mt-4">
+            <button class="btn-main back-to-page" onclick="history.back();" title="back" alt="back">Return to the previous page.</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>

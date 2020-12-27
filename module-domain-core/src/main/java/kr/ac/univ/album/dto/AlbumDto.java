@@ -22,6 +22,7 @@ public class AlbumDto extends CommonDto {
 
     /* 기본 정보 */
     @NotBlank(message = "The title must not be blank.")
+    @Size(max = 255, message = "The title can be used for less than 50 characters.")
     private String title;
 
     private LocalDate photoTakenDate;

@@ -17,9 +17,6 @@ public class DataHistoryRestController {
 
     @PutMapping("/{idx}/{activeStatus}")
     public ResponseEntity<?> putDataHistory(@PathVariable("idx") Long idx, @PathVariable("activeStatus") ActiveStatus activeStatus) {
-        System.out.println("=ActiveStatus=");
-        System.out.println(activeStatus);
-
         dataHistoryService.updateDataHistory(idx, activeStatus);
 
         return new ResponseEntity<>("{}", HttpStatus.OK);

@@ -57,13 +57,34 @@ function validateByLength(inputName, maxStrLength, title) {
     var strLength = document.getElementsByName(inputName)[0].value.length;
 
     if (strLength > maxStrLength) {
-        alert("The " + title + " is up to " + maxStrLength + " characters long." +
-            "\n(Number of characters currently entered: " + strLength + ")");
+        Alert.fire({
+            icon: "error",
+            text: "The " + title + " is up to " + maxStrLength + " characters long." +
+                "\n(Number of characters currently entered: " + strLength + ")",
+        })
         document.getElementsByName(inputName)[0].focus();
 
         return false;
     } else if (!validateByWhiteSpace(document.getElementsByName(inputName)[0].value)) {
-        alert("The " + title + " must not be blank.");
+        Alert.fire({
+            icon: "error",
+            text: "The " + title + " must not be blank.",
+        })
+        document.getElementsByName(inputName)[0].focus();
+
+        return false;
+    } else {
+        return true;
+    }
+}
+
+/* input tag validation - 문자열 길이 */
+function validateByBlank(inputName, title) {
+    if (!validateByWhiteSpace(document.getElementsByName(inputName)[0].value)) {
+        Alert.fire({
+            icon: "error",
+            text: "The " + title + " must not be blank.",
+        })
         document.getElementsByName(inputName)[0].focus();
 
         return false;
@@ -77,8 +98,11 @@ function validateBySize(inputName, maxByteSize, title) {
     var byteSize = getByteSize(document.getElementsByName(inputName)[0].value);
 
     if (byteSize > maxByteSize) {
-        alert("The " + title + "is up to " + maxByteSize + " bytes size." +
-            "\n(Size of characters currently entered: " + byteSize + " bytes).");
+        Alert.fire({
+            icon: "error",
+            text: "The " + title + "is up to " + maxByteSize + " bytes size." +
+                "\n(Size of characters currently entered: " + byteSize + " bytes)."
+        })
         document.getElementsByName(inputName)[0].focus();
 
         return false;
@@ -92,8 +116,11 @@ function validateBySelect(inputName, title) {
     var target = document.getElementsByName(inputName)[0];
 
     if (target.options[target.selectedIndex].value == -1) {
-        alert("The " + title + " is inactive or deleted." +
-            "\nPlease check validate " + title + ".");
+        Alert.fire({
+            icon: "error",
+            text: "The " + title + " is inactive or deleted." +
+                "\nPlease check validate " + title + ".",
+        })
 
         return false;
     } else {
@@ -118,8 +145,11 @@ function validateByFileExist() {
     deleteArrayIndexIsNull();
 
     if (uploadedAttachedFileLength + insertFileArrayLength - deleteFileArrayLength !== 1) {
-        alert("The upload file does not exist." +
-            "\nPlease upload file.");
+        Alert.fire({
+            icon: "error",
+            text: "The upload file does not exist." +
+                "\nPlease upload file.",
+        })
 
         return false;
     } else {
@@ -133,7 +163,10 @@ function validateByFileNumber(files, number) {
     deleteArrayIndexIsNull();
 
     if (files.length > number || (uploadedAttachedFileLength - insertFileArrayLength - deleteFileArrayLength !== 0)) {
-        alert("The number of file that can be uploaded is 1.");
+        Alert.fire({
+            icon: "error",
+            text: "The number of file that can be uploaded is 1."
+        })
 
         return false;
     } else {
@@ -149,7 +182,7 @@ function validateByFileNumber(files, number) {
  */
 function validateImageFile(file) {
     // file validation - 필수 확장자
-    var includeArray = [".jpg", ".jpeg", ".png"];
+    var includeArray = [".jpg", ".jpeg", ".png", ".tif", ".tiff"];
     // 파일 이름
     var fileName = file.name;
     // 파일 확장자명(대문자를 소문자로 변경)
@@ -172,7 +205,10 @@ function validateImageFile(file) {
         }
 
         if (!result) {
-            alert("The attached file only uses [" + includeArray.join(', ') + "] extension. ");
+            Alert.fire({
+                icon: "error",
+                text: "The attached file only uses [" + includeArray.join(', ') + "] extension. "
+            })
             $("#file").replaceWith($("#file").clone(true));
             $("#file").val('');
 
@@ -181,7 +217,10 @@ function validateImageFile(file) {
 
         /* 파일 크기 검사 */
         if (fileSize > maxSize) {
-            alert("The attached file can upload within 20 MB size.");
+            Alert.fire({
+                icon: "error",
+                text: "The attached file can upload within 20 MB size."
+            })
             $("#file").replaceWith($("#file").clone(true));
             $("#file").val('');
 
@@ -190,7 +229,10 @@ function validateImageFile(file) {
 
         /* 모든 파일 크기 검사 */
         if (fileSize + totalFileSize > maxSize) {
-            alert("All attached files must be within 20 MB size.");
+            Alert.fire({
+                icon: "error",
+                text: "All attached files must be within 20 MB size."
+            })
             $("#file").replaceWith($("#file").clone(true));
             $("#file").val('');
 
@@ -202,6 +244,149 @@ function validateImageFile(file) {
 
     return true;
 }
+
+/*
+ * 파일 validation - 필수 확장자
+ *
+ * [전역 변수 선언 필요]
+ * var totalFileSize = 0;
+ */
+function validatePdfFile(file) {
+    // file validation - 필수 확장자
+    var includeArray = [".pdf"];
+    // 파일 이름
+    var fileName = file.name;
+    // 파일 확장자명(대문자를 소문자로 변경)
+    var extensionName = fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
+    // 필수 확장자명 사용 여부 판단
+    var result = false;
+    // 첨부 파일 크기
+    var fileSize = file.size;
+    // 업로드 가능한 파일 크기: 20 MB
+    var maxSize = 20 * 1024 * 1024;
+
+    // 첨부 파일이 있는 경우
+    if (fileName != "") {
+        /* 확장자명 검사 */
+        for (var j = 0; j < includeArray.length; j++) {
+            if (extensionName == includeArray[j]) {
+                result = true;
+                break;
+            }
+        }
+
+        if (!result) {
+            Alert.fire({
+                icon: "error",
+                text: "The attached file only uses [" + includeArray.join(', ') + "] extension. "
+            })
+            $("#file").replaceWith($("#file").clone(true));
+            $("#file").val('');
+
+            return false;
+        }
+
+        /* 파일 크기 검사 */
+        if (fileSize > maxSize) {
+            Alert.fire({
+                icon: "error",
+                text: "The attached file can upload within 20 MB size."
+            })
+            $("#file").replaceWith($("#file").clone(true));
+            $("#file").val('');
+
+            return false;
+        }
+
+        /* 모든 파일 크기 검사 */
+        if (fileSize + totalFileSize > maxSize) {
+            Alert.fire({
+                icon: "error",
+                text: "All attached files must be within 20 MB size."
+            })
+            $("#file").replaceWith($("#file").clone(true));
+            $("#file").val('');
+
+            return false;
+        }
+
+        totalFileSize += fileSize;
+    }
+
+    return true;
+}
+
+/*
+ * 파일 validation - 필수 확장자
+ *
+ * [전역 변수 선언 필요]
+ * var totalFileSize = 0;
+ */
+function validateVideoFile(file) {
+    // file validation - 필수 확장자
+    var includeArray = [".mp4", ".m4v", ".avi", ".wmv", ".mwa", ".asf", ".ts"];
+    // 파일 이름
+    var fileName = file.name;
+    // 파일 확장자명(대문자를 소문자로 변경)
+    var extensionName = fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
+    // 필수 확장자명 사용 여부 판단
+    var result = false;
+    // 첨부 파일 크기
+    var fileSize = file.size;
+    // 업로드 가능한 파일 크기: 20 MB
+    var maxSize = 20 * 1024 * 1024;
+
+    // 첨부 파일이 있는 경우
+    if (fileName != "") {
+        /* 확장자명 검사 */
+        for (var j = 0; j < includeArray.length; j++) {
+            if (extensionName == includeArray[j]) {
+                result = true;
+                break;
+            }
+        }
+
+        if (!result) {
+            Alert.fire({
+                icon: "error",
+                text: "The attached file only uses [" + includeArray.join(', ') + "] extension. "
+            })
+            $("#file").replaceWith($("#file").clone(true));
+            $("#file").val('');
+
+            return false;
+        }
+
+        /* 파일 크기 검사 */
+        if (fileSize > maxSize) {
+            Alert.fire({
+                icon: "error",
+                text: "The attached file can upload within 20 MB size."
+            })
+            $("#file").replaceWith($("#file").clone(true));
+            $("#file").val('');
+
+            return false;
+        }
+
+        /* 모든 파일 크기 검사 */
+        if (fileSize + totalFileSize > maxSize) {
+            Alert.fire({
+                icon: "error",
+                text: "All attached files must be within 20 MB size."
+            })
+            $("#file").replaceWith($("#file").clone(true));
+            $("#file").val('');
+
+            return false;
+        }
+
+        totalFileSize += fileSize;
+    }
+
+    return true;
+}
+
 
 /*
  * 파일 validation - 유효한 파일 확장자
@@ -226,7 +411,10 @@ function validateFile(file) {
         /* 확장자명 검사 */
         for (var i = 0; i < excludeArray.length; i++) {
             if (extensionName == excludeArray[i]) {
-                alert("[" + extensionName + "] extension doesn't support uploading attached file.");
+                Alert.fire({
+                    icon: "error",
+                    text: "[" + extensionName + "] extension doesn't support uploading attached file.",
+                })
                 $("#file").val('');
                 $("#file").replaceWith($("#file").clone(true));
 
@@ -236,7 +424,10 @@ function validateFile(file) {
 
         /* 파일 크기 검사 */
         if (fileSize > maxSize) {
-            alert("The attached file can upload within 20 MB size.");
+            Alert.fire({
+                icon: "error",
+                text: "The attached file can upload within 20 MB size.",
+            })
             $("#file").replaceWith($("#file").clone(true));
             $("#file").val('');
 
@@ -245,7 +436,10 @@ function validateFile(file) {
 
         /* 모든 파일 크기 검사 */
         if (fileSize + totalFileSize > maxSize) {
-            alert("All attached files must be within 20 MB size.");
+            Alert.fire({
+                icon: "error",
+                text: "All attached files must be within 20 MB size.",
+            })
             $("#file").replaceWith($("#file").clone(true));
             $("#file").val('');
 
@@ -262,15 +456,24 @@ function validateFile(file) {
 /*
  * validation response message alert
  */
-function paraseErrorMsg(msg) {
-    var parseMsg = JSON.parse(msg.responseText);
+function parseErrorMsg(msg) {
     var alertMsg = null;
 
-    if (isEmpty(parseMsg.errors)) {
-        alertMsg = parseMsg.message;
+    if (!isEmpty(msg.responseText)) {
+        var parseMsg = JSON.parse(msg.responseText);
+
+        if (isEmpty(parseMsg.errors)) {
+            alertMsg = parseMsg.message;
+        } else {
+            alertMsg = parseMsg.message + "\n" + parseMsg.errors[0].reason;
+        }
     } else {
-        alertMsg = parseMsg.message + "\n" + parseMsg.errors[0].reason;
+        alertMsg = "NetworkError: Failed to execute 'send' on 'XMLHttpRequest'.";
     }
 
-    alert(alertMsg);
+    Toast.fire({
+        icon: "error",
+        title: "Error occurred.",
+        text: alertMsg
+    })
 }

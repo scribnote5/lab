@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- css -->
+    <th:block th:replace="layout/css.html"></th:block>
+
+    <title th:if="!${aboutUsDto.idx}" th:text="${@environment.getProperty('title')} + ' | About Us Register'"></title>
+    <title th:if="${aboutUsDto.idx}" th:text="${@environment.getProperty('title')} + ' | About Us Update'"></title>
+</head>
+<body>
+<div class="d-flex" id="wrapper">
+    <!-- sidebar -->
+    <div th:replace="layout/sidebar::sidebar"></div>
+
+    <div id="page-content-wrapper">
+        <!-- header -->
+        <div th:replace="layout/header::header"></div>
+
+        <div class="container-fluid">
+            <form name="form" id="form" th:object="${aboutUsDto}" action="#">
+                <div class="page-header breadcrumbs">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 th:if="!*{idx}">AboutUs Register</h2>
+                        <h2 th:if="*{idx}">AboutUs Update</h2>
+                        <ol>
+                            <li>Home</li>
+                            <img src="/images/chevron-right.svg">
+                            <li th:if="!*{idx}">About Us Register</li>
+                            <li th:if="*{idx}">About Us Update</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="mt-5">
+                    <table class="table">
+                        <colgroup>
+                            <col width="17.5%"/>
+                            <col width="82.5%"/>
+                        </colgroup>
+                        <tr>
+                            <th colspan="2" class="sub-item-title">AboutUs Information</th>
+                        </tr>
+                        <tr>
+                            <th>Title</th>
+                            <td><input type="text" name="title" id="title" class="form-control" th:value="*{title}"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="width: 100%"><textarea name="content" id="summernote" class="summernote" th:text="*{content}"></textarea></td>
+                        </tr>
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Additional Information</th>
+                        </tr>
+                        <tr>
+                            <th>Active Status</th>
+                            <td>
+                                <div class="pull-left">
+                                    <select class="custom-select" name="activeStatus" th:field="*{activeStatus}">
+                                        <option th:value="ACTIVE">Active</option>
+                                        <option th:value="INACTIVE">Inactive</option>
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Created Date</th>
+                            <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Modified Date</th>
+                            <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="row justify-content-between mt-5 mb-3">
+                    <div class="col-auto mx-3">
+                        <a href="/about-us/list" class="btn btn-secondary">Move to List</a>
+                    </div>
+                    <div class="col-auto mx-3">
+                        <button th:if="!*{idx}" id="insert" type="button" class="btn-main">Register</button>
+                        <button th:if="*{idx}" id="update" type="button" class="btn btn-info">Update</button>
+                    </div>
+                </div>
+
+                <!-- input type="hidden" -->
+                <input type="hidden" name="idx" th:value="*{idx}"/>
+                <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
+                <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- footer -->
+<div th:replace="layout/footer::footer"></div>
+
+<!-- script file -->
+<th:block th:replace="layout/script.html"></th:block>
+
+<!-- javascript -->
+<script>
+    $(document).ready(function () {
+        <!-- summernote setting -->
+        $('#summernote').summernote({
+            height: 400,	// 에디터 높이
+            minHeight: null,	// 최소 높이
+            maxHeight: null,	// 최대 높이
+            // focus: true,	// 에디터 로딩후 포커스를 맞출지 여부
+            lang: "ko-KR",// 한글 설정
+            placeholder: "The editor's max input size of bytes is 16777215(16 MB)."	//placeholder 설정
+        });
+    });
+
+    function deleteAboutUs(aboutUsIdx) {
+        $.ajax({
+            url: moduleAppApiAddress + "/api/aboutUss/" + aboutUsIdx,
+            type: "delete",
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+            });
+    }
+</script>
+
+<script th:if="!${aboutUsDto?.idx}">
+    $("#insert").click(function () {
+        // (input tag mame, length or size, message)
+        if (!(validateByLength("title", 255, "title") && validateBySize("content", 16777215, "content"))) {
+            return false;
+        }
+
+        var jsonData = $("#form").serializeObject();
+
+        $.ajax({
+            url: moduleAppApiAddress + "/api/about-us",
+            type: "post",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                localStorage.setItem("result", "/about-us/register-success");
+                location.href = "/about-us?idx=" + msg;
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+            });
+    });
+</script>
+
+<script th:if="${aboutUsDto?.idx}" th:inline="javascript">
+    $("#update").click(function () {
+        // (input tag mame, length or size, message)
+        if (!(validateByLength("title", 255, "title") && validateBySize("content", 16777215, "content"))) {
+            return false;
+        }
+
+        var jsonData = $("#form").serializeObject();
+        var aboutUsIdx = document.getElementsByName("idx")[0].value;
+
+        $.ajax({
+            url: moduleAppApiAddress + "/api/about-us/" + aboutUsIdx,
+            type: "put",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                localStorage.setItem("result", "/about-us/update-success");
+                location.href = "/about-us?idx=" + aboutUsIdx;
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+            });
+    });
+</script>
+
+</body>
+</html>

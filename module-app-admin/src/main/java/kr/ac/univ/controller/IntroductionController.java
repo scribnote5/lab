@@ -25,7 +25,7 @@ public class IntroductionController {
     public String introductionList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
         model.addAttribute("introductionDtoList", introductionService.findIntroductionList(pageable, searchDto));
 
-        return "/introduction/list";
+        return "introduction/list";
     }
 
     // Form Update
@@ -36,11 +36,11 @@ public class IntroductionController {
 
         // 권한 확인
         if (introductionDto.isAccess()) {
-            model.addAttribute("introductionDto", introductionDto);
+           model.addAttribute("introductionDto", introductionDto);
 
-            returnPage = "/introduction/form";
+            returnPage = "introduction/form";
         } else {
-            returnPage = "/user/permission-denied";
+            returnPage = "user/permission-denied";
         }
 
         return returnPage;
@@ -49,10 +49,12 @@ public class IntroductionController {
     // Read
     @GetMapping({"", "/"})
     public String introductionRead(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
-        IntroductionDto introductionDto = introductionService.findIntroductionByIdx(idx);
+        IntroductionDto introductionDto = null;
+
+        introductionDto = introductionService.findIntroductionByIdx(idx);
 
         model.addAttribute("introductionDto", introductionDto);
 
-        return "/introduction/read";
+        return "introduction/read";
     }
 }

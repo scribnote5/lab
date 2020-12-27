@@ -14,6 +14,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -24,19 +25,33 @@ public class PublicationDto extends CommonDto {
 
     /* 기본 정보 */
     @NotBlank(message = "The title must not be blank.")
+    @Size(max = 255, message = "The title can be used for less than 200 characters.")
     private String title;
+
     private String authors;
+
     private PublicationType publicationType;
+
     private PublishingArea publishingArea;
+
     private String publishedIn;
+
     private String impactFactor;
+
     private LocalDate publishedDate;
+
     private String pages;
+
     private String volume;
+
     private String number;
+
     private String doi;
+
     private String uri;
+
     private String isbnIssn;
+
     private String remark;
 
     /* 첨부 파일 */

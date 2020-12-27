@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- css -->
+    <th:block th:replace="layout/css.html"></th:block>
+
+    <title th:if="!${introductionImageDto.idx}" th:text="${@environment.getProperty('title')} + ' | Introduction Image Register'"></title>
+    <title th:if="${introductionImageDto.idx}" th:text="${@environment.getProperty('title')} + ' | Introduction Image Update'"></title>
+</head>
+<body>
+<div class="d-flex" id="wrapper">
+    <!-- sidebar -->
+    <div th:replace="layout/sidebar::sidebar"></div>
+
+    <div id="page-content-wrapper">
+        <!-- header -->
+        <div th:replace="layout/header::header"></div>
+
+        <div class="container-fluid">
+            <form name="form" id="form" th:object="${introductionImageDto}" action="#">
+                <div class="page-header breadcrumbs">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 th:if="!*{idx}">Introduction Image Register</h2>
+                        <h2 th:if="*{idx}">Introduction Image Update</h2>
+                        <ol>
+                            <li>Home</li>
+                            <img src="/images/chevron-right.svg">
+                            <li th:if="!*{idx}">Introduction Image Register</li>
+                            <li th:if="*{idx}">Introduction Image Update</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="mt-5">
+                    <table class="table">
+                        <colgroup>
+                            <col width="17.5%"/>
+                            <col width="47.5%"/>
+                            <col width="35%"/>
+                        </colgroup>
+                        <tr>
+                            <th colspan="3" class="sub-item-title">IntroductionImage Information</th>
+                        </tr>
+                        <tr>
+                            <th>Title</th>
+                            <td colspan="2"><input type="text" name="title" id="title" class="form-control" th:value="*{title}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Main Page Priority</th>
+                            <td colspan="2">
+                                <div class="mb-3">
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <input type="radio" id="mainPageNonCheck" name="mainPage" class="custom-control-input" th:checked="*{mainPagePriority == -1 ||  mainPagePriority == null}">
+                                        <label class="custom-control-label" for="mainPageNonCheck"><strong>Don't show main page.</strong></label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <input type="radio" id="mainPageCheck" name="mainPage" class="custom-control-input" th:checked="*{mainPagePriority >= 0}">
+                                        <label class="custom-control-label" for="mainPageCheck"><strong>Show main page and set priority.</strong></label>
+                                    </div>
+                                </div>
+                                <select class="custom-select main-page-priority" name="mainPagePriority" th:field="*{mainPagePriority}" th:style="*{mainPagePriority >= 0} ? 'display: inline;' : 'display: none'">
+                                    <option th:value="-1" th:text="'Don\'t show main page.'" th:style="'display: none;'" selected></option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Attached File</th>
+                            <td>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="file" name="file">
+                                    <label class="custom-file-label" for="file">Choose file.</label>
+                                </div>
+                                <div id="fileDrop" class="fileDrop">
+                                    <strong>Drop files here.</strong>
+                                </div>
+                            </td>
+                            <td>
+                                <img th:if="*{attachedFileList.size()} == 0" id="imgPreview" class="introductionImage-img-preview img-thumbnail" th:attr="src=@{/images/no-preview-available.jpg}"/>
+                                <img th:if="*{attachedFileList.size()} != 0" id="imgPreview" class="introductionImage-img-preview img-thumbnail"
+                                     th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Total file size</th>
+                            <td colspan="2">
+                                <div><span id="totalFileSize"> 0 MB</span>, Up to 20 MB</div>
+                            </td>
+                        <tr>
+                            <th>Upload Attached File</th>
+                            <td colspan="2">
+                                <div id="attachedFileList"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Uploaded Attached File</th>
+                            <td colspan="2">
+                                <div id="uploadedAttachedFileList" th:each="attachedFile : *{attachedFileList}">
+                                    <div th:id="imgData + ${attachedFileStat.index}">
+                                        <span th:text="${attachedFile.fileName} + ',&nbsp;' + 'File Size: ' + ${attachedFile.fileSize}"></span>
+                                        <img th:attr="src=@{|/images/cancel-icon.png|}, onclick=|deleteFile('${attachedFileStat.index}','${attachedFile.idx}','${attachedFile.savedFileName}')|" class="cancel-icon"/>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Additional Information</th>
+                        </tr>
+                        <tr>
+                            <th>Active Status</th>
+                            <td colspan="2">
+                                <div class="pull-left">
+                                    <select class="custom-select" name="activeStatus" th:field="*{activeStatus}">
+                                        <option th:value="ACTIVE">Active</option>
+                                        <option th:value="INACTIVE">Inactive</option>
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Created Date</th>
+                            <td colspan="2"><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Modified Date</th>
+                            <td colspan="2"><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="row justify-content-between mt-5 mb-3">
+                    <div class="col-auto mx-3">
+                        <a href="/introduction-image/list" class="btn btn-secondary">Move to List</a>
+                    </div>
+                    <div class="col-auto mx-3">
+                        <button th:if="!*{idx}" id="insert" type="button" class="btn-main">Register</button>
+                        <button th:if="*{idx}" id="update" type="button" class="btn btn-info">Update</button>
+                    </div>
+                </div>
+
+                <!-- input type="hidden" -->
+                <input type="hidden" name="idx" th:value="*{idx}"/>
+                <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
+                <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- footer -->
+<div th:replace="layout/footer::footer"></div>
+
+<!-- script file -->
+<th:block th:replace="layout/script.html"></th:block>
+
+<!-- javascript -->
+<script th:inline="javascript">
+    var totalFileSize = 0;
+    var insertFileArray = [];
+    var deleteFileArray = [];
+    var imgDataId = 0;
+    var exit = null;
+
+    // 파일 Number validation
+    var insertFileArrayLength = 0;
+    var deleteFileArrayLength = 0;
+    var uploadedAttachedFileLength = [[${introductionImageDto.attachedFileList}]].length;
+
+
+    $(document).ready(function () {
+        <!-- File Drop -->
+        $("#fileDrop").on("dragenter dragover", function (event) {
+            event.preventDefault(); // 기본 이벤트 발생을 막음
+        });
+
+        <!-- Main Page Priority -->
+        var mainPagePrioritySelect = document.getElementsByName("mainPagePriority")[0];
+        var introductionImageDtoList = [[${introductionImageDtoList}]];
+        var introductionImageDto = [[${introductionImageDto}]];
+
+        for (var i = 0; i < 25; i++) {
+            var option = document.createElement("option");
+            option.text = i + 1;
+            option.value = i + 1;
+            mainPagePrioritySelect.options.add(option, i + 1);
+        }
+
+        for (var i = 0; i < introductionImageDtoList.length; i++) {
+            var mainPagePriority = introductionImageDtoList[i].mainPagePriority;
+
+            // 현재 introductionImage의 mainPagePriority인 경우(select)
+            if (mainPagePriority == introductionImageDto.mainPagePriority) {
+                mainPagePrioritySelect.options.item(mainPagePriority).selected = true;
+            }
+            // 다른 introductionImage의 mainPagePriority인 경우(disable)
+            else {
+                mainPagePrioritySelect.options.item(mainPagePriority).text += " has been set by '" + introductionImageDtoList[i].title + "'.(disabled)";
+                mainPagePrioritySelect.options.item(mainPagePriority).className = "disable";
+                mainPagePrioritySelect.options.item(mainPagePriority).disabled = true;
+            }
+        }
+    });
+
+    /* input tag event */
+    $("#file").change(function () {
+        var files = document.getElementsByName("file")[0].files;
+
+        // 업로드하는 파일 개수가 number개가 넘어가는 경우, 파일 업로드 불가
+        if (!validateByFileNumber(files, 1)) {
+            return false;
+        }
+
+        for (var i = 0; i < files.length; i++) {
+            if (validateImageFile(files[i])) {
+                insertFileArray.push(files[i]);
+                document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
+
+                $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
+                    + '<span>'
+                    + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size)
+                    + '<img src="/images/cancel-icon.png" class="cancel-icon" onClick="cancelFile(' + imgDataId + ')"/>'
+                    + '</span>'
+                    + '</div>');
+
+                imgDataId++;
+                readURL(this);
+            } else {
+                return false;
+            }
+        }
+    });
+
+    /* Drag & drop event */
+    $("#fileDrop").on("drop", function (event) {
+        event.preventDefault(); // 기본 효과를 막음
+        document.getElementById("fileDrop").style.opacity = 1;
+
+        // 드래그된 파일의 정보
+        // event : jQuery의 이벤트
+        // originalEvent : javascript의 이벤트
+        var files = event.originalEvent.dataTransfer.files;
+
+        // 업로드하는 파일 개수가 number개가 넘어가는 경우, 파일 업로드 불가
+        if (!validateByFileNumber(files, 1)) {
+            return false;
+        }
+
+        for (var i = 0; i < files.length; i++) {
+            if (validateImageFile(files[i])) {
+                insertFileArray.push(files[i]);
+                document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
+
+                $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
+                    + '<span>'
+                    + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size)
+                    + '<img src="/images/cancel-icon.png" class="cancel-icon" onClick="cancelFile(' + imgDataId + ')" />'
+                    + '</span>'
+                    + '</div>');
+
+                imgDataId++;
+                readURL(this);
+            } else {
+                return false;
+            }
+        }
+    });
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#imgPreview').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $("#fileDrop").on("dragover", function (event) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        document.getElementById("fileDrop").style.opacity = 0.25;
+    });
+
+    $("#fileDrop").on("dragleave", function (event) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        document.getElementById("fileDrop").style.opacity = 1;
+    });
+
+    // 새로 업로드한 파일을 취소하는 경우
+    function cancelFile(fileId) {
+        $('#imgData' + fileId).remove();
+
+        totalFileSize -= insertFileArray[fileId].size;
+        insertFileArray[fileId] = null;
+
+        document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
+        document.getElementById("imgPreview").src = "/images/no-preview-available.jpg";
+    }
+
+    // 기존 업로드한 파일을 삭제하는 경우
+    function deleteFile(fileId, idx, savedFileName) {
+        $('#imgData' + fileId).remove();
+
+        deleteFileArray.push(idx);
+        document.getElementById("imgPreview").src = "/images/no-preview-available.jpg";
+    }
+
+    function deleteIntroductionImage(introductionImageIdx) {
+        $.ajax({
+            url: moduleAppApiAddress + "/api/introduction-image/" + introductionImageIdx,
+            type: "delete",
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+            });
+    }
+
+    // Main Page Priority 변경
+    $("#mainPageNonCheck").on("change", function () {
+        document.getElementsByName("mainPagePriority")[0].style.display = "none";
+        document.getElementsByName("mainPagePriority")[0].value = -1;
+    });
+
+    $("#mainPageCheck").on("change", function () {
+        var introductionImageDto = [[${introductionImageDto}]];
+        document.getElementsByName("mainPagePriority")[0].style.display = "inline";
+
+
+        // register || update 일 때의 mainPagePriority
+        if (!(introductionImageDto.mainPagePriority == null || introductionImageDto.mainPagePriority == -1)) {
+            document.getElementsByName("mainPagePriority")[0].options.item(introductionImageDto.mainPagePriority - 1).selected = true;
+        }
+    });
+</script>
+
+<script th:if="!${introductionImageDto?.idx}">
+    $("#insert").click(function () {
+        // (input tag mame, length or size, message)
+        if (!(validateByLength("title", 255, "title") && validateByFileExist())) {
+            return false;
+        }
+
+        var jsonData = $("#form").serializeObject();
+        var introductionImageIdx;
+
+        $.ajax({
+            url: moduleAppApiAddress + "/api/introduction-images",
+            type: "post",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                introductionImageIdx = msg;
+                exit = false;
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                exit = true;
+            });
+
+        if (exit) return false;
+
+        // 파일 업로드
+        var formData = new FormData();
+
+        for (var i = 0; i < insertFileArray.length; i++) {
+            formData.append("files", insertFileArray[i]);
+        }
+
+        formData.append("idx", introductionImageIdx);
+        formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
+
+        $.ajax({
+            url: moduleAppApiAddress + "/api/introduction-images/attachedFile",
+            type: "post",
+            data: formData,
+            dataType: "text",
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            async: false,
+        })
+            .done(function (msg) {
+                localStorage.setItem("result", "/introduction-image/register-success");
+                location.href = "/introduction-image?idx=" + introductionImageIdx;
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                deleteIntroductionImage(introductionImageIdx);
+            });
+
+    });
+</script>
+
+<script th:if="${introductionImageDto?.idx}" th:inline="javascript">
+       $("#update").click(function () {
+        // (input tag mame, length or size, message)
+        if (!(validateByLength("title", 255, "title") && validateByFileExist())) {
+            return false;
+        }
+
+        var jsonData = $("#form").serializeObject();
+        var introductionImageIdx = document.getElementsByName("idx")[0].value;
+
+        $.ajax({
+            url: moduleAppApiAddress + "/api/introduction-images/" + introductionImageIdx,
+            type: "put",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                exit = false;
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                exit = true;
+            });
+
+        if (exit) return false;
+
+        // 만일 파일이 수정되지 않은 경우 '파일 업로드' 및 '파일 삭제'를 수행하지 않음
+        if (insertFileArray.length == 0 && deleteFileArray.length == 0) {
+            localStorage.setItem("result", "/introduction-image/update-success");
+            location.href = "/introductionImage?idx=" + introductionImageIdx;
+        }
+
+        // 파일 삭제
+        if (deleteFileArray.length > 0) {
+            $.ajax({
+                url: moduleAppApiAddress + "/api/introduction-images/attachedFile",
+                type: "delete",
+                data: JSON.stringify(deleteFileArray),
+                contentType: "application/json",
+                async: false,
+            })
+                .done(function (msg) {
+                    exit = false;
+                })
+                .fail(function (msg) {
+                    parseErrorMsg(msg);
+                    exit = true;
+                });
+        }
+
+        if (exit) return false;
+
+        if (insertFileArray.length <= 0) {
+            localStorage.setItem("result", "/introduction-image/update-success");
+            location.href = "/introduction-image?idx=" + introductionImageIdx;
+        }
+
+        // 파일 업로드
+        var formData = new FormData();
+
+        for (var i = 0; i < insertFileArray.length; i++) {
+            formData.append("files", insertFileArray[i]);
+        }
+
+        formData.append("idx", introductionImageIdx);
+        formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
+
+        $.ajax({
+            url: moduleAppApiAddress + "/api/introduction-images/attachedFile",
+            type: "post",
+            data: formData,
+            dataType: "text",
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            async: false,
+        })
+            .done(function (msg) {
+                localStorage.setItem("result", "/introduction-image/update-success");
+                location.href = "/introduction-image?idx=" + introductionImageIdx;
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                deleteIntroductionImage(introductionImageIdx);
+            })
+    });
+</script>
+
+</body>
+</html>

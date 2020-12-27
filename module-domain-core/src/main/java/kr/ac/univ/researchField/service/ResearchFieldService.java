@@ -16,7 +16,6 @@ import java.util.List;
 
 @Service
 public class ResearchFieldService {
-
     private final ResearchFieldRepository researchFieldRepository;
 
     public ResearchFieldService(ResearchFieldRepository researchFieldRepository) {
@@ -32,9 +31,6 @@ public class ResearchFieldService {
         switch (searchDto.getSearchType()) {
             case "TITLE":
                 researchFieldList = researchFieldRepository.findAllByTitleContaining(pageable, searchDto.getKeyword());
-                break;
-            case "SUB_TITLE":
-                researchFieldList = researchFieldRepository.findAllBySubTitleContaining(pageable, searchDto.getKeyword());
                 break;
             case "ID":
                 researchFieldList = researchFieldRepository.findAllByCreatedByContaining(pageable, searchDto.getKeyword());
