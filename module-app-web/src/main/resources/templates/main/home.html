@@ -61,7 +61,6 @@
                     <div class="carousel-inner carousel-border" data-aos="fade-up" data-aos-delay="150">
                         <div th:each="researchFieldDto, index : ${researchFieldDtoList}" th:class="${index.first} ? 'carousel-item active' : 'carousel-item'">
                             <h4 th:text="${researchFieldDto.title}" class="text-center"></h4>
-                            <h6 th:text="${researchFieldDto.subTitle}" class="text-center text-muted"></h6>
                             <p th:utext="${researchFieldDto.content}" class="text-center"></p>
                         </div>
                     </div>
