@@ -6,6 +6,7 @@ import kr.ac.univ.learnMoreVideo.domain.LearnMoreVideo;
 import kr.ac.univ.learnMoreVideo.dto.LearnMoreVideoDto;
 import kr.ac.univ.learnMoreVideo.dto.mapper.LearnMoreVideoMapper;
 import kr.ac.univ.learnMoreVideo.repository.LearnMoreVideoRepository;
+import kr.ac.univ.learnMoreVideo.repository.LearnMoreVideoRepositoryImpl;
 import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.AccessCheck;
 import kr.ac.univ.util.NewIconCheck;
@@ -18,9 +19,11 @@ import java.util.List;
 @Service
 public class LearnMoreVideoService {
     private final LearnMoreVideoRepository learnMoreVideoRepository;
+    private final LearnMoreVideoRepositoryImpl learnMoreVideoRepositoryImpl;
 
-    public LearnMoreVideoService(LearnMoreVideoRepository learnMoreVideoRepository) {
+    public LearnMoreVideoService(LearnMoreVideoRepository learnMoreVideoRepository, LearnMoreVideoRepositoryImpl learnMoreVideoRepositoryImpl) {
         this.learnMoreVideoRepository = learnMoreVideoRepository;
+        this.learnMoreVideoRepositoryImpl = learnMoreVideoRepositoryImpl;
     }
 
     public Page<LearnMoreVideoDto> findLearnMoreList(Pageable pageable, SearchDto searchDto) {
@@ -77,6 +80,9 @@ public class LearnMoreVideoService {
         } else {
             learnMoreVideoDto.setAccess(false);
         }
+
+        learnMoreVideoRepositoryImpl.updateViewsByIdx(idx);
+        learnMoreVideoDto.setViews(learnMoreVideoDto.getViews() + 1);
 
         return learnMoreVideoDto;
     }

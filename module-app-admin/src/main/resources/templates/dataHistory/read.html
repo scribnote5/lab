@@ -54,11 +54,11 @@
                         </tr>
                         <tr>
                             <th>Aud Message</th>
-                            <td><span id="audMessage" class="form-control aud-message" th:text="*{audMessage}"></span></td>
+                            <td><span id="audMessage" th:text="*{audMessage}"></span></td>
                         </tr>
                         <tr>
                             <th>Aud Sub Message</th>
-                            <td><span id="audSubMessage" class="form-control aud-message" th:text="*{audSubMessage}"></span></td>
+                            <td><span id="audSubMessage" th:text="*{audSubMessage}"></span></td>
                         </tr>
                         <tr>
                             <th colspan="2" class="sub-item-title">Additional Information</th>
@@ -73,21 +73,24 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>Created By</th>
-                            <td><input type="text" class="form-control created-modified-by" readonly="readonly" th:value="*{createdBy}"/></td>
-                        </tr>
-                        <tr>
-                            <th>lastModified By</th>
-                            <td><input type="text" class="form-control created-modified-by" readonly="readonly" th:value="*{lastModifiedBy}"/></td>
-                        </tr>
-
-                        <tr>
                             <th>Created Date</th>
                             <td><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr>
-                            <th>Modified Date</th>
+                            <th>Last Modified Date</th>
                             <td><span th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Created By</th>
+                            <td><span th:text="*{createdBy}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Last Created By</th>
+                            <td><span th:text="*{lastModifiedBy}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Views</th>
+                            <td><span th:text="*{views}"/></td>
                         </tr>
                     </table>
                 </div>

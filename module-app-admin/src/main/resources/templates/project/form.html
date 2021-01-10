@@ -42,12 +42,12 @@
                         </tr>
                         <tr>
                             <th>Title</th>
-                            <td><input type="text" name="title" id="title" class="form-control" th:value="*{title}"/></td>
+                            <td><input type="text" name="title" id="title" class="form-control form-control-sm" th:value="*{title}"/></td>
                         </tr>
                         <tr>
                             <th>Research Field</th>
                             <td>
-                                <select class="custom-select" name="researchFieldIdx" th:field="*{researchFieldIdx}">
+                                <select class="custom-select custom-select-sm" name="researchFieldIdx" th:field="*{researchFieldIdx}">
                                     <option th:if="${#strings.isEmpty(researchFieldDto)} and *{idx}" th:value="-1">This field is inactive or deleted.</option>
                                     <option th:each="researchFieldDto : ${researchFieldDtoList}"
                                             th:value="${researchFieldDto.idx}"
@@ -57,13 +57,13 @@
                         </tr>
                         <tr>
                             <th>Research Establishment</th>
-                            <td><input type="text" name="researchEstablishment" id="researchEstablishment" class="form-control" th:value="*{researchEstablishment}"/></td>
+                            <td><input type="text" name="researchEstablishment" id="researchEstablishment" class="form-control form-control-sm" th:value="*{researchEstablishment}"/></td>
                         </tr>
                         <tr>
                             <th>Project Status</th>
                             <td>
                                 <div class="pull-left">
-                                    <select class="custom-select" name="projectStatus" id="projectStatus" th:field="*{projectStatus}">
+                                    <select class="custom-select custom-select-sm" name="projectStatus" id="projectStatus" th:field="*{projectStatus}">
                                         <option th:value="CURRENT">Current</option>
                                         <option th:value="PREVIOUS">Previous</option>
                                     </select>
@@ -72,11 +72,11 @@
                         </tr>
                         <tr>
                             <th>Start Date<span class="required-field">*</span></th>
-                            <td><input type="date" name="startDate" id="startDate" class="form-control" th:value="*{startDate}"/></td>
+                            <td><input type="date" name="startDate" id="startDate" class="form-control form-control-sm" th:value="*{startDate}"/></td>
                         </tr>
                         <tr>
                             <th>End Date<span class="required-field">*</span></th>
-                            <td><input type="date" name="endDate" id="endDate" class="form-control" th:value="*{endDate}"/></td>
+                            <td><input type="date" name="endDate" id="endDate" class="form-control form-control-sm" th:value="*{endDate}"/></td>
                         </tr>
                         <tr>
                             <td colspan="2"><textarea name="content" id="summernote" class="summernote" th:text="*{content}"></textarea></td>
@@ -122,7 +122,7 @@
                             <th>Active Status</th>
                             <td>
                                 <div class="pull-left">
-                                    <select class="custom-select" name="activeStatus" th:field="*{activeStatus}">
+                                    <select class="custom-select custom-select-sm" name="activeStatus" th:field="*{activeStatus}">
                                         <option th:value="ACTIVE">Active</option>
                                         <option th:value="INACTIVE">Inactive</option>
                                     </select>
@@ -131,11 +131,23 @@
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created Date</th>
-                            <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
-                            <th>Modified Date</th>
-                            <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <th>Last Modified Date</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Created By</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{createdBy}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Last Modified By</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{lastModifiedBy}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Views</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{views}"/></td>
                         </tr>
                     </table>
                 </div>
@@ -176,13 +188,14 @@
     $(document).ready(function () {
         <!-- summernote setting -->
         $('#summernote').summernote({
-            height: 400,	// 에디터 높이
+            height: 500,	// 에디터 높이
             minHeight: null,	// 최소 높이
             maxHeight: null,	// 최대 높이
             // focus: true,	// 에디터 로딩후 포커스를 맞출지 여부
             lang: "ko-KR",// 한글 설정
             placeholder: "The editor's max input size of bytes is 16777215(16 MB)."	//placeholder 설정
         });
+        $('#summernote').summernote('fontSize', 14);
 
         <!-- File Drop -->
         $("#fileDrop").on("dragenter dragover", function (event) {

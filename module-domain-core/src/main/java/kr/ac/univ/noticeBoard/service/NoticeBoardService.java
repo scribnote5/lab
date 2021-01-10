@@ -118,6 +118,7 @@ public class NoticeBoardService {
         }
 
         noticeBoardRepositoryImpl.updateViewsByIdx(idx);
+        noticeBoardDto.setViews(noticeBoardDto.getViews() + 1);
 
         return noticeBoardDto;
     }

@@ -17,7 +17,6 @@ import javax.persistence.Table;
 @Table
 @ToString
 public class IntroductionImageAttachedFile extends AttachedFileAudit {
-    @Column
     private Long introductionImageIdx;
 
     @Builder

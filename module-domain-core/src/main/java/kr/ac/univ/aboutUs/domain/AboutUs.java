@@ -20,10 +20,8 @@ import javax.persistence.Table;
 @ToString
 @EntityListeners(AboutUsListener.class)
 public class AboutUs extends CommonAudit {
-    @Column
     private String title;
 
-    @Column
     private String content;
 
     @Builder

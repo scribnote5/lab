@@ -17,7 +17,6 @@ import javax.persistence.Table;
 @Table
 @ToString
 public class SeminarAttachedFile extends AttachedFileAudit {
-    @Column
     private Long seminarIdx;
 
     @Builder

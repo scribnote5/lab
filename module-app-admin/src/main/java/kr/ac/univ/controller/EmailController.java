@@ -40,7 +40,7 @@ public class EmailController {
 
             returnPage = "email/form";
         } else {
-            returnPage = "user/permission-denied";
+            returnPage = "user/access-denied";
         }
 
         return returnPage;

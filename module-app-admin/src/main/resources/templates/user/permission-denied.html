@@ -6,7 +6,7 @@
 <script>
     Alert.fire({
         icon: "error",
-        text: "You do not have permission on access this path.\n" + "Only admin(root or manager authority) can access."
+        text: "You do not have permission on access this path.\n" + "Only admin(root or manager authority) user can access it."
     }).then((result) => {
         location.href = "/user/login"
     });

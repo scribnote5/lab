@@ -31,14 +31,14 @@
 
                 <div class="row justify-content-end mt-3">
                     <div class="col-auto px-1">
-                        <select class="custom-select" name="searchType" id="searchType" th:field="*{searchType}">
+                        <select class="custom-select custom-select-sm" name="searchType" id="searchType" th:field="*{searchType}">
                             <option th:value="TITLE">Title</option>
                             <option th:value="ID">ID</option>
                         </select>
                     </div>
 
                     <div class="col-auto px-1">
-                        <input type="text" name="keyword" class="form-control" th:value="${searchDto?.keyword}"/>
+                        <input type="text" name="keyword" class="form-control form-control-sm" th:value="${searchDto?.keyword}"/>
                     </div>
 
                     <div class="col-auto px-3">
@@ -62,7 +62,7 @@
                         <tr th:each="learnMoreVideoDto : ${learnMoreVideoDtoList}">
                             <td th:text="${learnMoreVideoDto.idx}"></td>
                             <td>
-                                <a th:href="'/learn-mored-video?idx='+${learnMoreVideoDto.idx}" class="link"
+                                <a th:href="'/learn-more-video?idx='+${learnMoreVideoDto.idx}" class="link"
                                    th:text="${#strings.length(learnMoreVideoDto.title)} < 40 ? ${learnMoreVideoDto.title} : ${#strings.substring(learnMoreVideoDto.title, 0, 40)} + '...'"></a>
                                 <img th:if="${learnMoreVideoDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>

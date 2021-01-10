@@ -16,7 +16,6 @@ import javax.persistence.Table;
 @Table
 @ToString
 public class LearnMoreVideoAttachedFile extends AttachedFileAudit {
-    @Column
     private Long learnMoreVideoIdx;
 
     @Builder

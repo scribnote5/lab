@@ -6,6 +6,7 @@ import kr.ac.univ.introduction.domain.Introduction;
 import kr.ac.univ.introduction.dto.IntroductionDto;
 import kr.ac.univ.introduction.dto.mapper.IntroductionMapper;
 import kr.ac.univ.introduction.repository.IntroductionRepository;
+import kr.ac.univ.introduction.repository.IntroductionRepositoryImpl;
 import kr.ac.univ.util.AccessCheck;
 import kr.ac.univ.util.NewIconCheck;
 import org.springframework.data.domain.*;
@@ -16,9 +17,11 @@ import javax.transaction.Transactional;
 @Service
 public class IntroductionService {
     private final IntroductionRepository introductionRepository;
+    private final IntroductionRepositoryImpl introductionRepositoryImpl;
 
-    public IntroductionService(IntroductionRepository introductionRepository) {
+    public IntroductionService(IntroductionRepository introductionRepository, IntroductionRepositoryImpl introductionRepositoryImpl) {
         this.introductionRepository = introductionRepository;
+        this.introductionRepositoryImpl = introductionRepositoryImpl;
     }
 
     public Page<IntroductionDto> findIntroductionList(Pageable pageable, SearchDto searchDto) {
@@ -78,6 +81,9 @@ public class IntroductionService {
         } else {
             introductionDto.setAccess(false);
         }
+
+        introductionRepositoryImpl.updateViewsByIdx(idx);
+        introductionDto.setViews(introductionDto.getViews() + 1);
 
         return introductionDto;
     }

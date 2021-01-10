@@ -22,15 +22,11 @@ public abstract class AttachedFileAudit {
     @CreatedDate
     private LocalDateTime createdDate;
 
-    @Column
     private String createdBy;
 
-    @Column
     private String fileName;
 
-    @Column
     private String savedFileName;
 
-    @Column
     private String fileSize;
 }

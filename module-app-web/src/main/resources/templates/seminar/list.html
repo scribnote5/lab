@@ -7,100 +7,101 @@
     <title th:text="${@environment.getProperty('title')} + ' | Seminar List'"></title>
 </head>
 <body>
-<div id="page-content-wrapper">
-    <!-- header -->
-    <div th:replace="layout/header::header"></div>
+<div id="wrapper">
+    <div id="page-content-wrapper">
+        <!-- header -->
+        <div th:replace="layout/header::header"></div>
 
-    <div class="container">
-        <form name="form" id="form" th:object="${searchDto}" action="#">
-            <div class="page-header breadcrumbs" data-aos="fade-up" data-aos-delay="100">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h2>Seminar List</h2>
-                    <ol>
-                        <li>Home</li>
-                        <img src="/images/chevron-right.svg">
-                        <li>Seminar List</li>
-                    </ol>
-                </div>
-            </div>
-
-            <div class="row justify-content-end mt-3" data-aos="fade-up" data-aos-delay="100">
-                <div class="col-auto px-1">
-                    <select class="custom-select" name="searchType" th:field="*{searchType}">
-                        <option th:value="TITLE">Title</option>
-                        <option th:value="CONTENT">Content</option>
-                        <option th:value="ID">ID</option>
-                    </select>
+        <div class="container">
+            <form name="form" id="form" th:object="${searchDto}" action="#">
+                <div class="page-header breadcrumbs" data-aos="fade-up" data-aos-delay="100">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2>Seminar List</h2>
+                        <ol>
+                            <li>Home</li>
+                            <img src="/images/chevron-right.svg">
+                            <li>Seminar List</li>
+                        </ol>
+                    </div>
                 </div>
 
-                <div class="col-auto px-1">
-                    <input type="text" name="keyword" class="form-control" th:value="${searchDto?.keyword}"/>
+                <div class="row justify-content-end mt-3" data-aos="fade-up" data-aos-delay="100">
+                    <div class="col-auto px-1">
+                        <select class="custom-select custom-select-sm" name="searchType" th:field="*{searchType}">
+                            <option th:value="TITLE">Title</option>
+                            <option th:value="CONTENT">Content</option>
+                            <option th:value="ID">ID</option>
+                        </select>
+                    </div>
+
+                    <div class="col-auto px-1">
+                        <input type="text" name="keyword" class="form-control form-control-sm" th:value="${searchDto?.keyword}"/>
+                    </div>
+                    <div class="col-auto px-3">
+                        <button id="search" type="button" class="btn-main">Search</button>
+                    </div>
                 </div>
-                <div class="col-auto px-3">
-                    <button id="search" type="button" class="btn-main">Search</button>
+
+                <div class="mt-5" data-aos="fade-up" data-aos-delay="150">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th style="width: 65%">Title</th>
+                            <th style="width: 15%">Created By</th>
+                            <th style="width: 15%">Created Date</th>
+                            <th style="width: 5%">Views</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="seminarDto : ${seminarDtoList}">
+                            <td>
+                                <a th:href="'/seminar?idx='+${seminarDto.idx}" class="link"
+                                   th:text="${#strings.length(seminarDto.title)} < 40 ? ${seminarDto.title} : ${#strings.substring(seminarDto.title, 0, 40)} + '...'"></a>
+                                <img th:if="${seminarDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
+                            </td>
+                            <td th:text="${seminarDto.createdBy}">></td>
+                            <td th:text="${#temporals.format(seminarDto.createdDate,'yyyy-MM-dd')}"></td>
+
+                        </tr>
+                        <tr th:if="${seminarDtoList.totalElements == 0}">
+                            <td colspan="10" class="no-posts">
+                                No posts founded.
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
-            </div>
 
-            <div class="mt-5" data-aos="fade-up" data-aos-delay="150">
-                <table class="table table-hover">
-                    <thead>
-                    <tr>
-                        <th style="width: 65%">Title</th>
-                        <th style="width: 15%">Created By</th>
-                        <th style="width: 15%">Created Date</th>
-                        <th style="width: 5%">Views</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="seminarDto : ${seminarDtoList}">
-                        <td>
-                            <a th:href="'/seminar?idx='+${seminarDto.idx}" class="link"
-                               th:text="${#strings.length(seminarDto.title)} < 40 ? ${seminarDto.title} : ${#strings.substring(seminarDto.title, 0, 40)} + '...'"></a>
-                            <img th:if="${seminarDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
-                        </td>
-                        <td th:text="${seminarDto.createdBy}">></td>
-                        <td th:text="${#temporals.format(seminarDto.createdDate,'yyyy-MM-dd HH:mm')}"></td>
-
-                        <td th:text="${seminarDto.views}"></td>
-                    </tr>
-                    <tr th:if="${seminarDtoList.totalElements == 0}">
-                        <td colspan="10" class="no-posts">
-                            No posts founded.
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="row justify-content-end mt-5 mb-3" data-aos="fade-up" data-aos-delay="200">
-                <div class="col-auto mx-3">
-                    <a href="/seminar/form" sec:authorize="isAuthenticated()" class="btn-main">Register</a>
+                <div class="row justify-content-end mt-5 mb-3" data-aos="fade-up" data-aos-delay="200">
+                    <div class="col-auto mx-3">
+                        <a href="/seminar/form" sec:authorize="isAuthenticated()" class="btn-main">Register</a>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Pagination -->
-            <div class="row justify-content-center" aria-label="Page navigation" data-aos="fade-up" data-aos-delay="200">
-                <ul class="pagination "
-                    th:with="startNumber=${T(Math).floor(seminarDtoList.number/10)}*10+1, endNumber=(${seminarDtoList.totalPages} > ${startNumber}+9) ? ${startNumber}+9 : (${seminarDtoList.totalPages} == 0 ? 1 : ${seminarDtoList.totalPages})">
-                    <li class="page-item">
-                        <a class="page-link" aria-label="Previous" th:href="@{/seminar/list(page=1,searchType=*{searchType},keyword=*{keyword})}">&laquo;</a>
-                    </li>
-                    <li class="page-item" th:style="${seminarDtoList.first} ? 'display:none'">
-                        <a class="page-link" th:href="@{/seminar/list(page=${seminarDtoList.number},searchType=*{searchType},keyword=*{keyword})}">&lsaquo;</a>
-                    </li>
-                    <li th:each="page :${#numbers.sequence(startNumber, endNumber)}" th:class="(${page} == ${seminarDtoList.number}+1) ? 'page-item active'">
-                        <a class="page-link" th:href="@{/seminar/list(page=${page},searchType=*{searchType},keyword=*{keyword})}" th:text="${page}"><span class="sr-only"></span></a>
-                    </li>
-                    <li class="page-item" th:style="${seminarDtoList.last} ? 'display:none'">
-                        <a class="page-link" th:href="@{/seminar/list(page=${seminarDtoList.number}+2,searchType=*{searchType},keyword=*{keyword})}">&rsaquo;</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" aria-label="Next" th:href="@{/seminar/list(page=${seminarDtoList.totalPages},searchType=*{searchType},keyword=*{keyword})}">&raquo;</a>
-                    </li>
-                </ul>
-            </div>
-            <!-- /Pagination -->
-        </form>
+                <!-- Pagination -->
+                <div class="row justify-content-center mb-3" aria-label="Page navigation" data-aos="fade-up" data-aos-delay="200">
+                    <ul class="pagination "
+                        th:with="startNumber=${T(Math).floor(seminarDtoList.number/10)}*10+1, endNumber=(${seminarDtoList.totalPages} > ${startNumber}+9) ? ${startNumber}+9 : (${seminarDtoList.totalPages} == 0 ? 1 : ${seminarDtoList.totalPages})">
+                        <li class="page-item">
+                            <a class="page-link" aria-label="Previous" th:href="@{/seminar/list(page=1,searchType=*{searchType},keyword=*{keyword})}">&laquo;</a>
+                        </li>
+                        <li class="page-item" th:style="${seminarDtoList.first} ? 'display:none'">
+                            <a class="page-link" th:href="@{/seminar/list(page=${seminarDtoList.number},searchType=*{searchType},keyword=*{keyword})}">&lsaquo;</a>
+                        </li>
+                        <li th:each="page :${#numbers.sequence(startNumber, endNumber)}" th:class="(${page} == ${seminarDtoList.number}+1) ? 'page-item active'">
+                            <a class="page-link" th:href="@{/seminar/list(page=${page},searchType=*{searchType},keyword=*{keyword})}" th:text="${page}"><span class="sr-only"></span></a>
+                        </li>
+                        <li class="page-item" th:style="${seminarDtoList.last} ? 'display:none'">
+                            <a class="page-link" th:href="@{/seminar/list(page=${seminarDtoList.number}+2,searchType=*{searchType},keyword=*{keyword})}">&rsaquo;</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" aria-label="Next" th:href="@{/seminar/list(page=${seminarDtoList.totalPages},searchType=*{searchType},keyword=*{keyword})}">&raquo;</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /Pagination -->
+            </form>
+        </div>
     </div>
 </div>
 

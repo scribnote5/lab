@@ -50,7 +50,7 @@ public class SeminarController {
 
             returnPage = "seminar/form";
         } else {
-            returnPage = "user/permission-denied";
+            returnPage = "user/access-denied";
         }
 
         return returnPage;

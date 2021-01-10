@@ -5,6 +5,7 @@ import kr.ac.univ.email.domain.Email;
 import kr.ac.univ.email.dto.EmailDto;
 import kr.ac.univ.email.dto.mapper.EmailMapper;
 import kr.ac.univ.email.repository.EmailRepository;
+import kr.ac.univ.email.repository.EmailRepositoryImpl;
 import kr.ac.univ.util.AccessCheck;
 import kr.ac.univ.util.NewIconCheck;
 import org.springframework.data.domain.*;
@@ -15,9 +16,11 @@ import javax.transaction.Transactional;
 @Service
 public class EmailService {
     private final EmailRepository emailRepository;
+    private final EmailRepositoryImpl emailRepositoryImpl;
 
-    public EmailService(EmailRepository emailRepository) {
+    public EmailService(EmailRepository emailRepository, EmailRepositoryImpl emailRepositoryImpl) {
         this.emailRepository = emailRepository;
+        this.emailRepositoryImpl = emailRepositoryImpl;
     }
 
     public Page<EmailDto> findEmailList(Pageable pageable, SearchDto searchDto) {
@@ -70,6 +73,9 @@ public class EmailService {
         } else {
             emailDto.setAccess(false);
         }
+
+        emailRepositoryImpl.updateViewsByIdx(idx);
+        emailDto.setViews(emailDto.getViews() + 1);
 
         return emailDto;
     }

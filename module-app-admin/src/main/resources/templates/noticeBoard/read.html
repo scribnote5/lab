@@ -42,7 +42,7 @@
                             <td><span id="title" th:text="*{title}"></span></td>
                         </tr>
                         <tr>
-                            <td colspan="2"><span id="content" class="form-control content" th:utext="*{content}"></span></td>
+                            <td colspan="2"><span id="content" class="form-control form-control-sm content" th:utext="*{content}"></span></td>
                         </tr>
                         <tr>
                             <th>Uploaded Attached File</th>
@@ -70,8 +70,20 @@
                             <td><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr>
-                            <th>Modified Date</th>
+                            <th>Last Modified Date</th>
                             <td><span th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Created By</th>
+                            <td><span th:text="*{createdBy}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Last Created By</th>
+                            <td><span th:text="*{lastModifiedBy}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Views</th>
+                            <td><span th:text="*{views}"/></td>
                         </tr>
                     </table>
                 </div>
@@ -87,7 +99,7 @@
                         </tr>
                         <tr th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}">
                             <td colspan="2">
-                                <textarea class="form-control comment" name="content" id="comment"></textarea>
+                                <textarea class="form-control form-control-sm comment" name="content" id="comment"></textarea>
                                 <button type="button" class="btn btn-primary mt-3" id="insertComment">Register</button>
                             </td>
                         </tr>
@@ -111,7 +123,7 @@
                                 <div class="mx-3 my-3">
                                     <span th:id="content + ${noticeBoardCommentDtoStat.index}"
                                           th:text="${noticeBoardCommentDto.content}"></span>
-                                    <textarea class="form-control comment"
+                                    <textarea class="form-control form-control-sm comment"
                                               style="display: none;"
                                               name="updateContent"
                                               th:id="updateContent + ${noticeBoardCommentDtoStat.index}"

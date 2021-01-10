@@ -1,6 +1,7 @@
 package kr.ac.univ.loginHistory.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import kr.ac.univ.loginHistory.domain.QLoginHistory;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.loginHistory.domain.LoginHistory;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
@@ -33,4 +34,17 @@ public class LoginHistoryRepositoryImpl extends QuerydslRepositorySupport {
                 .execute();
     }
 
+    public long updateViewsByIdx(Long idx) {
+        QLoginHistory loginHistory = QLoginHistory.loginHistory;
+        /*
+         * UPDATE loginHistory
+         *    SET views = views + 1
+         *  WHERE id = 'id';
+         */
+        return queryFactory
+                .update(loginHistory)
+                .set(loginHistory.views, loginHistory.views.add(1))
+                .where(loginHistory.idx.eq(idx))
+                .execute();
+    }
 }

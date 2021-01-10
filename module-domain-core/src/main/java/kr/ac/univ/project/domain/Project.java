@@ -22,28 +22,20 @@ import java.time.LocalDate;
 @ToString
 @EntityListeners(ProjectListener.class)
 public class Project extends CommonAudit {
-    @Column
     private String title;
 
-    @Column
     private String content;
 
-    @Column
     private Long views = 0L;
 
-    @Column
     private Long researchFieldIdx = 0L;
 
-    @Column
     private String researchEstablishment;
 
-    @Column
     private ProjectStatus projectStatus;
 
-    @Column
     private LocalDate startDate;
 
-    @Column
     private LocalDate endDate;
 
     @Builder

@@ -4,6 +4,7 @@ import kr.ac.univ.album.domain.Album;
 import kr.ac.univ.album.dto.AlbumDto;
 import kr.ac.univ.album.dto.mapper.AlbumMapper;
 import kr.ac.univ.album.repository.AlbumRepository;
+import kr.ac.univ.album.repository.AlbumRepositoryImpl;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.SearchDto;
 import kr.ac.univ.user.repository.UserRepository;
@@ -21,11 +22,11 @@ public class AlbumService {
     @Value("${module.name}")
     private String moduleName;
     private final AlbumRepository albumRepository;
-    private final UserRepository userRepository;
+    private final AlbumRepositoryImpl albumRepositoryImpl;
 
-    public AlbumService(AlbumRepository albumRepository, UserRepository userRepository) {
+    public AlbumService(AlbumRepository albumRepository, AlbumRepositoryImpl albumRepositoryImpl) {
         this.albumRepository = albumRepository;
-        this.userRepository = userRepository;
+        this.albumRepositoryImpl = albumRepositoryImpl;
     }
 
     public Page<AlbumDto> findAlbumList(Pageable pageable, SearchDto searchDto) {
@@ -87,8 +88,8 @@ public class AlbumService {
         List<AlbumDto> albumDtoList = AlbumMapper.INSTANCE.toDto(albumRepository.findAllByActiveStatusIsOrderByMainHashTagDescIdxDesc(ActiveStatus.ACTIVE));
         String mainHashTag = "";
 
-        for(AlbumDto albumDto: albumDtoList) {
-            if(!mainHashTag.equals(albumDto.getMainHashTag())  ) {
+        for (AlbumDto albumDto : albumDtoList) {
+            if (!mainHashTag.equals(albumDto.getMainHashTag())) {
                 albumDto.setMainHashTagPrint(true);
                 mainHashTag = albumDto.getMainHashTag();
             } else {
@@ -125,14 +126,17 @@ public class AlbumService {
             albumDto.setAccess(false);
         }
 
+        albumRepositoryImpl.updateViewsByIdx(idx);
+        albumDto.setViews(albumDto.getViews() + 1);
+
         return albumDto;
     }
 
-    public AlbumDto findByMainPagePriorityIs (Long idx, Long mainPagePriority) {
+    public AlbumDto findByMainPagePriorityIs(Long idx, Long mainPagePriority) {
         AlbumDto albumDto = null;
 
         // insert하는 경우와 자신의 album mainPagePriority와 저장하는 mainPagePrioirty가 중복 되는 경우는 패스
-        if(idx != null && albumRepository.findById(idx).orElse(new Album()).getMainPagePriority() != mainPagePriority) {
+        if (idx != null && albumRepository.findById(idx).orElse(new Album()).getMainPagePriority() != mainPagePriority) {
             albumDto = AlbumMapper.INSTANCE.toDto(albumRepository.findByMainPagePriorityIsAndActiveStatusIs(mainPagePriority, ActiveStatus.ACTIVE));
         }
 

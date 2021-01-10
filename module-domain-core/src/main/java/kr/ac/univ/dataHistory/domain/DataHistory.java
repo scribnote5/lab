@@ -17,20 +17,15 @@ import java.time.LocalDateTime;
 @Table
 @ToString
 public class DataHistory extends CommonAudit {
-    @Column
     private Long audIdx;
 
-    @Column
     private String audClass;
 
-    @Column
     @Enumerated(EnumType.STRING)
     private AudType audType;
 
-    @Column
     private String audMessage;
 
-    @Column
     private String audSubMessage;
 
     @Builder

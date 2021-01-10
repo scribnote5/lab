@@ -4,8 +4,8 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title  th:if="!${albumDto.idx}" th:text="${@environment.getProperty('title')} + ' | Album Register'"></title>
-    <title  th:if="${albumDto.idx}" th:text="${@environment.getProperty('title')} + ' | Album Update'"></title>
+    <title th:if="!${albumDto.idx}" th:text="${@environment.getProperty('title')} + ' | Album Register'"></title>
+    <title th:if="${albumDto.idx}" th:text="${@environment.getProperty('title')} + ' | Album Update'"></title>
 </head>
 <body>
 <div class="d-flex" id="wrapper">
@@ -43,11 +43,11 @@
                         </tr>
                         <tr>
                             <th>Title</th>
-                            <td colspan="2"><input type="text" name="title" id="title" class="form-control" th:value="*{title}"/></td>
+                            <td colspan="2"><input type="text" name="title" id="title" class="form-control form-control-sm" th:value="*{title}"/></td>
                         </tr>
                         <tr>
                             <th>Photo Taken Date</th>
-                            <td colspan="2"><input type="date" name="photoTakenDate" id="photoTakenDate" class="form-control" th:value="*{photoTakenDate}"/></td>
+                            <td colspan="2"><input type="date" name="photoTakenDate" id="photoTakenDate" class="form-control form-control-sm" th:value="*{photoTakenDate}"/></td>
                         </tr>
                         <tr>
                             <th>Main Page Priority</th>
@@ -62,21 +62,21 @@
                                         <label class="custom-control-label" for="mainPageCheck"><strong>Show main page and set priority.</strong></label>
                                     </div>
                                 </div>
-                                <select class="custom-select main-page-priority" name="mainPagePriority" th:field="*{mainPagePriority}" th:style="*{mainPagePriority >= 0} ? 'display: inline;' : 'display: none'">
+                                <select class="custom-select custom-select-sm main-page-priority" name="mainPagePriority" th:field="*{mainPagePriority}" th:style="*{mainPagePriority >= 0} ? 'display: inline;' : 'display: none'">
                                     <option th:value="-1" th:text="'Don\'t show main page.'" th:style="'display: none;'" selected></option>
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <th>Main Hash Tag</th>
-                            <td colspan="2"><input type="text" name="mainHashTag" id="mainHashTag" class="form-control" th:value="*{mainHashTag}" readonly/></td>
+                            <td colspan="2"><input type="text" name="mainHashTag" id="mainHashTag" class="form-control form-control-sm" th:value="*{mainHashTag}" readonly/></td>
                         </tr>
                         <tr>
                             <th>Hash Tags</th>
                             <td id="hashTagsTd" colspan="2">
-                                <input th:if="!*{idx}" type="text" id="hashTag" class="form-control" placeholder="#Hash Tag ↵ (Special character is not available.)"/>
-                                <input th:if="*{idx}" type="text" id="hashTag" class="form-control" placeholder="#Hash Tag ↵ (Special character is not available.)"/>
-                                <input type="hidden" name="hashTags" id="hashTags" class="form-control" readonly/>
+                                <input th:if="!*{idx}" type="text" id="hashTag" class="form-control form-control-sm" placeholder="#Hash Tag ↵ (Special character is not available.)"/>
+                                <input th:if="*{idx}" type="text" id="hashTag" class="form-control form-control-sm" placeholder="#Hash Tag ↵ (Special character is not available.)"/>
+                                <input type="hidden" name="hashTags" id="hashTags" class="form-control form-control-sm" readonly/>
                             </td>
                         </tr>
                         <tr>
@@ -91,8 +91,8 @@
                                 </div>
                             </td>
                             <td>
-                                <img th:if="*{attachedFileList.size()} == 0" id="imgPreview" class="album-img-preview img-thumbnail" th:attr="src=@{/images/no-preview-available.jpg}"/>
-                                <img th:if="*{attachedFileList.size()} != 0" id="imgPreview" class="album-img-preview img-thumbnail"
+                                <img th:if="*{attachedFileList.size()} == 0" id="imgPreview" class="float-right general-img-preview img-thumbnail" th:attr="src=@{/images/no-preview-available.jpg}"/>
+                                <img th:if="*{attachedFileList.size()} != 0" id="imgPreview" class="float-right general-img-preview img-thumbnail"
                                      th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}"/>
                             </td>
                         </tr>
@@ -125,7 +125,7 @@
                             <th>Active Status</th>
                             <td colspan="2">
                                 <div class="pull-left">
-                                    <select class="custom-select" name="activeStatus" th:field="*{activeStatus}">
+                                    <select class="custom-select custom-select-sm" name="activeStatus" th:field="*{activeStatus}">
                                         <option th:value="ACTIVE">Active</option>
                                         <option th:value="INACTIVE">Inactive</option>
                                     </select>
@@ -134,11 +134,23 @@
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created Date</th>
-                            <td colspan="2"><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
-                            <th>Modified Date</th>
-                            <td colspan="2"><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <th>Last Modified Date</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Created By</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{createdBy}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Last Modified By</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{lastModifiedBy}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Views</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{views}"/></td>
                         </tr>
                     </table>
                 </div>

@@ -39,6 +39,20 @@ spring:
     # 개인 비밀번호로 변경 필요하다.
     password: 123123123
     driver-class-name: org.h2.Driver
+    # spring boot 2.x에서는 connection pool로 HikariCP를 사용한다.
+    # HikariCP 설정은 default value 값을 사용하였으며, HikariCP에서 추천하는 mysql 설정을 다음과 같이 적용하였다.
+    hikari:
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+        useLocalSessionState: true
+        rewriteBatchedStatements: true
+        cacheResultSetMetadata: true
+        cacheServerConfiguration: true
+        elideSetAutoCommits: true
+        maintainTimeStats: false
 server:
   port: 8081
 ---
@@ -55,6 +69,20 @@ spring:
     # 개인 비밀번호로 변경 필요하다.
     password: 123123123
     driver-class-name: org.mariadb.jdbc.Driver
+    # spring boot 2.x에서는 connection pool로 HikariCP를 사용한다.
+    # HikariCP 설정은 default value 값을 사용하였으며, HikariCP에서 추천하는 mysql 설정을 다음과 같이 적용하였다.
+    hikari:
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+        useLocalSessionState: true
+        rewriteBatchedStatements: true
+        cacheResultSetMetadata: true
+        cacheServerConfiguration: true
+        elideSetAutoCommits: true
+        maintainTimeStats: false
 server:
   port: 8081
 ---
@@ -71,5 +99,19 @@ spring:
     # 개인 비밀번호로 변경 필요하다.
     password: 123123123
     driver-class-name: org.mariadb.jdbc.Driver
+    # spring boot 2.x에서는 connection pool로 HikariCP를 사용한다.
+    # HikariCP 설정은 default value 값을 사용하였으며, HikariCP에서 추천하는 mysql 설정을 다음과 같이 적용하였다.
+    hikari:
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+        useLocalSessionState: true
+        rewriteBatchedStatements: true
+        cacheResultSetMetadata: true
+        cacheServerConfiguration: true
+        elideSetAutoCommits: true
+        maintainTimeStats: false
 server:
   port: 8081

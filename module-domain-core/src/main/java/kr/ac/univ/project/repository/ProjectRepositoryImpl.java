@@ -31,5 +31,4 @@ public class ProjectRepositoryImpl extends QuerydslRepositorySupport {
                 .where(project.idx.eq(idx))
                 .execute();
     }
-
 }

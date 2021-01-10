@@ -1,12 +1,10 @@
-html {
-    position: relative;
-    min-height: 100%;
-}
-
-* {
+/*--------------------------------------------------------------
+# General
+--------------------------------------------------------------*/
+html * {
     font-family: 'Spoqa Han Sans', san-serif;
     font-weight: var(--regular-font-weight);
-    font-size: var(--regular-font-size);
+    font-size: 13px;
     color: var(--main-black);
 }
 
@@ -14,16 +12,9 @@ body .container-fluid {
     padding: 1.5rem;
 }
 
-/*
- * general layout
- */
 #wrapper {
     overflow-x: hidden;
     overflow-y: hidden;
-}
-
-#page-content-wrapper {
-    min-height: calc(100vh - 4rem);
 }
 
 label {
@@ -53,8 +44,8 @@ table td {
     vertical-align: middle;
     user-select: none;
     border: 1px solid transparent;
-    padding: .375rem .75rem;
-    font-size: 1rem;
+    padding: .25rem .75rem;
+    font-size: .9rem;
     line-height: 1.5;
     border-radius: .25rem;
     transition: 0.5s;
@@ -176,7 +167,7 @@ table td {
 
     width: 100%;
 
-    background: #fff;
+    background: var(--dark-white);
     box-shadow: 2px 2px 1rem rgba(0, 0, 0, 0.2);
     /*padding: 12.5px 0;*/
     color: #222222;

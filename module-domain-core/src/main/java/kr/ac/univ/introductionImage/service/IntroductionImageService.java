@@ -6,6 +6,7 @@ import kr.ac.univ.introductionImage.domain.IntroductionImage;
 import kr.ac.univ.introductionImage.dto.IntroductionImageDto;
 import kr.ac.univ.introductionImage.dto.mapper.IntroductionImageMapper;
 import kr.ac.univ.introductionImage.repository.IntroductionImageRepository;
+import kr.ac.univ.introductionImage.repository.IntroductionImageRepositoryImpl;
 import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.AccessCheck;
 import kr.ac.univ.util.NewIconCheck;
@@ -21,11 +22,11 @@ public class IntroductionImageService {
     @Value("${module.name}")
     private String moduleName;
     private final IntroductionImageRepository introductionImageRepository;
-    private final UserRepository userRepository;
+    private final IntroductionImageRepositoryImpl introductionImageRepositoryImpl;
 
-    public IntroductionImageService(IntroductionImageRepository introductionImageRepository, UserRepository userRepository) {
+    public IntroductionImageService(IntroductionImageRepository introductionImageRepository, IntroductionImageRepositoryImpl introductionImageRepositoryImpl) {
         this.introductionImageRepository = introductionImageRepository;
-        this.userRepository = userRepository;
+        this.introductionImageRepositoryImpl = introductionImageRepositoryImpl;
     }
 
     public Page<IntroductionImageDto> findIntroductionImageList(Pageable pageable, SearchDto searchDto) {
@@ -97,14 +98,17 @@ public class IntroductionImageService {
             introductionImageDto.setAccess(false);
         }
 
+        introductionImageRepositoryImpl.updateViewsByIdx(idx);
+        introductionImageDto.setViews(introductionImageDto.getViews() + 1);
+
         return introductionImageDto;
     }
 
-    public IntroductionImageDto findByMainPagePriorityIs (Long idx, Long mainPagePriority) {
+    public IntroductionImageDto findByMainPagePriorityIs(Long idx, Long mainPagePriority) {
         IntroductionImageDto introductionImageDto = null;
 
         // insert하는 경우와 자신의 introductionImage mainPagePriority와 저장하는 mainPagePrioirty가 중복 되는 경우는 패스
-        if(idx != null && introductionImageRepository.findById(idx).orElse(new IntroductionImage()).getMainPagePriority() != mainPagePriority) {
+        if (idx != null && introductionImageRepository.findById(idx).orElse(new IntroductionImage()).getMainPagePriority() != mainPagePriority) {
             introductionImageDto = IntroductionImageMapper.INSTANCE.toDto(introductionImageRepository.findByMainPagePriorityIsAndActiveStatusIs(mainPagePriority, ActiveStatus.ACTIVE));
         }
 

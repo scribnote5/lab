@@ -20,7 +20,6 @@ import javax.persistence.Table;
 @ToString
 @EntityListeners(LearnMoreVideoListener.class)
 public class LearnMoreVideo extends CommonAudit {
-    @Column
     private String title;
 
     @Builder

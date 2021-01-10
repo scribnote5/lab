@@ -1,11 +1,11 @@
 package kr.ac.univ.publication.repository;
 
-
 import java.util.List;
 
 import javax.transaction.Transactional;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
+import kr.ac.univ.publication.domain.QPublication;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.publication.domain.Publication;
 import kr.ac.univ.publication.domain.QPublication;
@@ -20,7 +20,6 @@ import static kr.ac.univ.publication.domain.QPublication.publication;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
-
 @Repository
 @Transactional
 public class PublicationRepositoryImpl extends QuerydslRepositorySupport {
@@ -29,6 +28,20 @@ public class PublicationRepositoryImpl extends QuerydslRepositorySupport {
     public PublicationRepositoryImpl(JPAQueryFactory queryFactory) {
         super(Publication.class);
         this.queryFactory = queryFactory;
+    }
+
+    public long updateViewsByIdx(Long idx) {
+        QPublication publication = QPublication.publication;
+        /*
+         * UPDATE publication
+         *    SET views = views + 1
+         *  WHERE id = 'id';
+         */
+        return queryFactory
+                .update(publication)
+                .set(publication.views, publication.views.add(1))
+                .where(publication.idx.eq(idx))
+                .execute();
     }
 
     public List<Publication> findTop10(Long lastIdx) {
@@ -44,7 +57,6 @@ public class PublicationRepositoryImpl extends QuerydslRepositorySupport {
                 .limit(10)
                 .fetch();
     }
-
 
     public Publication findMaxPublicationIdx() {
         /*
@@ -91,17 +103,28 @@ public class PublicationRepositoryImpl extends QuerydslRepositorySupport {
          */
         BooleanExpression result = null;
 
-        if(publicationSearchDto.getPublicationSearchType() == PublicationSearchType.INTERNATIONAL_JOURNAL) {
-            result = publication.publishingArea.eq(PublishingArea.INTERNATIONAL).and(publication.publicationType.eq(PublicationType.JOURNAL));
-        }
-        else if (publicationSearchDto.getPublicationSearchType() == PublicationSearchType.INTERNATIONAL_CONFERENCE){
-            result = publication.publishingArea.eq(PublishingArea.INTERNATIONAL).and(publication.publicationType.ne(PublicationType.JOURNAL));
-        }
-        else if (publicationSearchDto.getPublicationSearchType() == PublicationSearchType.DOMESTIC_JOURNAL){
-            result = publication.publishingArea.eq(PublishingArea.DOMESTIC).and(publication.publicationType.eq(PublicationType.JOURNAL));
-        }
-        else if (publicationSearchDto.getPublicationSearchType() == PublicationSearchType.DOMESTIC_CONFERENCE){
-            result = publication.publishingArea.eq(PublishingArea.DOMESTIC).and(publication.publicationType.ne(PublicationType.JOURNAL));
+        if (publicationSearchDto.getPublicationSearchType() == PublicationSearchType.INTERNATIONAL_JOURNAL) {
+            result = publication.publishingArea.eq(PublishingArea.INTERNATIONAL)
+                    .and(publication.publicationType.eq(PublicationType.JOURNAL)
+                            .or(publication.publicationType.eq(PublicationType.JOURNAL_SCI))
+                            .or(publication.publicationType.eq(PublicationType.JOURNAL_SCOPUS))
+                    );
+        } else if (publicationSearchDto.getPublicationSearchType() == PublicationSearchType.INTERNATIONAL_CONFERENCE) {
+            result = publication.publishingArea.eq(PublishingArea.INTERNATIONAL)
+                    .and(publication.publicationType.ne(PublicationType.JOURNAL)
+                            .and(publication.publicationType.ne(PublicationType.JOURNAL_SCI))
+                            .and(publication.publicationType.ne(PublicationType.JOURNAL_SCOPUS))
+                    );
+        } else if (publicationSearchDto.getPublicationSearchType() == PublicationSearchType.DOMESTIC_JOURNAL) {
+            result = publication.publishingArea.eq(PublishingArea.DOMESTIC)
+                    .and(publication.publicationType.eq(PublicationType.JOURNAL)
+                            .or(publication.publicationType.eq(PublicationType.JOURNAL_KCI))
+                    );
+        } else if (publicationSearchDto.getPublicationSearchType() == PublicationSearchType.DOMESTIC_CONFERENCE) {
+            result = publication.publishingArea.eq(PublishingArea.DOMESTIC)
+                    .and(publication.publicationType.ne(PublicationType.JOURNAL)
+                            .and(publication.publicationType.eq(PublicationType.JOURNAL_KCI))
+                    );
         }
 
         return result;

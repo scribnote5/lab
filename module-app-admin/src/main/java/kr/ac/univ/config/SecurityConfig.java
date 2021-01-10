@@ -39,6 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/css/**", "/js/**", "/images/**", "/summernote/**", "/font/**", "/icons/**");
         // logout 페이지는 인증 무시(authenticationEntryPoint 비인증 사용자 enrty point에서 제외)
         web.ignoring().antMatchers("/user/logout/success");
+        web.ignoring().antMatchers("/");
     }
 
     @Override
@@ -73,7 +74,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .accessDeniedPage("/user/permission-denied") // 권한이 없는 경우, 403 예외처리
                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint()); // 로그인하지 않은(비인증) 사용자가 접근하는 경우, 401 에러처리
-
     }
 
     @Bean

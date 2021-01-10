@@ -7,137 +7,139 @@
     <title th:text="${@environment.getProperty('title')} + ' | NoticeBoard Detail'"></title>
 </head>
 <body>
-<div id="page-content-wrapper">
-    <!-- header -->
-    <div th:replace="layout/header::header"></div>
+<div id="wrapper">
+    <div id="page-content-wrapper">
+        <!-- header -->
+        <div th:replace="layout/header::header"></div>
 
-    <div class="container">
-        <form name="form" id="form" th:object="${noticeBoardDto}" action="#">
-            <div class="page-header breadcrumbs" data-aos="fade-up" data-aos-delay="100">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h2>NoticeBoard Detail</h2>
-                    <ol>
-                        <li>Home</li>
-                        <img src="/images/chevron-right.svg">
-                        <li>NoticeBoard Detail</li>
-                    </ol>
-                </div>
-            </div>
-
-            <div class="mt-4" data-aos="fade-up" data-aos-delay="150">
-                <div class="mb-2 text-right">
-                    <strong class="date">&nbsp;&nbsp;Created Date: </strong>
-                    <span class="date" th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/> </span><br>
-
-                    <strong class="date">Modified Date: </strong>
-                    <span class="date" th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></span>
+        <div class="container">
+            <form name="form" id="form" th:object="${noticeBoardDto}" action="#">
+                <div class="page-header breadcrumbs" data-aos="fade-up" data-aos-delay="100">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2>NoticeBoard Detail</h2>
+                        <ol>
+                            <li>Home</li>
+                            <img src="/images/chevron-right.svg">
+                            <li>NoticeBoard Detail</li>
+                        </ol>
+                    </div>
                 </div>
 
-                <table class="table">
-                    <colgroup>
-                        <col width="17.5%"/>
-                        <col width="82.5%"/>
-                    </colgroup>
-                    <tr>
-                        <th>Title</th>
-                        <td><span id="title" th:text="*{title}"></span></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"><span id="content" class="form-control content" th:utext="*{content}"></span></td>
-                    </tr>
-                    <tr th:if="!*{#lists.isEmpty(attachedFileList)}">
-                        <th>Uploaded Attached File</th>
-                        <td>
-                            <div id="attachedFileList" th:each="attachedFile : *{attachedFileList}">
+                <div class="mt-4" data-aos="fade-up" data-aos-delay="150">
+                    <div class="mb-2 text-right">
+                        <strong class="date">&nbsp;&nbsp;Created Date: </strong>
+                        <span class="date" th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/> </span><br>
+
+                        <strong class="date">Modified Date: </strong>
+                        <span class="date" th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></span>
+                    </div>
+
+                    <table class="table">
+                        <colgroup>
+                            <col width="17.5%"/>
+                            <col width="82.5%"/>
+                        </colgroup>
+                        <tr>
+                            <th>Title</th>
+                            <td><span id="title" th:text="*{title}"></span></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><span id="content" class="form-control form-control-sm content" th:utext="*{content}"></span></td>
+                        </tr>
+                        <tr th:if="!*{#lists.isEmpty(attachedFileList)}">
+                            <th>Uploaded Attached File</th>
+                            <td>
+                                <div id="attachedFileList" th:each="attachedFile : *{attachedFileList}">
                                 <span th:attr="onclick=|location.href='${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/${attachedFile.savedFileName}'|"
                                       th:text="${attachedFile.fileName} + ',&nbsp;' + 'File size: ' + ${attachedFile.fileSize}"></span>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
 
-            <div class="mt-3">
-                <table class="table">
-                    <colgroup>
-                        <col width="17.5%"/>
-                        <col width="82.5%"/>
-                    </colgroup>
-                    <tr>
-                        <th colspan="2" class="sub-item-title">Comments</th>
-                    </tr>
-                    <tr th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}">
-                        <td colspan="2">
-                            <textarea class="form-control comment" name="content" id="comment"></textarea>
-                            <button type="button" class="btn btn-primary mt-3" id="insertComment">Register</button>
-                        </td>
-                    </tr>
-                </table>
-            </div>
+                <div class="mt-3">
+                    <table class="table">
+                        <colgroup>
+                            <col width="17.5%"/>
+                            <col width="82.5%"/>
+                        </colgroup>
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Comments</th>
+                        </tr>
+                        <tr th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}">
+                            <td colspan="2">
+                                <textarea class="form-control form-control-sm comment" name="content" id="comment"></textarea>
+                                <button type="button" class="btn btn-primary mt-3" id="insertComment">Register</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
 
-            <div th:if="!${#lists.isEmpty(noticeBoardCommentDtoList)}" class="mt-3">
-                <table class="table table-hover">
-                    <colgroup>
-                        <col width="17.5%"/>
-                        <col width="82.5%"/>
-                    </colgroup>
-                    <tr th:each="noticeBoardCommentDto : ${noticeBoardCommentDtoList}">
-                        <td colspan="2">
-                            <div class="mx-3">
-                                <span th:class="createdBy" th:text="${noticeBoardCommentDto.createdBy}"></span><br>
-                                <span th:class="createdDate"
-                                      th:text="${#temporals.format(noticeBoardCommentDto.createdDate,'yyyy-MM-dd HH:mm')}"></span>
-                                <img th:class="new-icon" th:if="${noticeBoardCommentDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}"/>
-                            </div>
-                            <div class="mx-3 my-3">
+                <div th:if="!${#lists.isEmpty(noticeBoardCommentDtoList)}" class="mt-3">
+                    <table class="table table-hover">
+                        <colgroup>
+                            <col width="17.5%"/>
+                            <col width="82.5%"/>
+                        </colgroup>
+                        <tr th:each="noticeBoardCommentDto : ${noticeBoardCommentDtoList}">
+                            <td colspan="2">
+                                <div class="mx-3">
+                                    <span th:class="createdBy" th:text="${noticeBoardCommentDto.createdBy}"></span><br>
+                                    <span th:class="createdDate"
+                                          th:text="${#temporals.format(noticeBoardCommentDto.createdDate,'yyyy-MM-dd HH:mm')}"></span>
+                                    <img th:class="new-icon" th:if="${noticeBoardCommentDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}"/>
+                                </div>
+                                <div class="mx-3 my-3">
                                     <span th:id="content + ${noticeBoardCommentDtoStat.index}"
                                           th:text="${noticeBoardCommentDto.content}"></span>
-                                <textarea class="form-control comment"
-                                          style="display: none;"
-                                          name="updateContent"
-                                          th:id="updateContent + ${noticeBoardCommentDtoStat.index}"
-                                          th:text="${noticeBoardCommentDto.content}">
+                                    <textarea class="form-control form-control-sm comment"
+                                              style="display: none;"
+                                              name="updateContent"
+                                              th:id="updateContent + ${noticeBoardCommentDtoStat.index}"
+                                              th:text="${noticeBoardCommentDto.content}">
 					                </textarea>
-                            </div>
-                            <div th:if="${noticeBoardCommentDto.access}">
-                                <button type="button" class="btn btn-outline-info mx-1"
-                                        th:id="displayComment + ${noticeBoardCommentDtoStat.index}"
-                                        th:onclick="displayComment([[${noticeBoardCommentDtoStat.index}]])">
-                                    Update
-                                </button>
-                                <button type="button" class="btn btn-outline-danger mx-1"
-                                        th:id="deleteComment + ${noticeBoardCommentDtoStat.index}"
-                                        th:onclick="deleteComment([[${noticeBoardCommentDto.idx}]], [[${noticeBoardCommentDtoStat.index}]])">
-                                    Delete
-                                </button>
+                                </div>
+                                <div th:if="${noticeBoardCommentDto.access}">
+                                    <button type="button" class="btn btn-outline-info mx-1"
+                                            th:id="displayComment + ${noticeBoardCommentDtoStat.index}"
+                                            th:onclick="displayComment([[${noticeBoardCommentDtoStat.index}]])">
+                                        Update
+                                    </button>
+                                    <button type="button" class="btn btn-outline-danger mx-1"
+                                            th:id="deleteComment + ${noticeBoardCommentDtoStat.index}"
+                                            th:onclick="deleteComment([[${noticeBoardCommentDto.idx}]], [[${noticeBoardCommentDtoStat.index}]])">
+                                        Delete
+                                    </button>
 
-                                <button type="button" style="display:none;" class="btn btn-outline-primary mx-1"
-                                        th:id="updateComment + ${noticeBoardCommentDtoStat.index}"
-                                        th:onclick="updateComment([[${noticeBoardCommentDto.idx}]], [[${noticeBoardCommentDto.createdBy}]], [[${noticeBoardCommentDto.activeStatus}]],[[${noticeBoardCommentDtoStat.index}]])">
-                                    Register
-                                </button>
-                                <button type="button" style="display:none;" class="btn btn-outline-danger mx-1" th:id="cancelComment + ${noticeBoardCommentDtoStat.index}"
-                                        th:onclick="cancelComment([[${noticeBoardCommentDtoStat.index}]])">
-                                    Cancel
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="row justify-content-between mt-5 mb-3">
-                <div class="col-auto mx-3">
-                    <a href="/notice-board/list" class="btn btn-secondary">Move to List</a>
+                                    <button type="button" style="display:none;" class="btn btn-outline-primary mx-1"
+                                            th:id="updateComment + ${noticeBoardCommentDtoStat.index}"
+                                            th:onclick="updateComment([[${noticeBoardCommentDto.idx}]], [[${noticeBoardCommentDto.createdBy}]], [[${noticeBoardCommentDto.activeStatus}]],[[${noticeBoardCommentDtoStat.index}]])">
+                                        Register
+                                    </button>
+                                    <button type="button" style="display:none;" class="btn btn-outline-danger mx-1" th:id="cancelComment + ${noticeBoardCommentDtoStat.index}"
+                                            th:onclick="cancelComment([[${noticeBoardCommentDtoStat.index}]])">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
-            </div>
 
-            <!-- input type="hidden" -->
-            <input type="hidden" name="idx" th:value="*{idx}"/>
-            <input type="hidden" name="createdBy" th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}" th:value="${#authentication.principal.username}"/>
-            <input type="hidden" name="lastModifiedBy" th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}" th:value="${#authentication.principal.username}"/>
-            <input type="hidden" name="activeStatus" th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}" th:value="ACTIVE"/>
-        </form>
+                <div class="row justify-content-between mt-5 mb-4">
+                    <div class="col-auto mx-3">
+                        <a href="/notice-board/list" class="btn btn-secondary">Move to List</a>
+                    </div>
+                </div>
+
+                <!-- input type="hidden" -->
+                <input type="hidden" name="idx" th:value="*{idx}"/>
+                <input type="hidden" name="createdBy" th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}" th:value="${#authentication.principal.username}"/>
+                <input type="hidden" name="lastModifiedBy" th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}" th:value="${#authentication.principal.username}"/>
+                <input type="hidden" name="activeStatus" th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}" th:value="ACTIVE"/>
+            </form>
+        </div>
     </div>
 </div>
 

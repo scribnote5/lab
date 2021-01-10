@@ -19,7 +19,7 @@ public enum ErrorCode {
     FILE_NUMBER_EXCEEDED(500, "F003", "The upload file number is exceeded."),
 
     // User
-    INVALID_USERNAME(500, "U001", "The ID is duplicated or ID can be used for more than 6 characters and less than 16 characters."),
+    INVALID_USERNAME(500, "U001", "The ID is duplicated or ID must be more than 6 characters and less than 16 characters."),
 
     // Album
     MAIN_PAGE_PRIORITY_DUPLICATE(500, "A001", "The main page priority is duplicated.")

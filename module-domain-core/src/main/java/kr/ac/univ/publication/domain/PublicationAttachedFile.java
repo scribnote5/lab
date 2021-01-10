@@ -17,16 +17,12 @@ import lombok.ToString;
 @Table
 @ToString
 public class PublicationAttachedFile extends AttachedFileAudit {
-    @Column
     private Long publicationIdx;
 
-    @Column
     private String fileName;
 
-    @Column
     private String savedFileName;
 
-    @Column
     private String fileSize;
 
     @Builder

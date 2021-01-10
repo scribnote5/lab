@@ -30,14 +30,14 @@
 
                 <div class="row justify-content-end mt-3">
                     <div class="col-auto px-1">
-                        <select class="custom-select" name="searchType" th:field="*{searchType}">
+                        <select class="custom-select custom-select-sm" name="searchType" th:field="*{searchType}">
                             <option th:value="TITLE">Title</option>
                             <option th:value="CONTENT">Content</option>
                             <option th:value="ID">ID</option>
                         </select>
                     </div>
                     <div class="col-auto px-1">
-                        <input type="text" name="keyword" class="form-control" th:value="${searchDto?.keyword}"/>
+                        <input type="text" name="keyword" class="form-control form-control-sm" th:value="${searchDto?.keyword}"/>
                     </div>
                     <div class="col-auto px-3">
                         <button id="search" type="button" class="btn-main">Search</button>

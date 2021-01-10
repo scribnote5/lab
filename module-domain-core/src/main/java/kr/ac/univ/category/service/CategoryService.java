@@ -4,6 +4,7 @@ import kr.ac.univ.category.domain.Category;
 import kr.ac.univ.category.dto.CategoryDto;
 import kr.ac.univ.category.dto.mapper.CategoryMapper;
 import kr.ac.univ.category.repository.CategoryRepository;
+import kr.ac.univ.category.repository.CategoryRepositoryImpl;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.SearchDto;
 import kr.ac.univ.util.AccessCheck;
@@ -17,9 +18,11 @@ import java.util.List;
 @Service
 public class CategoryService {
     private final CategoryRepository categoryRepository;
+    private final CategoryRepositoryImpl categoryRepositoryImpl;
 
-    public CategoryService(CategoryRepository categoryRepository) {
+    public CategoryService(CategoryRepository categoryRepository, CategoryRepositoryImpl categoryRepositoryImpl) {
         this.categoryRepository = categoryRepository;
+        this.categoryRepositoryImpl = categoryRepositoryImpl;
     }
 
     public Page<CategoryDto> findCategoryList(Pageable pageable, SearchDto searchDto) {
@@ -72,6 +75,9 @@ public class CategoryService {
         } else {
             categoryDto.setAccess(false);
         }
+
+        categoryRepositoryImpl.updateViewsByIdx(idx);
+        categoryDto.setViews(categoryDto.getViews() + 1);
 
         return categoryDto;
     }

@@ -26,16 +26,6 @@ function validateBySpecialChar(str) {
     }
 }
 
-/* ID 검사: 영어 소문자와 숫자 검사 */
-function validateById(str) {
-    var regexp = /^[a-z]+[a-z0-9]{5,19}$/g;
-    if (regexp.test(str) == true) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
 /* 바이트 수 반환 */
 function getByteSize(el) {
     var codeByte = 0;
@@ -51,6 +41,27 @@ function getByteSize(el) {
     }
     return codeByte;
 }
+
+/* ID 검사: 영어 소문자와 숫자 검사 */
+function validateById(str) {
+    var regexp = /^[a-z]+[a-z0-9]{3,19}$/g;
+    if (regexp.test(str) == true) {
+        return true;
+    } else {
+        Alert.fire({
+            icon: "error",
+            text: "The ID must be only lower case letters and numbers are available, more than 4 characters and less than 16 characters." +
+                "\n(Number of characters currently entered: " + document.getElementsByName("username")[0].value.length + ")."
+        }).then((result) => {
+            document.getElementsByName("username")[0].focus();
+            document.getElementsByName("username")[0].value = "";
+            document.getElementById("usernameCheckResult").innerHTML = "";
+        })
+
+        return false;
+    }
+}
+
 
 /* input tag validation - 문자열 길이 */
 function validateByLength(inputName, maxStrLength, title) {
@@ -78,7 +89,7 @@ function validateByLength(inputName, maxStrLength, title) {
     }
 }
 
-/* input tag validation - 문자열 길이 */
+/* input tag validation - 공백을 제외한 문자열 */
 function validateByBlank(inputName, title) {
     if (!validateByWhiteSpace(document.getElementsByName(inputName)[0].value)) {
         Alert.fire({
@@ -128,6 +139,21 @@ function validateBySelect(inputName, title) {
     }
 }
 
+/* external validation - 외부 조건에 따른 결과 출력 */
+function validateByExternal(inputName, title, result) {
+    if (result) {
+        Alert.fire({
+            icon: "error",
+            text: "Please check " + title + ".",
+        })
+        document.getElementsByName(inputName)[0].focus();
+
+        return false;
+    } else {
+        return true;
+    }
+}
+
 // 배열 요소가 NULL인 경우를 제외하여 배열 길이를 계산함
 function deleteArrayIndexIsNull() {
     insertFileArrayLength = insertFileArray.filter(function (item) {
@@ -165,7 +191,7 @@ function validateByFileNumber(files, number) {
     if (files.length > number || (uploadedAttachedFileLength - insertFileArrayLength - deleteFileArrayLength !== 0)) {
         Alert.fire({
             icon: "error",
-            text: "The number of file that can be uploaded is 1."
+            text: "The number of file that must be uploaded is 1."
         })
 
         return false;

@@ -10,6 +10,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,28 +21,28 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 public class SeminarDto extends CommonDto {
-    /* CommonDto: JPA Audit */
-
-    /* 기본 정보 */
     @NotBlank(message = "The title must not be blank.")
-    @Size(max = 255, message = "The title can be used for less than 50 characters.")
+    @Size(max = 255, message = "The title must be less than 255 characters.")
     private String title;
 
+    @NotNull(message = "The seminar type must not be null.")
     private SeminarType seminarType;
 
     private LocalDateTime presentationDate;
 
+    @Size(max = 255, message = "The place must be less than 255 characters.")
     private String place;
 
+    @Size(max = 255, message = "The presenter must be less than 255 characters.")
     private String presenter;
 
     private Long categoryIdx;
 
-    @Editor(max = 16777215, message = "The editor's input size of bytes is exceeded.")
+    @Editor(max = 16777215, message = "The editor's input size must be less than 16777215 bytes(16MB).")
     private String content;
 
-    private Long views;
+    private Long views = 0L;
 
-    /* 첨부 파일 */
+    /* Attached File */
     private List<SeminarAttachedFile> attachedFileList = new ArrayList<SeminarAttachedFile>();
 }

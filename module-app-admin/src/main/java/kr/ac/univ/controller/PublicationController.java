@@ -45,7 +45,7 @@ public class PublicationController {
 
             returnPage = "publication/form";
         } else {
-            returnPage = "user/permission-denied";
+            returnPage = "user/access-denied";
         }
 
         return returnPage;

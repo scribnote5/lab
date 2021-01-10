@@ -3,6 +3,7 @@ package kr.ac.univ.publication.service;
 
 import java.util.List;
 
+import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.publication.domain.Publication;
 import kr.ac.univ.publication.domain.enums.PublicationType;
 import kr.ac.univ.publication.domain.enums.PublishingArea;
@@ -31,12 +32,10 @@ public class PublicationService {
     private String moduleName;
     private final PublicationRepository publicationRepository;
     private final PublicationRepositoryImpl publicationRepositoryImpl;
-    private final UserRepository userRepository;
 
-    public PublicationService(PublicationRepository publicationRepository, PublicationRepositoryImpl publicationRepositoryImpl, UserRepository userRepository) {
+    public PublicationService(PublicationRepository publicationRepository, PublicationRepositoryImpl publicationRepositoryImpl) {
         this.publicationRepository = publicationRepository;
         this.publicationRepositoryImpl = publicationRepositoryImpl;
-        this.userRepository = userRepository;
     }
 
     public Page<PublicationDto> findPublicationList(Pageable pageable, PublicationSearchDto publicationSearchDto) {
@@ -61,10 +60,17 @@ public class PublicationService {
                     break;
             }
         } else {
-            String[] str = publicationSearchDto.getPublicationSearchType().getSearchPublicationType().split("_");
+            String[] str = publicationSearchDto.getPublicationSearchType().getSearchPublicationType().split(" ");
+            String parsedString = "";
 
             PublishingArea publishingArea = PublishingArea.valueOf(str[0].toUpperCase());
-            PublicationType publicationType = PublicationType.valueOf(str[1].toUpperCase().replaceAll(" ", ""));
+
+            for (int i = 1; i < str.length; i++) {
+                parsedString += str[i];
+            }
+
+            parsedString = parsedString.toUpperCase().replaceAll("-", "_");
+            PublicationType publicationType = PublicationType.valueOf(parsedString.toUpperCase().replaceAll(" ", ""));
 
             switch (publicationSearchDto.getSearchType()) {
                 case "TITLE":
@@ -104,8 +110,11 @@ public class PublicationService {
         return publicationDtoList;
     }
 
-    public Long insertPublication(Publication publication) {
+    public Long countAllByActiveStatusIs() {
+        return publicationRepository.countAllByActiveStatusIs(ActiveStatus.ACTIVE);
+    }
 
+    public Long insertPublication(Publication publication) {
         return publicationRepository.save(publication).getIdx();
     }
 
@@ -124,6 +133,9 @@ public class PublicationService {
             publicationDto.setAccess(false);
         }
 
+        publicationRepositoryImpl.updateViewsByIdx(idx);
+        publicationDto.setViews(publicationDto.getViews() + 1);
+
         return publicationDto;
     }
 
@@ -136,7 +148,6 @@ public class PublicationService {
 
         return publicationRepository.save(publication).getIdx();
     }
-
 
     public Long findMaxPublicationIdx() {
         Long lastIdx = 0L;

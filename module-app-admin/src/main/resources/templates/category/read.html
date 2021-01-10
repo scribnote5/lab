@@ -58,8 +58,20 @@
                             <td><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr>
-                            <th>Modified Date</th>
+                            <th>Last Modified Date</th>
                             <td><span th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Created By</th>
+                            <td><span th:text="*{createdBy}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Last Created By</th>
+                            <td><span th:text="*{lastModifiedBy}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Views</th>
+                            <td><span th:text="*{views}"/></td>
                         </tr>
                     </table>
                 </div>

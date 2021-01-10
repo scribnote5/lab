@@ -30,7 +30,7 @@ public class AlbumRestController {
 
     @PostMapping
     public ResponseEntity<?> postAlbum(@RequestBody @Valid AlbumDto albumDto) {
-        if(albumDto.getMainPagePriority() != - 1 && !EmptyUtil.isEmpty(albumService.findByMainPagePriorityIs(albumDto.getIdx(), albumDto.getMainPagePriority())))  {
+        if (albumDto.getMainPagePriority() != -1 && !EmptyUtil.isEmpty(albumService.findByMainPagePriorityIs(albumDto.getIdx(), albumDto.getMainPagePriority()))) {
             throw new BusinessException(ErrorCode.MAIN_PAGE_PRIORITY_DUPLICATE);
         }
 
@@ -41,7 +41,7 @@ public class AlbumRestController {
 
     @PutMapping("/{idx}")
     public ResponseEntity<?> putAlbum(@PathVariable("idx") Long idx, @RequestBody @Valid AlbumDto albumDto) {
-        if(albumDto.getMainPagePriority() != - 1 && !EmptyUtil.isEmpty(albumService.findByMainPagePriorityIs(albumDto.getIdx(), albumDto.getMainPagePriority())))  {
+        if (albumDto.getMainPagePriority() != -1 && !EmptyUtil.isEmpty(albumService.findByMainPagePriorityIs(albumDto.getIdx(), albumDto.getMainPagePriority()))) {
             throw new BusinessException(ErrorCode.MAIN_PAGE_PRIORITY_DUPLICATE);
         }
 
@@ -62,7 +62,7 @@ public class AlbumRestController {
     @PostMapping("/attachedFile")
     public ResponseEntity<?> uploadAttachedFile(Long idx, String createdBy, MultipartFile[] files) throws Exception {
         if (files.length >= 2) {
-            throw new FileNumberExceededException("The number of files that can be uploaded is 1.");
+            throw new FileNumberExceededException("The number of files that must be uploaded is 1.");
         }
 
         String fileValidationResult = FileValidator.isFileValid(files);

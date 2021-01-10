@@ -20,7 +20,6 @@ import javax.persistence.Table;
 @ToString
 @EntityListeners(LearnMoreReadListener.class)
 public class LearnMoreRead extends CommonAudit {
-    @Column
     private String title;
 
     @Builder

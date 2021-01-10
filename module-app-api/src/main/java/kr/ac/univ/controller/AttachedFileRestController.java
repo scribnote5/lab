@@ -43,6 +43,31 @@ public class AttachedFileRestController {
                 .body(resource);
     }
 
+    @GetMapping("/view-image/{savedFileName}")
+    public ResponseEntity<?> viewImageAttachedFile(@PathVariable("savedFileName") String savedFileName) throws Exception {
+        // 파일 이름이 한글인 경우 인코딩이 깨지지 않도록 변경
+        String encordedSavedFileName = URLEncoder.encode(savedFileName, "UTF-8").replace("+", "%20");
+
+        // 헤더 추가
+        HttpHeaders header = new HttpHeaders();
+        header.add(HttpHeaders.CONTENT_DISPOSITION, "inline;filename=" + encordedSavedFileName.substring(33));
+        header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+        header.add("Pragma", "no-cache");
+        header.add("Expires", "0");
+
+        // MimeType 추가, application/octet-stream은 text/plain 타입을 제외한 기본 값
+        MediaType mediaType = MediaType.parseMediaType("image/jpeg");
+
+        // 다운로드 파일 추가
+        Path path = Paths.get("./upload/" + savedFileName);
+        ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+
+        return ResponseEntity.ok()
+                .headers(header)
+                .contentType(mediaType)
+                .body(resource);
+    }
+
     @GetMapping("/view-pdf/{savedFileName}")
     public ResponseEntity<?> viewPdfAttachedFile(@PathVariable("savedFileName") String savedFileName) throws Exception {
         // 파일 이름이 한글인 경우 인코딩이 깨지지 않도록 변경
@@ -92,5 +117,4 @@ public class AttachedFileRestController {
                 .contentType(mediaType)
                 .body(resource);
     }
-
 }

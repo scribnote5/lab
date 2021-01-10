@@ -17,7 +17,6 @@ import javax.persistence.Table;
 @Table
 @ToString
 public class AlbumAttachedFile extends AttachedFileAudit {
-    @Column
     private Long albumIdx;
 
     @Builder

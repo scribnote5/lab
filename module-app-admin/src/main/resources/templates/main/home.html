@@ -20,11 +20,11 @@
             <h1>Dashboard</h1>
 
             <div class="float-right url-icon-area">
-                <img src="/images/external-link.svg" class="url-icon"/>
+                <img src="/images/external-link.svg"/>
                 <span class="external-link">External Link</span>
-                <img src="/images/small-logo.png" title="Link user page." class="url-icon"/>
-                <img src="/images/google-analytics.png" title="Link google analytics." class="url-icon"/>
-                <img src="/images/github.svg" title="Link github." class="url-icon"/>
+                <img src="/images/favicon.ico" title="Link user page."/>
+                <img src="/images/google-analytics.png" title="Link google analytics."/>
+                <img src="/images/github.svg" title="Link github."/>
             </div>
 
             <div class="row mt-4">
@@ -150,6 +150,7 @@
                 </div>
             </div>
 
+
             <div class="row mt-2">
                 <div class="card col table-card">
                     <div class="card-header table-card-header">
@@ -164,10 +165,10 @@
                         <tr>
                             <th style="width: 5%">No.</th>
                             <th style="width: 40%">Aud Message</th>
-                            <th style="width: 15%">Aud Class</th>
-                            <th style="width: 10%">Aud Type</th>
+                            <th style="width: 12.5%">Aud Class</th>
+                            <th style="width: 12.5%">Aud Type</th>
                             <th style="width: 15%">ID</th>
-                            <th style="width: 15%">Created Date</th>
+                            <th style="width: 20%">Created Date</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -175,7 +176,7 @@
                             <td th:text="${dataHistoryDto.idx}"></td>
                             <td>
                                 <a th:href="'/data-history?idx='+${dataHistoryDto.idx}" class="link"
-                                   th:text="${#strings.length(dataHistoryDto.audMessage)} < 20 ? ${dataHistoryDto.audMessage} : ${#strings.substring(dataHistoryDto.audMessage, 0, 20)} + '...'"></a>
+                                   th:text="${#strings.length(dataHistoryDto.audMessage)} < 40 ? ${dataHistoryDto.audMessage} : ${#strings.substring(dataHistoryDto.audMessage, 0, 40)} + '...'"></a>
                                 <img th:if="${dataHistoryDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
                             <td th:text="${dataHistoryDto.audClass}"></td>
@@ -203,10 +204,11 @@
                         <thead>
                         <tr>
                             <th style="width: 5%">No.</th>
-                            <th style="width: 45%">Aud Message</th>
-                            <th style="width: 20%">Login Result Type</th>
+                            <th style="width: 40%">Aud Message</th>
+                            <th style="width: 12.5%">Login Result Type</th>
+                            <th style="width: 12.5%">Aud Location</th>
                             <th style="width: 15%">ID</th>
-                            <th style="width: 15%">Created Date</th>
+                            <th style="width: 20%">Created Date</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -214,11 +216,12 @@
                             <td th:text="${loginHistoryDto.idx}"></td>
                             <td>
                                 <a th:href="'/login-history?idx='+${loginHistoryDto.idx}" class="link"
-                                   th:text="${#strings.length(loginHistoryDto.audMessage)} < 20 ? ${loginHistoryDto.audMessage} : ${#strings.substring(loginHistoryDto.audMessage, 0, 20)} + '...'"></a>
+                                   th:text="${#strings.length(loginHistoryDto.audMessage)} < 40 ? ${loginHistoryDto.audMessage} : ${#strings.substring(loginHistoryDto.audMessage, 0, 40)} + '...'"></a>
                                 <img th:if="${loginHistoryDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
                             <td th:if="${loginHistoryDto.audLoginResultType?.name() == 'SUCCESS'}" th:text="Success"></td>
                             <td th:if="${loginHistoryDto.audLoginResultType?.name() == 'FAIL'}" th:text="Fail"></td>
+                            <td th:text="${loginHistoryDto.audLocation}"></td>
                             <td th:text="${loginHistoryDto.createdBy}"></td>
                             <td th:text="${#temporals.format(loginHistoryDto.createdDate,'yyyy-MM-dd HH:mm')}"></td>
                         </tr>
@@ -226,7 +229,6 @@
                     </table>
                 </div>
             </div>
-
 
         </div>
     </div>

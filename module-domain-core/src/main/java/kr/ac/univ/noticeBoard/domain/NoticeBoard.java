@@ -20,13 +20,10 @@ import javax.persistence.Table;
 @ToString
 @EntityListeners(NoticeBoardListener.class)
 public class NoticeBoard extends CommonAudit {
-    @Column
     private String title;
 
-    @Column
     private String content;
 
-    @Column
     private Long views = 0L;
 
     @Builder

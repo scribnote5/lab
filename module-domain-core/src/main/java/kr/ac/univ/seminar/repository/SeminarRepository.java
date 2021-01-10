@@ -13,17 +13,17 @@ import java.util.List;
 public interface SeminarRepository extends JpaRepository<Seminar, Long> {
     Page<Seminar> findAllByTitleContaining(Pageable pageable, String title);
 
-    Page<Seminar> findAllByPresenterContaining(Pageable pageable, String presenter);
+    Page<Seminar> findAllByContentContaining(Pageable pageable, String presenter);
 
+    Page<Seminar> findAllByCreatedByContaining(Pageable pageable, String username);
 
     Page<Seminar> findAllByActiveStatusIs(Pageable pageable, ActiveStatus activeStatus);
 
     Page<Seminar> findAllByTitleContainingAndActiveStatusIs(Pageable pageable, String title, ActiveStatus activeStatus);
 
-    Page<Seminar> findAllByPresenterContainingAndActiveStatusIs(Pageable pageable, String presenter, ActiveStatus activeStatus);
+    Page<Seminar> findAllByContentContainingAndActiveStatusIs(Pageable pageable, String presenter, ActiveStatus activeStatus);
 
     Page<Seminar> findAllByCreatedByContainingAndActiveStatusIs(Pageable pageable, String username, ActiveStatus activeStatus);
-
 
     List<Seminar> findTop10ByOrderByIdxDesc();
 }

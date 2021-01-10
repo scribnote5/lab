@@ -7,208 +7,192 @@
     <title th:text="${@environment.getProperty('title')} + ' | Home'"></title>
 </head>
 <body>
-<div id="page-content-wrapper">
-    <!-- header -->
-    <div th:replace="layout/header::header"></div>
+<div id="wrapper">
+    <div id="page-content-wrapper">
+        <!-- header -->
+        <div th:replace="layout/header::header"></div>
 
-    <!-- ======= Introduction Section ======= -->
-    <section id="introduction" class="introduction d-flex align-items-center">
-        <div class="container">
-            <div class="row">
+        <main id="home">
+            <!-- ======= Introduction Section ======= -->
+            <section id="introduction" class="introduction d-flex align-items-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="introduction-content-wrapper col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center">
+                            <h1 data-aos="fade-up" th:text="${#strings.isEmpty(introductionDto)} ? 'No title.' : ${introductionDto.title}"></h1>
+                            <h2 data-aos="fade-up" data-aos-delay="100" th:text="${#strings.isEmpty(introductionDto)} ? 'No content.' : ${introductionDto.content}"></h2>
 
-                <div class="col-lg-7 pt-5 pt-lg-0 order-2 order-lg-1 d-flex flex-column justify-content-center">
-                    <h1 data-aos="fade-up" th:text="${#strings.isEmpty(introductionDto)} ? 'No title.' : ${introductionDto.title}"></h1>
-                    <h2 data-aos="fade-up" data-aos-delay="100" th:text="${#strings.isEmpty(introductionDto)} ? 'No content.' : ${introductionDto.content}"></h2>
-
-                    <div data-aos="fade-up" data-aos-delay="200">
-                        <a href="/about-us" class="btn-main-about-us">About Us</a>
-                    </div>
-                </div>
-
-                <div class="col-lg-5 order-1 order-lg-2" data-aos="fade-left" data-aos-delay="200">
-                    <div class="owl-carousel introduction-image-carousel ">
-                        <img th:each="introductionImageDto, index : ${introductionImageDtoList}"
-                             th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/${introductionImageDto.attachedFileList[0].savedFileName}|}"
-                        >
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- End Intro -->
-
-    <main id="main">
-        <!-- ======= Divider Section ======= -->
-        <section class="divider">
-            <div class="container p-0">
-                <div class="divider-line"></div>
-            </div>
-        </section>
-        <!-- End Divider Section -->
-
-        <!-- ======= Research Field Section ======= -->
-        <section class="research-field">
-            <div class="container">
-                <div class="section-title" data-aos="fade-up">
-                    <h2>Research Field</h2>
-                    <h4>This section introduces ESLAB's research field.</h4>
-                </div>
-
-                <div id="researchField-slider" class="row section-content carousel slide" data-ride="carousel">
-                    <ul class="carousel-indicators">
-                        <li th:each="researchFieldDto, index : ${researchFieldDtoList}" data-target="#researchField-slider" data-slide-to="${index.index}" th:class="${index.first} ? 'active'"></li>
-                    </ul>
-                    <div class="carousel-inner carousel-border" data-aos="fade-up" data-aos-delay="150">
-                        <div th:each="researchFieldDto, index : ${researchFieldDtoList}" th:class="${index.first} ? 'carousel-item active' : 'carousel-item'">
-                            <h4 th:text="${researchFieldDto.title}" class="text-center"></h4>
-                            <p th:utext="${researchFieldDto.content}" class="text-center"></p>
-                        </div>
-                    </div>
-                    <a class="carousel-control-prev" href="#researchField-slider" data-slide="prev">
-                        <span class="carousel-control-prev-icon"></span>
-                    </a>
-                    <a class="carousel-control-next" href="#researchField-slider" data-slide="next">
-                        <span class="carousel-control-next-icon"></span>
-                    </a>
-                </div>
-            </div>
-        </section>
-        <!-- End Research Field Section -->
-
-        <!-- ======= Board Section ======= -->
-        <section class="board">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="section-title" data-aos="fade-up">
-                            <h2>Notice Board</h2>
-                            <h4>This section is the latest news from the ESLAB.</h4>
+                            <div data-aos="fade-up" data-aos-delay="100">
+                                <a href="/about-us/" class="btn-main-about-us">About Us</a>
+                            </div>
                         </div>
 
-                        <div class="section-content">
-                            <table class="table table-hover" data-aos="fade-up" data-aos-delay="100">
-                                <colgroup>
-                                    <col width="65%"/>
-                                    <col width="35%"/>
-                                </colgroup>
-                                <tbody>
-                                <tr th:each="noticeBoardDto : ${noticeBoardDtoList}">
-                                    <td>
-                                        <a th:href="'/noticeBoard?idx='+${noticeBoardDto.idx}" class="link"
-                                           th:text="${#strings.length(noticeBoardDto.title)} < 20 ? ${noticeBoardDto.title} : ${#strings.substring(noticeBoardDto.title, 0, 20)} + '...'"></a>
-                                        <img th:if="${noticeBoardDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
-                                    </td>
-                                    <td th:text="${#temporals.format(noticeBoardDto.createdDate,'yyyy-MM-dd')}"></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6">
-                        <div class="section-title" data-aos="fade-up">
-                            <h2>Seminar</h2>
-                            <h4>This section is the latest seminar from the ESLAB.</h4>
-                        </div>
-
-                        <div class="section-content">
-                            <table class="table table-hover" data-aos="fade-up" data-aos-delay="100">
-                                <colgroup>
-                                    <col width="65%"/>
-                                    <col width="35%"/>
-                                </colgroup>
-                                <tbody>
-                                <tr th:each="seminarDto : ${seminarDtoList}">
-                                    <td>
-                                        <a th:href="'/seminar?idx='+${seminarDto.idx}" class="link"
-                                           th:text="${#strings.length(seminarDto.title)} < 20 ? ${seminarDto.title} : ${#strings.substring(seminarDto.title, 0, 20)} + '...'"></a>
-                                        <img th:if="${seminarDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
-                                    </td>
-                                    <td th:text="${#temporals.format(seminarDto.createdDate,'yyyy-MM-dd')}"></td>
-                                </tr>
-                                </tbody>
-                            </table>
+                        <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-left" data-aos-delay="100">
+                            <div class="owl-carousel introduction-image-carousel ">
+                                <img th:each="introductionImageDto, index : ${introductionImageDtoList}"
+                                     th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/${introductionImageDto.attachedFileList[0].savedFileName}|}">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section><!-- End Board Section -->
+            </section>
+            <!-- End Intro -->
 
-        <!-- ======= Album Section ======= -->
-        <section class="album">
-            <div class="container">
-                <div class="section-title" data-aos="fade-up">
-                    <h2>Album</h2>
-                    <h4>This section's photos were taken with ESLAB member.</h4>
-                </div>
-
-                <div class="row section-content">
-                    <div class="col-lg-12 d-flex justify-content-center" data-aos="fade-up" data-aos-delay="100">
-                        <a href="/album/list" class="btn-main">View more album</a>
+            <!-- ======= Research Field Section ======= -->
+            <section class="research-field">
+                <div class="container">
+                    <div class="section-title" data-aos="fade-up">
+                        <h3>Research Field</h3>
+                        <h5>These are the ESLAB's research field.</h5>
                     </div>
-                </div>
 
-                <div class="row mt-4" data-aos="fade-up" data-aos-delay="150">
-                    <div th:each="albumDto : ${albumDtoList}" class="col-lg-4 col-md-6 album-item">
-                        <div class="album-wrap">
-                            <img th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/${albumDto.attachedFileList[0].savedFileName}|}" class="img-fluid"/>
-
-                            <div class="album-info">
-                                <h5 th:text="${albumDto.title}"></h5>
-                                <span th:each="hashTag : ${#strings.arraySplit(albumDto.hashTags,'#')}" th:text="'#' + ${hashTag}"></span>
-
-                                <div class="album-links">
-                                    <a th:href="@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/${albumDto.attachedFileList[0].savedFileName}|}" data-gall="portfolioGallery" class="venobox"
-                                       th:title="${albumDto.title}">
-                                        <img src="/images/plus.svg"/>
-                                    </a>
+                    <div class="row justify-content-center">
+                        <div th:each="researchFieldDto: ${researchFieldDtoList}" class="col-md-6 d-flex">
+                            <div class="card" data-aos="fade-up" data-aos-delay="100"
+                                 th:style=" !${#lists.isEmpty(researchFieldDto.attachedFileList)} ? 'background-image:url(' + ${@environment.getProperty('module-app-api.address')} + '/api/attachedFiles/download/' + ${researchFieldDto.attachedFileList[0].savedFileName} + ');' : 'background-color: rgb(255, 255, 255)'">
+                                <div class="card-body">
+                                    <h4 class="card-title" th:text="${researchFieldDto.title}"></h4>
+                                    <span class="card-content" th:text="${researchFieldDto.content}"></span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
-        <!-- End Album Section -->
+            </section>
+            <!-- End Research Field Section -->
 
-        <!-- ======= Contact Section ======= -->
-        <section id="contact" class="contact">
-            <div class="container">
-                <div class="section-title" data-aos="fade-up">
-                    <h2>Contact Us</h2>
-                    <h4>If you are interested in the ESLAB, contact us.</h4>
-                </div>
+            <!-- ======= Board Section ======= -->
+            <section class="board">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="section-title" data-aos="fade-up">
+                                <h3>Notice Board</h3>
+                                <h5>These are the latest news at ESLAB.</h5>
+                            </div>
 
-                <div class="row section-content">
-                    <div class="col-lg-6 col-md-6" data-aos="fade-up" data-aos-delay="50">
-                        <div class="contact-about">
-                            <h4 style="font-weight: bold"><img src="/images/map-pin.svg" class="url-icon"> Address</h4>
-                            <h6>College of Engineering No. 5, 533 Embedded System Labatory.</h6>
-                            <h6>99, Daehak-ro, Yuseong-gu, Daejeon, Republic of Korea.</h6>
+                            <div class="section-content">
+                                <table class="table table-hover" data-aos="fade-up" data-aos-delay="100">
+                                    <colgroup>
+                                        <col width="75%"/>
+                                        <col width="25%"/>
+                                    </colgroup>
+                                    <tbody>
+                                    <tr th:each="noticeBoardDto : ${noticeBoardDtoList}">
+                                        <td>
+                                            <a th:href="'/noticeBoard?idx='+${noticeBoardDto.idx}" class="link"
+                                               th:text="${#strings.length(noticeBoardDto.title)} < 20 ? ${noticeBoardDto.title} : ${#strings.substring(noticeBoardDto.title, 0, 20)} + '...'"></a>
+                                            <img th:if="${noticeBoardDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
+                                        </td>
+                                        <td th:text="${#temporals.format(noticeBoardDto.createdDate,'yyyy-MM-dd')}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="section-title" data-aos="fade-up">
+                                <h3>Seminar</h3>
+                                <h5>These are the latest seminar at ESLAB.</h5>
+                            </div>
+
+                            <div class="section-content">
+                                <table class="table table-hover" data-aos="fade-up" data-aos-delay="100">
+                                    <colgroup>
+                                        <col width="75%"/>
+                                        <col width="25%"/>
+                                    </colgroup>
+                                    <tbody>
+                                    <tr th:each="seminarDto : ${seminarDtoList}">
+                                        <td>
+                                            <a th:href="'/seminar?idx='+${seminarDto.idx}" class="link"
+                                               th:text="${#strings.length(seminarDto.title)} < 20 ? ${seminarDto.title} : ${#strings.substring(seminarDto.title, 0, 20)} + '...'"></a>
+                                            <img th:if="${seminarDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
+                                        </td>
+                                        <td th:text="${#temporals.format(seminarDto.createdDate,'yyyy-MM-dd')}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                        <div class="contact-about">
-                            <h4 style="font-weight: bold"><img src="/images/mail.svg" class="url-icon"> <img src="/images/phone.svg" class="url-icon"> Contact</h4>
-                            <h6> Professor Hyunshin kim's email address: <a href="mailto:hyngshin@cnu.ac.kr">hyngshin@cnu.ac.kr</a></h6>
-                            <h6> ESLAB Telephone: <a href="tel:042-821-7446">+82) 42-821-7446 </a></h6>
+                </div>
+            </section><!-- End Board Section -->
+
+            <!-- ======= Album Section ======= -->
+            <section class="album">
+                <div class="container">
+                    <div class="section-title" data-aos="fade-up">
+                        <h3>Album</h3>
+                        <h5>This section's photos were taken with ESLAB member.</h5>
+                    </div>
+
+                    <div class="row section-content">
+                        <div class="col-lg-12 d-flex justify-content-center" data-aos="fade-up" data-aos-delay="100">
+                            <a href="/album/list" class="btn-main">View more album</a>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4" data-aos="fade-up" data-aos-delay="150">
+                        <div th:each="albumDto : ${albumDtoList}" class="col-lg-4 col-md-6">
+                            <div class="album-wrap">
+                                <img th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/${albumDto.attachedFileList[0].savedFileName}|}"/>
+
+                                <div class="album-info">
+                                    <h5 th:text="${albumDto.title}"></h5>
+                                    <span th:each="hashTag : ${#strings.arraySplit(albumDto.hashTags,'#')}" th:text="'#' + ${hashTag}"></span>
+
+                                    <div class="album-links">
+                                        <a th:href="@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-image/${albumDto.attachedFileList[0].savedFileName}|}"
+                                           data-gall="albumGallery" class="venobox"
+                                           th:title="${albumDto.title}">
+                                            <i class="icofont-plus"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section><!-- End Contact Section -->
-    </main><!-- End #main -->
+            </section>
+            <!-- End Album Section -->
 
-    <div class="container-fluid container-main"></div>
-    <!-- /#page-content-wrapper -->
+            <!-- ======= Contact Section ======= -->
+            <section id="contact" class="contact">
+                <div class="container">
+                    <div class="section-title" data-aos="fade-up">
+                        <h3>Contact Us</h3>
+                        <h5>If you are interested in the ESLAB, contact us.</h5>
+                    </div>
+
+                    <div class="row section-content">
+                        <div class="col-lg-6 col-md-6" data-aos="fade-up" data-aos-delay="50">
+                            <div>
+                                <h4><i class="icofont-location-pin"></i> Address</h4>
+                                <span th:text="${settingDto.labAddress}"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                            <div>
+                                <h4><i class="icofont-mail"></i> <i class="icofont-phone"></i> Contact</h4>
+                                <span th:text="${settingDto.emailRecipient}"></span> <a th:href="'mailto:' + ${settingDto.emailAddress}" th:text="${settingDto.emailAddress}"></a> <br>
+                                <span th:text="${settingDto.callee}"> </span><a th:href="'tel:' + ${settingDto.phoneNumber}" th:text="${settingDto.phoneNumber}"></a>                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section><!-- End Contact Section -->
+        </main><!-- End #main -->
+
+        <div class="container-fluid container-main"></div>
+        <!-- /#page-content-wrapper -->
+    </div>
 </div>
 <!-- /#wrapper -->
 
 <!-- footer -->
 <div th:replace="layout/footer::footer"></div>
 
-
-<a href="#" class="back-to-top"><img src="/images/chevron-up-white.svg"></a>
+<a href="#" class="back-to-top link"><i class="icofont-simple-up"></i></a>
 
 <!-- script file -->
 <th:block th:replace="layout/script.html"></th:block>

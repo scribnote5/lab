@@ -31,7 +31,7 @@
 
                 <div class="row justify-content-end mt-3">
                     <div class="col-auto px-1">
-                        <select class="custom-select" name="searchType" id="searchType" th:field="*{searchType}">
+                        <select class="custom-select custom-select-sm" name="searchType" id="searchType" th:field="*{searchType}">
                             <option th:value="AUD_MESSAGE">Aud Message</option>
                             <option th:value="AUD_CLASS">Aud Class</option>
                             <option th:value="AUD_TYPE">Aud Type</option>
@@ -41,10 +41,10 @@
                     <div class="col-auto px-1">
                         <input th:disabled="*{#strings.equals(searchType, 'AUD_TYPE')}"
                                th:style="*{#strings.equals(searchType, 'AUD_TYPE')} ? 'display:none' : 'display:inline'"
-                               type="text" name="keyword" id="keywordInputText" class="form-control" th:value="${searchDto?.keyword}"/>
+                               type="text" name="keyword" id="keywordInputText" class="form-control form-control-sm" th:value="${searchDto?.keyword}"/>
                         <select th:disabled="!*{#strings.equals(searchType, 'AUD_TYPE')}"
                                 th:style="!*{#strings.equals(searchType, 'AUD_TYPE')} ? 'display:none' : 'display:inline'"
-                                name="keyword" id="keywordSelect" class="custom-select" th:field="*{keyword}">
+                                name="keyword" id="keywordSelect" class="custom-select custom-select-sm" th:field="*{keyword}">
                             <option th:each="audType : ${T(kr.ac.univ.dataHistory.domain.enums.AudType).values()}"
                                     th:value="${audType}" th:text="${audType.getAudType()}">
                             </option>
@@ -74,7 +74,7 @@
                             <td th:text="${dataHistoryDto.idx}"></td>
                             <td>
                                 <a th:href="'/data-history?idx='+${dataHistoryDto.idx}" class="link"
-                                   th:text="${#strings.length(dataHistoryDto.audMessage)} < 30 ? ${dataHistoryDto.audMessage} : ${#strings.substring(dataHistoryDto.audMessage, 0, 30)} + '...'"></a>
+                                   th:text="${#strings.length(dataHistoryDto.audMessage)} < 25 ? ${dataHistoryDto.audMessage} : ${#strings.substring(dataHistoryDto.audMessage, 0, 25)} + '...'"></a>
                                 <img th:if="${dataHistoryDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
                             <td th:text="${dataHistoryDto.audClass}"></td>

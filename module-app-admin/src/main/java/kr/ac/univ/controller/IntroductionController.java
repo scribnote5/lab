@@ -36,11 +36,11 @@ public class IntroductionController {
 
         // 권한 확인
         if (introductionDto.isAccess()) {
-           model.addAttribute("introductionDto", introductionDto);
+            model.addAttribute("introductionDto", introductionDto);
 
             returnPage = "introduction/form";
         } else {
-            returnPage = "user/permission-denied";
+            returnPage = "user/access-denied";
         }
 
         return returnPage;
@@ -49,11 +49,7 @@ public class IntroductionController {
     // Read
     @GetMapping({"", "/"})
     public String introductionRead(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
-        IntroductionDto introductionDto = null;
-
-        introductionDto = introductionService.findIntroductionByIdx(idx);
-
-        model.addAttribute("introductionDto", introductionDto);
+        model.addAttribute("introductionDto", introductionService.findIntroductionByIdx(idx));
 
         return "introduction/read";
     }

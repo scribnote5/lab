@@ -22,7 +22,7 @@ public class SeminarRepositoryImpl extends QuerydslRepositorySupport {
     public long updateViewsByIdx(Long idx) {
 
         /*
-         * UPDATE notice_board
+         * UPDATE seminar
          *    SET views = views + 1
          *  WHERE id = 'id';
          */
@@ -32,5 +32,4 @@ public class SeminarRepositoryImpl extends QuerydslRepositorySupport {
                 .where(seminar.idx.eq(idx))
                 .execute();
     }
-
 }

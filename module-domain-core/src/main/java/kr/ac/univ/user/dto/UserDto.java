@@ -6,6 +6,7 @@ import java.util.List;
 
 import kr.ac.univ.common.dto.CommonDto;
 import kr.ac.univ.common.validation.Contact;
+import kr.ac.univ.common.validation.Editor;
 import kr.ac.univ.common.validation.Password;
 import kr.ac.univ.user.domain.UserAttachedFile;
 import kr.ac.univ.user.domain.enums.AuthorityType;
@@ -14,70 +15,74 @@ import kr.ac.univ.user.domain.enums.UserStatus;
 import kr.ac.univ.user.domain.enums.UserType;
 import lombok.*;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Past;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
-public class UserDto extends CommonDto  {
-    /* CommonDto: JPA Audit */
-
-    /* 기본 정보 */
-    @Size(min = 4, max = 16, message = "The ID can be used for more than 4 characters and less than 16 characters.")
+public class UserDto extends CommonDto {
+    /* Required Information */
+    @Size(min = 4, max = 16, message = "The ID must be more than 4 characters and less than 16 characters.")
     private String username;
 
-    @Password(min = 6, max = 16, message = "The password can be used for more than 6 characters and less than 16 characters.")
+    @Password(min = 6, max = 16, message = "The password must be more than 6 characters and less than 16 characters.")
     private String password;
 
-    @NotEmpty(message ="The korean name is empty.")
+    @NotBlank(message = "The korean name must not be blank.")
     private String koreanName;
 
-    @NotEmpty(message ="The english name is empty.")
+    @NotBlank(message = "The english name must not be blank.")
     private String englishName;
 
-    private GenderType gender;
-
-    @Past(message ="The birthDate mus be past.")
-    private LocalDate birthDate;
-
-    @Email(message = "The email format is not valid.")
-    private String email;
-
-    @Email(message = "The email format is not valid.")
-    private String privateEmail;
-
-    @NotEmpty(message ="The messenger id is empty.")
-    private String messengerId;
-
-    @Contact(message = "The contact format is not valid.")
-    private String contact;
-
-    private UserType userType;
-
-    private UserStatus userStatus;
-
+    /* Self Introduction */
+    @Editor(max = 16777215, message = "The editor's input size must be less than 16777215 bytes(16MB).")
     private String introduction;
 
-    /* 부가 정보 */
+    @NotNull(message = "The user type must not be null.")
+    private UserType userType;
+
+    @NotNull(message = "The user status must not be null.")
+    private UserStatus userStatus;
+
+    /* Personal Information */
     private LocalDate admissionDate;
 
     private LocalDate graduatedDate;
+    @NotNull(message = "The gender name must not be null.")
+    private GenderType gender;
 
+    private LocalDate birthDate;
+
+    @Size(max = 255, message = "The workplace must be less than 255 characters.")
     private String workplace;
 
-    private String externalWebPage;
+    /* Contact Information */
+    @Size(max = 255, message = "The messenger id must be less than 255 characters.")
+    private String messengerId;
 
+    @Size(max = 255, message = "The aud type must be less than 255 characters.")
+    private String contact;
+
+    @Size(max = 255, message = "The email must be less than 255 characters.")
+    private String email;
+
+    @Size(max = 255, message = "The private email must be less than 255 characters.")
+    private String privateEmail;
+
+    @Size(max = 255, message = "The github must be less than 255 characters.")
     private String github;
 
+    @Size(max = 255, message = "The linked in must be less than 255 characters.")
     private String linkedIn;
 
-    /* 관리자가 수정하는 정보 */
+    @Size(max = 255, message = "The external web page must be less than 255 characters.")
+    private String externalWebPage;
+
+    /* Additional Information */
+    @NotNull(message = "The authority type must be null.")
     private AuthorityType authorityType;
 
-    /* 첨부 파일 */
+    /* Attached File */
     private List<UserAttachedFile> attachedFileList = new ArrayList<UserAttachedFile>();
 }

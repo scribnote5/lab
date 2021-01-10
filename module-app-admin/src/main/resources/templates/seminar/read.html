@@ -67,7 +67,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2"><span class="form-control overflow-auto content" id="content" th:utext="*{content}"></span></td>
+                            <td colspan="2"><span class="form-control form-control-sm content" id="content" th:utext="*{content}"></span></td>
                         </tr>
                         <tr>
                             <th>Uploaded Attached File</th>
@@ -95,8 +95,20 @@
                             <td><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr>
-                            <th>Modified Date</th>
+                            <th>Last Modified Date</th>
                             <td><span th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Created By</th>
+                            <td><span th:text="*{createdBy}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Last Created By</th>
+                            <td><span th:text="*{lastModifiedBy}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Views</th>
+                            <td><span th:text="*{views}"/></td>
                         </tr>
                     </table>
                 </div>

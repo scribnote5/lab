@@ -28,13 +28,12 @@ public abstract class CommonAudit {
     @LastModifiedDate
     private LocalDateTime lastModifiedDate;
 
-    @Column
     private String createdBy;
 
-    @Column
     private String lastModifiedBy;
 
-    @Column
     @Enumerated(EnumType.STRING)
     private ActiveStatus activeStatus;
+
+    private Long views = 0L;
 }

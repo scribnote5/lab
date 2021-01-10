@@ -4,6 +4,7 @@ import kr.ac.univ.alumniAssociation.domain.AlumniAssociation;
 import kr.ac.univ.alumniAssociation.dto.AlumniAssociationDto;
 import kr.ac.univ.alumniAssociation.dto.mapper.AlumniAssociationMapper;
 import kr.ac.univ.alumniAssociation.repository.AlumniAssociationRepository;
+import kr.ac.univ.alumniAssociation.repository.AlumniAssociationRepositoryImpl;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.SearchDto;
 import kr.ac.univ.user.repository.UserRepository;
@@ -21,11 +22,11 @@ public class AlumniAssociationService {
     @Value("${module.name}")
     private String moduleName;
     private final AlumniAssociationRepository alumniAssociationRepository;
-    private final UserRepository userRepository;
+    private final AlumniAssociationRepositoryImpl alumniAssociationRepositoryImpl;
 
-    public AlumniAssociationService(AlumniAssociationRepository alumniAssociationRepository, UserRepository userRepository) {
+    public AlumniAssociationService(AlumniAssociationRepository alumniAssociationRepository, AlumniAssociationRepositoryImpl alumniAssociationRepositoryImpl) {
         this.alumniAssociationRepository = alumniAssociationRepository;
-        this.userRepository = userRepository;
+        this.alumniAssociationRepositoryImpl = alumniAssociationRepositoryImpl;
     }
 
     public Page<AlumniAssociationDto> findAlumniAssociationList(Pageable pageable, SearchDto searchDto) {
@@ -101,6 +102,9 @@ public class AlumniAssociationService {
         } else {
             alumniAssociationDto.setAccess(false);
         }
+
+        alumniAssociationRepositoryImpl.updateViewsByIdx(idx);
+        alumniAssociationDto.setViews(alumniAssociationDto.getViews() + 1);
 
         return alumniAssociationDto;
     }

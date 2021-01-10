@@ -7,46 +7,48 @@
     <title th:text="${@environment.getProperty('title')} + ' | Project List'"></title>
 </head>
 <body>
-<div id="page-content-wrapper">
-    <!-- header -->
-    <div th:replace="layout/header::header"></div>
+<div id="wrapper">
+    <div id="page-content-wrapper">
+        <!-- header -->
+        <div th:replace="layout/header::header"></div>
 
-    <div class="container project">
-        <div class="page-header breadcrumbs" data-aos="fade-up" data-aos-delay="100">
-            <div class="d-flex justify-content-between align-items-center">
-                <h2>Project List</h2>
-                <ol>
-                    <li>Home</li>
-                    <img src="/images/chevron-right.svg">
-                    <li>Project List</li>
-                </ol>
+        <div class="container project">
+            <div class="page-header breadcrumbs" data-aos="fade-up" data-aos-delay="100">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2>Project List</h2>
+                    <ol>
+                        <li>Home</li>
+                        <img src="/images/chevron-right.svg">
+                        <li>Project List</li>
+                    </ol>
+                </div>
             </div>
-        </div>
 
-        <div class="mt-5" data-aos="fade-up" data-aos-delay="150">
-            <h4>Current Project</h4>
-            <ul th:each="projectDto : ${currentProjectDtoList}">
-                <li>
-                    <a th:href="'/project?idx='+${projectDto.idx}" th:text="${projectDto.title}" class="link"></a>
-                    <span th:text="'(' + ${#temporals.format(projectDto.startDate,'yyyy-MM')}  + ' ~ ' + ', '"></span>
-                    <span class="text-muted" th:text="${projectDto.researchEstablishment} + ')'"></span>
+            <div class="mt-5" data-aos="fade-up" data-aos-delay="150">
+                <h4>Current Project</h4>
+                <ul th:each="projectDto : ${currentProjectDtoList}">
+                    <li>
+                        <a th:href="'/project?idx='+${projectDto.idx}" th:text="${projectDto.title}" class="link"></a>
+                        <span th:text="'(' + ${#temporals.format(projectDto.startDate,'yyyy-MM')}  + ' ~ ' + ', '"></span>
+                        <span class="text-muted" th:text="${projectDto.researchEstablishment} + ')'"></span>
 
-                    <img th:if="${projectDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
-                </li>
-            </ul>
-        </div>
+                        <img th:if="${projectDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
+                    </li>
+                </ul>
+            </div>
 
-        <div class="mt-5 mb-5" data-aos="fade-up" data-aos-delay="150">
-            <h4>Previous Project</h4>
-            <ul th:each="projectDto : ${previousProjectDtoList}">
-                <li>
-                    <a th:href="'/project?idx='+${projectDto.idx}" th:text="${projectDto.title}" class="link"></a>
-                    <span th:text="'(' + ${#temporals.format(projectDto.startDate,'yyyy-MM')}  + ' ~ ' + ${#temporals.format(projectDto.endDate,'yyyy-MM')} + ', '"></span>
-                    <span class="text-muted" th:text="${projectDto.researchEstablishment} + ')'"></span>
+            <div class="mt-5 mb-5" data-aos="fade-up" data-aos-delay="150">
+                <h4>Previous Project</h4>
+                <ul th:each="projectDto : ${previousProjectDtoList}">
+                    <li>
+                        <a th:href="'/project?idx='+${projectDto.idx}" th:text="${projectDto.title}" class="link"></a>
+                        <span th:text="'(' + ${#temporals.format(projectDto.startDate,'yyyy-MM')}  + ' ~ ' + ${#temporals.format(projectDto.endDate,'yyyy-MM')} + ', '"></span>
+                        <span class="text-muted" th:text="${projectDto.researchEstablishment} + ')'"></span>
 
-                    <img th:if="${projectDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
-                </li>
-            </ul>
+                        <img th:if="${projectDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>

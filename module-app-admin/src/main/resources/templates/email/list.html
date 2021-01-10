@@ -31,14 +31,14 @@
 
                 <div class="row justify-content-end mt-3">
                     <div class="col-auto px-1">
-                        <select class="custom-select" name="searchType" th:field="*{searchType}">
+                        <select class="custom-select custom-select-sm" name="searchType" th:field="*{searchType}">
                             <option th:value="EMAIL_ADDRESS">Email Address</option>
                             <option th:value="NOTE">Note</option>
                             <option th:value="ID">ID</option>
                         </select>
                     </div>
                     <div class="col-auto px-1">
-                        <input type="text" name="keyword" class="form-control" th:value="${searchDto?.keyword}"/>
+                        <input type="text" name="keyword" class="form-control form-control-sm" th:value="${searchDto?.keyword}"/>
                     </div>
                     <div class="col-auto px-3">
                         <button id="search" type="button" class="btn-main">Search</button>
@@ -63,7 +63,7 @@
                             <td th:text="${emailDto.idx}"></td>
                             <td>
                                 <a th:href="'/email?idx='+${emailDto.idx}" class="link"
-                                   th:text="${#strings.length(emailDto.title)} < 40 ? ${emailDto.title} : ${#strings.substring(emailDto.title, 0, 40)} + '...'"></a>
+                                   th:text="${#strings.length(emailDto.emailAddress)} < 40 ? ${emailDto.emailAddress} : ${#strings.substring(emailDto.emailAddress, 0, 40)} + '...'"></a>
                                 <img th:if="${emailDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
                             <td th:if="${emailDto.receiverType?.name() == 'ADMIN'}" th:text="Admin"></td>

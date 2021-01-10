@@ -17,7 +17,6 @@ import lombok.ToString;
 @Table
 @ToString
 public class UserAttachedFile extends AttachedFileAudit {
-    @Column
     private Long userIdx;
 
     @Builder

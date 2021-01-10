@@ -30,7 +30,7 @@ public class LearnMoreReadRestController {
     @PostMapping
     public ResponseEntity<?> postLearnMore(@RequestBody @Valid LearnMoreReadDto learnMoreReadDto) {
         if (learnMoreReadDto.getActiveStatus() == ActiveStatus.ACTIVE && learnMoreReadService.countAllByActiveStatus() > 0) {
-            throw new BusinessException("Only one learnMoreRead can be activate.");
+            throw new BusinessException("Only one learn more read must be activate.");
         }
 
         Long idx = learnMoreReadService.insertLearnMore(learnMoreReadDto);
@@ -41,7 +41,7 @@ public class LearnMoreReadRestController {
     @PutMapping("/{idx}")
     public ResponseEntity<?> putLearnMore(@PathVariable("idx") Long idx, @RequestBody @Valid LearnMoreReadDto learnMoreReadDto) {
         if (learnMoreReadDto.getActiveStatus() == ActiveStatus.ACTIVE && learnMoreReadService.countAllByActiveStatus() > 1) {
-            throw new BusinessException("Only one learnMoreRead can be activate.");
+            throw new BusinessException("Only one learn more read must be activate.");
         }
 
         learnMoreReadService.updateLearnMore(idx, learnMoreReadDto);
@@ -61,7 +61,7 @@ public class LearnMoreReadRestController {
     @PostMapping("/attachedFile")
     public ResponseEntity<?> uploadAttachedFile(Long idx, String createdBy, MultipartFile[] files) throws Exception {
         if (files.length >= 2) {
-            throw new FileNumberExceededException("The number of files that can be uploaded is 1.");
+            throw new FileNumberExceededException("The number of files that must be uploaded is 1.");
         }
 
         String fileValidationResult = FileValidator.isFileValid(files);
