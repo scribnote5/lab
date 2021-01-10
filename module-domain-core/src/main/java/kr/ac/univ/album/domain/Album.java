@@ -21,19 +21,14 @@ import java.time.LocalDate;
 @ToString
 @EntityListeners(AlbumListener.class)
 public class Album extends CommonAudit {
-    @Column
     private String title;
 
-    @Column
     private LocalDate photoTakenDate;
 
-    @Column
     private Long mainPagePriority;
 
-    @Column
     private String hashTags;
 
-    @Column
     private String mainHashTag;
 
     @Builder

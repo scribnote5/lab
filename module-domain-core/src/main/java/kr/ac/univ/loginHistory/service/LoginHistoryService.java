@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 
-
 @Service
 public class LoginHistoryService {
     private final LoginHistoryRepository loginHistoryRepository;
@@ -90,6 +89,9 @@ public class LoginHistoryService {
         } else {
             loginHistoryDto.setAccess(false);
         }
+
+        loginHistoryRepositoryImpl.updateViewsByIdx(idx);
+        loginHistoryDto.setViews(loginHistoryDto.getViews() + 1);
 
         return loginHistoryDto;
     }

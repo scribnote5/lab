@@ -17,7 +17,6 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
 
     Page<Album> findAllByCreatedByContaining(Pageable pageable, String username);
 
-
     Page<Album> findAllByActiveStatusIs(Pageable pageable, ActiveStatus activeStatus);
 
     Page<Album> findAllByTitleContainingAndActiveStatusIs(Pageable pageable, String title, ActiveStatus activeStatus);
@@ -26,11 +25,9 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
 
     Page<Album> findAllByCreatedByContainingAndActiveStatusIs(Pageable pageable, String username, ActiveStatus activeStatus);
 
-
     List<Album> findAllByActiveStatusIsAndMainPagePriorityGreaterThanEqualOrderByMainPagePriorityAsc(ActiveStatus activeStatus, Long mainPagePriority);
 
     Album findByMainPagePriorityIsAndActiveStatusIs(Long mainPagePriority, ActiveStatus activeStatus);
-
 
     List<Album> findAllByActiveStatusIsOrderByMainHashTagDescIdxDesc(ActiveStatus activeStatus);
 }

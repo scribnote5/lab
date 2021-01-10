@@ -18,5 +18,4 @@ public interface ResearchFieldRepository extends JpaRepository<ResearchField, Lo
     List<ResearchField> findAllByActiveStatusIs(ActiveStatus activeStatus);
 
     ResearchField findByIdxAndActiveStatusIs(Long idx, ActiveStatus activeStatus);
-
 }

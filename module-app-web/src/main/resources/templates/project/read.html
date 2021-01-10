@@ -7,97 +7,98 @@
     <title th:text="${@environment.getProperty('title')} + ' | Project Detail'"></title>
 </head>
 <body>
+<div id="wrapper">
+    <div id="page-content-wrapper">
+        <!-- header -->
+        <div th:replace="layout/header::header"></div>
 
-<div id="page-content-wrapper">
-    <!-- header -->
-    <div th:replace="layout/header::header"></div>
-
-    <div class="container">
-        <form name="form" id="form" th:object="${projectDto}" action="#">
-            <div class="page-header breadcrumbs" data-aos="fade-up" data-aos-delay="100">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h2>Project Detail</h2>
-                    <ol>
-                        <li>Home</li>
-                        <img src="/images/chevron-right.svg">
-                        <li>Project Detail</li>
-                    </ol>
-                </div>
-            </div>
-
-            <div class="mt-4" data-aos="fade-up" data-aos-delay="150">
-                <div class="mb-2 text-right">
-                    <strong class="date">&nbsp;&nbsp;Created Date: </strong>
-                    <span class="date" th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/> </span><br>
-
-                    <strong class="date">Modified Date: </strong>
-                    <span class="date" th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></span>
+        <div class="container">
+            <form name="form" id="form" th:object="${projectDto}" action="#">
+                <div class="page-header breadcrumbs" data-aos="fade-up" data-aos-delay="100">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2>Project Detail</h2>
+                        <ol>
+                            <li>Home</li>
+                            <img src="/images/chevron-right.svg">
+                            <li>Project Detail</li>
+                        </ol>
+                    </div>
                 </div>
 
-                <table class="table">
-                    <colgroup>
-                        <col width="17.5%"/>
-                        <col width="82.5%"/>
-                    </colgroup>
-                    <tr>
-                        <th colspan="2" class="sub-item-title">Project Information</th>
-                    </tr>
-                    <tr>
-                        <th>Title</th>
-                        <td><span id="title" th:text="*{title}"></span></td>
-                    </tr>
-                    <tr>
-                        <th>Research Field</th>
-                        <td>
-                            <span th:if="!${#strings.isEmpty(researchFieldDto)}" id="category" th:text="${researchFieldDto.title} + ' - ' + ${researchFieldDto.subTitle}"></span>
-                            <span th:if="${#strings.isEmpty(researchFieldDto)}" id="category" th:text="'This field is inactive or deleted.'"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Research Establishment</th>
-                        <td><span name="researchEstablishment" id="researchEstablishment" th:text="*{researchEstablishment}"/></td>
-                    </tr>
-                    <tr>
-                        <th>Project Status</th>
-                        <td>
-                            <div>
-                                <span th:if="*{projectStatus?.name() == 'CURRENT'}" th:text="'Current Project'"> </span>
-                                <span th:if="*{projectStatus?.name() == 'PREVIOUS'}" th:text="'Previous Project'"> </span>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Start Date</th>
-                        <td><span id="startDate" th:text="*{startDate}"></span></td>
-                    </tr>
-                    <tr th:if="*{projectStatus?.name() == 'PREVIOUS'}">
-                        <th>End Date</th>
-                        <td><span id="endDate" th:text="*{endDate}"></span></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"><span class="form-control overflow-auto content" id="content" th:utext="*{content}"></span></td>
-                    </tr>
-                    <tr th:if="!*{#lists.isEmpty(attachedFileList)}">
-                        <th>Uploaded Attached File</th>
-                        <td>
-                            <div id="attachedFileList" th:each="attachedFile : *{attachedFileList}">
+                <div class="mt-4" data-aos="fade-up" data-aos-delay="150">
+                    <div class="mb-2 text-right">
+                        <strong class="date">&nbsp;&nbsp;Created Date: </strong>
+                        <span class="date" th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/> </span><br>
+
+                        <strong class="date">Modified Date: </strong>
+                        <span class="date" th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></span>
+                    </div>
+
+                    <table class="table">
+                        <colgroup>
+                            <col width="17.5%"/>
+                            <col width="82.5%"/>
+                        </colgroup>
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Project Information</th>
+                        </tr>
+                        <tr>
+                            <th>Title</th>
+                            <td><span id="title" th:text="*{title}"></span></td>
+                        </tr>
+                        <tr>
+                            <th>Research Field</th>
+                            <td>
+                                <span th:if="!${#strings.isEmpty(researchFieldDto)}" th:text="${researchFieldDto.title}"></span>
+                                <span th:if="${#strings.isEmpty(researchFieldDto)}" th:text="'This field is inactive or deleted.'"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Research Establishment</th>
+                            <td><span name="researchEstablishment" id="researchEstablishment" th:text="*{researchEstablishment}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Project Status</th>
+                            <td>
+                                <div>
+                                    <span th:if="*{projectStatus?.name() == 'CURRENT'}" th:text="'Current Project'"> </span>
+                                    <span th:if="*{projectStatus?.name() == 'PREVIOUS'}" th:text="'Previous Project'"> </span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Start Date</th>
+                            <td><span id="startDate" th:text="*{startDate}"></span></td>
+                        </tr>
+                        <tr th:if="*{projectStatus?.name() == 'PREVIOUS'}">
+                            <th>End Date</th>
+                            <td><span id="endDate" th:text="*{endDate}"></span></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><span class="form-control form-control-sm content" id="content" th:utext="*{content}"></span></td>
+                        </tr>
+                        <tr th:if="!*{#lists.isEmpty(attachedFileList)}">
+                            <th>Uploaded Attached File</th>
+                            <td>
+                                <div id="attachedFileList" th:each="attachedFile : *{attachedFileList}">
                                 <span th:attr="onclick=|location.href='${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/${attachedFile.savedFileName}'|"
                                       th:text="${attachedFile.fileName} + ',&nbsp;' + 'File size: ' + ${attachedFile.fileSize}"></span>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="row justify-content-between mt-5 mb-3">
-                <div class="col-auto mx-3">
-                    <a href="/project/list" class="btn btn-secondary">Move to List</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
-            </div>
 
-            <!-- input type="hidden" -->
-            <input type="hidden" name="idx" th:value="*{idx}"/>
-        </form>
+                <div class="row justify-content-between mt-5 mb-4">
+                    <div class="col-auto mx-3">
+                        <a href="/project/list" class="btn btn-secondary">Move to List</a>
+                    </div>
+                </div>
+
+                <!-- input type="hidden" -->
+                <input type="hidden" name="idx" th:value="*{idx}"/>
+            </form>
+        </div>
     </div>
 </div>
 

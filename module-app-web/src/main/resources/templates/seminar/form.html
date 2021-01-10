@@ -8,148 +8,150 @@
     <title th:if="${seminarDto.idx}" th:text="${@environment.getProperty('title')} + ' | Seminar Update'"></title>
 </head>
 <body>
-<div id="page-content-wrapper">
-    <!-- header -->
-    <div th:replace="layout/header::header"></div>
+<div id="wrapper">
+    <div id="page-content-wrapper">
+        <!-- header -->
+        <div th:replace="layout/header::header"></div>
 
-    <div class="container">
-        <form name="form" id="form" th:object="${seminarDto}" action="#">
-            <div class="page-header breadcrumbs" data-aos="fade-up" data-aos-delay="100">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h2 th:if="!*{idx}">Seminar Register</h2>
-                    <h2 th:if="*{idx}">Seminar Update</h2>
-                    <ol>
-                        <li>Home</li>
-                        <img src="/images/chevron-right.svg">
-                        <li th:if="!*{idx}">Seminar Register</li>
-                        <li th:if="!*{idx}">Seminar Update</li>
-                    </ol>
+        <div class="container">
+            <form name="form" id="form" th:object="${seminarDto}" action="#">
+                <div class="page-header breadcrumbs" data-aos="fade-up" data-aos-delay="100">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 th:if="!*{idx}">Seminar Register</h2>
+                        <h2 th:if="*{idx}">Seminar Update</h2>
+                        <ol>
+                            <li>Home</li>
+                            <img src="/images/chevron-right.svg">
+                            <li th:if="!*{idx}">Seminar Register</li>
+                            <li th:if="!*{idx}">Seminar Update</li>
+                        </ol>
+                    </div>
                 </div>
-            </div>
 
-            <div class="row mt-5" data-aos="fade-up" data-aos-delay="150">
-                <table class="table">
-                    <colgroup>
-                        <col width="17.5%"/>
-                        <col width="82.5%"/>
-                    </colgroup>
-                    <tr>
-                        <th colspan="2" class="sub-item-title">Seminar Information</th>
-                    </tr>
-                    <tr>
-                        <th>Title</th>
-                        <td><input type="text" name="title" id="title" class="form-control" th:value="*{title}"/></td>
-                    </tr>
-                    <tr>
-                        <th>Presenter</th>
-                        <td><input type="text" name="presenter" id="presenter" class="form-control" th:value="*{presenter}"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Presentation Date</th>
-                        <td><input type="datetime-local" name="presentationDate" id="presentationDate" class="form-control presentation-date" th:value="*{presentationDate}"/></td>
-                    </tr>
-                    <tr>
-                        <th>Place</th>
-                        <td><input type="text" name="place" id="place" class="form-control" th:value="*{place}"/></td>
-                    </tr>
-                    <tr>
-                        <th>Seminar Type</th>
-                        <td>
-                            <select class="custom-select" name="seminarType" th:field="*{seminarType}">
-                                <option th:each="seminarType : ${T(kr.ac.univ.seminar.domain.enums.SeminarType).values()}"
-                                        th:value="${seminarType}" th:text="${seminarType.getSeminarType()}"></option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Category</th>
-                        <td>
-                            <select class="custom-select" name="categoryIdx" th:field="*{categoryIdx}">
-                                <option th:if="${#strings.isEmpty(categoryDto)} and *{idx}" th:value="-1">This field is inactive or deleted.</option>
-                                <option th:each="categoryDto : ${categoryDtoList}"
-                                        th:value="${categoryDto.idx}" th:text="${categoryDto.title}"></option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"><textarea name="content" id="summernote" class="summernote"
-                                                  th:text="*{content}"></textarea></td>
-                    </tr>
-                    <tr>
-                        <th>Attached File</th>
-                        <td>
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="file" name="file" multiple>
-                                <label class="custom-file-label" for="file">Choose file.</label>
-                            </div>
-                            <div id="fileDrop" class="fileDrop">
-                                <strong>Drop files here.</strong>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Total file size</th>
-                        <td>
-                            <div><span id="totalFileSize"> 0 MB</span>, Up to 20 MB</div>
-                        </td>
-                    <tr>
-                        <th>Upload Attached File</th>
-                        <td>
-                            <div id="attachedFileList"></div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Uploaded Attached File</th>
-                        <td>
-                            <div id="uploadedAttachedFileList" th:each="attachedFile : *{attachedFileList}">
-                                <div th:id="imgData + ${attachedFileStat.index}">
-                                    <span th:text="${attachedFile.fileName} + ',&nbsp;' + 'File Size: ' + ${attachedFile.fileSize} + '&nbsp;'"></span>
-                                    <img th:attr="src=@{|/images/cancel-icon.png|}, onclick=|deleteFile('${attachedFileStat.index}','${attachedFile.idx}','${attachedFile.savedFileName}')|" class="cancel-icon"/>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th colspan="2" class="sub-item-title">Additional Information</th>
-                    </tr>
-                    <tr>
-                        <th>Active Status</th>
-                        <td>
-                            <div class="pull-left">
-                                <select class="custom-select" name="activeStatus" th:field="*{activeStatus}">
-                                    <option th:value="ACTIVE">Active</option>
-                                    <option th:value="INACTIVE">Inactive</option>
+                <div class="row mt-5" data-aos="fade-up" data-aos-delay="150">
+                    <table class="table">
+                        <colgroup>
+                            <col width="17.5%"/>
+                            <col width="82.5%"/>
+                        </colgroup>
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Seminar Information</th>
+                        </tr>
+                        <tr>
+                            <th>Title</th>
+                            <td><input type="text" name="title" id="title" class="form-control form-control-sm" th:value="*{title}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Presenter</th>
+                            <td><input type="text" name="presenter" id="presenter" class="form-control form-control-sm" th:value="*{presenter}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Presentation Date</th>
+                            <td><input type="datetime-local" name="presentationDate" id="presentationDate" class="form-control form-control-sm presentation-date" th:value="*{presentationDate}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Place</th>
+                            <td><input type="text" name="place" id="place" class="form-control form-control-sm" th:value="*{place}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Seminar Type</th>
+                            <td>
+                                <select class="custom-select custom-select-sm" name="seminarType" th:field="*{seminarType}">
+                                    <option th:each="seminarType : ${T(kr.ac.univ.seminar.domain.enums.SeminarType).values()}"
+                                            th:value="${seminarType}" th:text="${seminarType.getSeminarType()}"></option>
                                 </select>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr th:if="*{idx}">
-                        <th>Created Date</th>
-                        <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
-                    </tr>
-                    <tr th:if="*{idx}">
-                        <th>Modified Date</th>
-                        <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="row justify-content-between mt-5 mb-3" data-aos="fade-up" data-aos-delay="200">
-                <div class="col-auto mx-3">
-                    <a href="/seminar/list" class="btn btn-secondary col-auto">Move to List</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Category</th>
+                            <td>
+                                <select class="custom-select custom-select-sm" name="categoryIdx" th:field="*{categoryIdx}">
+                                    <option th:if="${#strings.isEmpty(categoryDto)} and *{idx}" th:value="-1">This field is inactive or deleted.</option>
+                                    <option th:each="categoryDto : ${categoryDtoList}"
+                                            th:value="${categoryDto.idx}" th:text="${categoryDto.title}"></option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><textarea name="content" id="summernote" class="summernote"
+                                                      th:text="*{content}"></textarea></td>
+                        </tr>
+                        <tr>
+                            <th>Attached File</th>
+                            <td>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="file" name="file" multiple>
+                                    <label class="custom-file-label" for="file">Choose file.</label>
+                                </div>
+                                <div id="fileDrop" class="fileDrop">
+                                    <strong>Drop files here.</strong>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Total file size</th>
+                            <td>
+                                <div><span id="totalFileSize"> 0 MB</span>, Up to 20 MB</div>
+                            </td>
+                        <tr>
+                            <th>Upload Attached File</th>
+                            <td>
+                                <div id="attachedFileList"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Uploaded Attached File</th>
+                            <td>
+                                <div id="uploadedAttachedFileList" th:each="attachedFile : *{attachedFileList}">
+                                    <div th:id="imgData + ${attachedFileStat.index}">
+                                        <span th:text="${attachedFile.fileName} + ',&nbsp;' + 'File Size: ' + ${attachedFile.fileSize} + '&nbsp;'"></span>
+                                        <img th:attr="src=@{|/images/cancel-icon.png|}, onclick=|deleteFile('${attachedFileStat.index}','${attachedFile.idx}','${attachedFile.savedFileName}')|" class="cancel-icon"/>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Additional Information</th>
+                        </tr>
+                        <tr>
+                            <th>Active Status</th>
+                            <td>
+                                <div class="pull-left">
+                                    <select class="custom-select custom-select-sm" name="activeStatus" th:field="*{activeStatus}">
+                                        <option th:value="ACTIVE">Active</option>
+                                        <option th:value="INACTIVE">Inactive</option>
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Created Date</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Modified Date</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                    </table>
                 </div>
-                <div class="col-auto mx-3">
-                    <button th:if="!*{idx}" id="insert" type="button" class="btn-main">Register</button>
-                    <button th:if="*{idx}" id="update" type="button" class="btn-main">Update</button>
-                </div>
-            </div>
 
-            <!-- input type="hidden" -->
-            <input type="hidden" name="idx" th:value="*{idx}"/>
-            <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
-            <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
-        </form>
+                <div class="row justify-content-between mt-5 mb-3" data-aos="fade-up" data-aos-delay="200">
+                    <div class="col-auto mx-3">
+                        <a href="/seminar/list" class="btn btn-secondary col-auto">Move to List</a>
+                    </div>
+                    <div class="col-auto mx-3">
+                        <button th:if="!*{idx}" id="insert" type="button" class="btn-main">Register</button>
+                        <button th:if="*{idx}" id="update" type="button" class="btn-main">Update</button>
+                    </div>
+                </div>
+
+                <!-- input type="hidden" -->
+                <input type="hidden" name="idx" th:value="*{idx}"/>
+                <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
+                <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -170,13 +172,14 @@
     $(document).ready(function () {
         <!-- summernote setting -->
         $('#summernote').summernote({
-            height: 400,	// 에디터 높이
+            height: 500,	// 에디터 높이
             minHeight: null,	// 최소 높이
             maxHeight: null,	// 최대 높이
             // focus: true,	// 에디터 로딩후 포커스를 맞출지 여부
             lang: "ko-KR",// 한글 설정
             placeholder: "The editor's max input size of bytes is 16777215(16 MB)."	//placeholder 설정
         });
+        $('#summernote').summernote('fontSize', 14);
 
         <!-- File Drop -->
         $("#fileDrop").on("dragenter dragover", function (event) {

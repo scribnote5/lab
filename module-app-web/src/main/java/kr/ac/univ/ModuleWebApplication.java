@@ -1,11 +1,15 @@
 package kr.ac.univ;
 
 import kr.ac.univ.common.domain.enums.ActiveStatus;
+import kr.ac.univ.noticeBoard.domain.NoticeBoard;
 import kr.ac.univ.noticeBoard.repository.NoticeBoardRepository;
 import kr.ac.univ.publication.domain.Publication;
 import kr.ac.univ.publication.domain.enums.PublicationType;
 import kr.ac.univ.publication.domain.enums.PublishingArea;
 import kr.ac.univ.publication.repository.PublicationRepository;
+import kr.ac.univ.user.domain.User;
+import kr.ac.univ.user.domain.enums.AuthorityType;
+import kr.ac.univ.user.domain.enums.UserType;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -34,21 +38,19 @@ public class ModuleWebApplication {
             /* noticeBoardRepository.deleteAll(); */
 
             /* 게시글 등록 */
-            /*
-            IntStream.rangeClosed(1, 200).forEach(index ->
-                noticeBoardRepository.save(NoticeBoard.builder()
-                    .title("게시글" + index)
-                    .content("컨텐츠" + index)
-                    .activeStatus(ActiveStatus.ACTIVE)
-                    .createdBy("root")
-                    .build()));
-            */
+            /*IntStream.rangeClosed(1, 200).forEach(index ->
+                    noticeBoardRepository.save(NoticeBoard.builder()
+                            .title("게시글" + index)
+                            .content("컨텐츠" + index)
+                            .activeStatus(ActiveStatus.ACTIVE)
+                            .createdBy("root")
+                            .build()));*/
 
             /* 사용자 모두 삭제 */
-            /* userRepository.deleteAll(); */
+            /*             userRepository.deleteAll();*/
 
             /* 사용자 생성 */
-            /* userRepository.save(User.builder()
+            /*userRepository.save(User.builder()
                     .username("root")
                     .password(passwordEncoder.encode("123123123"))
                     .userType(UserType.PART_TIME_MS)
@@ -100,20 +102,19 @@ public class ModuleWebApplication {
                     .authorityType(AuthorityType.NON_USER)
                     .activeStatus(ActiveStatus.ACTIVE)
                     .createdBy("non_user")
-                    .build());
-            */
+                    .build());*/
 
             /* 논문 모두 삭제 */
             /* publicationRepositroy.deleteAll(); */
 
             /* 논문 생성 */
-            /* IntStream.rangeClosed(1, 50).forEach(index ->
+            /*IntStream.rangeClosed(1, 50).forEach(index ->
                     publicationRepositroy.save(Publication.builder()
                             .title("게시글" + index)
                             .authors("저자" + index)
                             .publishedIn("KSC 2019")
                             .publishedDate(LocalDate.now())
-                            .publicationType(PublicationType.JOURNAL)
+                            .publicationType(PublicationType.JOURNAL_SCI)
                             .publishingArea(PublishingArea.DOMESTIC)
                             .volume("" + index)
                             .number("" + index)
@@ -127,7 +128,7 @@ public class ModuleWebApplication {
                             .authors("저자" + index)
                             .publishedIn("KSC 2018")
                             .publishedDate(LocalDate.now())
-                            .publicationType(PublicationType.POSTER)
+                            .publicationType(PublicationType.CONFERENCE_POSTER)
                             .publishingArea(PublishingArea.DOMESTIC)
                             .volume("" + index)
                             .number("" + index)
@@ -155,14 +156,13 @@ public class ModuleWebApplication {
                             .authors("저자" + index)
                             .publishedIn("ICNGC 2016")
                             .publishedDate(LocalDate.now())
-                            .publicationType(PublicationType.POSTER)
+                            .publicationType(PublicationType.CONFERENCE_POSTER)
                             .publishingArea(PublishingArea.INTERNATIONAL)
                             .volume("" + index)
                             .number("" + index)
                             .activeStatus(ActiveStatus.ACTIVE)
                             .createdBy("root")
-                            .build()));
-            */
+                            .build()));*/
         };
     }
 }

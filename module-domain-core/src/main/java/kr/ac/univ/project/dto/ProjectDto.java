@@ -10,6 +10,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -20,28 +21,27 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 public class ProjectDto extends CommonDto {
-    /* CommonDto: JPA Audit */
-
-    /* 기본 정보 */
     @NotBlank(message = "The title must not be blank.")
-    @Size(max = 255, message = "The title can be used for less than 50 characters.")
+    @Size(max = 255, message = "The title must be less than 255 characters.")
     private String title;
 
-    @Editor(max = 16777215, message = "The editor's input size of bytes is exceeded.")
+    @Editor(max = 16777215, message = "The editor's input size must be less than 16777215 bytes(16MB).")
     private String content;
 
-    private Long views;
+    private Long views = 0L;
 
     private Long researchFieldIdx;
 
+    @Size(max = 255, message = "The research establishment must be less than 255 characters.")
     private String researchEstablishment;
 
+    @NotNull(message = "The project status must be not null")
     private ProjectStatus projectStatus;
 
     private LocalDate startDate;
 
     private LocalDate endDate;
 
-    /* 첨부 파일 */
+    /* Attached File */
     private List<ProjectAttachedFile> attachedFileList = new ArrayList<ProjectAttachedFile>();
 }

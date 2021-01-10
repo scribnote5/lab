@@ -12,8 +12,11 @@ import kr.ac.univ.learnMoreRead.dto.LearnMoreReadDto;
 import kr.ac.univ.learnMoreRead.service.LearnMoreReadAttachedFileService;
 import kr.ac.univ.learnMoreRead.service.LearnMoreReadService;
 import kr.ac.univ.noticeBoard.service.NoticeBoardService;
+import kr.ac.univ.researchField.dto.ResearchFieldDto;
+import kr.ac.univ.researchField.service.ResearchFieldAttachedFileService;
 import kr.ac.univ.researchField.service.ResearchFieldService;
 import kr.ac.univ.seminar.service.SeminarService;
+import kr.ac.univ.setting.service.SettingService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,30 +33,41 @@ public class MainController {
     private final IntroductionImageService introductionImageService;
     private final IntroductionImageAttachedFileService introductionImageAttachedFileService;
     private final ResearchFieldService researchFieldService;
+    private final ResearchFieldAttachedFileService researchFieldAttachedFileService;
     private final NoticeBoardService noticeBoardService;
     private final SeminarService seminarService;
+    private final SettingService settingService;
 
-    public MainController(AlbumService albumService, AlbumAttachedFileService albumAttachedFileService, IntroductionService introductionService,
+    public MainController(AlbumService albumService, AlbumAttachedFileService albumAttachedFileService,
+                          IntroductionService introductionService,
                           IntroductionImageService introductionImageService, IntroductionImageAttachedFileService introductionImageAttachedFileService,
-                          ResearchFieldService researchFieldService, NoticeBoardService noticeBoardService, SeminarService seminarService) {
+                          ResearchFieldService researchFieldService, ResearchFieldAttachedFileService researchFieldAttachedFileService,
+                          NoticeBoardService noticeBoardService,
+                          SeminarService seminarService,
+                          SettingService settingService) {
         this.albumService = albumService;
         this.albumAttachedFileService = albumAttachedFileService;
         this.introductionService = introductionService;
         this.introductionImageService = introductionImageService;
         this.introductionImageAttachedFileService = introductionImageAttachedFileService;
+        this.researchFieldAttachedFileService = researchFieldAttachedFileService;
         this.researchFieldService = researchFieldService;
         this.noticeBoardService = noticeBoardService;
         this.seminarService = seminarService;
+        this.settingService = settingService;
     }
 
     // Home
     @GetMapping("")
     public String home(Model model) {
-        IntroductionDto introductionDto = introductionService.findIntroductionByActiveStatusIs();
-
         List<IntroductionImageDto> introductionImageDtoList = introductionImageService.findIntroductionImageListByActiveStatusIs();
         for (IntroductionImageDto introductionImageDto : introductionImageDtoList) {
             introductionImageAttachedFileService.findAttachedFileByIntroductionImageIdx(introductionImageDto.getIdx(), introductionImageDto);
+        }
+
+        List<ResearchFieldDto> researchFieldDtoList = researchFieldService.findResearchFieldListByActiveStatusIs();
+        for (ResearchFieldDto researchFieldDto : researchFieldDtoList) {
+            researchFieldAttachedFileService.findAttachedFileByResearchFieldIdx(researchFieldDto.getIdx(), researchFieldDto);
         }
 
         List<AlbumDto> albumDtoList = albumService.findAlbumListByActiveStatusIs();
@@ -61,12 +75,13 @@ public class MainController {
             albumAttachedFileService.findAttachedFileByAlbumIdx(albumDto.getIdx(), albumDto);
         }
 
-        model.addAttribute("introductionDto", introductionDto);
+        model.addAttribute("introductionDto", introductionService.findIntroductionByActiveStatusIs());
         model.addAttribute("introductionImageDtoList", introductionImageDtoList);
-        model.addAttribute("researchFieldDtoList", researchFieldService.findResearchFieldListByActiveStatusIs());
+        model.addAttribute("researchFieldDtoList", researchFieldDtoList);
         model.addAttribute("albumDtoList", albumDtoList);
         model.addAttribute("noticeBoardDtoList", noticeBoardService.findNoticeBoardList());
         model.addAttribute("seminarDtoList", seminarService.findSeminarList());
+        model.addAttribute("settingDto", settingService.findSettingByIdx(1L));
 
         return "main/home";
     }

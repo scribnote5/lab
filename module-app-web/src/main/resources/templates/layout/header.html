@@ -4,30 +4,30 @@
 <div th:fragment="header">
     <header id="header" class="fixed-top d-flex align-items-center">
         <div class="container d-flex align-items-center">
-            <div class="logo mr-auto row align-items-center">
+
+            <div class="logo mr-auto">
                 <a href="/"><img src="/images/main-logo.png"></a>
             </div>
 
-            <nav class="nav-menu d-none d-lg-block">
+            <nav class="nav-menu d-none d-lg-block align-middle">
                 <ul>
                     <li><a href="/about-us/">About Us</a></li>
                     <li><a href="/user/list">Member</a></li>
                     <li><a href="/publication/list_scroll">Publication</a></li>
                     <li><a href="/seminar/list">Seminar</a></li>
                     <li><a href="/project/list">Project</a></li>
-                    <li class="drop-down"><a href="/notice-board/list">More <img src="/images/chevron-down-icon-black.svg/" style="height: 18px;"></a>
+                    <li class="drop-down"><a href="/notice-board/list">More</a>
                         <ul>
                             <li><a href="/notice-board/list">Notice Board</a></li>
                             <li><a href="/alumni-association/list">Alumni Association</a></li>
                             <li><a href="/album/list">Album</a></li>
-                            <li sec:authorize="isAuthenticated()"><a th:href="'/user/form?idx='+${#authentication.principal.idx}">User Information
-                                <img src="/images/user-information-black-icon.svg" class="user-information-black-icon"></a>
+                            <li sec:authorize="isAuthenticated()">
+                                <a th:href="'/user/form?idx='+${#authentication.principal.idx}">User Information</a>
                             </li>
                         </ul>
                     </li>
-
-                    <li sec:authorize="!isAuthenticated()" class="login" id="login">Login</li>
-                    <li sec:authorize="isAuthenticated()" class="logout" id="logout">Logout</li>
+                    <li sec:authorize="!isAuthenticated()" class="login-logout"><a href="javascript:login()">Login</a></li>
+                    <li sec:authorize="isAuthenticated()" class="login-logout"><a href="javascript:logout()">Logout</a></li>
                 </ul>
             </nav><!-- .nav-menu -->
         </div>

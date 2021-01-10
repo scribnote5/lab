@@ -21,13 +21,10 @@ import javax.persistence.Table;
 @ToString
 @EntityListeners(EmailListener.class)
 public class Email extends CommonAudit {
-    @Column
     private String emailAddress;
 
-    @Column
     private ReceiverType receiverType;
 
-    @Column
     private String note;
 
     @Builder

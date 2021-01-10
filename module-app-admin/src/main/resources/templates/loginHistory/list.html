@@ -31,7 +31,7 @@
 
                 <div class="row justify-content-end mt-3">
                     <div class="col-auto px-1">
-                        <select class="custom-select" name="searchType" id="searchType" th:field="*{searchType}">
+                        <select class="custom-select custom-select-sm" name="searchType" id="searchType" th:field="*{searchType}">
                             <option th:value="AUD_MESSAGE">Aud Message</option>
                             <option th:value="AUD_IP">Aud Ip</option>
                             <option th:value="AUD_LOCATION">Aud Location</option>
@@ -43,11 +43,11 @@
                         <input th:disabled="*{#strings.equals(searchType, 'AUD_LOGIN_RESULT_TPYE')}"
                                th:style="*{#strings.equals(searchType, 'AUD_LOGIN_RESULT_TPYE')} ? 'display:none' : 'display:inline'"
                                type="text"
-                               name="keyword" id="keywordInputText" class="form-control"
+                               name="keyword" id="keywordInputText" class="form-control form-control-sm"
                                th:value="${searchDto?.keyword}"/>
                         <select th:disabled="!*{#strings.equals(searchType, 'AUD_LOGIN_RESULT_TPYE')}"
                                 th:style="!*{#strings.equals(searchType, 'AUD_LOGIN_RESULT_TPYE')} ? 'display:none' : 'display:inline'"
-                                name="keyword" id="keywordSelect" class="custom-select"
+                                name="keyword" id="keywordSelect" class="custom-select custom-select-sm"
                                 th:field="*{keyword}">
                             <option th:each="audLoginResultType : ${T(kr.ac.univ.loginHistory.domain.enums.AudLoginResultType).values()}"
                                     th:value="${audLoginResultType}" th:text="${audLoginResultType.getAudLoginResultType()}"></option>
@@ -77,7 +77,7 @@
                             <td th:text="${loginHistoryDto.idx}"></td>
                             <td>
                                 <a th:href="'/login-history?idx='+${loginHistoryDto.idx}" class="link"
-                                   th:text="${#strings.length(loginHistoryDto.audMessage)} < 30 ? ${loginHistoryDto.audMessage} : ${#strings.substring(loginHistoryDto.audMessage, 0, 30)} + '...'"></a>
+                                   th:text="${#strings.length(loginHistoryDto.audMessage)} < 25 ? ${loginHistoryDto.audMessage} : ${#strings.substring(loginHistoryDto.audMessage, 0, 25)} + '...'"></a>
                                 <img th:if="${loginHistoryDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
                             <td th:text="${loginHistoryDto.audIp}"></td>

@@ -40,7 +40,7 @@ public class CategoryController {
 
             returnPage = "category/form";
         } else {
-            returnPage = "user/permission-denied";
+            returnPage = "user/access-denied";
         }
 
         return returnPage;

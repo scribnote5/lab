@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- css -->
+    <th:block th:replace="layout/css.html"></th:block>
+
+    <title th:if="!${settingDto.idx}" th:text="${@environment.getProperty('title')} + ' | Setting Register'"></title>
+    <title th:if="${settingDto.idx}" th:text="${@environment.getProperty('title')} + ' | Setting Update'"></title>
+</head>
+<body>
+<div class="d-flex" id="wrapper">
+    <!-- sidebar -->
+    <div th:replace="layout/sidebar::sidebar"></div>
+
+    <div id="page-content-wrapper">
+        <!-- header -->
+        <div th:replace="layout/header::header"></div>
+
+        <div class="container-fluid">
+            <form name="form" id="form" th:object="${settingDto}" action="#">
+                <div class="page-header breadcrumbs">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 th:if="!*{idx}">Setting Register</h2>
+                        <h2 th:if="*{idx}">Setting Update</h2>
+                        <ol>
+                            <li>Home</li>
+                            <img src="/images/chevron-right.svg">
+                            <li th:if="!*{idx}">Setting Register</li>
+                            <li th:if="*{idx}">Setting Update</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="mt-5">
+                    <table class="table">
+                        <colgroup>
+                            <col width="17.5%"/>
+                            <col width="82.5%"/>
+                        </colgroup>
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Setting Information</th>
+                        </tr>
+                        <tr>
+                            <th>Lab Address</th>
+                            <td><input type="text" name="labAddress" id="labAddress" class="form-control form-control-sm" th:value="*{labAddress}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Email Recipient</th>
+                            <td><input type="text" name="emailRecipient" id="emailRecipient" class="form-control form-control-sm" th:value="*{emailRecipient}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Email Address</th>
+                            <td><input type="text" name="emailAddress" id="emailAddress" class="form-control form-control-sm" th:value="*{emailAddress}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Callee</th>
+                            <td><input type="text" name="callee" id="callee" class="form-control form-control-sm" th:value="*{callee}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Phone Number</th>
+                            <td><input type="text" name="phoneNumber" id="phoneNumber" class="form-control form-control-sm" th:value="*{phoneNumber}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Lab Start Date</th>
+                            <td><input type="date" name="labStartDate" id="labStartDate" class="form-control form-control-sm" th:value="*{labStartDate}"/></td>
+                        </tr>
+                        <tr>
+                            <th colspan="2" class="sub-item-title">About Us Content</th>
+                        </tr>
+                        <tr>
+                            <th>Maintenance Years Count Content</th>
+                            <td><input type="text" name="labMaintenanceYearsCountContent" id="labMaintenanceYearsCountContent" class="form-control form-control-sm" th:value="*{labMaintenanceYearsCountContent}"/></td>
+                        </tr>
+                        <tr>
+                            <th>User Count Content</th>
+                            <td><input type="text" name="userCountContent" id="userCountContent" class="form-control form-control-sm" th:value="*{userCountContent}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Publication Count Content</th>
+                            <td><input type="text" name="publicationCountContent" id="publicationCountContent" class="form-control form-control-sm" th:value="*{publicationCountContent}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Project Count Content</th>
+                            <td><input type="text" name="projectCountContent" id="projectCountContent" class="form-control form-control-sm" th:value="*{projectCountContent}"/></td>
+                        </tr>
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Additional Information</th>
+                        </tr>
+                        <tr>
+                            <th>Active Status</th>
+                            <td>
+                                <div class="pull-left">
+                                    <select class="custom-select custom-select-sm" name="activeStatus" th:field="*{activeStatus}">
+                                        <option th:value="ACTIVE">Active</option>
+                                        <option th:value="INACTIVE">Inactive</option>
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Created Date</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Last Modified Date</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Created By</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{createdBy}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Last Modified By</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{lastModifiedBy}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Views</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{views}"/></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="row justify-content-between mt-5 mb-3">
+                    <div class="col-auto mx-3">
+                        <a href="/setting/list" class="btn btn-secondary">Move to List</a>
+                    </div>
+                    <div class="col-auto mx-3">
+                        <button th:if="!*{idx}" id="insert" type="button" class="btn-main">Register</button>
+                        <button th:if="*{idx}" id="update" type="button" class="btn btn-info">Update</button>
+                    </div>
+                </div>
+
+                <!-- input type="hidden" -->
+                <input type="hidden" name="idx" th:value="*{idx}"/>
+                <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
+                <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- footer -->
+<div th:replace="layout/footer::footer"></div>
+
+<!-- script file -->
+<th:block th:replace="layout/script.html"></th:block>
+
+<!-- javascript -->
+<script th:if="${settingDto?.idx}" th:inline="javascript">
+    $('#update').click(function () {
+        var jsonData = $("#form").serializeObject();
+        var settingIdx = document.getElementsByName("idx")[0].value;
+
+        $.ajax({
+            url: moduleAppApiAddress + "/api/settings/" + settingIdx,
+            type: "put",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                localStorage.setItem("result", "/setting/update-success");
+                location.href = "/setting?idx=" + settingIdx;
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+            });
+    });
+</script>
+
+</body>
+</html>

@@ -20,20 +20,20 @@
 }
 
 .date {
-    font-size: var(--small-font-size);
+    font-size: var(--regular-font-size);
     color: var(--lighter-black);
 }
 
 .content-small {
     overflow: auto;
-    min-height: 12.5rem;
+    min-height: 200px;
     height: auto;
     resize: none;
 }
 
 .content {
     overflow: auto;
-    min-height: 32.5rem;
+    min-height: 500px;
     height: auto;
     resize: none;
 }
@@ -63,7 +63,13 @@
 }
 
 .required-field {
-    margin-left: .25rem;
+    margin-left: .2rem;
     color: red;
+    font-weight: 700;
+}
+
+.user-page-show-field {
+    margin-left: .2rem;
+    color: blue;
     font-weight: 700;
 }

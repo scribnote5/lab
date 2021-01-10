@@ -24,6 +24,13 @@
     margin-top: -2.5rem;
 }
 
+.url-icon-area img {
+    margin: 0 .25rem .125rem .25rem;
+    height: 1.25rem;
+    width: auto;
+}
+
+
 .external-link {
     padding-right: .75rem;
     border-right: .05rem solid var(--lighter-grey);

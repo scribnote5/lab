@@ -7,94 +7,96 @@
     <title th:text="${@environment.getProperty('title')} + ' | Seminar Detail'"></title>
 </head>
 <body>
-<div id="page-content-wrapper">
-    <!-- header -->
-    <div th:replace="layout/header::header"></div>
+<div id="wrapper">
+    <div id="page-content-wrapper">
+        <!-- header -->
+        <div th:replace="layout/header::header"></div>
 
-    <div class="container">
-        <form name="form" id="form" th:object="${seminarDto}" action="#">
-            <div class="page-header breadcrumbs" data-aos="fade-up" data-aos-delay="100">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h2>Seminar Detail</h2>
-                    <ol>
-                        <li>Home</li>
-                        <img src="/images/chevron-right.svg">
-                        <li>Seminar Detail</li>
-                    </ol>
-                </div>
-            </div>
-
-            <div class="mt-4" data-aos="fade-up" data-aos-delay="150">
-                <div class="mb-2 text-right">
-                    <strong class="date">&nbsp;&nbsp;Created Date: </strong>
-                    <span class="date" th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/> </span><br>
-
-                    <strong class="date">Modified Date: </strong>
-                    <span class="date" th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></span>
+        <div class="container">
+            <form name="form" id="form" th:object="${seminarDto}" action="#">
+                <div class="page-header breadcrumbs" data-aos="fade-up" data-aos-delay="100">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2>Seminar Detail</h2>
+                        <ol>
+                            <li>Home</li>
+                            <img src="/images/chevron-right.svg">
+                            <li>Seminar Detail</li>
+                        </ol>
+                    </div>
                 </div>
 
-                <table class="table">
-                    <colgroup>
-                        <col width="17.5%"/>
-                        <col width="82.5%"/>
-                    </colgroup>
-                    <tr>
-                        <th>Title</th>
-                        <td><span id="title" th:text="*{title}"></span></td>
-                    </tr>
-                    <tr>
-                        <th>Presenter</th>
-                        <td><span id="presenter" th:text="*{presenter}"></span></td>
-                    </tr>
-                    <tr>
-                        <th>Presentation Date</th>
-                        <td>
-                            <span id="presentationDate" th:text="*{#temporals.format(presentationDate,'yyyy-MM-dd HH:mm')}"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Place</th>
-                        <td><span id="place" th:text="*{place}"></span></td>
-                    </tr>
-                    <tr>
-                        <th>Seminar Type</th>
-                        <td><span id="seminarType" th:text="*{seminarType.seminarType}"></span></td>
-                    </tr>
-                    <tr>
-                        <th>Category</th>
-                        <td>
-                            <span th:if="!${#strings.isEmpty(categoryDto)}" id="category" th:text="${categoryDto.title}"></span>
-                            <span th:if="${#strings.isEmpty(categoryDto)}" id="category" th:text="'This field is inactive or deleted.'"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"><span class="form-control overflow-auto content" id="content" th:utext="*{content}"></span></td>
-                    </tr>
-                    <tr th:if="!*{#lists.isEmpty(attachedFileList)}">
-                        <th>Uploaded Attached File</th>
-                        <td>
-                            <div id="attachedFileList" th:each="attachedFile : *{attachedFileList}">
+                <div class="mt-4" data-aos="fade-up" data-aos-delay="150">
+                    <div class="mb-2 text-right">
+                        <strong class="date">&nbsp;&nbsp;Created Date: </strong>
+                        <span class="date" th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/> </span><br>
+
+                        <strong class="date">Modified Date: </strong>
+                        <span class="date" th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></span>
+                    </div>
+
+                    <table class="table">
+                        <colgroup>
+                            <col width="17.5%"/>
+                            <col width="82.5%"/>
+                        </colgroup>
+                        <tr>
+                            <th>Title</th>
+                            <td><span id="title" th:text="*{title}"></span></td>
+                        </tr>
+                        <tr>
+                            <th>Presenter</th>
+                            <td><span id="presenter" th:text="*{presenter}"></span></td>
+                        </tr>
+                        <tr>
+                            <th>Presentation Date</th>
+                            <td>
+                                <span id="presentationDate" th:text="*{#temporals.format(presentationDate,'yyyy-MM-dd HH:mm')}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Place</th>
+                            <td><span id="place" th:text="*{place}"></span></td>
+                        </tr>
+                        <tr>
+                            <th>Seminar Type</th>
+                            <td><span id="seminarType" th:text="*{seminarType.seminarType}"></span></td>
+                        </tr>
+                        <tr>
+                            <th>Category</th>
+                            <td>
+                                <span th:if="!${#strings.isEmpty(categoryDto)}" id="category" th:text="${categoryDto.title}"></span>
+                                <span th:if="${#strings.isEmpty(categoryDto)}" id="category" th:text="'This field is inactive or deleted.'"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><span class="form-control form-control-sm content" id="content" th:utext="*{content}"></span></td>
+                        </tr>
+                        <tr th:if="!*{#lists.isEmpty(attachedFileList)}">
+                            <th>Uploaded Attached File</th>
+                            <td>
+                                <div id="attachedFileList" th:each="attachedFile : *{attachedFileList}">
                                 <span th:attr="onclick=|location.href='${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/${attachedFile.savedFileName}'|"
                                       th:text="${attachedFile.fileName} + ',&nbsp;' + 'File size: ' + ${attachedFile.fileSize}"></span>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="row justify-content-between mt-5 mb-3" data-aos="fade-up" data-aos-delay="200">
-                <div class="col-auto mx-3">
-                    <a href="/seminar/list" class="btn btn-secondary">Move to List</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
-                <div th:if="*{access}" class="col-auto mx-3">
-                    <a th:href="'/seminar/form?idx='+*{idx}" class="btn btn-info mx-1">Update</a>
-                    <button type="button" class="btn btn-danger mx-1" id="delete">Delete</button>
-                </div>
-            </div>
 
-            <!-- input type="hidden" -->
-            <input type="hidden" name="idx" th:value="*{idx}"/>
-        </form>
+                <div class="row justify-content-between mt-5 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="col-auto mx-3">
+                        <a href="/seminar/list" class="btn btn-secondary">Move to List</a>
+                    </div>
+                    <div th:if="*{access}" class="col-auto mx-3">
+                        <a th:href="'/seminar/form?idx='+*{idx}" class="btn btn-info mx-1">Update</a>
+                        <button type="button" class="btn btn-danger mx-1" id="delete">Delete</button>
+                    </div>
+                </div>
+
+                <!-- input type="hidden" -->
+                <input type="hidden" name="idx" th:value="*{idx}"/>
+            </form>
+        </div>
     </div>
 </div>
 

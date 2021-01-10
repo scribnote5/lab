@@ -7,10 +7,13 @@ import kr.ac.univ.loginHistory.repository.LoginHistoryRepository;
 import kr.ac.univ.loginHistory.service.GeoLocationService;
 import kr.ac.univ.user.domain.User;
 import kr.ac.univ.user.domain.enums.AuthorityType;
+import kr.ac.univ.user.domain.enums.UserStatus;
+import kr.ac.univ.user.domain.enums.UserType;
 import kr.ac.univ.user.dto.UserDto;
 import kr.ac.univ.user.dto.UserPrincipal;
 import kr.ac.univ.user.dto.mapper.UserMapper;
 import kr.ac.univ.user.repository.UserRepository;
+import kr.ac.univ.user.repository.UserRepositoryImpl;
 import kr.ac.univ.util.AccessCheck;
 import kr.ac.univ.util.EmptyUtil;
 import kr.ac.univ.util.NewIconCheck;
@@ -23,17 +26,20 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @Service
 public class UserService implements UserDetailsService {
     @Value("${module.name}")
     private String moduleName;
-
     private final UserRepository userRepository;
+    private final UserRepositoryImpl userRepositoryImpl;
 
-
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, UserRepositoryImpl userRepositoryImpl) {
         this.userRepository = userRepository;
-
+        this.userRepositoryImpl = userRepositoryImpl;
     }
 
     public Page<UserDto> findUserList(Pageable pageable, SearchDto searchDto) {
@@ -88,9 +94,14 @@ public class UserService implements UserDetailsService {
         return userDtoList;
     }
 
-    public Long countUser() {
-        return userRepository.countAllBy();
+    public Long countAllByActiveStatusIsAndUserStatusIsAndUserTypeIs(UserType userType) {
+        return userRepository.countAllByActiveStatusIsAndUserStatusIsAndUserTypeIs(ActiveStatus.ACTIVE, UserStatus.ATTENDING, userType);
     }
+
+    public Long countUser() {
+        return userRepository.count();
+    }
+
 
     /**
      * 회원 가입
@@ -163,6 +174,9 @@ public class UserService implements UserDetailsService {
             }
         }
 
+        userRepositoryImpl.updateViewsByIdx(idx);
+        userDto.setViews(userDto.getViews() + 1);
+
         return userDto;
     }
 
@@ -183,5 +197,4 @@ public class UserService implements UserDetailsService {
     public boolean isDupulicationUserByUsername(String username) {
         return (userRepository.countByUsername(username) > 0) ? true : false;
     }
-
 }

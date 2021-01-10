@@ -23,70 +23,52 @@ import java.time.LocalDate;
 @ToString
 @EntityListeners(UserListener.class)
 public class User extends CommonAudit {
-    /* 기본 정보 */
-    @Column
+    /* Required Information */
     private String username;
 
-    @Column
     private String password;
 
-    @Column
     private String koreanName;
 
-    @Column
     private String englishName;
 
-    @Column
-    @Enumerated(EnumType.STRING)
-    private GenderType gender;
-
-    @Column
-    private LocalDate birthDate;
-
-    @Column
-    private String email;
-
-    @Column
-    private String privateEmail;
-
-    @Column
-    private String messengerId;
-
-    @Column
-    private String contact;
-
-    @Column
     @Enumerated(EnumType.STRING)
     private UserType userType;
 
-    @Column
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus;
 
-    @Column
+    /* Self Introduction */
     private String introduction;
 
-    /* 부가 정보 */
-    @Column
+    /* Personal Information */
     private LocalDate admissionDate;
 
-    @Column
     private LocalDate graduatedDate;
 
-    @Column
-    private String externalWebPage;
+    @Enumerated(EnumType.STRING)
+    private GenderType gender;
 
-    @Column
-    private String github;
+    private LocalDate birthDate;
 
-    @Column
-    private String linkedIn;
-
-    @Column
     private String workplace;
 
-    /* 관리자가 수정하는 정보 */
-    @Column
+    /* Contact Information */
+    private String messengerId;
+
+    private String contact;
+
+    private String email;
+
+    private String privateEmail;
+
+    private String github;
+
+    private String linkedIn;
+
+    private String externalWebPage;
+
+    /* Additional Information */
     @Enumerated(EnumType.STRING)
     private AuthorityType authorityType;
 
@@ -124,7 +106,7 @@ public class User extends CommonAudit {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         // 비밀번호가 변경된 경우 -> 비밀번호 변경함
-        if (!passwordEncoder.matches(user.getPassword(),password) && !"".equals(user.getPassword())) {
+        if (!passwordEncoder.matches(user.getPassword(), password) && !"".equals(user.getPassword())) {
             this.password = passwordEncoder.encode(user.getPassword());
         }
 

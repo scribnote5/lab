@@ -6,6 +6,7 @@ import kr.ac.univ.researchField.domain.ResearchField;
 import kr.ac.univ.researchField.dto.ResearchFieldDto;
 import kr.ac.univ.researchField.dto.mapper.ResearchFieldMapper;
 import kr.ac.univ.researchField.repository.ResearchFieldRepository;
+import kr.ac.univ.researchField.repository.ResearchFieldRepositoryImpl;
 import kr.ac.univ.util.AccessCheck;
 import kr.ac.univ.util.NewIconCheck;
 import org.springframework.data.domain.*;
@@ -17,9 +18,11 @@ import java.util.List;
 @Service
 public class ResearchFieldService {
     private final ResearchFieldRepository researchFieldRepository;
+    private final ResearchFieldRepositoryImpl researchFieldRepositoryImpl;
 
-    public ResearchFieldService(ResearchFieldRepository researchFieldRepository) {
+    public ResearchFieldService(ResearchFieldRepository researchFieldRepository, ResearchFieldRepositoryImpl researchFieldRepositoryImpl) {
         this.researchFieldRepository = researchFieldRepository;
+        this.researchFieldRepositoryImpl = researchFieldRepositoryImpl;
     }
 
     public Page<ResearchFieldDto> findResearchFieldList(Pageable pageable, SearchDto searchDto) {
@@ -53,7 +56,7 @@ public class ResearchFieldService {
     public List<ResearchFieldDto> findResearchFieldListByActiveStatusIs() {
         return ResearchFieldMapper.INSTANCE.toDto(researchFieldRepository.findAllByActiveStatusIs(ActiveStatus.ACTIVE));
     }
-    
+
     public Long insertResearchField(ResearchFieldDto researchFieldDto) {
         return researchFieldRepository.save(ResearchFieldMapper.INSTANCE.toEntity(researchFieldDto)).getIdx();
     }
@@ -72,6 +75,9 @@ public class ResearchFieldService {
         } else {
             researchFieldDto.setAccess(false);
         }
+
+        researchFieldRepositoryImpl.updateViewsByIdx(idx);
+        researchFieldDto.setViews(researchFieldDto.getViews() + 1);
 
         return researchFieldDto;
     }

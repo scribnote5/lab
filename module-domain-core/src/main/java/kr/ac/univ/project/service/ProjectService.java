@@ -24,12 +24,10 @@ public class ProjectService {
     private String moduleName;
     private final ProjectRepository projectRepository;
     private final ProjectRepositoryImpl projectRepositoryImpl;
-    private final UserRepository userRepository;
 
-    public ProjectService(ProjectRepository projectRepository, ProjectRepositoryImpl projectRepositoryImpl, UserRepository userRepository) {
+    public ProjectService(ProjectRepository projectRepository, ProjectRepositoryImpl projectRepositoryImpl) {
         this.projectRepository = projectRepository;
         this.projectRepositoryImpl = projectRepositoryImpl;
-        this.userRepository = userRepository;
     }
 
     public Page<ProjectDto> findProjectList(Pageable pageable, SearchDto searchDto) {
@@ -74,8 +72,11 @@ public class ProjectService {
         return projectDtoList;
     }
 
-    public Long insertProject(ProjectDto projectDto) {
+    public Long countAllByActiveStatusIsAndProjectStatus() {
+        return projectRepository.countAllByActiveStatusIsAndProjectStatus(ActiveStatus.ACTIVE, ProjectStatus.CURRENT);
+    }
 
+    public Long insertProject(ProjectDto projectDto) {
         return projectRepository.save(ProjectMapper.INSTANCE.toEntity(projectDto)).getIdx();
     }
 
@@ -95,6 +96,7 @@ public class ProjectService {
         }
 
         projectRepositoryImpl.updateViewsByIdx(idx);
+        projectDto.setViews(projectDto.getViews() + 1);
 
         return projectDto;
     }

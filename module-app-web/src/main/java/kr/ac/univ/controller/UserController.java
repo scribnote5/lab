@@ -80,7 +80,14 @@ public class UserController {
     @GetMapping("/permission-denied")
     public String permissionDenied() {
 
-        return "user/permission-denied";
+        return "user/access-denied";
+    }
+
+    // Access Denied
+    @GetMapping("/access-denied")
+    public String accessDenied() {
+
+        return "user/access-denied";
     }
 
     // Anonymous User Permission Denied
@@ -117,7 +124,7 @@ public class UserController {
 
             returnPage = "user/form";
         } else {
-            returnPage = "user/permission-denied";
+            returnPage = "user/access-denied";
         }
 
         return returnPage;

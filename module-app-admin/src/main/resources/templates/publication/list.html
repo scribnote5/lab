@@ -30,14 +30,21 @@
 
                 <div class="row justify-content-end mt-3">
                     <div class="col-auto px-1">
-                        <select name="publicationSearchType" th:field="*{publicationSearchType}" class="form-control input-sm">
+                        <select name="publicationSearchType" th:field="*{publicationSearchType}" class="form-control form-control-sm input-sm">
                             <option th:each="publicationSearchType : ${T(kr.ac.univ.publication.dto.enums.PublicationSearchType).values()}"
                                     th:value="${publicationSearchType}"
                                     th:text="${publicationSearchType.getSearchPublicationType()}"></option>
                         </select>
                     </div>
                     <div class="col-auto px-1">
-                        <input type="text" name="keyword" class="form-control" th:value="${searchDto?.keyword}"/>
+                        <select class="custom-select custom-select-sm" name="searchType" th:field="*{searchType}">
+                            <option th:value="TITLE">Title</option>
+                            <option th:value="AUTHORS">Authors</option>
+                            <option th:value="PUBLISHED_IN">Published In</option>
+                        </select>
+                    </div>
+                    <div class="col-auto px-1">
+                        <input type="text" name="keyword" class="form-control form-control-sm" th:value="${searchDto?.keyword}"/>
                     </div>
                     <div class="col-auto px-3">
                         <button id="search" type="button" class="btn-main">Search</button>
@@ -69,7 +76,7 @@
                                 <a th:href="'/publication?idx='+${publicationDto.idx}" class="link" th:text="${#strings.length(publicationDto.title)} < 40 ? ${publicationDto.title} : ${#strings.substring(publicationDto.title, 0, 40)} + '...'"></a>
                                 <img th:if="${publicationDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
-                            <td th:text="${publicationDto.authors}"></td>
+                            <td th:text="${#strings.length(publicationDto.authors)} < 20 ? ${publicationDto.authors} : ${#strings.substring(publicationDto.authors, 0, 20)} + '...'"></td>
                             <td th:text="${publicationDto.publishedIn}"></td>
                             <td th:text="${#temporals.format(publicationDto.publishedDate,'yyyy-MM-dd')}"></td>
                         </tr>

@@ -94,6 +94,9 @@ public class DataHistoryService {
             dataHistoryDto.setAccess(false);
         }
 
+        dataHistoryRepositoryImpl.updateViewsByIdx(idx);
+        dataHistoryDto.setViews(dataHistoryDto.getViews() + 1);
+
         return dataHistoryDto;
     }
 

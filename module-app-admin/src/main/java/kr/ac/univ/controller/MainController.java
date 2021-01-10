@@ -25,11 +25,11 @@ public class MainController {
         this.userService = userService;
     }
 
-    // /
+    // / 경로 호출할 때 user/login으로 redirect
     @GetMapping("/")
     public RedirectView redirectUserLogin(Model model) {
 
-        return new RedirectView("/user/login");
+        return new RedirectView("user/login");
     }
 
     // Home

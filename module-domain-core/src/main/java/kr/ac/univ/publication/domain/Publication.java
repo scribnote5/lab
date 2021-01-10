@@ -23,48 +23,34 @@ import lombok.ToString;
 @ToString
 @EntityListeners(PublicationListener.class)
 public class Publication extends CommonAudit {
-    @Column
     private String title;
 
-    @Column
     private String authors;
 
-    @Column
     @Enumerated(EnumType.STRING)
     private PublicationType publicationType;
 
-    @Column
     @Enumerated(EnumType.STRING)
     private PublishingArea publishingArea;
 
-    @Column
     private String publishedIn;
 
-    @Column
     private String impactFactor;
 
-    @Column
     private LocalDate publishedDate;
 
-    @Column
     private String pages;
 
-    @Column
     private String volume;
 
-    @Column
     private String number;
 
-    @Column
     private String doi;
 
-    @Column
     private String uri;
 
-    @Column
     private String isbnIssn;
 
-    @Column
     private String remark;
 
     @Builder

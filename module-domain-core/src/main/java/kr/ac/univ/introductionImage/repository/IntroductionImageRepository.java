@@ -15,13 +15,11 @@ public interface IntroductionImageRepository extends JpaRepository<IntroductionI
 
     Page<IntroductionImage> findAllByCreatedByContaining(Pageable pageable, String username);
 
-
     Page<IntroductionImage> findAllByActiveStatusIs(Pageable pageable, ActiveStatus activeStatus);
 
     Page<IntroductionImage> findAllByTitleContainingAndActiveStatusIs(Pageable pageable, String title, ActiveStatus activeStatus);
 
     Page<IntroductionImage> findAllByCreatedByContainingAndActiveStatusIs(Pageable pageable, String username, ActiveStatus activeStatus);
-
 
     List<IntroductionImage> findAllByActiveStatusIsAndMainPagePriorityGreaterThanEqualOrderByMainPagePriorityAsc(ActiveStatus activeStatus, Long mainPagePriority);
 

@@ -14,10 +14,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @ToString
 public class CategoryDto extends CommonDto {
-    /* CommonDto: JPA Audit */
-
-    /* 기본 정보 */
     @NotBlank(message = "The title must not be blank.")
-    @Size(max = 255, message = "The title can be used for less than 50 characters.")
+    @Size(max = 255, message = "The title must be less than 255 characters.")
     private String title;
 }

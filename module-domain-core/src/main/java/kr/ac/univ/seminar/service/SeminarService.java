@@ -26,14 +26,10 @@ public class SeminarService {
     private String moduleName;
     private final SeminarRepository seminarRepository;
     private final SeminarRepositoryImpl seminarRepositoryImpl;
-    private final UserRepository userRepository;
-    private final CategoryRepository categoryRepository;
 
-    public SeminarService(SeminarRepository seminarRepository, SeminarRepositoryImpl seminarRepositoryImpl, UserRepository userRepository, CategoryRepository categoryRepository) {
+    public SeminarService(SeminarRepository seminarRepository, SeminarRepositoryImpl seminarRepositoryImpl) {
         this.seminarRepository = seminarRepository;
         this.seminarRepositoryImpl = seminarRepositoryImpl;
-        this.userRepository = userRepository;
-        this.categoryRepository = categoryRepository;
     }
 
     @Transactional
@@ -53,11 +49,20 @@ public class SeminarService {
                     seminarList = null;
                 }
                 break;
-            case "PRESENTER":
+            case "CONTENT":
                 if ("module-app-admin".equals(moduleName)) {
-                    seminarList = seminarRepository.findAllByPresenterContaining(pageable, searchDto.getKeyword());
+                    seminarList = seminarRepository.findAllByContentContaining(pageable, searchDto.getKeyword());
                 } else if ("module-app-web".equals(moduleName)) {
-                    seminarList = seminarRepository.findAllByPresenterContainingAndActiveStatusIs(pageable, searchDto.getKeyword(), ActiveStatus.ACTIVE);
+                    seminarList = seminarRepository.findAllByContentContainingAndActiveStatusIs(pageable, searchDto.getKeyword(), ActiveStatus.ACTIVE);
+                } else {
+                    seminarList = null;
+                }
+                break;
+            case "ID":
+                if ("module-app-admin".equals(moduleName)) {
+                    seminarList = seminarRepository.findAllByCreatedByContaining(pageable, searchDto.getKeyword());
+                } else if ("module-app-web".equals(moduleName)) {
+                    seminarList = seminarRepository.findAllByCreatedByContainingAndActiveStatusIs(pageable, searchDto.getKeyword(), ActiveStatus.ACTIVE);
                 } else {
                     seminarList = null;
                 }
@@ -115,6 +120,7 @@ public class SeminarService {
         }
 
         seminarRepositoryImpl.updateViewsByIdx(idx);
+        seminarDto.setViews(seminarDto.getViews() + 1);
 
         return seminarDto;
     }

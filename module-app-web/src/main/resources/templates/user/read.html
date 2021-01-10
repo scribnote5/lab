@@ -7,100 +7,105 @@
     <title th:text="${@environment.getProperty('title')} + ' | Member Detail'"></title>
 </head>
 <body>
-<div class="d-flex" id="wrapper">
-    <!-- header -->
-    <div th:replace="layout/header::header"></div>
+<div id="wrapper">
+    <div id="page-content-wrapper">
+        <!-- header -->
+        <div th:replace="layout/header::header"></div>
 
-    <div class="container">
-        <form name="form" id="form" th:object="${userDto}" action="#">
-            <div class="page-header breadcrumbs" data-aos="fade-up" data-aos-delay="100">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h2>Member Detail</h2>
-                    <ol>
-                        <li>Home</li>
-                        <img src="/images/chevron-right.svg">
-                        <li>Member Detail</li>
-                    </ol>
+        <div class="container">
+            <form name="form" id="form" th:object="${userDto}" action="#">
+                <div class="page-header breadcrumbs" data-aos="fade-up" data-aos-delay="100">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2>Member Detail</h2>
+                        <ol>
+                            <li>Home</li>
+                            <img src="/images/chevron-right.svg">
+                            <li>Member Detail</li>
+                        </ol>
+                    </div>
                 </div>
-            </div>
 
-            <div class="mt-5" data-aos="fade-up" data-aos-delay="150">
-                <table class="table">
-                    <colgroup>
-                        <col width="17.5%"/>
-                        <col width="47.5%"/>
-                        <col width="35%"/>
-                    </colgroup>
-                    <tr>
-                        <th>Korean Name</th>
-                        <td><span id="koreanName" th:text="*{koreanName}"></span></td>
-                        <td rowspan="5">
-                            <div class="member img-thumbnail float-right">
-                                <div class="member-img">
-                                    <img th:if="*{attachedFileList.size()} == 0" th:attr="src=@{/images/no-preview-available.jpg}" class="member-photo"/>
-                                    <img th:if="*{attachedFileList.size()} != 0" th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}" class="member-photo"/>
+                <div class="mt-5" data-aos="fade-up" data-aos-delay="150">
+                    <table class="table">
+                        <colgroup>
+                            <col width="17.5%"/>
+                            <col width="42.5%"/>
+                            <col width="40%"/>
+                        </colgroup>
+                        <tr>
+                            <th>Korean Name</th>
+                            <td><span id="koreanName" th:text="*{koreanName}"></span></td>
+                            <td rowspan="6">
+                                <div class="member img-thumbnail float-right">
+                                    <div class="member-img">
+                                        <img th:if="*{attachedFileList.size()} == 0" th:attr="src=@{/images/no-preview-available.jpg}" class="member-photo"/>
+                                        <img th:if="*{attachedFileList.size()} != 0" th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}"
+                                             class="member-photo"/>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    </tr>
-                    <tr>
-                        <th>English Name</th>
-                        <td><span id="EnglishName" th:text="*{englishName}"></span></td>
-                    </tr>
-                    <tr>
-                        <th>Member Type</th>
-                        <td>
-                            <span th:if="*{userType?.name() == 'FACULTY'}" th:text="Faculty"> </span>
-                            <span th:if="*{userType?.name() == 'FULL_TIME_PhD'}" th:text="'Ph.D. ' + ' - ' + 'Full Time'"> </span>
-                            <span th:if="*{userType?.name() == 'PART_TIME_PhD'}" th:text="'Ph.D. ' + ' - ' + 'Part Time'"> </span>
-                            <span th:if="*{userType?.name() == 'FULL_TIME_MS'}" th:text="'M.S.' + ' - ' + 'Full Time'"> </span>
-                            <span th:if="*{userType?.name() == 'PART_TIME_MS'}" th:text="'M.S.' + '-' + 'Part Time'"> </span>
-                            <span th:if="*{userType?.name() == 'BS'}" th:text="B.S."> </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Member Status</th>
-                        <td>
-                            <span th:if="*{userStatus?.name() == 'ATTENDING'}" th:text="Attending"> </span>
-                            <span th:if="*{userStatus?.name() == 'GRADUATED'}" th:text="'Graduated, ' + *{graduatedDate}"> </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Workplace</th>
-                        <td><span th:text="*{workplace}"> </span></td>
-                    </tr>
-                </table>
+                            </td>
+                        </tr>
+                        </tr>
+                        <tr>
+                            <th>English Name</th>
+                            <td><span id="EnglishName" th:text="*{englishName}"></span></td>
+                        </tr>
+                        <tr>
+                            <th>Member Type</th>
+                            <td>
+                                <span th:if="*{userType?.name() == 'FACULTY'}" th:text="Faculty"> </span>
+                                <span th:if="*{userType?.name() == 'FULL_TIME_PhD'}" th:text="'Ph.D. ' + ' - ' + 'Full Time'"> </span>
+                                <span th:if="*{userType?.name() == 'PART_TIME_PhD'}" th:text="'Ph.D. ' + ' - ' + 'Part Time'"> </span>
+                                <span th:if="*{userType?.name() == 'FULL_TIME_MS'}" th:text="'M.S.' + ' - ' + 'Full Time'"> </span>
+                                <span th:if="*{userType?.name() == 'PART_TIME_MS'}" th:text="'M.S.' + '-' + 'Part Time'"> </span>
+                                <span th:if="*{userType?.name() == 'BS'}" th:text="B.S."> </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Member Status</th>
+                            <td>
+                                <span th:if="*{userStatus?.name() == 'ATTENDING'}" th:text="Attending"> </span>
+                                <span th:if="*{userStatus?.name() == 'GRADUATED'}" th:text="'Alumni, graduated at ' + *{graduatedDate}"> </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Workplace</th>
+                            <td><span th:text="*{workplace}"> </span></td>
+                        </tr>
+                        <tr><td colspan="2"></td></tr>
+                    </table>
 
-                <nav class="mt-5" data-aos="fade-up" data-aos-delay="200">
-                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        <a class="nav-item nav-link link-black active" id="general-tab" data-toggle="tab" href="#general" role="tab" aria-controls="general" aria-selected="false">General</a>
-                        <a class="nav-item nav-link link-black" id="contact-information-tab" data-toggle="tab" href="#contact-information" role="tab" aria-controls="contact-information" aria-selected="false">Contact Information</a>
-                    </div>
-                </nav>
-                <div class="tab-content" id="nav-tabContent">
-                    <div class="tab-pane fade show active mt-4 content-small" id="general" role="tabpanel" aria-labelledby="general-tab">
-                        <span id="introduction" class="" th:utext="*{introduction}"></span></td>
-                    </div>
+                    <nav class="mt-5" data-aos="fade-up" data-aos-delay="200">
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link link-black active" id="general-tab" data-toggle="tab" href="#general" role="tab" aria-controls="general" aria-selected="false">Self Introduction</a>
+                            <a class="nav-item nav-link link-black" id="contact-information-tab" data-toggle="tab" href="#contact-information" role="tab" aria-controls="contact-information" aria-selected="false">Contact Information</a>
+                        </div>
+                    </nav>
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active mt-4 content-small" id="general" role="tabpanel" aria-labelledby="general-tab">
+                            <span id="introduction" class="" th:utext="*{introduction}"></span></td>
+                        </div>
 
-                    <div class="tab-pane fade mt-4 content-small" id="contact-information" role="tabpanel" aria-labelledby="contact-information-tab">
-                        <p>Email: <a th:if="!*{#strings.isEmpty(email)}" th:href="'mailto:' + *{email}" th:text="*{email}" class="link"></a></p>
-                        <p>Github: <a th:if="!*{#strings.isEmpty(github)}" th:href="*{github}" th:text="*{github}" class="link"></a></p>
-                        <p>Linked In: <a th:if=!"*{#strings.isEmpty(linkedIn)}" th:href="*{linkedIn}" th:text="*{linkedIn}" class="link"></a></p>
-                        <p>External Web Page: <a th:if="!*{#strings.isEmpty(externalWebPage)}" th:href="*{externalWebPage}" th:text="*{externalWebPage}" class="link"></a></p>
+                        <div class="tab-pane fade mt-4 content-small" id="contact-information" role="tabpanel" aria-labelledby="contact-information-tab">
+                            <p>Email: <a th:if="!*{#strings.isEmpty(email)}" th:href="'mailto:' + *{email}" th:text="*{email}" class="link"></a></p>
+                            <p>Github: <a th:if="!*{#strings.isEmpty(github)}" th:href="*{github}" th:text="*{github}" class="link"></a></p>
+                            <p>Linked In: <a th:if="!*{#strings.isEmpty(linkedIn)}" th:href="*{linkedIn}" th:text="*{linkedIn}" class="link"></a></p>
+                            <p>External Web Page: <a th:if="!*{#strings.isEmpty(externalWebPage)}" th:href="*{externalWebPage}" th:text="*{externalWebPage}" class="link"></a></p>
+                            <p>Messenger ID(Skype): <a th:if="!*{#strings.isEmpty(messengerId)}" th:href="*{messengerId}" th:text="*{messengerId}" class="link"></a></p>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="row justify-content-between mt-5 mb-3">
-                <div class="col-auto mx-3">
-                    <a href="/user/list" class="btn btn-secondary">Move to List</a>
+                <div class="row justify-content-between mt-5 mb-4">
+                    <div class="col-auto mx-3">
+                        <a href="/user/list" class="btn btn-secondary">Move to List</a>
+                    </div>
                 </div>
-            </div>
 
-            <!-- input type="hidden" -->
-            <input type="hidden" name="idx" th:value="*{idx}"/>
-        </form>
+                <!-- input type="hidden" -->
+                <input type="hidden" name="idx" th:value="*{idx}"/>
+            </form>
+        </div>
     </div>
 </div>
 

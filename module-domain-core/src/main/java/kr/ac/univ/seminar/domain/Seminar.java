@@ -20,29 +20,21 @@ import java.time.LocalDateTime;
 @ToString
 @EntityListeners(SeminarListener.class)
 public class Seminar extends CommonAudit {
-    @Column
     private String title;
 
-    @Column
     @Enumerated(EnumType.STRING)
     private SeminarType seminarType;
 
-    @Column
     private LocalDateTime presentationDate;
 
-    @Column
     private String place;
 
-    @Column
     private String presenter;
 
-    @Column
     private Long categoryIdx;
 
-    @Column
     private String content;
 
-    @Column
     private Long views = 0L;
 
     @Builder

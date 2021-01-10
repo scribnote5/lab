@@ -20,7 +20,6 @@ import javax.persistence.Table;
 @ToString
 @EntityListeners(CategoryListener.class)
 public class Category extends CommonAudit {
-    @Column
     private String title;
 
     @Builder

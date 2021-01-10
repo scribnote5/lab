@@ -22,7 +22,7 @@ public class AboutUsRestController {
     @PostMapping
     public ResponseEntity<?> postAboutUs(@RequestBody @Valid AboutUsDto aboutUsDto) {
         if (aboutUsDto.getActiveStatus() == ActiveStatus.ACTIVE && aboutUsService.countAllByActiveStatus() > 0) {
-            throw new BusinessException("Only one about us can be activate.");
+            throw new BusinessException("Only one about us must be activate.");
         }
 
         Long idx = aboutUsService.insertAboutUs(aboutUsDto);
@@ -33,7 +33,7 @@ public class AboutUsRestController {
     @PutMapping("/{idx}")
     public ResponseEntity<?> putAboutUs(@PathVariable("idx") Long idx, @RequestBody @Valid AboutUsDto aboutUsDto) {
         if (aboutUsDto.getActiveStatus() == ActiveStatus.ACTIVE && aboutUsService.countAllByActiveStatus() > 1) {
-            throw new BusinessException("Only one about us can be activate.");
+            throw new BusinessException("Only one about us must be activate.");
         }
 
         aboutUsService.updateAboutUs(idx, aboutUsDto);

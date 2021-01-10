@@ -20,15 +20,12 @@ import javax.persistence.Table;
 @ToString
 @EntityListeners(ResearchFieldListener.class)
 public class ResearchField extends CommonAudit {
-    @Column
     private String title;
 
-    @Column
     private Long categoryIdx = 0L;
 
-    @Column
     private String content;
-    
+
     @Builder
     public ResearchField(Long idx, String createdBy, String lastModifiedBy, ActiveStatus activeStatus, String title, Long categoryIdx, String content) {
         setIdx(idx);

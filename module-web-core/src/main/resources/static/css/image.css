@@ -1,12 +1,6 @@
 /*
  * Icon
  */
-.url-icon {
-    margin: 0 .25rem .125rem .25rem;
-    height: 1.25rem;
-    width: auto;
-}
-
 .sidebar-icon {
     height: 2.5rem;
     width: 2.5rem;
@@ -56,7 +50,6 @@
     height: 18px;
 }
 
-
 .logout-icon {
     border-left: .075rem solid var(--light-grey);
     padding-left: .2rem;
@@ -69,22 +62,16 @@
 /*
  * Image
  */
-.album-img-preview {
-    max-width: 100%;
+.general-img-preview {
     width: auto;
-    height: 13.5rem;
+    height: 220px;
 }
 
 .user-img-preview {
-    width: 10rem;
-    height: 10rem;
-}
-
-.no-preview-available {
-    width: 330px;
-    height: 330px;
+    width: 200px;
+    height: auto;
 }
 
 .img-thumbnail:hover {
-    box-shadow: 0 0 .05rem .05rem rgb(158, 37, 41);
+    box-shadow: 0 0 .05rem .05rem var(--main-red);
 }

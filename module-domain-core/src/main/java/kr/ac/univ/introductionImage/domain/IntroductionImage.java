@@ -21,10 +21,8 @@ import java.time.LocalDate;
 @ToString
 @EntityListeners(IntroductionImageListener.class)
 public class IntroductionImage extends CommonAudit {
-    @Column
     private String title;
 
-    @Column
     private Long mainPagePriority;
 
     @Builder

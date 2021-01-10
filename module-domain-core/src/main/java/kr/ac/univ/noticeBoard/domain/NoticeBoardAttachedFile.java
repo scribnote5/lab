@@ -17,7 +17,6 @@ import javax.persistence.Table;
 @Table
 @ToString
 public class NoticeBoardAttachedFile extends AttachedFileAudit {
-    @Column
     private Long noticeBoardIdx;
 
     @Builder

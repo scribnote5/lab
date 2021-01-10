@@ -40,7 +40,7 @@ public class AlumniAssociationController {
 
             returnPage = "alumniAssociation/form";
         } else {
-            returnPage = "user/permission-denied";
+            returnPage = "user/access-denied";
         }
 
         return returnPage;

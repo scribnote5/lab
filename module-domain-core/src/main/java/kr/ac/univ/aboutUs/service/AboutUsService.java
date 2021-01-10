@@ -4,6 +4,7 @@ import kr.ac.univ.aboutUs.domain.AboutUs;
 import kr.ac.univ.aboutUs.dto.AboutUsDto;
 import kr.ac.univ.aboutUs.dto.mapper.AboutUsMapper;
 import kr.ac.univ.aboutUs.repository.AboutUsRepository;
+import kr.ac.univ.aboutUs.repository.AboutUsRepositoryImpl;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.SearchDto;
 import kr.ac.univ.util.AccessCheck;
@@ -20,10 +21,11 @@ public class AboutUsService {
     @Value("${module.name}")
     private String moduleName;
     private final AboutUsRepository aboutUsRepository;
+    private final AboutUsRepositoryImpl aboutUsRepositoryImpl;
 
-    public AboutUsService(AboutUsRepository aboutUsRepository) {
+    public AboutUsService(AboutUsRepository aboutUsRepository, AboutUsRepositoryImpl aboutUsRepositoryImpl) {
         this.aboutUsRepository = aboutUsRepository;
-
+        this.aboutUsRepositoryImpl = aboutUsRepositoryImpl;
     }
 
     public Page<AboutUsDto> findAboutUsList(Pageable pageable, SearchDto searchDto) {
@@ -83,6 +85,9 @@ public class AboutUsService {
         } else {
             aboutUsDto.setAccess(false);
         }
+
+        aboutUsRepositoryImpl.updateViewsByIdx(idx);
+        aboutUsDto.setViews(aboutUsDto.getViews() + 1);
 
         return aboutUsDto;
     }

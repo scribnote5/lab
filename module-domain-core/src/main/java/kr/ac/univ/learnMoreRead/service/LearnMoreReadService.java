@@ -6,6 +6,7 @@ import kr.ac.univ.learnMoreRead.domain.LearnMoreRead;
 import kr.ac.univ.learnMoreRead.dto.LearnMoreReadDto;
 import kr.ac.univ.learnMoreRead.dto.mapper.LearnMoreReadMapper;
 import kr.ac.univ.learnMoreRead.repository.LearnMoreReadRepository;
+import kr.ac.univ.learnMoreRead.repository.LearnMoreReadRepositoryImpl;
 import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.AccessCheck;
 import kr.ac.univ.util.NewIconCheck;
@@ -18,9 +19,11 @@ import java.util.List;
 @Service
 public class LearnMoreReadService {
     private final LearnMoreReadRepository learnMoreReadRepository;
+    private final LearnMoreReadRepositoryImpl learnMoreReadRepositoryImpl;
 
-    public LearnMoreReadService(LearnMoreReadRepository learnMoreReadRepository) {
+    public LearnMoreReadService(LearnMoreReadRepository learnMoreReadRepository, LearnMoreReadRepositoryImpl learnMoreReadRepositoryImpl) {
         this.learnMoreReadRepository = learnMoreReadRepository;
+        this.learnMoreReadRepositoryImpl = learnMoreReadRepositoryImpl;
     }
 
     public Page<LearnMoreReadDto> findLearnMoreList(Pageable pageable, SearchDto searchDto) {
@@ -77,6 +80,9 @@ public class LearnMoreReadService {
         } else {
             learnMoreReadDto.setAccess(false);
         }
+
+        learnMoreReadRepositoryImpl.updateViewsByIdx(idx);
+        learnMoreReadDto.setViews(learnMoreReadDto.getViews() + 1);
 
         return learnMoreReadDto;
     }

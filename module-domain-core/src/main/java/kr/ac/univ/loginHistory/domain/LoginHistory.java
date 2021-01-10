@@ -17,22 +17,16 @@ import java.time.LocalDateTime;
 @Table
 @ToString
 public class LoginHistory extends CommonAudit {
-    @Column
     private Long audIdx;
 
-    @Column
     private String audIp;
 
-    @Column
     private String audLocation;
 
-    @Column
     private String audMessage;
 
-    @Column
     private String audSubMessage;
 
-    @Column
     @Enumerated(EnumType.STRING)
     private AudLoginResultType audLoginResultType;
 

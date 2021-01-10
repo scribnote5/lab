@@ -51,7 +51,7 @@ public class NoticeBoardController {
 
             returnPage = "noticeBoard/form";
         } else {
-            returnPage = "user/permission-denied";
+            returnPage = "user/access-denied";
         }
 
         return returnPage;

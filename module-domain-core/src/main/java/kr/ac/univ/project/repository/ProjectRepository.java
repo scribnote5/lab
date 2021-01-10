@@ -18,7 +18,7 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     Page<Project> findAllByCreatedByContaining(Pageable pageable, String username);
 
-
-
     List<Project> findAllByProjectStatusIsAndActiveStatusIsOrderByStartDateDesc(ProjectStatus projectStatus, ActiveStatus activeStatus);
+
+    Long countAllByActiveStatusIsAndProjectStatus(ActiveStatus activeStatus, ProjectStatus projectStatus);
 }

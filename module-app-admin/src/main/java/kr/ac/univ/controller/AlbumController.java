@@ -46,7 +46,7 @@ public class AlbumController {
 
             returnPage = "album/form";
         } else {
-            returnPage = "user/permission-denied";
+            returnPage = "user/access-denied";
         }
 
         return returnPage;

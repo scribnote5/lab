@@ -42,73 +42,85 @@
                         </tr>
                         <tr>
                             <th>Title</th>
-                            <td><input type="text" name="title" class="form-control" th:value="*{title}"/></td>
+                            <td><input type="text" name="title" class="form-control form-control-sm" th:value="*{title}"/></td>
                         </tr>
                         <tr>
                             <th>Authors</th>
-                            <td><input type="text" name="authors" class="form-control" th:value="*{authors}"/></td>
-                        </tr>
-                        <tr>
-                            <th>Publication Type</th>
-                            <td>
-                                <select class="custom-select" name="publicationType" th:field="*{publicationType}">
-                                    <option th:value="JOURNAL">Journal</option>
-                                    <option th:value="POSTER">Poster</option>
-                                    <option th:value="REGULAR">Regular</option>
-                                    <option th:value="DEMO">Demo</option>
-                                    <option th:value="WORKSHOP">Workshop</option>
-                                    <option th:value="WORKINPROCESS">Work in Process</option>
-                                </select>
-                            </td>
+                            <td><input type="text" name="authors" class="form-control form-control-sm" th:value="*{authors}"/></td>
                         </tr>
                         <tr>
                             <th>Publishing Area</th>
                             <td>
-                                <select class="custom-select" name="publishingArea" th:field="*{publishingArea}">
+                                <select class="custom-select custom-select-sm" name="publishingArea" id="publishingArea" th:field="*{publishingArea}">
                                     <option th:value="DOMESTIC">Domestic</option>
                                     <option th:value="INTERNATIONAL">International</option>
                                 </select>
                             </td>
                         </tr>
                         <tr>
-                            <th>Published In</th>
-                            <td><input type="text" class="form-control" name="publishedIn" th:value="*{publishedIn}"/></td>
+                            <th>Publication Type</th>
+                            <td>
+                                <select th:disabled="*{#strings.equals(publishingArea, 'INTERNATIONAL')}" th:style="!*{#strings.equals(publishingArea, 'INTERNATIONAL')} ? 'display:inline' : 'display:none'"
+                                        class="custom-select custom-select-sm" name="publicationType" id="domesticPublicationType" th:field="*{publicationType}">
+                                    <option th:value="JOURNAL">Journal</option>
+                                    <option th:value="JOURNAL_KCI">Journal - KCI</option>
+                                    <option th:value="CONFERENCE_POSTER">Conference- Poster</option>
+                                    <option th:value="CONFERENCE_REGULAR">Conference- Regular</option>
+                                    <option th:value="CONFERENCE_DEMO">Conference- Demo</option>
+                                    <option th:value="CONFERENCE_WORKSHOP">Conference- Workshop</option>
+                                </select>
+
+                                <select th:disabled="!*{#strings.equals(publishingArea, 'INTERNATIONAL')}" th:style="*{#strings.equals(publishingArea, 'INTERNATIONAL')} ? 'display:inline' : 'display:none'"
+                                        class="custom-select custom-select-sm" name="publicationType" id="internationalPublicationType" th:field="*{publicationType}">
+                                    <option th:value="JOURNAL">Journal</option>
+                                    <option th:value="JOURNAL_SCOPUS">Journal - SCOPUS</option>
+                                    <option th:value="JOURNAL_SCI">Journal - SCI</option>
+                                    <option th:value="CONFERENCE_POSTER">Conference- Poster</option>
+                                    <option th:value="CONFERENCE_REGULAR">Conference- Regular</option>
+                                    <option th:value="CONFERENCE_DEMO">Conference- Demo</option>
+                                    <option th:value="CONFERENCE_WORKSHOP">Conference- Workshop</option>
+                                </select>
+                            </td>
                         </tr>
                         <tr>
-                            <th>Impact Factor(SCIE)</th>
-                            <td><input type="text" name="impactFactor" class="form-control" th:placeholder="*{#strings.isEmpty(impactFactor)} ? 'ex) IF: 0.861' : ''" th:value="*{impactFactor}"/></td>
+                            <th>Published In</th>
+                            <td><input type="text" class="form-control form-control-sm" name="publishedIn" th:value="*{publishedIn}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Impact Factor(SCI or SCOPUS)</th>
+                            <td><input type="text" name="impactFactor" class="form-control form-control-sm" th:placeholder="*{#strings.isEmpty(impactFactor)} ? 'ex) IF: 0.861' : ''" th:value="*{impactFactor}"/></td>
                         </tr>
                         <tr>
                             <th>Published Date</th>
-                            <td><input type="date" name="publishedDate" class="form-control" th:value="*{publishedDate}"/></td>
+                            <td><input type="date" name="publishedDate" class="form-control form-control-sm" th:value="*{publishedDate}"/></td>
                         </tr>
                         <tr>
                             <th>Pages</th>
-                            <td><input type="text" name="pages" class="form-control" th:value="*{pages}"/></td>
+                            <td><input type="text" name="pages" class="form-control form-control-sm" th:value="*{pages}"/></td>
                         </tr>
                         <tr>
                             <th>Volume</th>
-                            <td><input type="text" name="volume" class="form-control" th:value="*{volume}"/></td>
+                            <td><input type="text" name="volume" class="form-control form-control-sm" th:value="*{volume}"/></td>
                         </tr>
                         <tr>
                             <th>Number</th>
-                            <td><input type="text" name="number" class="form-control" th:value="*{number}"/></td>
+                            <td><input type="text" name="number" class="form-control form-control-sm" th:value="*{number}"/></td>
                         </tr>
                         <tr>
                             <th>DOI</th>
-                            <td><input type="text" name="doi" class="form-control" th:value="*{doi}"/></td>
+                            <td><input type="text" name="doi" class="form-control form-control-sm" th:value="*{doi}"/></td>
                         </tr>
                         <tr>
                             <th>URI</th>
-                            <td><input type="text" name="uri" class="form-control" th:value="*{uri}"/></td>
+                            <td><input type="text" name="uri" class="form-control form-control-sm" th:value="*{uri}"/></td>
                         </tr>
                         <tr>
                             <th>ISBN/ISSN</th>
-                            <td><input type="text" name="isbnIssn" class="form-control" th:value="*{isbnIssn}"/></td>
+                            <td><input type="text" name="isbnIssn" class="form-control form-control-sm" th:value="*{isbnIssn}"/></td>
                         </tr>
                         <tr>
                             <th>Remark</th>
-                            <td><input type="text" name="remark" class="form-control" th:value="*{remark}"/></td>
+                            <td><input type="text" name="remark" class="form-control form-control-sm" th:value="*{remark}"/></td>
                         </tr>
                         <tr>
                             <th>Attached File</th>
@@ -152,7 +164,7 @@
                             <th>Active Status</th>
                             <td>
                                 <div class="pull-left">
-                                    <select class="custom-select" name="activeStatus" th:field="*{activeStatus}">
+                                    <select class="custom-select custom-select-sm" name="activeStatus" th:field="*{activeStatus}">
                                         <option th:value="ACTIVE">Active</option>
                                         <option th:value="INACTIVE">Inactive</option>
                                     </select>
@@ -161,11 +173,23 @@
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created Date</th>
-                            <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
-                            <th>Modified Date</th>
-                            <td><input type="text" class="form-control" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <th>Last Modified Date</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Created By</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{createdBy}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Last Modified By</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{lastModifiedBy}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Views</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{views}"/></td>
                         </tr>
                     </table>
                 </div>
@@ -292,15 +316,28 @@
             });
     }
 
+    $("#publishingArea").change(function () {
+        var selectOption = document.getElementById("publishingArea");
+        var domesticPublicationType = document.getElementById("domesticPublicationType");
+        var internationalPublicationType = document.getElementById("internationalPublicationType");
 
-    publish
-    publishingArea
-
+        if (selectOption.options[selectOption.selectedIndex].value == "DOMESTIC") {
+            domesticPublicationType.style.display = "inline";
+            domesticPublicationType.disabled = false;
+            internationalPublicationType.style.display = "none";
+            internationalPublicationType.disabled = true;
+        } else {
+            domesticPublicationType.style.display = "none";
+            domesticPublicationType.disabled = true;
+            internationalPublicationType.style.display = "inline";
+            internationalPublicationType.disabled = false;
+        }
+    });
 </script>
 <script th:if="!${publicationDto?.idx}">
     $("#insert").click(function () {
         // (input tag mame, length or size, message)
-        if (!(validateByLength("title", 255, "title"))) {
+        if (!(validateByLength("title", 255, "title")) || !(validateByLength("authors", 255, "authors"))) {
             return false;
         }
 
@@ -360,7 +397,7 @@
 <script th:if="${publicationDto?.idx}" th:inline="javascript">
     $("#update").click(function () {
         // (input tag mame, length or size, message)
-        if (!(validateByLength("title", 255, "title"))) {
+        if (!(validateByLength("title", 255, "title")) || !(validateByLength("authors", 255, "authors"))) {
             return false;
         }
 

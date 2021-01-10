@@ -3,10 +3,14 @@ package kr.ac.univ.user.repository;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.user.domain.User;
 import kr.ac.univ.user.domain.enums.AuthorityType;
+import kr.ac.univ.user.domain.enums.UserStatus;
+import kr.ac.univ.user.domain.enums.UserType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -17,6 +21,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByUsernameAndAuthorityTypeIn(String username, AuthorityType[] authorityType);
 
     Long countAllBy();
+
+    Long countAllByActiveStatusIsAndUserStatusIsAndUserTypeIs(ActiveStatus activeStatus, UserStatus userStatus, UserType userType);
 
     Page<User> findAllByUsernameContaining(Pageable pageable, String username);
 

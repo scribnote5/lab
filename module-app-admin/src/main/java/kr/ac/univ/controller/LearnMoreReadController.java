@@ -50,7 +50,7 @@ public class LearnMoreReadController {
 
             returnPage = "learnMoreRead/form";
         } else {
-            returnPage = "user/permission-denied";
+            returnPage = "user/access-denied";
         }
 
         return returnPage;

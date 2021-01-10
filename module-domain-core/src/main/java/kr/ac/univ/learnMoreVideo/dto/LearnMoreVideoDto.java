@@ -17,13 +17,10 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 public class LearnMoreVideoDto extends CommonDto {
-    /* CommonDto: JPA Audit */
-
-    /* 기본 정보 */
     @NotBlank(message = "The title must not be blank.")
-    @Size(max = 255, message = "The title can be used for less than 50 characters.")
+    @Size(max = 255, message = "The title must be less than 255 characters.")
     private String title;
 
-    /* 첨부 파일 */
+    /* Attached File */
     private List<LearnMoreVideoAttachedFile> attachedFileList = new ArrayList<LearnMoreVideoAttachedFile>();
 }

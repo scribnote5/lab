@@ -5,18 +5,22 @@
     padding: 1rem;
     background: var(--darker-white);
     min-height: 40px;
-    margin-top: 5.5rem;
+    margin-top: 6.5rem;
+}
+
+.breadcrumbs i {
+    font-size: 1.5rem;
 }
 
 @media (max-width: 992px) {
     .breadcrumbs {
-        margin-top: 4rem;
+        margin-top: 5.5rem;
     }
 }
 
-/*
- * Section
- */
+/*--------------------------------------------------------------
+# Sections General
+--------------------------------------------------------------*/
 section {
     padding: 2.5rem 0;
     overflow: hidden;
@@ -70,33 +74,33 @@ section {
 }
 
 .section-title h2 {
-    margin-bottom: .5rem;
     font-weight: var(--strong-font-weight);
     line-height: 2.5rem;
 }
 
-.section-title h2::before, .section-title h2::after {
+.section-title h3 {
+    margin-bottom: 1rem;
+    font-weight: var(--strong-font-weight);
+    line-height: 2.25rem;
+}
+
+.section-title h3::before, .section-title h3::after {
     content: '';
     width: 2.5rem;
-    height: .25rem;
+    height: .2rem;
     background: var(--main-red);
     display: inline-block;
 }
 
-.section-title h2::before {
-    margin: 0 .6rem .6rem 0;
+.section-title h3::before {
+    margin: 0 .5rem .5rem 0;
 }
 
-.section-title h2::after {
-    margin: 0 0 .6rem .6rem;
+.section-title h3::after {
+    margin: 0 0 .5rem .5rem;
 }
 
-.section-title h3 {
-    font-size: 1.5rem;
-}
-
-.section-title h4 {
-    margin-top: 1.25rem;
+.section-title h5 {
 }
 
 /* section-search */
@@ -110,7 +114,13 @@ section {
 .introduction {
     width: 100%;
     height: 65vh;
-    margin-top: 70px;
+    margin-top: 5rem;
+}
+
+.introduction .introduction-content-wrapper {
+    text-align: justify;
+    text-justify: inter-word;
+    padding-right: 2rem;
 }
 
 .introduction h1 {
@@ -122,23 +132,22 @@ section {
 
 .introduction h2 {
     color: var(--lighter-black);
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     font-size: 1.5rem;
     line-height: 2.25rem;
 }
 
 .btn-main-about-us {
-    font-family: "Raleway", sans-serif;
     display: inline-block;
     text-align: center;
     vertical-align: middle;
     user-select: none;
     border: 2px solid var(--main-red);
-    padding: .5rem 1.5rem;
-    font-size: 1.25rem;
+    padding: .75rem 1.25rem;
+    font-size: var(--larger-font-size);
     font-weight: var(--strong-font-weight);
-    line-height: 2rem;
-    border-radius: 2rem;
+    line-height: 1.5rem;
+    border-radius: 3rem;
     transition: 0.5s;
     background: var(--white);
     color: var(--main-red);
@@ -171,7 +180,6 @@ section {
 .introduction .introduction-image-carousel {
     width: 420px !important;
     height: 300px !important;
-    float: right;
 }
 
 .introduction .introduction-image-carousel img {
@@ -188,6 +196,7 @@ section {
 @media (max-width: 991px) {
     .introduction {
         height: 100vh;
+        margin-top: 4.5rem;
     }
 
     .introduction .animated {
@@ -195,25 +204,28 @@ section {
         animation: none;
     }
 
-    .introduction .introduction-image-carousel {
-        width: 300px !important;
-        height: 220px !important;
-        float: none;
+    .introduction-content-wrapper {
+        margin-top: 3.5rem;
+    }
 
+    .introduction .introduction-image-carousel {
         display: block;
         margin-left: auto;
         margin-right: auto;
-        width: 50%;
+        width: 70%;
     }
 
     .introduction .introduction-image-carousel img {
-        width: 300px !important;
-        height: 220px !important;
+        width: 70%;
     }
 }
 
 @media (max-width: 768px) {
     .introduction {
+        margin-top: 4rem;
+    }
+
+    .introduction-content-wrapper {
         margin-top: 4.5rem;
     }
 
@@ -234,6 +246,10 @@ section {
 }
 
 @media (max-width: 575px) {
+    .introduction .introduction-image-carousel {
+        width: 80%;
+    }
+
     .introduction .introduction-img img {
         width: 80%;
     }
@@ -258,46 +274,67 @@ section {
 }
 
 /*
- * Divider
- */
-
-.divider {
-    padding: 0 !important;
-}
-
-.divider .divider-line {
-    background: var(--main-red);
-    padding: .25rem 0;
-}
-
-/*
  * Research Field
  */
-.research-field .carousel-border {
-    border: .1rem solid var(--light-grey);
-    border-radius: .5rem;
-    padding: .5rem;
+.research-field .card {
+    margin-bottom: 1.5rem;
+    border: 0;
+    padding: 140px 15px 15px 15px;
+    position: relative;
+    width: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 
-.research-field .carousel-border:hover {
-    box-shadow: 0 0 .05rem .05rem rgb(158, 37, 41);
+.research-field .card-body {
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px 20px;
+    box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+    transition: 0.3s;
+    transition: ease-in-out 0.4s;
+    border-radius: 5px;
+
+    min-height: 150px;
+    max-height: 150px;
+    overflow: auto;
+}
+
+.research-field .card-title {
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.research-field .card-title a {
+    color: var(--main-black);
+}
+
+.research-field .card-content {
+    color: var(--lighter-black);
+}
+
+.research-field .card:hover .card-body {
+    background-color: var(--lightest-grey);
+}
+
+.research-field .card:hover .research-field .card:hover .card-title, .research-field .card:hover .card-title a, .research-field .card:hover .card-text {
+    color: var(--white);
 }
 
 /*
  * Album
  */
-.album .album-item {
-    margin-bottom: 2rem;
-}
 
 .album .album-wrap {
     position: relative;
     overflow: hidden;
     z-index: 1;
-    background: rgba(34, 34, 34, 0.5);
     border-radius: .5rem;
     transition: 0.3s;
-    margin-top: 1rem;
+    margin: 1rem 0;
+    height: 245px;
 }
 
 .album .album-wrap:hover {
@@ -319,6 +356,8 @@ section {
 
 .album .album-wrap img {
     transition: all ease-in-out 0.3s;
+    width: 100%;
+    height: 245px;
 }
 
 .album .album-wrap .album-info {
@@ -333,7 +372,7 @@ section {
     left: 0;
     z-index: 3;
     opacity: 0;
-    padding: 1rem;
+    padding: .75rem;
     transition: all ease-in-out 0.3s;
 }
 
@@ -344,6 +383,7 @@ section {
 
 .album .album-wrap .album-info span {
     color: var(--lightest-grey);
+    font-size: var(--small-font-size);
     font-style: italic;
 }
 
@@ -353,11 +393,12 @@ section {
 }
 
 .album .album-wrap .album-links a {
-    color: #fff;
+    color: var(--white);
     margin: 0 .5rem 0 0;
     font-size: 2rem;
     display: inline-block;
     transition: 0.3s;
+    text-decoration: none;
 }
 
 .album .album-wrap .album-links a:hover {
@@ -376,34 +417,33 @@ section {
     opacity: 1;
 }
 
-/*
- * Board
- */
-.board a {
-    color: var(--main-red);
-    text-decoration: none;
-}
-
-.board a:hover {
-    color: var(--lighter-red);
-    text-decoration: none;
+.album .album-wrap i {
+    color: var(--white);
 }
 
 /*
  * Contact
  */
-.contact .section-content h3 {
+.contact .section-content h4 {
     margin-bottom: .5rem;
     font-weight: var(--strong-font-weight);
 }
 
-.contact h6 a {
-    font-size: 1rem;
+.contact .section-content i {
+    font-size: 1.5rem;
+}
+
+.contact span {
+    font-size: var(--larger-font-size);
+}
+
+.contact a {
+    font-size: var(--large-font-size);
     color: var(--main-red);
     text-decoration: none;
 }
 
-.contact h6 a:hover {
+.contact a:hover {
     font-size: 1rem;
     color: var(--lighter-red);
     text-decoration: none;
@@ -471,11 +511,8 @@ section {
 }
 
 .member-img .member-photo {
-    padding: .25rem .25rem 0 .25rem;
-    border-radius: .25rem;
-    border: lightgrey;
-    height: 230px;
-    width: 230px;
+    height: 220px;
+    width: 220px;
 }
 
 @media (max-width: 1199px) {
@@ -487,8 +524,8 @@ section {
 
 @media (max-width: 991px) {
     .member-img .member-photo {
-        height: 305px;
-        width: 305px;
+        height: 250px;
+        width: 250px;
     }
 }
 
@@ -513,21 +550,26 @@ section {
 
 .social a {
     transition: color 0.3s;
-    margin: 0 .75rem;
-    padding-top: .5rem;
+    margin: 0 .5rem;
+    padding-top: .25rem;
     display: inline-block;
 }
 
-.social a img {
-    width: 1.25rem;
-    height: 1.25rem;
+.social a:hover {
+    text-decoration: none;
+    color: var(--lighter-grey);
+}
+
+.social a i {
+    font-size: var(--larger-font-size);
+    color: var(--dark-grey);
 }
 
 .member-info {
     padding: .75rem .5rem;
 }
 
-.member-info h4 {
+.member-info h5 {
     font-weight: var(--strong-font-weight);
     margin-bottom: .75rem;
     color: var(--main-black);
@@ -537,12 +579,12 @@ section {
     text-decoration: none;
 }
 
-.member-info a:hover h4 {
+.member-info a:hover h5 {
     color: var(--lighter-black);
 }
 
 .member-info h6 {
-    font-size: 1rem;
+    font-size: var(--regular-font-size);
     color: var(--main-grey);
 }
 
@@ -597,10 +639,6 @@ section {
     font-size: 1.1rem;
 }
 
-.project {
-    color: var(--main-grey);
-}
-
 /*
  * Alumni Association
  */
@@ -609,3 +647,36 @@ section {
 /*
  * Seminar
  */
+
+
+/*
+ * About Us
+ */
+.about-us .who-we-are h3 {
+    font-weight: var(--strong-font-weight);
+}
+
+.about-us .count-box {
+    padding: 20px 0;
+    width: 100%;
+}
+
+.about-us .count-box i {
+    font-size: 24px;
+    color: var(--main-red);
+    margin-right: .5rem;
+}
+
+.about-us .count-box .count-number {
+    font-size: 24px;
+    font-weight: var(--strong-font-weight);
+}
+
+.about-us .count-box .count-info {
+    font-size: 16px;
+    font-style: italic;
+}
+
+.about-us .count-box .count-content {
+    font-size: 14px;
+}

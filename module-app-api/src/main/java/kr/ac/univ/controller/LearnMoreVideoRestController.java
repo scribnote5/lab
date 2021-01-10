@@ -30,9 +30,9 @@ public class LearnMoreVideoRestController {
     @PostMapping
     public ResponseEntity<?> postLearnMore(@RequestBody @Valid LearnMoreVideoDto learnMoreVideoDto) {
         if (learnMoreVideoDto.getActiveStatus() == ActiveStatus.ACTIVE && learnMoreVideoService.countAllByActiveStatus() > 0) {
-            throw new BusinessException("Only one learnMoreVideo can be activate.");
+            throw new BusinessException("Only one learn more video must be activate.");
         }
-        
+
         Long idx = learnMoreVideoService.insertLearnMore(learnMoreVideoDto);
 
         return new ResponseEntity<>(idx, HttpStatus.CREATED);
@@ -41,9 +41,9 @@ public class LearnMoreVideoRestController {
     @PutMapping("/{idx}")
     public ResponseEntity<?> putLearnMore(@PathVariable("idx") Long idx, @RequestBody @Valid LearnMoreVideoDto learnMoreVideoDto) {
         if (learnMoreVideoDto.getActiveStatus() == ActiveStatus.ACTIVE && learnMoreVideoService.countAllByActiveStatus() > 1) {
-            throw new BusinessException("Only one learnMoreVideo can be activate.");
+            throw new BusinessException("Only one learn more video must be activate.");
         }
-        
+
         learnMoreVideoService.updateLearnMore(idx, learnMoreVideoDto);
 
         return new ResponseEntity<>("{}", HttpStatus.OK);
@@ -61,7 +61,7 @@ public class LearnMoreVideoRestController {
     @PostMapping("/attachedFile")
     public ResponseEntity<?> uploadAttachedFile(Long idx, String createdBy, MultipartFile[] files) throws Exception {
         if (files.length >= 2) {
-            throw new FileNumberExceededException("The number of files that can be uploaded is 1.");
+            throw new FileNumberExceededException("The number of files that must be uploaded is 1.");
         }
 
         String fileValidationResult = FileValidator.isFileValid(files);

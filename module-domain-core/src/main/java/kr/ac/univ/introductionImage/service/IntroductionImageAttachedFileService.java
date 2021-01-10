@@ -4,7 +4,7 @@ import kr.ac.univ.introductionImage.domain.IntroductionImageAttachedFile;
 import kr.ac.univ.introductionImage.dto.IntroductionImageDto;
 import kr.ac.univ.introductionImage.dto.mapper.IntroductionImageMapper;
 import kr.ac.univ.introductionImage.repository.IntroductionImageAttachedFileRepository;
-import kr.ac.univ.introductionImage.repository.IntroductionImageRepositoryImpl;
+import kr.ac.univ.introductionImage.repository.IntroductionImageAttachedFileRepositoryImpl;
 import kr.ac.univ.util.FileUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,9 +19,9 @@ import java.util.UUID;
 @Service
 public class IntroductionImageAttachedFileService {
     private final IntroductionImageAttachedFileRepository introductionImageAttachedFileRepository;
-    private final IntroductionImageRepositoryImpl introductionImageRepositoryImpl;
+    private final IntroductionImageAttachedFileRepositoryImpl introductionImageRepositoryImpl;
 
-    public IntroductionImageAttachedFileService(IntroductionImageAttachedFileRepository introductionImageAttachedFileRepository, IntroductionImageRepositoryImpl introductionImageRepositoryImpl) {
+    public IntroductionImageAttachedFileService(IntroductionImageAttachedFileRepository introductionImageAttachedFileRepository, IntroductionImageAttachedFileRepositoryImpl introductionImageRepositoryImpl) {
         this.introductionImageAttachedFileRepository = introductionImageAttachedFileRepository;
         this.introductionImageRepositoryImpl = introductionImageRepositoryImpl;
     }

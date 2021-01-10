@@ -27,7 +27,7 @@ public class IntroductionRestController {
     @PostMapping
     public ResponseEntity<?> postIntroduction(@RequestBody @Valid IntroductionDto introductionDto) {
         if (introductionDto.getActiveStatus() == ActiveStatus.ACTIVE && introductionService.countAllByActiveStatus() > 0) {
-            throw new BusinessException("Only one introduction can be activate.");
+            throw new BusinessException("Only one introduction must be activate.");
         }
 
         Long idx = introductionService.insertIntroduction(introductionDto);
@@ -38,7 +38,7 @@ public class IntroductionRestController {
     @PutMapping("/{idx}")
     public ResponseEntity<?> putIntroduction(@PathVariable("idx") Long idx, @RequestBody @Valid IntroductionDto introductionDto) {
         if (introductionDto.getActiveStatus() == ActiveStatus.ACTIVE && introductionService.countAllByActiveStatus() > 1) {
-            throw new BusinessException("Only one introduction can be activate.");
+            throw new BusinessException("Only one introduction must be activate.");
         }
 
         introductionService.updateIntroduction(idx, introductionDto);

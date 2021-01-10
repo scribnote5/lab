@@ -33,78 +33,44 @@
                         <colgroup>
                             <col width="17.5%"/>
                             <col width="42.5%"/>
-                            <col width="15%"/>
-                            <col width="25%"/>
+                            <col width="17.5%"/>
+                            <col width="22.5%"/>
                         </colgroup>
                         <tr>
                             <th colspan="4" class="sub-item-title">Required Information</th>
                         </tr>
                         <tr>
-                            <th>Id</th>
-                            <td><span id="username" th:text="*{username}"></span></td>
-                            <td colspan="2"></td>
+                            <th>ID</th>
+                            <td colspan="2"><span id="username" th:text="*{username}"></span></td>
+                            <td></td>
                         </tr>
                         <tr>
                             <th>Photo</th>
                             <td id="imgData">
-                                Uploaded Photo File:<br>
+                                Uploaded Photo File:
                                 <span th:if="*{attachedFileList.size()} == 0" th:text="No + ' ' + file."></span>
                                 <span th:if="*{attachedFileList.size()} != 0" th:attr="onclick=|location.href='${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/*{attachedFileList[0].savedFileName}'|"
                                       th:text="*{attachedFileList[0].fileName} + ',&nbsp;' + 'File size: ' + *{attachedFileList[0].fileSize}"></span>
                             </td>
-                            <td id="imgPreview">
-                                <img th:if="*{attachedFileList.size()} == 0" th:attr="src=@{/images/no-preview-available.jpg}" width="150" height="150"/>
-                                <img th:if="*{attachedFileList.size()} != 0" th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}"
-                                     class="img-thumbnail user-img-preview"/>
+                            <td colspan="2" id="imgPreview">
+                                <img th:if="*{attachedFileList.size()} == 0" class="img-thumbnail user-img-preview float-right" th:attr="src=@{/images/no-preview-available.jpg}"/>
+                                <img th:if="*{attachedFileList.size()} != 0" class="img-thumbnail user-img-preview float-right"
+                                     th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}"/>
                             </td>
-                            <td colspan=></td>
                         </tr>
                         <tr>
                             <th>Korean Name</th>
-                            <td><span id="koreanName" th:text="*{koreanName}"></span></td>
-                            <td colspan="2"></td>
+                            <td colspan="2"><span id="koreanName" th:text="*{koreanName}"></span></td>
+                            <td></td>
                         </tr>
                         <tr>
                             <th>English Name</th>
-                            <td><span id="EnglishName" th:text="*{englishName}"></span></td>
-                            <td colspan="2"></td>
-                        </tr>
-                        <tr>
-                            <th>Gender</th>
-                            <td>
-                                <span th:if="*{gender?.name() == 'MALE'}" th:text="Male"> </span>
-                                <span th:if="*{gender?.name() == 'FEMALE'}" th:text="Female"> </span>
-                            </td>
-                            <td colspan="2"></td>
-                        </tr>
-                        <tr>
-                            <th>Birth Date</th>
-                            <td><span class="form-control birth-date" th:text="*{birthDate}"> </span></td>
-                            <td colspan="2"></td>
-                        </tr>
-                        <tr>
-                            <th>Email</th>
-                            <td><span th:text="*{email}"> </span></td>
-                            <td colspan="2"></td>
-                        </tr>
-                        <tr>
-                            <th>Private Email</th>
-                            <td><span th:text="*{privateEmail}"> </span></td>
-                            <td colspan="2"></td>
-                        </tr>
-                        <tr>
-                            <th>Messenger Id</th>
-                            <td><span th:text="*{messengerId}"> </span></td>
-                            <td colspan="2"></td>
-                        </tr>
-                        <tr>
-                            <th>Contact</th>
-                            <td><span th:text="*{contact}"> </span></td>
-                            <td colspan="2"></td>
+                            <td colspan="2"><span id="EnglishName" th:text="*{englishName}"></span></td>
+                            <td></td>
                         </tr>
                         <tr>
                             <th>User Type</th>
-                            <td>
+                            <td colspan="2">
                                 <span th:if="*{userType?.name() == 'FACULTY'}" th:text="Faculty"> </span>
                                 <span th:if="*{userType?.name() == 'FULL_TIME_PhD'}" th:text="'Ph.D. ' + ' - ' + 'Full Time'"> </span>
                                 <span th:if="*{userType?.name() == 'PART_TIME_PhD'}" th:text="'Ph.D. ' + ' - ' + 'Part Time'"> </span>
@@ -112,79 +78,131 @@
                                 <span th:if="*{userType?.name() == 'PART_TIME_MS'}" th:text="'M.S.' + '-' + 'Part Time'"> </span>
                                 <span th:if="*{userType?.name() == 'BS'}" th:text="B.S."> </span>
                             </td>
-                            <td colspan="2"></td>
+                            <td></td>
                         </tr>
                         <tr>
                             <th>User Status</th>
-                            <td>
+                            <td colspan="2">
                                 <span th:if="*{userStatus?.name() == 'ATTENDING'}" th:text="Attending"> </span>
                                 <span th:if="*{userStatus?.name() == 'GRADUATED'}" th:text="Graduated"> </span>
                             </td>
-                            <td colspan="2"></td>
+                            <td></td>
                         </tr>
                         <tr>
-                            <td colspan="4"><span id="introduction" class="content" th:utext="*{introduction}"></span></td>
+                            <th colspan="4" class="sub-item-title">Self Introduction</th>
+                        </tr>
+                        <tr>
+                            <td colspan="4"><span id="introduction" class="content form-control form-control-sm" th:utext="*{introduction}"></span></td>
+                        </tr>
+                        <tr>
+                            <th colspan="4" class="sub-item-title">Personal Information</th>
+                        </tr>
+                        <tr>
+                            <th>Admission Date</th>
+                            <td colspan="2"><span th:text="*{admissionDate}"> </span></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>Graduated Date</th>
+                            <td colspan="2"><span th:text="*{graduatedDate}"> </span></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>Gender</th>
+                            <td colspan="2">
+                                <span th:if="*{gender?.name() == 'MALE'}" th:text="Male"> </span>
+                                <span th:if="*{gender?.name() == 'FEMALE'}" th:text="Female"> </span>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>Birth Date</th>
+                            <td colspan="2"><span th:text="*{birthDate}"> </span></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>Workplace</th>
+                            <td colspan="2"><span th:text="*{workplace}"> </span></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th colspan="4" class="sub-item-title">Contact Information</th>
+                        </tr>
+                        <tr>
+                            <th>Contact</th>
+                            <td colspan="2"><span th:text="*{contact}"> </span></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>Email</th>
+                            <td colspan="2"><span th:text="*{email}"> </span></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>Private Email</th>
+                            <td colspan="2"><span th:text="*{privateEmail}"> </span></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>Github</th>
+                            <td colspan="2"><span th:text="*{github}"> </span></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>Linked In</th>
+                            <td colspan="2"><span th:text="*{linkedIn}"> </span></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>External Web Page</th>
+                            <td colspan="2"><span th:text="*{externalWebPage}"> </span></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>Messenger ID(Skype)</th>
+                            <td colspan="2"><span th:text="*{messengerId}"> </span></td>
+                            <td></td>
                         </tr>
                         <tr>
                             <th colspan="4" class="sub-item-title">Additional Information</th>
                         </tr>
                         <tr>
-                            <th>Admission Date</th>
-                            <td><span th:text="*{admissionDate}"> </span></td>
-                            <td colspan="2"></td>
-                        </tr>
-                        <tr>
-                            <th>Graduated Date</th>
-                            <td><span th:text="*{graduatedDate}"> </span></td>
-                            <td colspan="2"></td>
-                        </tr>
-                        <tr>
-                            <th>External Web Page</th>
-                            <td><span th:text="*{externalWebPage}"> </span></td>
-                            <td colspan="2"></td>
-                        </tr>
-                        <tr>
-                            <th>Github</th>
-                            <td><span th:text="*{github}"> </span></td>
-                            <td colspan="2"></td>
-                        </tr>
-                        <tr>
-                            <th>Linked In</th>
-                            <td><span th:text="*{linkedIn}"> </span></td>
-                            <td colspan="2"></td>
-                        </tr>
-                        <tr>
-                            <th>Workplace</th>
-                            <td><span th:text="*{workplace}"> </span></td>
-                            <td colspan="2"></td>
-                        </tr>
-                        <tr>
                             <th>Authority Type</th>
-                            <td>
+                            <td colspan="2">
                                 <span th:if="*{authorityType?.name() == 'ROOT'}" th:text="root"> </span>
                                 <span th:if="*{authorityType?.name() == 'MANAGER'}" th:text="manager"> </span>
                                 <span th:if="*{authorityType?.name() == 'GENERAL'}" th:text="general"> </span>
                                 <span th:if="*{authorityType?.name() == 'NON_USER'}" th:text="Non + ' ' + User"> </span>
                             </td>
-                            <td colspan="2"></td>
+                            <td></td>
                         </tr>
                         <tr>
                             <th>Active Status</th>
-                            <td>
+                            <td colspan="2">
                                 <span th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active"> </span>
                                 <span th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"> </span>
                             </td>
-                            <td colspan="2"></td>
+                            <td></td>
                         </tr>
                         <tr>
                             <th>Created Date</th>
                             <td><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
-                            <td colspan="2"></td>
                         </tr>
                         <tr>
-                            <th>Modified Date</th>
+                            <th>Last Modified Date</th>
                             <td><span th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
-                            <td colspan="2"></td>
+                        </tr>
+                        <tr>
+                            <th>Created By</th>
+                            <td><span th:text="*{createdBy}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Last Created By</th>
+                            <td><span th:text="*{lastModifiedBy}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Views</th>
+                            <td><span th:text="*{views}"/></td>
                         </tr>
                     </table>
                 </div>

@@ -50,7 +50,7 @@ public class LearnMoreVideoController {
 
             returnPage = "learnMoreVideo/form";
         } else {
-            returnPage = "user/permission-denied";
+            returnPage = "user/access-denied";
         }
 
         return returnPage;

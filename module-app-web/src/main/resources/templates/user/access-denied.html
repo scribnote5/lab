@@ -1,0 +1,13 @@
+<script src="/js/sweetalert2.all.min.js"></script>
+<script src="/js/alert.js"></script>
+
+<body></body>
+
+<script>
+    Alert.fire({
+        icon: "error",
+        text: "You do not have permission on access this path.\n" + "Only user logged in to your account can access it."
+    }).then((result) => {
+        history.back();
+    });
+</script>

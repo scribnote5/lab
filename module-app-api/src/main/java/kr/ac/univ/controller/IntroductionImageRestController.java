@@ -62,7 +62,7 @@ public class IntroductionImageRestController {
     @PostMapping("/attachedFile")
     public ResponseEntity<?> uploadAttachedFile(Long idx, String createdBy, MultipartFile[] files) throws Exception {
         if (files.length >= 2) {
-            throw new FileNumberExceededException("The number of files that can be uploaded is 1.");
+            throw new FileNumberExceededException("The number of files that must be uploaded is 1.");
         }
 
         String fileValidationResult = FileValidator.isFileValid(files);
@@ -84,5 +84,4 @@ public class IntroductionImageRestController {
 
         return new ResponseEntity<>("{}", HttpStatus.OK);
     }
-
 }
