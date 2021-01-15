@@ -14,22 +14,26 @@
 
         <main id="home">
             <!-- ======= Introduction Section ======= -->
-            <section id="introduction" class="introduction d-flex align-items-center">
-                <div class="container">
-                    <div class="row">
-                        <div class="introduction-content-wrapper col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center">
-                            <h1 data-aos="fade-up" th:text="${#strings.isEmpty(introductionDto)} ? 'No title.' : ${introductionDto.title}"></h1>
-                            <h2 data-aos="fade-up" data-aos-delay="100" th:text="${#strings.isEmpty(introductionDto)} ? 'No content.' : ${introductionDto.content}"></h2>
-
-                            <div data-aos="fade-up" data-aos-delay="100">
-                                <a href="/about-us/" class="btn-main-about-us">About Us</a>
+            <section id="introduction" class="introduction">
+                <div data-aos="fade-up" data-aos-duration="1500" style="background: var(--dark);margin-top: 20px;">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6" data-aos="fade-up" data-aos-duration="1500" style="color: var(--white);">
+                                <h1 class="text-left" data-aos="fade-up" data-aos-duration="1500" style="margin-top: 35px;color: var(--white);" th:text="${#strings.isEmpty(introductionDto)} ? 'No title.' : ${introductionDto.title}"></h1>
+                                <p class="text-justify" data-aos="fade-up" data-aos-duration="1500" style="margin-top: 10px;" th:text="${#strings.isEmpty(introductionDto)} ? 'No content.' : ${introductionDto.content}"></p>
+                                <a href="/about-us/">                                    <button class="btn btn-light text-monospace text-center" data-aos="fade-up" data-aos-duration="1500" type="button" style="margin-top: 10px;margin-bottom: 15px;text-align: center;background: #9a1b1f;color: rgb(255,255,255);border-radius: 100px;border-width: 3px;border-style: none;">Read More</button></a>
                             </div>
-                        </div>
-
-                        <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-left" data-aos-delay="100">
-                            <div class="owl-carousel introduction-image-carousel ">
-                                <img th:each="introductionImageDto, index : ${introductionImageDtoList}"
-                                     th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/${introductionImageDto.attachedFileList[0].savedFileName}|}">
+                            <div class="col-md-6 align-self-center" data-aos="fade-left" data-aos-duration="1500">
+                                <div class="swiper-container simple-slider">
+                                    <div class="swiper-wrapper" style="height: auto;">
+                                        <div class="swiper-slide" style="background-image: url(https://eslab.cnu.ac.kr/uploads/slides/1bfe6d8ba3~.jpg);"></div>
+                                        <div class="swiper-slide" style="background-image: url(https://eslab.cnu.ac.kr/uploads/slides/3eb943af20~.jpg);"></div>
+                                        <div class="swiper-slide" style="background-image: url(https://eslab.cnu.ac.kr/uploads/slides/8384c73f64~.jpg);"></div>
+                                    </div>
+                                    <div class="swiper-pagination" style="filter: brightness(79%) contrast(121%) grayscale(13%) hue-rotate(157deg) invert(12%) saturate(200%) sepia(9%);"></div>
+                                    <div class="swiper-button-prev" style="margin: -20px;height: 30px;filter: brightness(79%) contrast(121%) grayscale(13%) hue-rotate(157deg) invert(12%) saturate(200%) sepia(9%);"></div>
+                                    <div class="swiper-button-next" style="margin: -20px;height: 30px;filter: brightness(79%) contrast(121%) grayscale(13%) hue-rotate(157deg) invert(12%) saturate(200%) sepia(9%);"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -38,26 +42,19 @@
             <!-- End Intro -->
 
             <!-- ======= Research Field Section ======= -->
-            <section class="research-field">
-                <div class="container">
-                    <div class="section-title" data-aos="fade-up">
-                        <h3>Research Field</h3>
-                        <h5>These are the ESLAB's research field.</h5>
+            <div class="features-clean">
+                <div class="container" data-aos="fade-up" data-aos-duration="1500" style="margin-top: 15px;">
+                    <div class="intro">
+                        <h2 class="text-center" data-aos="fade-up" data-aos-duration="1500" style="font-size: 32px;color: rgb(33,37,41);">Research Field</h2>
                     </div>
-
-                    <div class="row justify-content-center">
-                        <div th:each="researchFieldDto: ${researchFieldDtoList}" class="col-md-6 d-flex">
-                            <div class="card" data-aos="fade-up" data-aos-delay="100"
-                                 th:style=" !${#lists.isEmpty(researchFieldDto.attachedFileList)} ? 'background-image:url(' + ${@environment.getProperty('module-app-api.address')} + '/api/attachedFiles/download/' + ${researchFieldDto.attachedFileList[0].savedFileName} + ');' : 'background-color: rgb(255, 255, 255)'">
-                                <div class="card-body">
-                                    <h4 class="card-title" th:text="${researchFieldDto.title}"></h4>
-                                    <span class="card-content" th:text="${researchFieldDto.content}"></span>
-                                </div>
-                            </div>
+                    <div class="row justify-content-center align-items-start features" data-aos="fade-up" data-aos-duration="1500">
+                        <div th:each="researchFieldDto: ${researchFieldDtoList}" class="col-sm-6 col-lg-4 item"> <i th:class="${researchFieldDto.icon}"></i>
+                            <h3 class="name" th:text="${researchFieldDto.title}"></h3>
+                            <p class="text-justify description" th:text="${researchFieldDto.content}"></p>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
             <!-- End Research Field Section -->
 
             <!-- ======= Board Section ======= -->
@@ -67,7 +64,7 @@
                         <div class="col-lg-6">
                             <div class="section-title" data-aos="fade-up">
                                 <h3>Notice Board</h3>
-                                <h5>These are the latest news at ESLAB.</h5>
+
                             </div>
 
                             <div class="section-content">
@@ -93,7 +90,7 @@
                         <div class="col-lg-6">
                             <div class="section-title" data-aos="fade-up">
                                 <h3>Seminar</h3>
-                                <h5>These are the latest seminar at ESLAB.</h5>
+
                             </div>
 
                             <div class="section-content">
@@ -124,7 +121,6 @@
                 <div class="container">
                     <div class="section-title" data-aos="fade-up">
                         <h3>Album</h3>
-                        <h5>This section's photos were taken with ESLAB member.</h5>
                     </div>
 
                     <div class="row section-content">
@@ -157,30 +153,6 @@
             </section>
             <!-- End Album Section -->
 
-            <!-- ======= Contact Section ======= -->
-            <section id="contact" class="contact">
-                <div class="container">
-                    <div class="section-title" data-aos="fade-up">
-                        <h3>Contact Us</h3>
-                        <h5>If you are interested in the ESLAB, contact us.</h5>
-                    </div>
-
-                    <div class="row section-content">
-                        <div class="col-lg-6 col-md-6" data-aos="fade-up" data-aos-delay="50">
-                            <div>
-                                <h4><i class="icofont-location-pin"></i> Address</h4>
-                                <span th:text="${settingDto.labAddress}"></span>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                            <div>
-                                <h4><i class="icofont-mail"></i> <i class="icofont-phone"></i> Contact</h4>
-                                <span th:text="${settingDto.emailRecipient}"></span> <a th:href="'mailto:' + ${settingDto.emailAddress}" th:text="${settingDto.emailAddress}"></a> <br>
-                                <span th:text="${settingDto.callee}"> </span><a th:href="'tel:' + ${settingDto.phoneNumber}" th:text="${settingDto.phoneNumber}"></a>                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section><!-- End Contact Section -->
         </main><!-- End #main -->
 
         <div class="container-fluid container-main"></div>

@@ -2,18 +2,40 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <!--footer-->
 <div th:fragment="footer">
-    <footer id="footer">
-        <div class="container">
-            <div class="row d-flex align-items-center">
-                <div class="col-lg-12 text-center">
-                    <div class="copyright">
-                        &copy; Copyright <strong>Vesperr</strong> and redesigned by <strong>scribnote5</strong>. All Rights Reserved
+    <footer>
+        <div class="footer-dark" style="min-height: auto;max-height: 100%;">
+            <footer>
+                <div class="container">
+                    <div class="row justify-content-center" style="margin-top: -9px;">
+                        <div class="col-auto col-sm-6 col-md-3 item">
+                            <ul>
+                                <li><a href="/about-us/">About us</a></li>
+                                <li><a href="/user/list">Member</a></li>
+                                <li><a href="/publication/list_scroll">Publication</a></li>
+                                <li><a href="/seminar/list">Seminar</a></li>
+                                <li><a href="/project/list">Project</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-auto col-sm-6 col-md-3 item">
+                            <ul>
+                                <li><a href="/notice-board/list">Notice</a></li>
+                                <li><a href="/alumni-association/list">Alumni Association</a></li>
+                                <li><a href="/album/list">Album</a></li>
+                                <li><a href="#">Event</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6 item text">
+                            <h3>Contact</h3>
+                            <p>533, Engineering Building 5, Daehak-ro 99</p>
+                            <p>Chungnam National University</p>
+                            <p>Yuseong-gu, Daejeon, Korea, 34134</p>
+                            <p></p>
+                            <p>+82)42-821-7446</p>
+                        </div>
                     </div>
-                    <div class="credits">
-                        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-                    </div>
+                    <p class="copyright" style="padding-top: 0px;padding-bottom: 10px;margin-bottom: 0px;">Chungnam National University Embedded System Laboratory © 2021</p>
                 </div>
-            </div>
+            </footer>
         </div>
     </footer>
 </div>

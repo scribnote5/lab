@@ -5,7 +5,8 @@ html * {
     font-family: 'Spoqa Han Sans', san-serif;
     font-weight: var(--regular-font-weight);
     font-size: 13px;
-    color: var(--main-black);
+    color: var(--main-white);
+    font-size: var(--large-font-size);
 }
 
 body .container-fluid {

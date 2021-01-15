@@ -422,16 +422,16 @@
 
     /* 연락처 검사 */
     $("#contact").on("change", function () {
-        var regExp = /(01[016789])-([1-9]{1}[0-9]{2,3})-([0-9]{4})$/;
+        //var regExp = /(01[016789])-([1-9]{1}[0-9]{2,3})-([0-9]{4})$/;
+        var regExp = /^\d{3}-\d{3,4}-\d{4}$/;
         var contact = document.getElementsByName("contact")[0].value;
-
         if (regExp.test(contact)) {
             document.getElementById("contactCheckResult").innerHTML = "Contact format is valid.";
             document.getElementById("contactCheckResult").style.color = "blue";
             contactVaildation = true;
         } else if (!validateByWhiteSpace(contact)) {
-            document.getElementById("privateEmailCheckResult").innerHTML = "";
-            emailVaildation = true;
+            document.getElementById("contactCheckResult").innerHTML = "";
+            contactVaildation = true;
         } else {
             document.getElementById("contactCheckResult").innerHTML = "Contact format is not valid.";
             document.getElementById("contactCheckResult").style.color = "red";
@@ -474,11 +474,11 @@
             return false;
         } else if (!validateByExternal("email", "email", !emailVaildation)) {
             return false;
-        } else if (!validateByExternal("privateEmail", "private email", !privateEmailVaildation)) {
+        } /*else if (!validateByExternal("privateEmail", "private email", !privateEmailVaildation)) {
             return false;
         } else if (!validateByExternal("contact", "contact", !contactVaildation)) {
             return false;
-        }
+        }*/
 
         // 회원 업로드
         var jsonData = $("#form").serializeObject();

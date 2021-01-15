@@ -83,7 +83,7 @@ section {
     font-weight: var(--strong-font-weight);
     line-height: 2.25rem;
 }
-
+/*
 .section-title h3::before, .section-title h3::after {
     content: '';
     width: 2.5rem;
@@ -91,6 +91,7 @@ section {
     background: var(--main-red);
     display: inline-block;
 }
+
 
 .section-title h3::before {
     margin: 0 .5rem .5rem 0;
@@ -102,7 +103,7 @@ section {
 
 .section-title h5 {
 }
-
+*/
 /* section-search */
 .section-search {
     margin-top: 5rem;
@@ -113,7 +114,7 @@ section {
  */
 .introduction {
     width: 100%;
-    height: 65vh;
+    height: 400px;
     margin-top: 5rem;
 }
 
@@ -128,6 +129,7 @@ section {
     font-size: 2.5rem;
     font-weight: var(--strong-font-weight);
     line-height: 3.25rem;
+    font-weight: bold;
 }
 
 .introduction h2 {
@@ -195,7 +197,7 @@ section {
 
 @media (max-width: 991px) {
     .introduction {
-        height: 100vh;
+        height: auto;
         margin-top: 4.5rem;
     }
 
@@ -276,6 +278,7 @@ section {
 /*
  * Research Field
  */
+/*
 .research-field .card {
     margin-bottom: 1.5rem;
     border: 0;
@@ -322,7 +325,7 @@ section {
 .research-field .card:hover .research-field .card:hover .card-title, .research-field .card:hover .card-title a, .research-field .card:hover .card-text {
     color: var(--white);
 }
-
+*/
 /*
  * Album
  */

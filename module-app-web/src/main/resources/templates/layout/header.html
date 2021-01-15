@@ -2,35 +2,45 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <!--header-->
 <div th:fragment="header">
-    <header id="header" class="fixed-top d-flex align-items-center">
-        <div class="container d-flex align-items-center">
-
-            <div class="logo mr-auto">
-                <a href="/"><img src="/images/main-logo.png"></a>
+   <header id="header" class="fixed-top">
+        <nav class="navbar navbar-light navbar-expand-md navigation-clean-button">
+            <div class="container"><a class="navbar-brand" href="/"><img src="/images/logo_no_background.png" style="width: 85px;"></a>
+                <button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navcol-1">
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item" style="color: var(--dark);"><a class="nav-link" href="/about-us/" style="color: var(--dark);"><strong>About Us</strong></a></li>
+                        <li class="nav-item" style="color: var(--dark);"><a class="nav-link" href="/user/list/" style="color: var(--dark);"><strong>Member</strong></a></li>
+                        <li class="nav-item" style="color: var(--dark);"><a class="nav-link" href="/publication/list_scroll" style="color: var(--dark);"><strong>Publication</strong></a></li>
+                        <li class="nav-item" style="color: var(--dark);"><a class="nav-link" href="/seminar/list" style="color: var(--dark);"><strong>Seminar</strong></a></li>
+                        <li class="nav-item" style="color: var(--dark);"><a class="nav-link" href="/project/list" style="color: var(--dark);"><strong>Project</strong></a></li>
+                        <li class="nav-item" style="color: var(--dark);"></li>
+                        <li class="nav-item dropdown">
+                            <a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="/notice-board/list" style="color: var(--dark);"><strong>More</strong></a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="/notice-board/list">Notice</a>
+                                <a class="dropdown-item" href="#">Event</a>
+                                <a class="dropdown-item" href="/alumni-association/list">Alumni Association</a>
+                                <a class="dropdown-item" href="/album/list">Album</a>
+                                    <div sec:authorize="isAuthenticated()">
+                                        <a class="dropdown-item" th:href="'/user/form?idx='+${#authentication.principal.idx}">User Information</a>
+                                    </div>
+                                </div>
+                        </li>
+                    </ul>
+                    <span class="navbar-text actions">
+                        <div sec:authorize="!isAuthenticated()">
+                            <a class="btn btn-light action-button" role="button" href="javascript:login()" style="background: #9a1b1f;color: rgb(255,255,255);border-radius: 100px;"><strong>Sign in</strong></a>
+                        </div>
+                        <div sec:authorize="isAuthenticated()">
+                            <a class="btn btn-light action-button" role="button" href="javascript:logout()" style="background: #9a1b1f;color: rgb(255,255,255);border-radius: 100px;"><strong>Sign out</strong></a>
+                        </div>
+                    </span>
+                </div>
             </div>
-
-            <nav class="nav-menu d-none d-lg-block align-middle">
-                <ul>
-                    <li><a href="/about-us/">About Us</a></li>
-                    <li><a href="/user/list">Member</a></li>
-                    <li><a href="/publication/list_scroll">Publication</a></li>
-                    <li><a href="/seminar/list">Seminar</a></li>
-                    <li><a href="/project/list">Project</a></li>
-                    <li class="drop-down"><a href="/notice-board/list">More</a>
-                        <ul>
-                            <li><a href="/notice-board/list">Notice Board</a></li>
-                            <li><a href="/alumni-association/list">Alumni Association</a></li>
-                            <li><a href="/album/list">Album</a></li>
-                            <li sec:authorize="isAuthenticated()">
-                                <a th:href="'/user/form?idx='+${#authentication.principal.idx}">User Information</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li sec:authorize="!isAuthenticated()" class="login-logout"><a href="javascript:login()">Login</a></li>
-                    <li sec:authorize="isAuthenticated()" class="login-logout"><a href="javascript:logout()">Logout</a></li>
-                </ul>
-            </nav><!-- .nav-menu -->
-        </div>
+        </nav>
     </header><!-- End Header -->
 </div>
 <!--/header-->

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Locale;
 
 @Controller
 @RequestMapping("/")
@@ -68,7 +69,24 @@ public class MainController {
         List<ResearchFieldDto> researchFieldDtoList = researchFieldService.findResearchFieldListByActiveStatusIs();
         for (ResearchFieldDto researchFieldDto : researchFieldDtoList) {
             researchFieldAttachedFileService.findAttachedFileByResearchFieldIdx(researchFieldDto.getIdx(), researchFieldDto);
+            if (researchFieldDto.getTitle().toLowerCase(Locale.ROOT).contains("deep")) {
+                researchFieldDto.setIcon("fas fa-brain icon");
+            }
+            else if (researchFieldDto.getTitle().toLowerCase(Locale.ROOT).contains("embedded")) {
+                researchFieldDto.setIcon("fas fa-mobile-alt icon");
+            }
+            else if (researchFieldDto.getTitle().toLowerCase(Locale.ROOT).contains("real-time")) {
+                researchFieldDto.setIcon("fa fa-plane icon");
+            }
+            else if (researchFieldDto.getTitle().toLowerCase(Locale.ROOT).contains("linux")) {
+                researchFieldDto.setIcon("fa fa-linux icon");
+            }
+            else {
+                researchFieldDto.setIcon("fa fa-flask icon");
+            }
         }
+
+        //System.out.println(researchFieldDtoList.get(1).getTitle());
 
         List<AlbumDto> albumDtoList = albumService.findAlbumListByActiveStatusIs();
         for (AlbumDto albumDto : albumDtoList) {
