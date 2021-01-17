@@ -40,7 +40,7 @@ public class LearnMoreVideoRestController {
 
     @PutMapping("/{idx}")
     public ResponseEntity<?> putLearnMore(@PathVariable("idx") Long idx, @RequestBody @Valid LearnMoreVideoDto learnMoreVideoDto) {
-        if (learnMoreVideoDto.getActiveStatus() == ActiveStatus.ACTIVE && learnMoreVideoService.countAllByActiveStatus() > 1) {
+        if ((learnMoreVideoDto.getActiveStatus() != learnMoreVideoService.findLearnMoreByIdx(idx).getActiveStatus()) && learnMoreVideoService.countAllByActiveStatus() > 0) {
             throw new BusinessException("Only one learn more video must be activate.");
         }
 

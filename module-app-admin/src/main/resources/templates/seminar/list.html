@@ -22,7 +22,6 @@
                         <h2>Seminar List</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
                             <li>Seminar List</li>
                         </ol>
                     </div>
@@ -51,17 +50,17 @@
                             <th style="width: 5%">No.</th>
                             <th style="width: 45%">Title</th>
                             <th style="width: 10%">ID</th>
-                            <th style="width: 15%">Created Date</th>
-                            <th style="width: 15%">Modified Date</th>
-                            <th style="width: 5%">Status</th>
-                            <th style="width: 5%">Views</th>
+                            <th style="width: 12.5%">Created Date</th>
+                            <th style="width: 12.5%">Modified Date</th>
+                            <th style="width: 7.5%">Status</th>
+                            <th style="width: 7.5%">Views</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="seminarDto : ${seminarDtoList}">
                             <td th:text="${seminarDto.idx}"></td>
                             <td>
-                                <a th:href="'/seminar?idx='+${seminarDto.idx}" class="link" th:text="${#strings.length(seminarDto.title)} < 40 ? ${seminarDto.title} : ${#strings.substring(seminarDto.title, 0, 40)} + '...'"></a>
+                                <a th:href="'/seminar?idx='+${seminarDto.idx}" class="link" th:text="${#strings.length(seminarDto.title)} < 45 ? ${seminarDto.title} : ${#strings.substring(seminarDto.title, 0, 45)} + '...'"></a>
                                 <img th:if="${seminarDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
                             <td th:text="${seminarDto.createdBy}">></td>
@@ -75,6 +74,9 @@
                             <td colspan="10" class="no-posts">
                                 No posts founded.
                             </td>
+                        </tr>
+                        <tr>
+                            <td colspan="10"></td>
                         </tr>
                         </tbody>
                     </table>

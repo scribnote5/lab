@@ -13,4 +13,5 @@ CREATE TABLE research_field_attached_file
     saved_file_name    varchar(255) null,
     research_field_idx bigint       null,
     file_size          varchar(255) null
-);
+) ENGINE = InnoDB
+  DEFAULT CHARSET = UTF8;

@@ -8,9 +8,10 @@ CREATE TABLE user_attached_file
 (
     idx             bigint auto_increment primary key,
     created_by      varchar(255) null,
-    created_date    datetime  null,
+    created_date    datetime     null,
     file_name       varchar(255) null,
     saved_file_name varchar(255) null,
     user_idx        bigint       null,
     file_size       varchar(255) null
-);
+) ENGINE = InnoDB
+  DEFAULT CHARSET = UTF8;

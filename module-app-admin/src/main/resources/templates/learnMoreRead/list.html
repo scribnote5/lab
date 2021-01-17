@@ -4,7 +4,7 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title th:text="${@environment.getProperty('title')} + ' | LearnMore Read List'"></title>
+    <title th:text="${@environment.getProperty('title')} + ' | Learn More Read List'"></title>
 </head>
 <body>
 
@@ -20,11 +20,10 @@
             <form name="form" id="form" th:object="${searchDto}" action="#">
                 <div class="page-header breadcrumbs">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h2>LearnMore Read List</h2>
+                        <h2>Learn More Read List</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
-                            <li>LearnMore Read List</li>
+                            <li>Learn More Read List</li>
                         </ol>
                     </div>
                 </div>
@@ -53,9 +52,10 @@
                             <th style="width: 5%">No.</th>
                             <th style="width: 45%">Title</th>
                             <th style="width: 10%">ID</th>
-                            <th style="width: 15%">Created Date</th>
-                            <th style="width: 15%">Modified Date</th>
-                            <th style="width: 5%">Status</th>
+                            <th style="width: 12.5%">Created Date</th>
+                            <th style="width: 12.5%">Modified Date</th>
+                            <th style="width: 7.5%">Status</th>
+                            <th style="width: 7.5%">Views</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -63,7 +63,7 @@
                             <td th:text="${learnMoreReadDto.idx}"></td>
                             <td>
                                 <a th:href="'/learn-more-read?idx='+${learnMoreReadDto.idx}" class="link"
-                                   th:text="${#strings.length(learnMoreReadDto.title)} < 40 ? ${learnMoreReadDto.title} : ${#strings.substring(learnMoreReadDto.title, 0, 40)} + '...'"></a>
+                                   th:text="${#strings.length(learnMoreReadDto.title)} < 45 ? ${learnMoreReadDto.title} : ${#strings.substring(learnMoreReadDto.title, 0, 45)} + '...'"></a>
                                 <img th:if="${learnMoreReadDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
                             <td th:text="${learnMoreReadDto.createdBy}">></td>
@@ -71,11 +71,15 @@
                             <td th:text="${#temporals.format(learnMoreReadDto.lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
                             <td th:if="${learnMoreReadDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active"></td>
                             <td th:if="${learnMoreReadDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"></td>
+                            <td th:text="${learnMoreReadDto.views}">></td>
                         </tr>
                         <tr th:if="${learnMoreReadDtoList.totalElements == 0}">
                             <td colspan="10" class="no-posts">
                                 No posts founded.
                             </td>
+                        </tr>
+                        <tr>
+                            <td colspan="10"></td>
                         </tr>
                         </tbody>
                     </table>

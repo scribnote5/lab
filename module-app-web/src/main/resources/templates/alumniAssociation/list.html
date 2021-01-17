@@ -19,7 +19,6 @@
                         <h2>Alumni Association List</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
                             <li>Alumni Association List</li>
                         </ol>
                     </div>
@@ -46,20 +45,22 @@
                     <table class="table table-hover">
                         <thead>
                         <tr>
-                            <th style="width: 70%">Title</th>
-                            <th style="width: 15%">Created By</th>
-                            <th style="width: 15%">Created Date</th>
+                            <th style="width: 67.5%">Title</th>
+                            <th style="width: 12.5%">Created By</th>
+                            <th style="width: 12.5%">Created Date</th>
+                            <th style="width: 7.5%">Views</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="alumniAssociationDto : ${alumniAssociationDtoList}">
                             <td>
                                 <a th:href="'/alumni-association?idx='+${alumniAssociationDto.idx}" class="link"
-                                   th:text="${#strings.length(alumniAssociationDto.title)} < 40 ? ${alumniAssociationDto.title} : ${#strings.substring(alumniAssociationDto.title, 0, 40)} + '...'"></a>
+                                   th:text="${#strings.length(alumniAssociationDto.title)} < 68 ? ${alumniAssociationDto.title} : ${#strings.substring(alumniAssociationDto.title, 0, 68)} + '...'"></a>
                                 <img th:if="${alumniAssociationDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
                             <td th:text="${alumniAssociationDto.createdBy}"></td>
                             <td th:text="${#temporals.format(alumniAssociationDto.createdDate,'yyyy-MM-dd HH:mm')}"></td>
+                            <td th:text="${alumniAssociationDto.views}"></td>
                         </tr>
                         <tr th:if="${alumniAssociationDtoList.totalElements == 0}">
                             <td colspan="10" class="no-posts">

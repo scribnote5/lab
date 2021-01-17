@@ -4,7 +4,7 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title th:text="${@environment.getProperty('title')} + ' | LearnMore Read Read'"></title>
+    <title th:text="${@environment.getProperty('title')} + ' | Learn More Read Read'"></title>
 </head>
 <body>
 
@@ -20,11 +20,10 @@
             <form name="form" id="form" th:object="${learnMoreReadDto}" action="#">
                 <div class="page-header breadcrumbs">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h2>LearnMore Read Read</h2>
+                        <h2>Learn More Read Read</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
-                            <li>LearnMore Read Read</li>
+                            <li>Learn More Read Read</li>
                         </ol>
                     </div>
                 </div>
@@ -36,7 +35,7 @@
                             <col width="82.5%"/>
                         </colgroup>
                         <tr>
-                            <th colspan="2" class="sub-item-title">LearnMore Information</th>
+                            <th colspan="2" class="sub-item-title">Learn More Information</th>
                         </tr>
                         <tr>
                             <th>Title</th>
@@ -83,6 +82,9 @@
                             <th>Views</th>
                             <td><span th:text="*{views}"/></td>
                         </tr>
+                        <tr>
+                            <td colspan="10"></td>
+                        </tr>
                     </table>
                 </div>
 
@@ -119,14 +121,13 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: moduleAppApiAddress + "/api/learn-more-read-reads/" + document.getElementsByName("idx")[0].value,
+                    url: moduleAppApiAddress + "/api/learn-more-reads/" + document.getElementsByName("idx")[0].value,
                     type: "delete",
                     dataType: "text",
                     contentType: "application/json",
                     async: false,
                 })
                     .done(function (msg) {
-
                         localStorage.setItem("result", "/learn-more-read/delete-success");
                         location.href = "/learn-more-read/list";
                     })

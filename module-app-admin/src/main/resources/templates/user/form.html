@@ -24,7 +24,6 @@
                         <h2 th:if="*{idx}">User Update</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
                             <li th:if="!*{idx}">User Register</li>
                             <li th:if="*{idx}">User Update</li>
                         </ol>
@@ -32,7 +31,7 @@
                 </div>
 
                 <div class="mt-5">
-                    <div class="mb-2 text-right">
+                    <div class="mb-2 filed-introduction">
                         <span class="required-field">*</span>: Required field.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <br>
                         <span class="user-page-show-field">*</span>: User page show field.
@@ -50,9 +49,13 @@
                         </tr>
                         <tr>
                             <th>ID<span class="required-field">*</span></th>
-                            <td><input type="text" name="username" id="username" class="form-control form-control-sm" th:value="*{username}"/></td>
+                            <td th:if="!*{#strings.equals(authorityType, 'ROOT')}"><input type="text" name="username" id="username" class="form-control form-control-sm" th:value="*{username}"/></td>
+                            <td th:if="*{#strings.equals(authorityType, 'ROOT')}">
+                                <input type="text" name="username" id="username" class="form-control form-control-sm" th:value="*{username}" readonly="readonly"/>
+                                <input type="hidden" name="username" id="username" class="form-control form-control-sm" th:value="*{username}"/>
+                            </td>
                             <td>
-                                <button id="validationUsername" type="button" class="btn-main">Duplicate check</button>
+                                <button th:if="!*{#strings.equals(authorityType, 'ROOT')}" id="validationUsername" type="button" class="btn-main btn-sm">Duplicate check</button>
                             </td>
                             <td><span id="usernameCheckResult"></span></td>
                         </tr>
@@ -67,7 +70,7 @@
                             <td><span id="passwordCheckResult"></span></td>
                         </tr>
                         <tr>
-                            <th>Photo<span class="required-field">*</span><span class="user-page-show-field">*</span></th>
+                            <th>Photo(img file)<span class="user-page-show-field">*</span></th>
                             <td colspan="2">
                                 <div class="custom-file py-md-4">
                                     <input type="file" class="custom-file-input" id="file" name="file">
@@ -100,10 +103,10 @@
                             <td colspan="2">
                                 <select name="userType" th:field="*{userType}" class="form-control form-control-sm">
                                     <option th:value="FACULTY">Faculty</option>
-                                    <option th:value="FULL_TIME_PhD">Ph.D. - Full Time</option>
-                                    <option th:value="PART_TIME_PhD">Ph.D. - Part Time</option>
-                                    <option th:value="FULL_TIME_MS">M.S. - Full Time</option>
-                                    <option th:value="PART_TIME_MS">M.S. - Part Time</option>
+                                    <option th:value="FULL_TIME_PhD">Ph.D. Full Time</option>
+                                    <option th:value="PART_TIME_PhD">Ph.D. Part Time</option>
+                                    <option th:value="FULL_TIME_MS">M.S. Full Time</option>
+                                    <option th:value="PART_TIME_MS">M.S. Part Time</option>
                                     <option th:value="BS">B.S.</option>
                                 </select>
                             </td>
@@ -206,12 +209,26 @@
                         <tr>
                             <th>Authority Type</th>
                             <td colspan="2">
-                                <select th:if="!*{#strings.equals(authorityType, 'ROOT')}" name="authorityType" th:field="*{authorityType}" class="form-control form-control-sm">
-                                    <option th:value="MANAGER">Manager</option>
+                                <select th:if="!*{idx}" name="authorityType" th:field="*{authorityType}" class="form-control form-control-sm">
+                                    <option th:if="*{#strings.equals(#authentication.principal.authorityType, 'ROOT')}" th:value="MANAGER">Manager</option>
+                                    <option th:if="!*{#strings.equals(authorityType, 'ROOT')}" th:value="GENERAL">General</option>
+                                    <option th:if="!*{#strings.equals(authorityType, 'ROOT')}" th:value="NON_USER">Non User</option>
+                                </select>
+
+                                <select th:if="*{!#strings.isEmpty(idx) && (#strings.equals(authorityType, 'ROOT') || #strings.equals(authorityType, 'MANAGER'))}" name="authorityType" th:field="*{authorityType}"
+                                        class="form-control form-control-sm">
+                                    <option th:if="*{#strings.equals(authorityType, 'ROOT')}" th:value="ROOT">Root</option>
+                                    <option th:if="*{#strings.equals(authorityType, 'MANAGER')}" th:value="MANAGER">Manager</option>
+                                    <option th:if="*{#strings.equals(#authentication.principal.authorityType, 'ROOT') && !#strings.equals(authorityType, 'ROOT')}" th:value="GENERAL">General</option>
+                                    <option th:if="*{#strings.equals(#authentication.principal.authorityType, 'ROOT') && !#strings.equals(authorityType, 'ROOT')}" th:value="NON_USER">Non User</option>
+                                </select>
+
+                                <select th:if="*{!#strings.isEmpty(idx) && !#strings.equals(authorityType, 'ROOT') && !#strings.equals(authorityType, 'MANAGER')}" name="authorityType" th:field="*{authorityType}"
+                                        class="form-control form-control-sm">
+                                    <option th:if="*{#strings.equals(#authentication.principal.authorityType, 'ROOT')}" th:value="MANAGER">Manager</option>
                                     <option th:value="GENERAL">General</option>
                                     <option th:value="NON_USER">Non User</option>
                                 </select>
-                                <input type="text" th:if="*{#strings.equals(authorityType, 'ROOT')}" class="form-control form-control-sm" readonly="readonly" th:value="root"/></td>
                             </td>
                             <td></td>
                         </tr>
@@ -227,30 +244,38 @@
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created Date</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Last Modified Date</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created By</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{createdBy}"/></td>
+                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{createdBy}"/></td>
+                            <td></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Last Modified By</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{lastModifiedBy}"/></td>
+                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{lastModifiedBy}"/></td>
+                            <td></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Views</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{views}"/></td>
+                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{views}"/></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td colspan="10"></td>
                         </tr>
                     </table>
                 </div>
 
                 <div class="row justify-content-between mt-5 mb-3">
                     <div class="col-auto mx-3">
-                        <a href="/user/list" class="btn btn-secondary col-auto">Move to List</a>
+                        <a href="/user/list" class="btn btn-secondary btn-sm col-auto">Move to List</a>
                     </div>
                     <div class="col-auto mx-3">
                         <button th:if="!*{idx}" id="insert" type="button" class="btn btn-primary cold-auto">Register</button>
@@ -277,15 +302,15 @@
 <script th:inline="javascript">
     var totalFileSize = 0;
     var exit = null;
-    var usernameVaildation = false;
-    var passwordVaildation = false;
-    var emailVaildation = false;
-    var privateEmailVaildation = false;
-    var contactVaildation = false;
+    var usernameValidation = false;
+    var passwordValidation = false;
+    var emailValidation = false;
+    var privateEmailValidation = false;
+    var contactValidation = false;
 
     $(document).ready(function () {
         <!-- summernote setting -->
-        $('#summernote').summernote({
+        $("#summernote").summernote({
             height: 500,	// 에디터 높이
             minHeight: null,	// 최소 높이
             maxHeight: null,	// 최대 높이
@@ -293,7 +318,7 @@
             lang: "ko-KR",// 한글 설정
             placeholder: "The editor's max input size of bytes is 16777215(16 MB)."	//placeholder 설정
         });
-        $('#summernote').summernote('fontSize', 14);
+        $("#summernote").summernote('fontSize', 14);
     });
 
     function deleteUser(userIdx) {
@@ -315,36 +340,39 @@
 
     /* username 검사 */
     $("#username").on("change", function () {
-        if (!validateById(document.getElementsByName("username")[0].value)) {
-            return false;
-        } else {
-            return true;
-        }
+        usernameValidation = false;
     });
 
-    /* username 중복 검사 */
     $("#validationUsername").click(function () {
-        $.ajax({
-            url: moduleAppApiAddress + "/api/users/validation/username/" + document.getElementsByName("username")[0].value,
-            type: "get",
-            dataType: "text",
-            contentType: "application/json",
-            async: false,
-        })
-            .done(function (msg) {
-                if (msg == "false") {
-                    document.getElementById("usernameCheckResult").innerHTML = "This user id is not duplicated.";
-                    document.getElementById("usernameCheckResult").style.color = "blue";
-                    usernameVaildation = true;
-                } else {
-                    document.getElementById("usernameCheckResult").innerHTML = "This user id is already in use.";
-                    document.getElementById("usernameCheckResult").style.color = "red";
-                    usernameVaildation = false;
-                }
+        if (!validateById(document.getElementsByName("username")[0].value)) {
+            document.getElementById("usernameCheckResult").innerHTML = "This ID is not valid.";
+            document.getElementById("usernameCheckResult").style.color = "red";
+            usernameValidation = false;
+
+            return false;
+        } else {
+            $.ajax({
+                url: moduleAppApiAddress + "/api/users/validation/username/" + document.getElementsByName("username")[0].value,
+                type: "get",
+                dataType: "text",
+                contentType: "application/json",
+                async: false,
             })
-            .fail(function (msg) {
-                parseErrorMsg(msg);
-            })
+                .done(function (msg) {
+                    if (msg == "false") {
+                        document.getElementById("usernameCheckResult").innerHTML = "This ID is not duplicated.";
+                        document.getElementById("usernameCheckResult").style.color = "blue";
+                        usernameValidation = true;
+                    } else {
+                        document.getElementById("usernameCheckResult").innerHTML = "This ID is already in use.";
+                        document.getElementById("usernameCheckResult").style.color = "red";
+                        usernameValidation = false;
+                    }
+                })
+                .fail(function (msg) {
+                    parseErrorMsg(msg);
+                })
+        }
     });
 
     /* passowrd 검사 */
@@ -357,18 +385,18 @@
                 if (password == checkPassword) {
                     document.getElementById("passwordCheckResult").innerHTML = "Password matches.";
                     document.getElementById("passwordCheckResult").style.color = "blue";
-                    passwordVaildation = true;
+                    passwordValidation = true;
                 } else {
                     document.getElementById("passwordCheckResult").innerHTML = "Passwords do not match.";
                     document.getElementById("passwordCheckResult").style.color = "red";
-                    passwordVaildation = false;
+                    passwordValidation = false;
                 }
             } else if (password != "" && checkPassword == "") {
                 document.getElementById("passwordCheckResult").innerHTML = "Check password.";
                 document.getElementById("passwordCheckResult").style.color = "red";
-                passwordVaildation = false;
+                passwordValidation = false;
             } else {
-                passwordVaildation = false;
+                passwordValidation = false;
             }
         } else {
             Alert.fire({
@@ -390,14 +418,14 @@
         if (regExp.test(email)) {
             document.getElementById("emailCheckResult").innerHTML = "Email format is valid.";
             document.getElementById("emailCheckResult").style.color = "blue";
-            emailVaildation = true;
+            emailValidation = true;
         } else if (!validateByWhiteSpace(email)) {
             document.getElementById("emailCheckResult").innerHTML = "";
-            emailVaildation = true;
+            emailValidation = true;
         } else {
             document.getElementById("emailCheckResult").innerHTML = "Email format is not valid.";
             document.getElementById("emailCheckResult").style.color = "red";
-            emailVaildation = false;
+            emailValidation = false;
         }
     });
 
@@ -409,14 +437,14 @@
         if (regExp.test(privateEmail)) {
             document.getElementById("privateEmailCheckResult").innerHTML = "Email format is valid.";
             document.getElementById("privateEmailCheckResult").style.color = "blue";
-            privateEmailVaildation = true;
+            privateEmailValidation = true;
         } else if (!validateByWhiteSpace(privateEmail)) {
             document.getElementById("privateEmailCheckResult").innerHTML = "";
-            privateEmailVaildation = true;
+            privateEmailValidation = true;
         } else {
             document.getElementById("privateEmailCheckResult").innerHTML = "Email format is not valid.";
             document.getElementById("privateEmailCheckResult").style.color = "red";
-            privateEmailVaildation = false;
+            privateEmailValidation = false;
         }
     });
 
@@ -428,14 +456,14 @@
         if (regExp.test(contact)) {
             document.getElementById("contactCheckResult").innerHTML = "Contact format is valid.";
             document.getElementById("contactCheckResult").style.color = "blue";
-            contactVaildation = true;
+            contactValidation = true;
         } else if (!validateByWhiteSpace(contact)) {
             document.getElementById("privateEmailCheckResult").innerHTML = "";
-            emailVaildation = true;
+            contactValidation = true;
         } else {
             document.getElementById("contactCheckResult").innerHTML = "Contact format is not valid.";
             document.getElementById("contactCheckResult").style.color = "red";
-            contactVaildation = false;
+            contactValidation = false;
         }
     });
 
@@ -463,20 +491,23 @@
 
 <script th:if="!${userDto?.idx}">
     $("#insert").click(function () {
-        // validation
-        if (!validateByExternal("username", "ID", !usernameVaildation)) {
-            return false;
-        } else if (!validateByExternal("password", "password", !passwordVaildation)) {
-            return false;
-        } else if (!validateByBlank("koreanName", "Korean Name")) {
-            return false;
-        } else if (!validateByBlank("englishName", "English Name")) {
-            return false;
-        } else if (!validateByExternal("email", "email", !emailVaildation)) {
-            return false;
-        } else if (!validateByExternal("privateEmail", "private email", !privateEmailVaildation)) {
-            return false;
-        } else if (!validateByExternal("contact", "contact", !contactVaildation)) {
+        // validation (input tag mame, length or size)
+        if (!(validateByExternal("username", !usernameValidation, "ID")
+            && validateByExternal("password", !passwordValidation)
+            && validateByBlank("koreanName")
+            && validateByBlank("englishName")
+
+            && validateBySize("introduction", 16777215)
+
+            && validateByLength("workplace", 255)
+
+            && validateByExternal("contact", !contactValidation ^ validateByEmpty(document.getElementsByName("contact")[0].value))
+            && validateByExternal("email", !emailValidation ^ validateByEmpty(document.getElementsByName("email")[0].value))
+            && validateByExternal("privateEmail", !privateEmailValidation ^ validateByEmpty(document.getElementsByName("privateEmail")[0].value))
+            && validateByLength("messengerId", 255)
+            && validateByLength("github", 255)
+            && validateByLength("linkedIn", 255)
+        )) {
             return false;
         }
 
@@ -532,30 +563,34 @@
     });
 </script>
 <script th:if="${userDto?.idx}" th:inline="javascript">
-    // 초기 valdiation을 모두 true로 설정한다.
-    passwordVaildation = true;
-    emailVaildation = true;
-    privateEmailVaildation = true;
-    contactVaildation = true;
+    // 초기 validation을 모두 true로 설정한다.
+    passwordValidation = true;
+    emailValidation = true;
+    privateEmailValidation = true;
+    contactValidation = true;
 
     $("#update").click(function () {
-        // validation
         var oriUsername = [[${userDto.username}]];
         var oriPassword = [[${userDto.password}]];
 
-        if (!validateByExternal("username", "ID", (document.getElementsByName("username")[0].value != oriUsername) && !usernameVaildation)) {
-            return false;
-        } else if (!validateByExternal("password", "password", (document.getElementsByName("password")[0].value != oriPassword) && !passwordVaildation)) {
-            return false;
-        } else if (!validateByBlank("koreanName", "Korean Name")) {
-            return false;
-        } else if (!validateByBlank("englishName", "English Name")) {
-            return false;
-        } else if (!validateByExternal("email", "email", !emailVaildation)) {
-            return false;
-        } else if (!validateByExternal("privateEmail", "private email", !privateEmailVaildation)) {
-            return false;
-        } else if (!validateByExternal("contact", "contact", !contactVaildation)) {
+        // validation (input tag mame, length or size)
+        if (!(validateByExternal("username", !usernameValidation && (document.getElementsByName("username")[0].value != oriUsername), "ID") &&
+            validateByExternal("password", !passwordValidation && (document.getElementsByName("password")[0].value != oriPassword)) &&
+            validateByBlank("koreanName") &&
+            validateByBlank("englishName") &&
+
+            validateBySize("introduction", 16777215) &&
+
+            validateByLength("workplace", 255) &&
+
+            validateByExternal("contact", !contactValidation && !validateByEmpty(document.getElementsByName("contact")[0].value)) &&
+            validateByExternal("email", !emailValidation && !validateByEmpty(document.getElementsByName("email")[0].value)) &&
+            validateByExternal("privateEmail", !privateEmailValidation && !validateByEmpty(document.getElementsByName("privateEmail")[0].value)) &&
+
+            validateByLength("messengerId", 255) &&
+            validateByLength("github", 255) &&
+            validateByLength("linkedIn", 255)
+        )) {
             return false;
         }
 
@@ -603,7 +638,7 @@
                 exit = true;
             });
 
-        if (exit) return flase;
+        if (exit) return false;
 
         // 파일 업로드
         var formData = new FormData();
@@ -629,7 +664,6 @@
                 parseErrorMsg(msg);
                 deleteUser(userIdx);
             });
-
     });
 </script>
 

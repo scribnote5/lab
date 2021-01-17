@@ -122,7 +122,7 @@ public class IntroductionImageService {
 
         persistIntroductionImage.update(introductionImage);
 
-        return introductionImageRepository.save(introductionImage).getIdx();
+        return introductionImageRepository.save(persistIntroductionImage).getIdx();
     }
 
     public void deleteIntroductionImageByIdx(Long idx) {

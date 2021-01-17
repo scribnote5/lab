@@ -22,7 +22,6 @@
                         <h2>ResearchField List</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
                             <li>ResearchField List</li>
                         </ol>
                     </div>
@@ -48,18 +47,20 @@
                         <thead>
                         <tr>
                             <th style="width: 5%">No.</th>
-                            <th style="width: 50%">Title</th>
+                            <th style="width: 45%">Title</th>
                             <th style="width: 10%">ID</th>
-                            <th style="width: 15%">Created Date</th>
-                            <th style="width: 15%">Modified Date</th>
-                            <th style="width: 5%">Status</th>
+                            <th style="width: 12.5%">Created Date</th>
+                            <th style="width: 12.5%">Modified Date</th>
+                            <th style="width: 7.5%">Status</th>
+                            <th style="width: 7.5%">Views</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="researchFieldDto : ${researchFieldDtoList}">
                             <td th:text="${researchFieldDto.idx}"></td>
                             <td>
-                                <a th:href="'/research-field?idx='+${researchFieldDto.idx}" class="link" th:text="${#strings.length(researchFieldDto.title)} < 40 ? ${researchFieldDto.title} : ${#strings.substring(researchFieldDto.title, 0, 40)} + '...'"></a>
+                                <a th:href="'/research-field?idx='+${researchFieldDto.idx}" class="link"
+                                   th:text="${#strings.length(researchFieldDto.title)} < 45 ? ${researchFieldDto.title} : ${#strings.substring(researchFieldDto.title, 0, 45)} + '...'"></a>
                                 <img th:if="${researchFieldDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
                             <td th:text="${researchFieldDto.createdBy}">></td>
@@ -67,11 +68,15 @@
                             <td th:text="${#temporals.format(researchFieldDto.lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
                             <td th:if="${researchFieldDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active"></td>
                             <td th:if="${researchFieldDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"></td>
+                            <td th:text="${researchFieldDto.views}">></td>
                         </tr>
                         <tr th:if="${researchFieldDtoList.totalElements == 0}">
                             <td colspan="10" class="no-posts">
                                 No posts founded.
                             </td>
+                        </tr>
+                        <tr>
+                            <td colspan="10"></td>
                         </tr>
                         </tbody>
                     </table>

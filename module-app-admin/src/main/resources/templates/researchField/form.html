@@ -24,9 +24,8 @@
                         <h2 th:if="*{idx}">ResearchField Update></h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
                             <li th:if="!*{idx}">ResearchField Register</li>
-                            <li th:if="*{idx}">ResearchField Update></li>
+                            <li th:if="*{idx}">ResearchField Update</li>
                         </ol>
                     </div>
                 </div>
@@ -42,7 +41,7 @@
                             <th colspan="3" class="sub-item-title">ResearchField Information</th>
                         </tr>
                         <tr>
-                            <th>Title</th>
+                            <th>Title<span class="required-field">*</span></th>
                             <td colspan="2"><input type="text" name="title" id="title" class="form-control form-control-sm" th:value="*{title}"/></td>
                         </tr>
                         <tr>
@@ -57,10 +56,10 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="3"><textarea name="content" th:text="*{content}"></textarea></td>
+                            <td colspan="3"><textarea name="content" class="form-control content" th:text="*{content}"></textarea></td>
                         </tr>
                         <tr>
-                            <th>Attached File</th>
+                            <th>Attached File(img file)<span class="required-field">*</span></th>
                             <td>
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" id="file" name="file">
@@ -114,23 +113,26 @@
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created Date</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Last Modified Date</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created By</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{createdBy}"/></td>
+                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{createdBy}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Last Modified By</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{lastModifiedBy}"/></td>
+                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{lastModifiedBy}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Views</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{views}"/></td>
+                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{views}"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="10"></td>
                         </tr>
                     </table>
                 </div>
@@ -307,9 +309,9 @@
 </script>
 
 <script th:if="!${researchFieldDto?.idx}">
-    $('#insert').click(function () {
-        // (input tag mame, length or size, message)
-        if (!(validateByLength("title", 255, "title") && validateBySize("content", 16777215, "content"))) {
+    $("#insert").click(function () {
+        // validation (input tag mame, length or size)
+        if (!(validateByLengthAndBlank("title", 255) && validateBySize("content", 16777215))) {
             return false;
         }
 
@@ -357,7 +359,7 @@
             async: false,
         })
             .done(function (msg) {
-                localStorage.setItem("result", "/research-field/update-success");
+                localStorage.setItem("result", "/research-field/register-success");
                 location.href = "/research-field?idx=" + researchFieldIdx;
             })
             .fail(function (msg) {
@@ -369,9 +371,9 @@
 </script>
 
 <script th:if="${researchFieldDto?.idx}" th:inline="javascript">
-    $('#update').click(function () {
-        // (input tag mame, length or size, message)
-        if (!(validateByLength("title", 255, "title") && validateBySize("content", 16777215, "content"))) {
+    $("#update").click(function () {
+        // validation (input tag mame, length or size)
+        if (!(validateByLengthAndBlank("title", 255) && validateBySize("content", 16777215))) {
             return false;
         }
 
@@ -400,6 +402,8 @@
         if (insertFileArray.length == 0 && deleteFileArray.length == 0) {
             localStorage.setItem("result", "/research-field/update-success");
             location.href = "/researchField?idx=" + researchFieldIdx;
+
+            return true;
         }
 
         // 파일 삭제

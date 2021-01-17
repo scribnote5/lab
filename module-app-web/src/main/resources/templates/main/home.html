@@ -80,7 +80,7 @@
                                     <tr th:each="noticeBoardDto : ${noticeBoardDtoList}">
                                         <td>
                                             <a th:href="'/noticeBoard?idx='+${noticeBoardDto.idx}" class="link"
-                                               th:text="${#strings.length(noticeBoardDto.title)} < 20 ? ${noticeBoardDto.title} : ${#strings.substring(noticeBoardDto.title, 0, 20)} + '...'"></a>
+                                               th:text="${#strings.length(noticeBoardDto.title)} < 38 ? ${noticeBoardDto.title} : ${#strings.substring(noticeBoardDto.title, 0, 38)} + '...'"></a>
                                             <img th:if="${noticeBoardDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                                         </td>
                                         <td th:text="${#temporals.format(noticeBoardDto.createdDate,'yyyy-MM-dd')}"></td>
@@ -106,7 +106,7 @@
                                     <tr th:each="seminarDto : ${seminarDtoList}">
                                         <td>
                                             <a th:href="'/seminar?idx='+${seminarDto.idx}" class="link"
-                                               th:text="${#strings.length(seminarDto.title)} < 20 ? ${seminarDto.title} : ${#strings.substring(seminarDto.title, 0, 20)} + '...'"></a>
+                                               th:text="${#strings.length(seminarDto.title)} < 38 ? ${seminarDto.title} : ${#strings.substring(seminarDto.title, 0, 38)} + '...'"></a>
                                             <img th:if="${seminarDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                                         </td>
                                         <td th:text="${#temporals.format(seminarDto.createdDate,'yyyy-MM-dd')}"></td>

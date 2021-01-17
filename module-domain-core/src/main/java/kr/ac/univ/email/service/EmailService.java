@@ -87,7 +87,7 @@ public class EmailService {
 
         persistEmail.update(email);
 
-        return emailRepository.save(email).getIdx();
+        return emailRepository.save(persistEmail).getIdx();
     }
 
     public void deleteEmailByIdx(Long idx) {

@@ -28,8 +28,6 @@ public class ProjectDto extends CommonDto {
     @Editor(max = 16777215, message = "The editor's input size must be less than 16777215 bytes(16MB).")
     private String content;
 
-    private Long views = 0L;
-
     private Long researchFieldIdx;
 
     @Size(max = 255, message = "The research establishment must be less than 255 characters.")

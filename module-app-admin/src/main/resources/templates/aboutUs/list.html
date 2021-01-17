@@ -22,7 +22,6 @@
                         <h2>About Us List</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
                             <li>About Us List</li>
                         </ol>
                     </div>
@@ -51,16 +50,17 @@
                             <th style="width: 5%">No.</th>
                             <th style="width: 45%">Title</th>
                             <th style="width: 10%">ID</th>
-                            <th style="width: 15%">Created Date</th>
-                            <th style="width: 15%">Modified Date</th>
-                            <th style="width: 5%">Status</th>
+                            <th style="width: 12.5%">Created Date</th>
+                            <th style="width: 12.5%">Last Modified Date</th>
+                            <th style="width: 7.5%">Status</th>
+                            <th style="width: 7.5%">Views</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="aboutUsDto : ${aboutUsDtoList}">
                             <td th:text="${aboutUsDto.idx}"></td>
                             <td>
-                                <a th:href="'/about-us?idx='+${aboutUsDto.idx}" class="link" th:text="${#strings.length(aboutUsDto.title)} < 40 ? ${aboutUsDto.title} : ${#strings.substring(aboutUsDto.title, 0, 40)} + '...'"></a>
+                                <a th:href="'/about-us?idx='+${aboutUsDto.idx}" class="link" th:text="${#strings.length(aboutUsDto.title)} < 45 ? ${aboutUsDto.title} : ${#strings.substring(aboutUsDto.title, 0, 45)} + '...'"></a>
                                 <img th:if="${aboutUsDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
                             <td th:text="${aboutUsDto.createdBy}">></td>
@@ -68,16 +68,19 @@
                             <td th:text="${#temporals.format(aboutUsDto.lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
                             <td th:if="${aboutUsDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active"></td>
                             <td th:if="${aboutUsDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"></td>
+                            <td th:text="${aboutUsDto.views}">></td>
                         </tr>
                         <tr th:if="${aboutUsDtoList.totalElements == 0}">
                             <td colspan="10" class="no-posts">
                                 No posts founded.
                             </td>
                         </tr>
+                        <tr>
+                            <td colspan="10"></td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
-
 
                 <div class="row justify-content-end mt-5 mb-3">
                     <div class="col-auto mx-3">

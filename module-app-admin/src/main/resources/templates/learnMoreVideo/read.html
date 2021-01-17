@@ -4,7 +4,7 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title th:text="${@environment.getProperty('title')} + ' | LearnMore Video Read'"></title>
+    <title th:text="${@environment.getProperty('title')} + ' | Learn More Video Read'"></title>
 </head>
 <body>
 
@@ -20,11 +20,10 @@
             <form name="form" id="form" th:object="${learnMoreVideoDto}" action="#">
                 <div class="page-header breadcrumbs">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h2>LearnMore Video Read</h2>
+                        <h2>Learn More Video Read</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
-                            <li>LearnMore Video Read</li>
+                            <li>Learn More Video Read</li>
                         </ol>
                     </div>
                 </div>
@@ -36,7 +35,7 @@
                             <col width="82.5%"/>
                         </colgroup>
                         <tr>
-                            <th colspan="2" class="sub-item-title">LearnMore Information</th>
+                            <th colspan="2" class="sub-item-title">Learn More Information</th>
                         </tr>
                         <tr>
                             <th>Title</th>
@@ -83,6 +82,9 @@
                             <th>Views</th>
                             <td><span th:text="*{views}"/></td>
                         </tr>
+                        <tr>
+                            <td colspan="10"></td>
+                        </tr>
                     </table>
                 </div>
 
@@ -111,7 +113,7 @@
 
 <script>
     sweetalertFire("learn-more-video");
-    
+
     $("#delete").click(function () {
         Confirm.fire({
             icon: "warning",

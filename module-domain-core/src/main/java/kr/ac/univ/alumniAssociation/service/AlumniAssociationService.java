@@ -40,7 +40,7 @@ public class AlumniAssociationService {
                 if ("module-app-admin".equals(moduleName)) {
                     alumniAssociationList = alumniAssociationRepository.findAllByTitleContaining(pageable, searchDto.getKeyword());
                 } else if ("module-app-web".equals(moduleName)) {
-                    alumniAssociationList = alumniAssociationRepository.findAllByTitleContainingAndActiveStatusIs(pageable, searchDto.getKeyword(), ActiveStatus.ACTIVE, -1L);
+                    alumniAssociationList = alumniAssociationRepository.findAllByTitleContainingAndActiveStatusIs(pageable, searchDto.getKeyword(), ActiveStatus.ACTIVE);
                 } else {
                     alumniAssociationList = null;
                 }
@@ -49,7 +49,7 @@ public class AlumniAssociationService {
                 if ("module-app-admin".equals(moduleName)) {
                     alumniAssociationList = alumniAssociationRepository.findAllByContentContaining(pageable, searchDto.getKeyword());
                 } else if ("module-app-web".equals(moduleName)) {
-                    alumniAssociationList = alumniAssociationRepository.findAllByContentContainingAndActiveStatusIs(pageable, searchDto.getKeyword(), ActiveStatus.ACTIVE, -1L);
+                    alumniAssociationList = alumniAssociationRepository.findAllByContentContainingAndActiveStatusIs(pageable, searchDto.getKeyword(), ActiveStatus.ACTIVE);
                 } else {
                     alumniAssociationList = null;
                 }
@@ -58,16 +58,16 @@ public class AlumniAssociationService {
                 if ("module-app-admin".equals(moduleName)) {
                     alumniAssociationList = alumniAssociationRepository.findAllByCreatedByContaining(pageable, searchDto.getKeyword());
                 } else if ("module-app-web".equals(moduleName)) {
-                    alumniAssociationList = alumniAssociationRepository.findAllByCreatedByContainingAndActiveStatusIs(pageable, searchDto.getKeyword(), ActiveStatus.ACTIVE, -1L);
+                    alumniAssociationList = alumniAssociationRepository.findAllByCreatedByContainingAndActiveStatusIs(pageable, searchDto.getKeyword(), ActiveStatus.ACTIVE);
                 } else {
                     alumniAssociationList = null;
                 }
                 break;
             default:
                 if ("module-app-admin".equals(moduleName)) {
-                    alumniAssociationList = alumniAssociationRepository.findAll(pageable);
+                    alumniAssociationList = alumniAssociationRepository.findAllByOrderByMainPagePriorityAsc(pageable);
                 } else if ("module-app-web".equals(moduleName)) {
-                    alumniAssociationList = alumniAssociationRepository.findAllByActiveStatusIs(pageable, ActiveStatus.ACTIVE);
+                    alumniAssociationList = alumniAssociationRepository.findAllByActiveStatusIsOrderByMainPagePriorityAsc(pageable, ActiveStatus.ACTIVE);
                 } else {
                     alumniAssociationList = null;
                 }
@@ -82,6 +82,10 @@ public class AlumniAssociationService {
         }
 
         return alumniAssociationDtoList;
+    }
+
+    public List<AlumniAssociationDto> findAllByActiveStatusIsAndMainPagePriorityLessThanEqualOrderByMainPagePriorityAsc() {
+        return AlumniAssociationMapper.INSTANCE.toDto(alumniAssociationRepository.findAllByActiveStatusIsAndMainPagePriorityLessThanEqualOrderByMainPagePriorityAsc(ActiveStatus.ACTIVE, 10L));
     }
 
     public Long insertAlumniAssociation(AlumniAssociationDto alumniAssociationDto) {
@@ -116,7 +120,7 @@ public class AlumniAssociationService {
 
         persistAlumniAssociation.update(alumniAssociation);
 
-        return alumniAssociationRepository.save(alumniAssociation).getIdx();
+        return alumniAssociationRepository.save(persistAlumniAssociation).getIdx();
     }
 
     public void deleteAlumniAssociationByIdx(Long idx) {

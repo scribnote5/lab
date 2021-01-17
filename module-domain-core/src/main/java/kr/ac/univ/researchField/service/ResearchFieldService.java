@@ -93,7 +93,7 @@ public class ResearchFieldService {
 
         persistResearchField.update(researchField);
 
-        return researchFieldRepository.save(researchField).getIdx();
+        return researchFieldRepository.save(persistResearchField).getIdx();
     }
 
     public void deleteResearchFieldByIdx(Long idx) {

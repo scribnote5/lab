@@ -88,7 +88,7 @@ public class SeminarService {
         return seminarDtoList;
     }
 
-    public List<SeminarDto> findSeminarList() {
+    public List<SeminarDto> findTop10ByOrderByIdxDesc() {
         List<SeminarDto> seminarDtoList = SeminarMapper.INSTANCE.toDto(seminarRepository.findTop10ByOrderByIdxDesc());
 
         // NewIcon 판별
@@ -132,7 +132,7 @@ public class SeminarService {
 
         persistSeminar.update(seminar);
 
-        return seminarRepository.save(seminar).getIdx();
+        return seminarRepository.save(persistSeminar).getIdx();
     }
 
     public void deleteSeminarByIdx(Long idx) {

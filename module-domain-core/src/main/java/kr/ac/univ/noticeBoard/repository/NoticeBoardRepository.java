@@ -25,5 +25,11 @@ public interface NoticeBoardRepository extends JpaRepository<NoticeBoard, Long> 
 
     Page<NoticeBoard> findAllByCreatedByContainingAndActiveStatusIs(Pageable pageable, String username, ActiveStatus activeStatus);
 
-    List<NoticeBoard> findTop10ByOrderByIdxDesc();
+    List<NoticeBoard> findTop10ByOrderByMainPagePriorityAscIdxDesc();
+
+    List<NoticeBoard> findAllByActiveStatusIsAndMainPagePriorityLessThanEqualOrderByMainPagePriorityAsc(ActiveStatus activeStatus, Long mainPagePriority);
+
+    Page<NoticeBoard> findAllByOrderByMainPagePriorityAsc(Pageable pageable);
+
+    Page<NoticeBoard> findAllByActiveStatusIsOrderByMainPagePriorityAsc(Pageable pageable, ActiveStatus activeStatus);
 }

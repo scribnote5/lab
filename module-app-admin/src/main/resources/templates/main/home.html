@@ -103,9 +103,9 @@
                         <thead>
                         <tr>
                             <th style="width: 10%">No.</th>
-                            <th style="width: 45%">Title</th>
+                            <th style="width: 50%">Title</th>
                             <th style="width: 20%">ID</th>
-                            <th style="width: 25%">Created Date</th>
+                            <th style="width: 20%">Created Date</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -119,7 +119,7 @@
 
                 <div class="card col table-card">
                     <div class="card-header table-card-header">
-                        <h4>NoticeBoard List</h4>
+                        <h4>Notice Board List</h4>
                         <div class="text-right" style="margin-top: -2rem;">
                             <a href="/notice-board/list" class="more"> more...</a>
                         </div>
@@ -138,8 +138,9 @@
                         <tr th:each="noticeBoardDto : ${noticeBoardDtoList}">
                             <td th:text="${noticeBoardDto.idx}"></td>
                             <td>
+                                <img th:if="${noticeBoardDto.mainPagePriority != 11}" th:attr="src=@{|/images/speaker-icon.jpg|}" class="new-icon"/>
                                 <a th:href="'/notice-board?idx='+${noticeBoardDto.idx}" class="link"
-                                   th:text="${#strings.length(noticeBoardDto.title)} < 20 ? ${noticeBoardDto.title} : ${#strings.substring(noticeBoardDto.title, 0, 20)} + '...'"></a>
+                                   th:text="${#strings.length(noticeBoardDto.title)} < 23 ? ${noticeBoardDto.title} : ${#strings.substring(noticeBoardDto.title, 0, 23)} + '...'"></a>
                                 <img th:if="${noticeBoardDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
                             <td th:text="${noticeBoardDto.createdBy}"></td>
@@ -149,7 +150,6 @@
                     </table>
                 </div>
             </div>
-
 
             <div class="row mt-2">
                 <div class="card col table-card">
@@ -164,11 +164,11 @@
                         <thead>
                         <tr>
                             <th style="width: 5%">No.</th>
-                            <th style="width: 40%">Aud Message</th>
+                            <th style="width: 47.5%">Aud Message</th>
                             <th style="width: 12.5%">Aud Class</th>
                             <th style="width: 12.5%">Aud Type</th>
-                            <th style="width: 15%">ID</th>
-                            <th style="width: 20%">Created Date</th>
+                            <th style="width: 10%">ID</th>
+                            <th style="width: 12.5%">Created Date</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -176,7 +176,7 @@
                             <td th:text="${dataHistoryDto.idx}"></td>
                             <td>
                                 <a th:href="'/data-history?idx='+${dataHistoryDto.idx}" class="link"
-                                   th:text="${#strings.length(dataHistoryDto.audMessage)} < 40 ? ${dataHistoryDto.audMessage} : ${#strings.substring(dataHistoryDto.audMessage, 0, 40)} + '...'"></a>
+                                   th:text="${#strings.length(dataHistoryDto.audMessage)} < 48 ? ${dataHistoryDto.audMessage} : ${#strings.substring(dataHistoryDto.audMessage, 0, 48)} + '...'"></a>
                                 <img th:if="${dataHistoryDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
                             <td th:text="${dataHistoryDto.audClass}"></td>
@@ -204,11 +204,11 @@
                         <thead>
                         <tr>
                             <th style="width: 5%">No.</th>
-                            <th style="width: 40%">Aud Message</th>
+                            <th style="width: 47.5%">Aud Message</th>
                             <th style="width: 12.5%">Login Result Type</th>
                             <th style="width: 12.5%">Aud Location</th>
-                            <th style="width: 15%">ID</th>
-                            <th style="width: 20%">Created Date</th>
+                            <th style="width: 10%">ID</th>
+                            <th style="width: 12.5%">Created Date</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -216,7 +216,7 @@
                             <td th:text="${loginHistoryDto.idx}"></td>
                             <td>
                                 <a th:href="'/login-history?idx='+${loginHistoryDto.idx}" class="link"
-                                   th:text="${#strings.length(loginHistoryDto.audMessage)} < 40 ? ${loginHistoryDto.audMessage} : ${#strings.substring(loginHistoryDto.audMessage, 0, 40)} + '...'"></a>
+                                   th:text="${#strings.length(loginHistoryDto.audMessage)} < 48 ? ${loginHistoryDto.audMessage} : ${#strings.substring(loginHistoryDto.audMessage, 0, 48)} + '...'"></a>
                                 <img th:if="${loginHistoryDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
                             <td th:if="${loginHistoryDto.audLoginResultType?.name() == 'SUCCESS'}" th:text="Success"></td>

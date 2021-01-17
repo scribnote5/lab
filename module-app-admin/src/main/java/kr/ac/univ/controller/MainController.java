@@ -8,7 +8,6 @@ import kr.ac.univ.util.FileUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
@@ -37,7 +36,7 @@ public class MainController {
     public String home(Model model) {
         model.addAttribute("dataHistoryDtoList", dataHistoryService.findDataHistoryList());
         model.addAttribute("loginHistoryDtoList", loginHistoryService.findLoginHistoryList());
-        model.addAttribute("noticeBoardDtoList", noticeBoardService.findNoticeBoardList());
+        model.addAttribute("noticeBoardDtoList", noticeBoardService.findTop10ByOrderByIdxDesc());
 
         model.addAttribute("userCount", userService.countUser());
         model.addAttribute("dataHistoryCount", dataHistoryService.countDataHistory());

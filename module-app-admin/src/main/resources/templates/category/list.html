@@ -22,7 +22,6 @@
                         <h2>Category List</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
                             <li>Category List</li>
                         </ol>
                     </div>
@@ -50,17 +49,18 @@
                             <th style="width: 5%">No.</th>
                             <th style="width: 45%">Title</th>
                             <th style="width: 10%">ID</th>
-                            <th style="width: 15%">Created Date</th>
-                            <th style="width: 15%">Modified Date</th>
-                            <th style="width: 5%">Status</th>
+                            <th style="width: 12.5%">Created Date</th>
+                            <th style="width: 12.5%">Modified Date</th>
+                            <th style="width: 7.5%">Status</th>
+                            <th style="width: 7.5%">Views</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="categoryDto : ${categoryDtoList}">
                             <td th:text="${categoryDto.idx}"></td>
                             <td>
-                                <a th:href="'/category?idx='+${categoryDto.idx}" class="link" 
-                                   th:text="${#strings.length(categoryDto.title)} < 40 ? ${categoryDto.title} : ${#strings.substring(categoryDto.title, 0, 40)} + '...'"></a>
+                                <a th:href="'/category?idx='+${categoryDto.idx}" class="link"
+                                   th:text="${#strings.length(categoryDto.title)} < 45 ? ${categoryDto.title} : ${#strings.substring(categoryDto.title, 0, 45)} + '...'"></a>
                                 <img th:if="${categoryDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
                             <td th:text="${categoryDto.createdBy}">></td>
@@ -68,11 +68,15 @@
                             <td th:text="${#temporals.format(categoryDto.lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
                             <td th:if="${categoryDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active"></td>
                             <td th:if="${categoryDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"></td>
+                            <td th:text="${categoryDto.views}">></td>
                         </tr>
                         <tr th:if="${categoryDtoList.totalElements == 0}">
                             <td colspan="10" class="no-posts">
                                 No posts founded.
                             </td>
+                        </tr>
+                        <tr>
+                            <td colspan="10"></td>
                         </tr>
                         </tbody>
                     </table>

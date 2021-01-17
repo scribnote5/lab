@@ -89,12 +89,12 @@ public class LearnMoreReadService {
 
     @Transactional
     public Long updateLearnMore(Long idx, LearnMoreReadDto learnMoreReadDto) {
-        LearnMoreRead persistLearnMore = learnMoreReadRepository.getOne(idx);
+        LearnMoreRead persistLearnMoreRead = learnMoreReadRepository.getOne(idx);
         LearnMoreRead learnMoreRead = LearnMoreReadMapper.INSTANCE.toEntity(learnMoreReadDto);
 
-        persistLearnMore.update(learnMoreRead);
+        persistLearnMoreRead.update(learnMoreRead);
 
-        return learnMoreReadRepository.save(learnMoreRead).getIdx();
+        return learnMoreReadRepository.save(persistLearnMoreRead).getIdx();
     }
 
     public void deleteLearnMoreByIdx(Long idx) {

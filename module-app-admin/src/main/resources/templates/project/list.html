@@ -22,7 +22,6 @@
                         <h2>Project List</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
                             <li>Project List</li>
                         </ol>
                     </div>
@@ -51,17 +50,18 @@
                             <th style="width: 5%">No.</th>
                             <th style="width: 45%">Title</th>
                             <th style="width: 10%">ID</th>
-                            <th style="width: 15%">Created Date</th>
-                            <th style="width: 15%">Modified Date</th>
-                            <th style="width: 5%">Status</th>
-                            <th style="width: 5%">Views</th>
+                            <th style="width: 12.5%">Created Date</th>
+                            <th style="width: 12.5%">Modified Date</th>
+                            <th style="width: 7.5%">Status</th>
+                            <th style="width: 7.5%">Views</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="projectDto : ${projectDtoList}">
                             <td th:text="${projectDto.idx}"></td>
                             <td>
-                                <a th:href="'/project?idx='+${projectDto.idx}" class="link" th:text="${#strings.length(projectDto.title)} < 40 ? ${projectDto.title} : ${#strings.substring(projectDto.title, 0, 40)} + '...'"></a>
+                                <a th:href="'/project?idx='+${projectDto.idx}" class="link"
+                                   th:text="${#strings.length(projectDto.title)} < 45 ? ${projectDto.title} : ${#strings.substring(projectDto.title, 0, 45)} + '...'"></a>
                                 <img th:if="${projectDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
                             <td th:text="${projectDto.createdBy}">></td>
@@ -76,10 +76,12 @@
                                 No posts founded.
                             </td>
                         </tr>
+                        <tr>
+                            <td colspan="10"></td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
-
 
                 <div class="row justify-content-end mt-5 mb-3">
                     <div class="col-auto mx-3">

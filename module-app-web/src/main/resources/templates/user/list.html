@@ -19,7 +19,6 @@
                         <h2>Member List</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
                             <li>Member List</li>
                         </ol>
                     </div>
@@ -64,18 +63,18 @@
 
                                     <div th:if="${userDto.userStatus?.name() == 'ATTENDING'}">
                                         <h6 class="text-right" th:if="${userDto.userType?.name() == 'FACULTY'}" th:text="Faculty"></h6>
-                                        <h6 class="text-right" th:if="${userDto.userType?.name() == 'FULL_TIME_PhD'}" th:text="'Ph.D. Student' + '-' + 'Full Time'"></h6>
-                                        <h6 class="text-right" th:if="${userDto.userType?.name() == 'PART_TIME_PhD'}" th:text="'Ph.D. Student' + '-' + 'Part Time'"></h6>
-                                        <h6 class="text-right" th:if="${userDto.userType?.name() == 'FULL_TIME_MS'}" th:text="'M.S. Student' + '-' + 'Full Time'"></h6>
-                                        <h6 class="text-right" th:if="${userDto.userType?.name() == 'PART_TIME_MS'}" th:text="'M.S. Student' + '-' + 'Part Time'"></h6>
+                                        <h6 class="text-right" th:if="${userDto.userType?.name() == 'FULL_TIME_PhD'}" th:text="'Ph.D. Full Time'"></h6>
+                                        <h6 class="text-right" th:if="${userDto.userType?.name() == 'PART_TIME_PhD'}" th:text="'Ph.D. Part Time'"></h6>
+                                        <h6 class="text-right" th:if="${userDto.userType?.name() == 'FULL_TIME_MS'}" th:text="'M.S. Full Time'"></h6>
+                                        <h6 class="text-right" th:if="${userDto.userType?.name() == 'PART_TIME_MS'}" th:text="'M.S. Part Time'"></h6>
                                         <h6 class="text-right" th:if="${userDto.userType?.name() == 'BS'}" th:text="'B.S.'"></h6>
                                     </div>
                                     <div th:if="${userDto.userStatus?.name() == 'GRADUATED'}">
                                         <h6 class="text-right" th:if="${userDto.userType?.name() == 'FACULTY'}" th:text="Faculty"></h6>
-                                        <h6 class="text-right" th:if="${userDto.userType?.name() == 'FULL_TIME_PhD'}" th:text="'Alumni' + '(Ph.D. ' + '-' + 'Full Time, ' + ${#temporals.format(userDto.graduatedDate,'yy.-MM')} + ')'"></h6>
-                                        <h6 class="text-right" th:if="${userDto.userType?.name() == 'PART_TIME_PhD'}" th:text="'Alumni' + '(Ph.D. ' + '-' + 'Part Time, ' + ${#temporals.format(userDto.graduatedDate,'yyMM')} + ')'"></h6>
-                                        <h6 class="text-right" th:if="${userDto.userType?.name() == 'FULL_TIME_MS'}" th:text="'Alumni' + '(M.S.' + '-' + 'Full Time, ' + ${#temporals.format(userDto.graduatedDate,'yy-MM')} + ')'"></h6>
-                                        <h6 class="text-right" th:if="${userDto.userType?.name() == 'PART_TIME_MS'}" th:text="'Alumni' + '(M.S.' + '-' + 'Part Time, ' + ${#temporals.format(userDto.graduatedDate,'yy-MM')} + ')'"></h6>
+                                        <h6 class="text-right" th:if="${userDto.userType?.name() == 'FULL_TIME_PhD'}" th:text="'Alumni' + '(Ph.D. Full Time, ' + ${#temporals.format(userDto.graduatedDate,'yy.-MM')} + ')'"></h6>
+                                        <h6 class="text-right" th:if="${userDto.userType?.name() == 'PART_TIME_PhD'}" th:text="'Alumni' + '(Ph.D. Part Time, ' + ${#temporals.format(userDto.graduatedDate,'yyMM')} + ')'"></h6>
+                                        <h6 class="text-right" th:if="${userDto.userType?.name() == 'FULL_TIME_MS'}" th:text="'Alumni' + '(M.S. Full Time, ' + ${#temporals.format(userDto.graduatedDate,'yy-MM')} + ')'"></h6>
+                                        <h6 class="text-right" th:if="${userDto.userType?.name() == 'PART_TIME_MS'}" th:text="'Alumni' + '(M.S. Part Time, ' + ${#temporals.format(userDto.graduatedDate,'yy-MM')} + ')'"></h6>
                                         <h6 class="text-right" th:if="${userDto.userType?.name() == 'BS'}" th:text="'B.S.'"></h6>
                                         <h6 class="text-right" th:text="${userDto.workplace}"></h6>
                                     </div>

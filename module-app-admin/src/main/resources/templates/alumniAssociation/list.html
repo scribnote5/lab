@@ -23,7 +23,6 @@
                         <h2>Alumni Association List</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
                             <li>Alumni Association List</li>
                         </ol>
                     </div>
@@ -51,19 +50,21 @@
                         <thead>
                         <tr>
                             <th style="width: 5%">No.</th>
-                            <th style="width: 30%">Title</th>
+                            <th style="width: 45%">Title</th>
                             <th style="width: 10%">ID</th>
-                            <th style="width: 15%">Created Date</th>
-                            <th style="width: 15%">Modified Date</th>
-                            <th style="width: 5%">Status</th>
+                            <th style="width: 12.5%">Created Date</th>
+                            <th style="width: 12.5%">Modified Date</th>
+                            <th style="width: 7.5%">Status</th>
+                            <th style="width: 7.5%">Views</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="alumniAssociationDto : ${alumniAssociationDtoList}">
                             <td th:text="${alumniAssociationDto.idx}"></td>
                             <td>
+                                <img th:if="${alumniAssociationDto.mainPagePriority != 11}" th:attr="src=@{|/images/speaker-icon.jpg|}" class="new-icon"/>
                                 <a th:href="'/alumni-association?idx='+${alumniAssociationDto.idx}" class="link"
-                                   th:text="${#strings.length(alumniAssociationDto.title)} < 40 ? ${alumniAssociationDto.title} : ${#strings.substring(alumniAssociationDto.title, 0, 40)} + '...'"></a>
+                                   th:text="${#strings.length(alumniAssociationDto.title)} < 45 ? ${alumniAssociationDto.title} : ${#strings.substring(alumniAssociationDto.title, 0, 45)} + '...'"></a>
                                 <img th:if="${alumniAssociationDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
                             <td th:text="${alumniAssociationDto.createdBy}"></td>
@@ -71,11 +72,15 @@
                             <td th:text="${#temporals.format(alumniAssociationDto.lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
                             <td th:if="${alumniAssociationDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active"></td>
                             <td th:if="${alumniAssociationDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"></td>
+                            <td th:text="${alumniAssociationDto.views}"></td>
                         </tr>
                         <tr th:if="${alumniAssociationDtoList.totalElements == 0}">
                             <td colspan="10" class="no-posts">
                                 No posts founded.
                             </td>
+                        </tr>
+                        <tr>
+                            <td colspan="10"></td>
                         </tr>
                         </tbody>
                     </table>

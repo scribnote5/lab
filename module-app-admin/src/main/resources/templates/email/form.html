@@ -24,7 +24,6 @@
                         <h2 th:if="*{idx}">Email Update</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
                             <li th:if="!*{idx}">Email Register</li>
                             <li th:if="*{idx}">Email Update</li>
                         </ol>
@@ -42,7 +41,7 @@
                             <th colspan="3" class="sub-item-title">Email Information</th>
                         </tr>
                         <tr>
-                            <th>Email Address</th>
+                            <th>Email Address<span class="required-field">*</span></th>
                             <td><input type="text" name="emailAddress" id="emailAddress" class="form-control form-control-sm" th:value="*{emailAddress}"/></td>
                             <td><span id="emailCheckResult"></span></td>
                         </tr>
@@ -95,6 +94,9 @@
                             <th>Views</th>
                             <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{views}"/></td>
                         </tr>
+                        <tr>
+                            <td colspan="10"></td>
+                        </tr>
                     </table>
                 </div>
 
@@ -125,7 +127,7 @@
 
 <!-- javascript -->
 <script>
-    var emailVaildation = false;
+    var emailValidation = false;
 
     /* email 검사 */
     $("#emailAddress").on("change", function () {
@@ -135,12 +137,14 @@
         if (regExp.test(email)) {
             document.getElementById("emailCheckResult").innerHTML = "Email format is valid.";
             document.getElementById("emailCheckResult").style.color = "blue";
-            emailVaildation = true;
+            emailValidation = true;
+        } else if (!validateByWhiteSpace(email)) {
+            document.getElementById("emailCheckResult").innerHTML = "";
+            emailValidation = true;
         } else {
             document.getElementById("emailCheckResult").innerHTML = "Email format is not valid.";
             document.getElementById("emailCheckResult").style.color = "red";
-            document.getElementsByName("email")[0].value = "";
-            emailVaildation = false;
+            emailValidation = false;
         }
     });
 
@@ -162,20 +166,11 @@
 </script>
 
 <script th:if="!${emailDto?.idx}">
-    $('#insert').click(function () {
-        if (!emailVaildation) {
-            Alert.fire({
-                icon: "error",
-                text: "Please check email."
-            }).then((result) => {
-                document.getElementById("email").focus();
-            });
+    $("#insert").click(function () {
+        // validation (input tag mame, length or size)
+        if (!(validateByExternal("emailAddress", !emailValidation ^ validateByEmpty(document.getElementsByName("emailAddress")[0].value)) &&
+            validateByLength("note", 255))) {
 
-            return false;
-        }
-
-        // (input tag mame, length or size, message)
-        if (!validateBySize("note", 255, "note")) {
             return false;
         }
 
@@ -200,21 +195,13 @@
 </script>
 
 <script th:if="${emailDto?.idx}" th:inline="javascript">
-    emailVaildation = true;
+    emailValidation = true;
 
-    $('#update').click(function () {
-        if (!emailVaildation) {
-            Alert.fire({
-                icon: "error",
-                text: "Please check email."
-            }).then((result) => {
-                document.getElementById("email").focus();
-            })
-            return false;
-        }
+    $("#update").click(function () {
+        // validation (input tag mame, length or size)
+        if (!(validateByExternal("emailAddress", emailValidation ^ validateByEmpty(document.getElementsByName("emailAddress")[0].value)) &&
+            validateByLength("note", 255))) {
 
-        // (input tag mame, length or size, message)
-        if (!validateBySize("note", 255, "note")) {
             return false;
         }
 

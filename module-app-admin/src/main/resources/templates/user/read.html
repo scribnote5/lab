@@ -22,7 +22,6 @@
                         <h2>User Read</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
                             <li>User Read</li>
                         </ol>
                     </div>
@@ -72,10 +71,10 @@
                             <th>User Type</th>
                             <td colspan="2">
                                 <span th:if="*{userType?.name() == 'FACULTY'}" th:text="Faculty"> </span>
-                                <span th:if="*{userType?.name() == 'FULL_TIME_PhD'}" th:text="'Ph.D. ' + ' - ' + 'Full Time'"> </span>
-                                <span th:if="*{userType?.name() == 'PART_TIME_PhD'}" th:text="'Ph.D. ' + ' - ' + 'Part Time'"> </span>
-                                <span th:if="*{userType?.name() == 'FULL_TIME_MS'}" th:text="'M.S.' + ' - ' + 'Full Time'"> </span>
-                                <span th:if="*{userType?.name() == 'PART_TIME_MS'}" th:text="'M.S.' + '-' + 'Part Time'"> </span>
+                                <span th:if="*{userType?.name() == 'FULL_TIME_PhD'}" th:text="'Ph.D. Full Time'"> </span>
+                                <span th:if="*{userType?.name() == 'PART_TIME_PhD'}" th:text="'Ph.D. Part Time'"> </span>
+                                <span th:if="*{userType?.name() == 'FULL_TIME_MS'}" th:text="'M.S. Full Time'"> </span>
+                                <span th:if="*{userType?.name() == 'PART_TIME_MS'}" th:text="'M.S. Part Time'"> </span>
                                 <span th:if="*{userType?.name() == 'BS'}" th:text="B.S."> </span>
                             </td>
                             <td></td>
@@ -168,17 +167,17 @@
                         </tr>
                         <tr>
                             <th>Authority Type</th>
-                            <td colspan="2">
-                                <span th:if="*{authorityType?.name() == 'ROOT'}" th:text="root"> </span>
-                                <span th:if="*{authorityType?.name() == 'MANAGER'}" th:text="manager"> </span>
-                                <span th:if="*{authorityType?.name() == 'GENERAL'}" th:text="general"> </span>
+                            <td colspan="3">
+                                <span th:if="*{authorityType?.name() == 'ROOT'}" th:text="Root"> </span>
+                                <span th:if="*{authorityType?.name() == 'MANAGER'}" th:text="Manager"> </span>
+                                <span th:if="*{authorityType?.name() == 'GENERAL'}" th:text="General"> </span>
                                 <span th:if="*{authorityType?.name() == 'NON_USER'}" th:text="Non + ' ' + User"> </span>
                             </td>
                             <td></td>
                         </tr>
                         <tr>
                             <th>Active Status</th>
-                            <td colspan="2">
+                            <td colspan="3">
                                 <span th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active"> </span>
                                 <span th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"> </span>
                             </td>
@@ -186,28 +185,31 @@
                         </tr>
                         <tr>
                             <th>Created Date</th>
-                            <td><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td colspan="3"><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr>
                             <th>Last Modified Date</th>
-                            <td><span th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td colspan="3"><span th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr>
                             <th>Created By</th>
-                            <td><span th:text="*{createdBy}"/></td>
+                            <td colspan="3"><span th:text="*{createdBy}"/></td>
                         </tr>
                         <tr>
                             <th>Last Created By</th>
-                            <td><span th:text="*{lastModifiedBy}"/></td>
+                            <td colspan="3"><span th:text="*{lastModifiedBy}"/></td>
                         </tr>
                         <tr>
                             <th>Views</th>
-                            <td><span th:text="*{views}"/></td>
+                            <td colspan="3"><span th:text="*{views}"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="10"></td>
                         </tr>
                     </table>
                 </div>
 
-                <div class="row justify-content-between">
+                <div class="row justify-content-between mt-5 mb-3">
                     <div class="col-auto mx-3">
                         <a href="/user/list" class="btn btn-secondary">Move to List</a>
                     </div>

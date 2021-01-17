@@ -20,19 +20,21 @@ public class SettingService {
     }
 
     public SettingDto findSettingByIdx(Long idx) {
-        return SettingMapper.INSTANCE.toDto(settingRepository.findById(idx).orElse(new Setting()));
+        SettingDto settingDto = SettingMapper.INSTANCE.toDto(settingRepository.findById(idx).orElse(new Setting()));
+
+        settingRepositoryImpl.updateViewsByIdx(idx);
+        settingDto.setViews(settingDto.getViews() + 1);
+
+        return settingDto;
     }
 
     @Transactional
     public Long updateSetting(Long idx, SettingDto settingDto) {
         Setting persistSetting = settingRepository.getOne(idx);
-        Setting introduction = SettingMapper.INSTANCE.toEntity(settingDto);
+        Setting setting = SettingMapper.INSTANCE.toEntity(settingDto);
 
-        persistSetting.update(introduction);
+        persistSetting.update(setting);
 
-        settingRepositoryImpl.updateViewsByIdx(settingDto.getIdx());
-        settingDto.setViews(settingDto.getViews() + 1);
-
-        return settingRepository.save(introduction).getIdx();
+        return settingRepository.save(persistSetting).getIdx();
     }
 }

@@ -44,3 +44,12 @@ function convertFileSize(fileSize) {
 
     return retFormat;
 };
+
+/* 카멜 케이스 변수를 출력에 적합한 문자열로 변환
+* activeStatus -> active status
+* */
+function camelCaseToTitle(str) {
+    return str.replace(/([A-Z])/g, function (arg) {
+        return " " + arg.toLowerCase();
+    });
+}

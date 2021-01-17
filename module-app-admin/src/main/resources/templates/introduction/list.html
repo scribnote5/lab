@@ -22,7 +22,6 @@
                         <h2>Introduction List</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
                             <li>Introduction List</li>
                         </ol>
                     </div>
@@ -51,9 +50,10 @@
                             <th style="width: 5%">No.</th>
                             <th style="width: 45%">Title</th>
                             <th style="width: 10%">ID</th>
-                            <th style="width: 15%">Created Date</th>
-                            <th style="width: 15%">Modified Date</th>
-                            <th style="width: 5%">Status</th>
+                            <th style="width: 12.5%">Created Date</th>
+                            <th style="width: 12.5%">Modified Date</th>
+                            <th style="width: 7.5%">Status</th>
+                            <th style="width: 7.5%">Views</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -61,7 +61,7 @@
                             <td th:text="${introductionDto.idx}"></td>
                             <td>
                                 <a th:href="'/introduction?idx='+${introductionDto.idx}" class="link"
-                                   th:text="${#strings.length(introductionDto.title)} < 40 ? ${introductionDto.title} : ${#strings.substring(introductionDto.title, 0, 40)} + '...'"></a>
+                                   th:text="${#strings.length(introductionDto.title)} < 45 ? ${introductionDto.title} : ${#strings.substring(introductionDto.title, 0, 45)} + '...'"></a>
                                 <img th:if="${introductionDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
                             <td th:text="${introductionDto.createdBy}">></td>
@@ -69,11 +69,15 @@
                             <td th:text="${#temporals.format(introductionDto.lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
                             <td th:if="${introductionDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active"></td>
                             <td th:if="${introductionDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"></td>
+                            <td th:text="${introductionDto.views}">></td>
                         </tr>
                         <tr th:if="${introductionDtoList.totalElements == 0}">
                             <td colspan="10" class="no-posts">
                                 No posts founded.
                             </td>
+                        </tr>
+                        <tr>
+                            <td colspan="10"></td>
                         </tr>
                         </tbody>
                     </table>

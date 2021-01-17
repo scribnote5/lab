@@ -146,7 +146,7 @@ public class PublicationService {
 
         persistPublication.update(publication);
 
-        return publicationRepository.save(publication).getIdx();
+        return publicationRepository.save(persistPublication).getIdx();
     }
 
     public Long findMaxPublicationIdx() {

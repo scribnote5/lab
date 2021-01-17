@@ -13,4 +13,5 @@ CREATE TABLE notice_board_attached_file
     saved_file_name  varchar(255) null,
     notice_board_idx bigint       null,
     file_size        varchar(255) null
-);
+) ENGINE = InnoDB
+  DEFAULT CHARSET = UTF8;

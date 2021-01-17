@@ -4,7 +4,7 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title th:text="${@environment.getProperty('title')} + ' | NoticeBoard Read'"></title>
+    <title th:text="${@environment.getProperty('title')} + ' | Notice Board Read'"></title>
 </head>
 <body>
 <div class="d-flex" id="wrapper">
@@ -19,11 +19,10 @@
             <form name="form" id="form" th:object="${noticeBoardDto}" action="#">
                 <div class="page-header breadcrumbs">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h2>NoticeBoard Read</h2>
+                        <h2>Notice Board Read</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
-                            <li>NoticeBoard Read</li>
+                            <li>Notice Board Read</li>
                         </ol>
                     </div>
                 </div>
@@ -35,11 +34,15 @@
                             <col width="82.5%"/>
                         </colgroup>
                         <tr>
-                            <th colspan="2" class="sub-item-title">NoticeBoard Information</th>
+                            <th colspan="2" class="sub-item-title">Notice Board Information</th>
                         </tr>
                         <tr>
                             <th>Title</th>
                             <td><span id="title" th:text="*{title}"></span></td>
+                        </tr>
+                        <tr>
+                            <th>Main Page Priority</th>
+                            <td colspan="2"><span id="mainPagePriority" class="main-page-priority" th:text="*{mainPagePriority == 11} ? 'This post not shown on the main page.' : *{mainPagePriority}"/></td>
                         </tr>
                         <tr>
                             <td colspan="2"><span id="content" class="form-control form-control-sm content" th:utext="*{content}"></span></td>
@@ -84,6 +87,9 @@
                         <tr>
                             <th>Views</th>
                             <td><span th:text="*{views}"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="10"></td>
                         </tr>
                     </table>
                 </div>
@@ -213,6 +219,11 @@
     });
 
     $("#insertComment").click(function () {
+        // validation (input tag mame, length or size)
+        if (!(validateByLengthAndBlank("content", 16777215))) {
+            return false;
+        }
+
         var jsonData =
             {
                 createdBy: document.getElementsByName("createdBy")[0].value,
@@ -240,6 +251,11 @@
     });
 
     function updateComment(idx, createdBy, activeStatus, commentId) {
+        // validation (input tag mame, length or size)
+        if (!(validateByLengthAndBlank("updateContent", 16777215))) {
+            return false;
+        }
+
         var jsonData =
             {
                 idx: idx,

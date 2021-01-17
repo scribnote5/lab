@@ -19,4 +19,5 @@ CREATE TABLE data_history
     aud_type           varchar(255),
     aud_message        varchar(255),
     aud_sub_message    varchar(255)
-);
+) ENGINE = InnoDB
+  DEFAULT CHARSET = UTF8;

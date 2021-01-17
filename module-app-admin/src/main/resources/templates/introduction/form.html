@@ -24,7 +24,6 @@
                         <h2 th:if="*{idx}">Introduction Update</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
                             <li th:if="!*{idx}">Introduction Register</li>
                             <li th:if="*{idx}">Introduction Update</li>
                         </ol>
@@ -41,7 +40,7 @@
                             <th colspan="2" class="sub-item-title">Introduction Information</th>
                         </tr>
                         <tr>
-                            <th>Title</th>
+                            <th>Title<span class="required-field">*</span></th>
                             <td><input type="text" name="title" id="title" class="form-control form-control-sm" th:value="*{title}"/></td>
                         </tr>
                         <tr>
@@ -80,6 +79,9 @@
                         <tr th:if="*{idx}">
                             <th>Views</th>
                             <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{views}"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="10"></td>
                         </tr>
                     </table>
                 </div>
@@ -136,9 +138,9 @@
 </script>
 
 <script th:if="!${introductionDto?.idx}">
-    $('#insert').click(function () {
-        // (input tag mame, length or size, message)
-        if (!(validateByLength("title", 255, "title") && validateBySize("content", 16777215, "content"))) {
+    $("#insert").click(function () {
+        // validation (input tag mame, length or size)
+        if (!(validateByLengthAndBlank("title", 255) && validateBySize("content", 16777215))) {
             return false;
         }
 
@@ -164,9 +166,9 @@
 </script>
 
 <script th:if="${introductionDto?.idx}" th:inline="javascript">
-    $('#update').click(function () {
-        // (input tag mame, length or size, message)
-        if (!(validateByLength("title", 255, "title") && validateBySize("content", 16777215, "content"))) {
+    $("#update").click(function () {
+        // validation (input tag mame, length or size)
+        if (!(validateByLengthAndBlank("title", 255) && validateBySize("content", 16777215))) {
             return false;
         }
 

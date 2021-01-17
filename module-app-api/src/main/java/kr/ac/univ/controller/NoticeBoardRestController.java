@@ -4,6 +4,7 @@ import kr.ac.univ.common.validation.FileValidator;
 import kr.ac.univ.exception.FileTypeException;
 import kr.ac.univ.noticeBoard.dto.NoticeBoardDto;
 import kr.ac.univ.noticeBoard.service.NoticeBoardAttachedFileService;
+import kr.ac.univ.noticeBoard.service.NoticeBoardCommentService;
 import kr.ac.univ.noticeBoard.service.NoticeBoardService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +18,12 @@ import java.util.List;
 @RequestMapping("/api/notice-boards")
 public class NoticeBoardRestController {
     private final NoticeBoardService noticeBoardService;
+    private final NoticeBoardCommentService noticeBoardCommentService;
     private final NoticeBoardAttachedFileService noticeBoardAttachedFileService;
 
-    public NoticeBoardRestController(NoticeBoardService noticeBoardService, NoticeBoardAttachedFileService noticeBoardAttachedFileService) {
+    public NoticeBoardRestController(NoticeBoardService noticeBoardService, NoticeBoardCommentService noticeBoardCommentService, NoticeBoardAttachedFileService noticeBoardAttachedFileService) {
         this.noticeBoardService = noticeBoardService;
+        this.noticeBoardCommentService = noticeBoardCommentService;
         this.noticeBoardAttachedFileService = noticeBoardAttachedFileService;
     }
 
@@ -42,6 +45,7 @@ public class NoticeBoardRestController {
     public ResponseEntity<?> deleteNoticeBoard(@PathVariable("idx") Long idx) throws Exception {
         noticeBoardService.deleteNoticeBoardByIdx(idx);
         noticeBoardAttachedFileService.deleteAllAttachedFile(idx);
+        noticeBoardCommentService.deleteAllByNoticeBoardIdx(idx);
 
         return new ResponseEntity<>("{}", HttpStatus.OK);
     }

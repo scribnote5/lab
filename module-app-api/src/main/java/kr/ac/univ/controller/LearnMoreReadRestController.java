@@ -40,7 +40,7 @@ public class LearnMoreReadRestController {
 
     @PutMapping("/{idx}")
     public ResponseEntity<?> putLearnMore(@PathVariable("idx") Long idx, @RequestBody @Valid LearnMoreReadDto learnMoreReadDto) {
-        if (learnMoreReadDto.getActiveStatus() == ActiveStatus.ACTIVE && learnMoreReadService.countAllByActiveStatus() > 1) {
+        if ((learnMoreReadDto.getActiveStatus() != learnMoreReadService.findLearnMoreByIdx(idx).getActiveStatus()) && learnMoreReadService.countAllByActiveStatus() > 0) {
             throw new BusinessException("Only one learn more read must be activate.");
         }
 

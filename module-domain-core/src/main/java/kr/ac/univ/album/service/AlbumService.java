@@ -100,7 +100,7 @@ public class AlbumService {
         return albumDtoList;
     }
 
-    public List<AlbumDto> findAlbumListByActiveStatusIs() {
+    public List<AlbumDto> findAllByActiveStatusIsAndMainPagePriorityGreaterThanEqualOrderByMainPagePriorityAsc() {
         return AlbumMapper.INSTANCE.toDto(albumRepository.findAllByActiveStatusIsAndMainPagePriorityGreaterThanEqualOrderByMainPagePriorityAsc(ActiveStatus.ACTIVE, 0L));
     }
 
@@ -153,7 +153,7 @@ public class AlbumService {
 
         persistAlbum.update(album);
 
-        return albumRepository.save(album).getIdx();
+        return albumRepository.save(persistAlbum).getIdx();
     }
 
     public void deleteAlbumByIdx(Long idx) {

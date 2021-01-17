@@ -15,4 +15,5 @@ CREATE TABLE learn_more_video
     views              bigint       null,
 
     title              varchar(255) null
-);
+) ENGINE = InnoDB
+  DEFAULT CHARSET = UTF8;

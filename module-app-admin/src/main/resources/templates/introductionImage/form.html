@@ -24,7 +24,6 @@
                         <h2 th:if="*{idx}">Introduction Image Update</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
                             <li th:if="!*{idx}">Introduction Image Register</li>
                             <li th:if="*{idx}">Introduction Image Update</li>
                         </ol>
@@ -42,7 +41,7 @@
                             <th colspan="3" class="sub-item-title">IntroductionImage Information</th>
                         </tr>
                         <tr>
-                            <th>Title</th>
+                            <th>Title<span class="required-field">*</span></th>
                             <td colspan="2"><input type="text" name="title" id="title" class="form-control form-control-sm" th:value="*{title}"/></td>
                         </tr>
                         <tr>
@@ -64,7 +63,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>Attached File</th>
+                            <th>Attached File(img file)<span class="required-field">*</span></th>
                             <td>
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" id="file" name="file">
@@ -118,23 +117,26 @@
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created Date</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Last Modified Date</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created By</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{createdBy}"/></td>
+                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{createdBy}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Last Modified By</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{lastModifiedBy}"/></td>
+                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{lastModifiedBy}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Views</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{views}"/></td>
+                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{views}"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="10"></td>
                         </tr>
                     </table>
                 </div>
@@ -356,8 +358,8 @@
 
 <script th:if="!${introductionImageDto?.idx}">
     $("#insert").click(function () {
-        // (input tag mame, length or size, message)
-        if (!(validateByLength("title", 255, "title") && validateByFileExist())) {
+        // validation (input tag mame, length or size)
+        if (!(validateByLengthAndBlank("title", 255) && validateByFileExist())) {
             return false;
         }
 
@@ -416,9 +418,9 @@
 </script>
 
 <script th:if="${introductionImageDto?.idx}" th:inline="javascript">
-       $("#update").click(function () {
-        // (input tag mame, length or size, message)
-        if (!(validateByLength("title", 255, "title") && validateByFileExist())) {
+    $("#update").click(function () {
+        // validation (input tag mame, length or size)
+        if (!(validateByLengthAndBlank("title", 255) && validateByFileExist())) {
             return false;
         }
 
@@ -446,7 +448,9 @@
         // 만일 파일이 수정되지 않은 경우 '파일 업로드' 및 '파일 삭제'를 수행하지 않음
         if (insertFileArray.length == 0 && deleteFileArray.length == 0) {
             localStorage.setItem("result", "/introduction-image/update-success");
-            location.href = "/introductionImage?idx=" + introductionImageIdx;
+            location.href = "/introduction-image?idx=" + introductionImageIdx;
+
+            return true;
         }
 
         // 파일 삭제
@@ -472,6 +476,8 @@
         if (insertFileArray.length <= 0) {
             localStorage.setItem("result", "/introduction-image/update-success");
             location.href = "/introduction-image?idx=" + introductionImageIdx;
+
+            return true;
         }
 
         // 파일 업로드

@@ -32,7 +32,7 @@ public class AboutUsRestController {
 
     @PutMapping("/{idx}")
     public ResponseEntity<?> putAboutUs(@PathVariable("idx") Long idx, @RequestBody @Valid AboutUsDto aboutUsDto) {
-        if (aboutUsDto.getActiveStatus() == ActiveStatus.ACTIVE && aboutUsService.countAllByActiveStatus() > 1) {
+        if ((aboutUsDto.getActiveStatus() != aboutUsService.findAboutUsByIdx(idx).getActiveStatus()) && aboutUsService.countAllByActiveStatus() > 0) {
             throw new BusinessException("Only one about us must be activate.");
         }
 

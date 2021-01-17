@@ -35,8 +35,6 @@ public class Seminar extends CommonAudit {
 
     private String content;
 
-    private Long views = 0L;
-
     @Builder
     public Seminar(Long idx, String createdBy, String lastModifiedBy, ActiveStatus activeStatus, String title, SeminarType seminarType, ResearchField researchField, LocalDateTime presentationDate, String place, String presenter, Long categoryIdx, String content) {
         setIdx(idx);

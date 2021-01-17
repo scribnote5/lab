@@ -26,8 +26,6 @@ public class Project extends CommonAudit {
 
     private String content;
 
-    private Long views = 0L;
-
     private Long researchFieldIdx = 0L;
 
     private String researchEstablishment;

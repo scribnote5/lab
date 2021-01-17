@@ -19,7 +19,6 @@
                         <h2>Member Detail</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
                             <li>Member Detail</li>
                         </ol>
                     </div>
@@ -54,10 +53,10 @@
                             <th>Member Type</th>
                             <td>
                                 <span th:if="*{userType?.name() == 'FACULTY'}" th:text="Faculty"> </span>
-                                <span th:if="*{userType?.name() == 'FULL_TIME_PhD'}" th:text="'Ph.D. ' + ' - ' + 'Full Time'"> </span>
-                                <span th:if="*{userType?.name() == 'PART_TIME_PhD'}" th:text="'Ph.D. ' + ' - ' + 'Part Time'"> </span>
-                                <span th:if="*{userType?.name() == 'FULL_TIME_MS'}" th:text="'M.S.' + ' - ' + 'Full Time'"> </span>
-                                <span th:if="*{userType?.name() == 'PART_TIME_MS'}" th:text="'M.S.' + '-' + 'Part Time'"> </span>
+                                <span th:if="*{userType?.name() == 'FULL_TIME_PhD'}" th:text="'Ph.D. Full Time'"> </span>
+                                <span th:if="*{userType?.name() == 'PART_TIME_PhD'}" th:text="'Ph.D. Part Time'"> </span>
+                                <span th:if="*{userType?.name() == 'FULL_TIME_MS'}" th:text="'M.S. Full Time'"> </span>
+                                <span th:if="*{userType?.name() == 'PART_TIME_MS'}" th:text="'M.S. Part Time'"> </span>
                                 <span th:if="*{userType?.name() == 'BS'}" th:text="B.S."> </span>
                             </td>
                         </tr>
@@ -72,7 +71,9 @@
                             <th>Workplace</th>
                             <td><span th:text="*{workplace}"> </span></td>
                         </tr>
-                        <tr><td colspan="2"></td></tr>
+                        <tr>
+                            <td colspan="2"></td>
+                        </tr>
                     </table>
 
                     <nav class="mt-5" data-aos="fade-up" data-aos-delay="200">

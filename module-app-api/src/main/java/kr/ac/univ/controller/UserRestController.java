@@ -27,7 +27,7 @@ public class UserRestController {
     @PostMapping
     public ResponseEntity<?> postUser(@RequestBody @Valid UserDto userDto) {
         // 중복 ID 검사 및 ID 길이 제한
-        if (userService.isDupulicationUserByUsername(userDto.getUsername()) && userDto.getUsername().length() >= 4 && userDto.getUsername().length() <= 16) {
+        if (userService.isDuplicationUserByUsername(userDto.getUsername())) {
             throw new InvalidUsernameException();
         }
 
@@ -53,7 +53,7 @@ public class UserRestController {
     @GetMapping("/validation/username/{username}")
     public ResponseEntity<?> checkDuplicateUsername(@PathVariable("username") String username) {
 
-        return new ResponseEntity<>(userService.isDupulicationUserByUsername(username), HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.isDuplicationUserByUsername(username), HttpStatus.CREATED);
     }
 
     // 첨부 파일 업로드

@@ -15,5 +15,7 @@ CREATE TABLE notice_board
     views              bigint       null,
 
     content            mediumtext   null,
+    main_page_priority bigint       null,
     title              varchar(255) null
-);
+) ENGINE = InnoDB
+  DEFAULT CHARSET = UTF8;

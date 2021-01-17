@@ -15,5 +15,7 @@ CREATE TABLE alumni_association
     views              bigint       null,
 
     title              varchar(255) null,
+    main_page_priority bigint       null,
     content            mediumtext   null
-);
+) ENGINE = InnoDB
+  DEFAULT CHARSET = UTF8;

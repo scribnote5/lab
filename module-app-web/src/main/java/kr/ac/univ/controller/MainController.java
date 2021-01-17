@@ -70,7 +70,7 @@ public class MainController {
             researchFieldAttachedFileService.findAttachedFileByResearchFieldIdx(researchFieldDto.getIdx(), researchFieldDto);
         }
 
-        List<AlbumDto> albumDtoList = albumService.findAlbumListByActiveStatusIs();
+        List<AlbumDto> albumDtoList = albumService.findAllByActiveStatusIsAndMainPagePriorityGreaterThanEqualOrderByMainPagePriorityAsc();
         for (AlbumDto albumDto : albumDtoList) {
             albumAttachedFileService.findAttachedFileByAlbumIdx(albumDto.getIdx(), albumDto);
         }
@@ -79,8 +79,8 @@ public class MainController {
         model.addAttribute("introductionImageDtoList", introductionImageDtoList);
         model.addAttribute("researchFieldDtoList", researchFieldDtoList);
         model.addAttribute("albumDtoList", albumDtoList);
-        model.addAttribute("noticeBoardDtoList", noticeBoardService.findNoticeBoardList());
-        model.addAttribute("seminarDtoList", seminarService.findSeminarList());
+        model.addAttribute("noticeBoardDtoList", noticeBoardService.findTop10ByOrderByIdxDesc());
+        model.addAttribute("seminarDtoList", seminarService.findTop10ByOrderByIdxDesc());
         model.addAttribute("settingDto", settingService.findSettingByIdx(1L));
 
         return "main/home";

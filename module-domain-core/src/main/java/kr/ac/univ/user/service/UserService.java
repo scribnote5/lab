@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -160,14 +161,14 @@ public class UserService implements UserDetailsService {
                 userDto.setAccess(true);
             }
             // Update: isAccess 메소드에 따라 접근 가능 및 불가
-            else if (AccessCheck.isAccessInModuleAdmin(userDto.getCreatedBy())) {
+            else if (AccessCheck.isAccessInModuleAdminUser(userDto.getCreatedBy(), userDto.getUsername(), (userDto.getAuthorityType()).name())) {
                 userDto.setAccess(true);
             } else {
                 userDto.setAccess(false);
             }
         } else {
             // Update: isAccess 메소드에 따라 접근 가능 및 불가
-            if (AccessCheck.isAccessInModuleWeb(userDto.getCreatedBy())) {
+            if (AccessCheck.isAccessInModuleWebUser(userDto.getCreatedBy(), userDto.getUsername())) {
                 userDto.setAccess(true);
             } else {
                 userDto.setAccess(false);
@@ -194,7 +195,9 @@ public class UserService implements UserDetailsService {
         userRepository.deleteById(idx);
     }
 
-    public boolean isDupulicationUserByUsername(String username) {
-        return (userRepository.countByUsername(username) > 0) ? true : false;
+    public boolean isDuplicationUserByUsername(String username) {
+        String regex = "^[a-z0-9]{4,16}$";
+
+        return userRepository.countByUsername(username) > 0 && username.length() >= 4 && username.length() <= 16 && Pattern.matches(regex, username) ? true : false;
     }
 }

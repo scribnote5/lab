@@ -95,7 +95,7 @@ public class IntroductionService {
 
         persistIntroduction.update(introduction);
 
-        return introductionRepository.save(introduction).getIdx();
+        return introductionRepository.save(persistIntroduction).getIdx();
     }
 
     public void deleteIntroductionByIdx(Long idx) {

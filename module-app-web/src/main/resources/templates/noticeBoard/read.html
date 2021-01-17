@@ -4,7 +4,7 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title th:text="${@environment.getProperty('title')} + ' | NoticeBoard Detail'"></title>
+    <title th:text="${@environment.getProperty('title')} + ' | Notice Board Detail'"></title>
 </head>
 <body>
 <div id="wrapper">
@@ -16,11 +16,10 @@
             <form name="form" id="form" th:object="${noticeBoardDto}" action="#">
                 <div class="page-header breadcrumbs" data-aos="fade-up" data-aos-delay="100">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h2>NoticeBoard Detail</h2>
+                        <h2>Notice Board Detail</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
-                            <li>NoticeBoard Detail</li>
+                            <li>Notice Board Detail</li>
                         </ol>
                     </div>
                 </div>
@@ -131,6 +130,10 @@
                     <div class="col-auto mx-3">
                         <a href="/notice-board/list" class="btn btn-secondary">Move to List</a>
                     </div>
+                    <div th:if="*{access}" class="col-auto mx-3">
+                        <a th:href="'/notice-board/form?idx='+*{idx}" class="btn btn-info mx-1">Update</a>
+                        <button type="button" class="btn btn-danger mx-1" id="delete">Delete</button>
+                    </div>
                 </div>
 
                 <!-- input type="hidden" -->
@@ -151,6 +154,32 @@
 
 <script th:inline="javascript">
     sweetalertFire("notice-board");
+
+    $("#delete").click(function () {
+        Confirm.fire({
+            icon: "warning",
+            title: "Do you want to delete?",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: moduleAppApiAddress + "/api/notice-boards/" + document.getElementsByName("idx")[0].value,
+                    type: "delete",
+                    dataType: "text",
+                    contentType: "application/json",
+                    async: false,
+                })
+                    .done(function (msg) {
+                        localStorage.setItem("result", "/notice-board/delete-success");
+                        location.href = "/notice-board/list";
+                    })
+                    .fail(function (msg) {
+                        parseErrorMsg(msg);
+                    })
+            } else {
+                return false;
+            }
+        })
+    });
 
     $("#insertComment").click(function () {
         var jsonData =

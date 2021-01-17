@@ -22,7 +22,6 @@
                         <h2>Introduction Image List</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
                             <li>Introduction Image List</li>
                         </ol>
                     </div>
@@ -32,7 +31,6 @@
                     <div class="col-auto px-1">
                         <select class="custom-select custom-select-sm" name="searchType" th:field="*{searchType}">
                             <option th:value="TITLE">Title</option>
-                            <option th:value="HASH_TAGS">Hash Tags</option>
                             <option th:value="ID">ID</option>
                         </select>
                     </div>
@@ -51,9 +49,10 @@
                             <th style="width: 5%">No.</th>
                             <th style="width: 45%">Title</th>
                             <th style="width: 10%">ID</th>
-                            <th style="width: 15%">Created Date</th>
-                            <th style="width: 15%">Modified Date</th>
-                            <th style="width: 5%">Status</th>
+                            <th style="width: 12.5%">Created Date</th>
+                            <th style="width: 12.5%">Modified Date</th>
+                            <th style="width: 7.5%">Status</th>
+                            <th style="width: 7.5%">Views</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -61,7 +60,7 @@
                             <td th:text="${introductionImageDto.idx}"></td>
                             <td>
                                 <a th:href="'/introduction-image?idx='+${introductionImageDto.idx}" class="link"
-                                   th:text="${#strings.length(introductionImageDto.title)} < 40 ? ${introductionImageDto.title} : ${#strings.substring(introductionImageDto.title, 0, 40)} + '...'"></a>
+                                   th:text="${#strings.length(introductionImageDto.title)} < 45 ? ${introductionImageDto.title} : ${#strings.substring(introductionImageDto.title, 0, 45)} + '...'"></a>
                                 <img th:if="${introductionImageDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
                             <td th:text="${introductionImageDto.createdBy}"></td>
@@ -69,11 +68,15 @@
                             <td th:text="${#temporals.format(introductionImageDto.lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
                             <td th:if="${introductionImageDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active"></td>
                             <td th:if="${introductionImageDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"></td>
+                            <td th:text="${introductionImageDto.views}"></td>
                         </tr>
                         <tr th:if="${introductionImageDtoList.totalElements == 0}">
                             <td colspan="10" class="no-posts">
                                 No posts founded.
                             </td>
+                        </tr>
+                        <tr>
+                            <td colspan="10"></td>
                         </tr>
                         </tbody>
                     </table>

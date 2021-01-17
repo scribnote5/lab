@@ -22,23 +22,25 @@ import javax.persistence.Table;
 public class NoticeBoard extends CommonAudit {
     private String title;
 
+    private Long mainPagePriority;
+
     private String content;
 
-    private Long views = 0L;
-
     @Builder
-    public NoticeBoard(Long idx, String createdBy, String lastModifiedBy, ActiveStatus activeStatus, String title, String content) {
+    public NoticeBoard(Long idx, String createdBy, String lastModifiedBy, ActiveStatus activeStatus, String title, Long mainPagePriority, String content) {
         setIdx(idx);
         setCreatedBy(createdBy);
         setLastModifiedBy(lastModifiedBy);
         setActiveStatus(activeStatus);
         this.title = title;
+        this.mainPagePriority = mainPagePriority;
         this.content = content;
     }
 
     public void update(NoticeBoard noticeBoard) {
         setActiveStatus(noticeBoard.getActiveStatus());
         this.title = noticeBoard.getTitle();
+        this.mainPagePriority = noticeBoard.getMainPagePriority();
         this.content = noticeBoard.getContent();
     }
 }

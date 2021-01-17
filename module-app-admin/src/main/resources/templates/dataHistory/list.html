@@ -23,7 +23,6 @@
                         <h2>Data History List</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
                             <li>Data History List</li>
                         </ol>
                     </div>
@@ -64,9 +63,10 @@
                             <th style="width: 10%">Aud Class</th>
                             <th style="width: 10%">Aud Type</th>
                             <th style="width: 10%">ID</th>
-                            <th style="width: 15%">Created Date</th>
-                            <th style="width: 15%">Modified Date</th>
-                            <th style="width: 5%">Status</th>
+                            <th style="width: 12.5%">Created Date</th>
+                            <th style="width: 12.5%">Modified Date</th>
+                            <th style="width: 7.5%">Status</th>
+                            <th style="width: 7.5%">Views</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -86,11 +86,15 @@
                             <td th:text="${#temporals.format(dataHistoryDto.lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
                             <td th:if="${dataHistoryDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active"></td>
                             <td th:if="${dataHistoryDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"></td>
+                            <td th:text="${dataHistoryDto.views}">></td>
                         </tr>
                         <tr th:if="${dataHistoryDtoList.totalElements == 0}">
                             <td colspan="10" class="no-posts">
                                 No posts founded.
                             </td>
+                        </tr>
+                        <tr>
+                            <td colspan="10"></td>
                         </tr>
                         </tbody>
                     </table>

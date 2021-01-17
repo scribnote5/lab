@@ -26,7 +26,7 @@ table th {
 }
 
 table td {
-    word-break:break-all;
+    word-break: break-all;
 }
 
 .no-posts {
@@ -38,17 +38,15 @@ table td {
 }
 
 .btn-main {
-    font-family: "Raleway", sans-serif;
     display: inline-block;
     text-align: center;
     vertical-align: middle;
     user-select: none;
     border: 1px solid transparent;
-    padding: .25rem .75rem;
-    font-size: .9rem;
+    padding: .375rem .75rem;
+    font-size: 1rem;
     line-height: 1.5;
     border-radius: .25rem;
-    transition: 0.5s;
     background: var(--main-red);
     color: var(--white);
 }
@@ -90,7 +88,10 @@ table td {
     text-decoration: none;
 }
 
-
+.filed-introduction {
+    text-align: right;
+    text-justify: inter-word;
+}
 
 /*
  * Breadcrumbs
@@ -110,18 +111,19 @@ table td {
 
 @media (max-width: 992px) {
     .breadcrumbs ol {
-        margin-top: .75rem;
+        margin-top: 10px;
     }
 }
 
 .breadcrumbs ol li + li {
-    padding-left: .75rem;
+    padding-left: 10px;
 }
 
 .breadcrumbs ol li + li::before {
     display: inline-block;
-    padding-right: .75rem;
-    color: #3c3c3c;
+    padding-right: 10px;
+    color: var(--lighter-black);
+    content: "/";
 }
 
 @media (max-width: 768px) {

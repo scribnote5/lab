@@ -4,8 +4,8 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title th:if="!${learnMoreVideoDto.idx}" th:text="${@environment.getProperty('title')} + ' | LearnMore Video Register'"></title>
-    <title th:if="${learnMoreVideoDto.idx}" th:text="${@environment.getProperty('title')} + ' | LearnMore Video Update'"></title>
+    <title th:if="!${learnMoreVideoDto.idx}" th:text="${@environment.getProperty('title')} + ' | Learn More Video Register'"></title>
+    <title th:if="${learnMoreVideoDto.idx}" th:text="${@environment.getProperty('title')} + ' | Learn More Video Update'"></title>
 </head>
 <body>
 <div class="d-flex" id="wrapper">
@@ -20,14 +20,13 @@
             <form name="form" id="form" th:object="${learnMoreVideoDto}" action="#">
                 <div class="page-header breadcrumbs">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h2 th:if="!*{idx}">LearnMore Video Register</h2>
-                        <h2 th:if="*{idx}">LearnMore Video Update</h2>
+                        <h2 th:if="!*{idx}">Learn More Video Register</h2>
+                        <h2 th:if="*{idx}">Learn More Video Update</h2>
 
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
-                            <li th:if="!*{idx}">LearnMore Register</li>
-                            <li th:if="*{idx}">LearnMore Update</li>
+                            <li th:if="!*{idx}">Learn More Register</li>
+                            <li th:if="*{idx}">Learn More Update</li>
                         </ol>
                     </div>
                 </div>
@@ -39,14 +38,14 @@
                             <col width="82.5%"/>
                         </colgroup>
                         <tr>
-                            <th colspan="2" class="sub-item-title">LearnMore Information</th>
+                            <th colspan="2" class="sub-item-title">Learn More Information</th>
                         </tr>
                         <tr>
-                            <th>Title</th>
+                            <th>Title<span class="required-field">*</span></th>
                             <td><input type="text" name="title" id="title" class="form-control form-control-sm" th:value="*{title}"/></td>
                         </tr>
                         <tr>
-                            <th>Attached File</th>
+                            <th>Attached File(video file)<span class="required-field">*</span></th>
                             <td>
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" id="file" name="file">
@@ -112,6 +111,9 @@
                         <tr th:if="*{idx}">
                             <th>Views</th>
                             <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{views}"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="10"></td>
                         </tr>
                     </table>
                 </div>
@@ -272,12 +274,12 @@
 </script>
 
 <script th:if="!${learnMoreVideoDto?.idx}">
-    $('#insert').click(function () {
+    $("#insert").click(function () {
         // 배열 요소가 null인 경우를 제외하여 배열 길이를 계산함
         deleteArrayIndexIsNull();
 
-        // (input tag mame, length or size, message)
-        if (!(validateByLength("title", 255, "title") && validateByFileExist())) {
+        // validation (input tag mame, length or size)
+        if (!(validateByLengthAndBlank("title", 255) && validateByFileExist())) {
             return false;
         }
 
@@ -335,12 +337,12 @@
 </script>
 
 <script th:if="${learnMoreVideoDto?.idx}" th:inline="javascript">
-    $('#update').click(function () {
+    $("#update").click(function () {
         // 배열 요소가 null인 경우를 제외하여 배열 길이를 계산함
         deleteArrayIndexIsNull();
 
-        // (input tag mame, length or size, message)
-        if (!(validateByLength("title", 255, "title") && validateByFileExist())) {
+        // validation (input tag mame, length or size)
+        if (!(validateByLengthAndBlank("title", 255) && validateByFileExist())) {
             return false;
         }
 
@@ -369,6 +371,8 @@
         if (insertFileArray.length == 0 && deleteFileArray.length == 0) {
             localStorage.setItem("result", "/learn-more-video/update-success");
             location.href = "/learn-more-video?idx=" + learnMoreIdx;
+
+            return true;
         }
 
         // 파일 삭제
@@ -424,7 +428,6 @@
                 parseErrorMsg(msg);
                 deleteLearnMore(learnMoreIdx);
             })
-
     });
 </script>
 

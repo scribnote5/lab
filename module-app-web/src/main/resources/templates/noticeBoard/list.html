@@ -4,7 +4,7 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title th:text="${@environment.getProperty('title')} + ' | NoticeBoard List'"></title>
+    <title th:text="${@environment.getProperty('title')} + ' | Notice Board List'"></title>
 </head>
 <body>
 <div id="wrapper">
@@ -16,11 +16,10 @@
             <form name="form" id="form" th:object="${searchDto}" action="#">
                 <div class="page-header breadcrumbs" data-aos="fade-up" data-aos-delay="100">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h2>NoticeBoard List</h2>
+                        <h2>Notice Board List</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
-                            <li>NoticeBoard List</li>
+                            <li>Notice Board List</li>
                         </ol>
                     </div>
                 </div>
@@ -45,10 +44,10 @@
                     <table class="table table-hover">
                         <thead>
                         <tr>
-                            <th style="width: 65%">Title</th>
-                            <th style="width: 15%">Created By</th>
-                            <th style="width: 15%">Created Date</th>
-                            <th style="width: 5%">Views</th>
+                            <th style="width: 67.5%">Title</th>
+                            <th style="width: 12.5%">Created By</th>
+                            <th style="width: 12.5%">Created Date</th>
+                            <th style="width: 7.5%">Views</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -71,8 +70,11 @@
                     </table>
                 </div>
 
-
-                <div class="row justify-content-end mt-5 mb-3"></div>
+                <div class="row justify-content-end mt-5 mb-3" data-aos="fade-up" data-aos-delay="200">
+                    <div class="col-auto mx-3">
+                        <a href="/notice-board/form" sec:authorize="isAuthenticated()" class="btn-main">Register</a>
+                    </div>
+                </div>
 
                 <!-- Pagination -->
                 <div class="row justify-content-center mb-3" aria-label="Page navigation" data-aos="fade-up" data-aos-delay="200">

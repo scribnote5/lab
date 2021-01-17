@@ -37,6 +37,26 @@ public class NoticeBoardController {
         return "noticeBoard/list";
     }
 
+    // Form Update
+    @GetMapping("/form{idx}")
+    public String noticeBoardForm(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
+        NoticeBoardDto noticeBoardDto = noticeBoardService.findNoticeBoardByIdx(idx);
+        String returnPage = null;
+
+        // 권한 확인
+        if (noticeBoardDto.isAccess()) {
+            noticeBoardDto = noticeBoardAttachedFileService.findAttachedFileByNoticeBoardIdx(idx, noticeBoardDto);
+
+            model.addAttribute("noticeBoardDto", noticeBoardDto);
+
+            returnPage = "noticeBoard/form";
+        } else {
+            returnPage = "user/access-denied";
+        }
+
+        return returnPage;
+    }
+
     // Read
     @GetMapping({"", "/"})
     public String noticeBoardRead(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {

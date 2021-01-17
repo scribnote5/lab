@@ -4,29 +4,25 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title th:if="!${learnMoreReadDto.idx}" th:text="${@environment.getProperty('title')} + ' | Learn More Read Register'"></title>
-    <title th:if="${learnMoreReadDto.idx}" th:text="${@environment.getProperty('title')} + ' | Learn More Read Update'"></title>
+    <title th:if="!${noticeBoardDto.idx}" th:text="${@environment.getProperty('title')} + ' | Notice Board Register'"></title>
+    <title th:if="${noticeBoardDto.idx}" th:text="${@environment.getProperty('title')} + ' | Notice Board Update'"></title>
 </head>
 <body>
-<div class="d-flex" id="wrapper">
-    <!-- sidebar -->
-    <div th:replace="layout/sidebar::sidebar"></div>
-
+<div id="wrapper">
     <div id="page-content-wrapper">
         <!-- header -->
         <div th:replace="layout/header::header"></div>
 
-        <div class="container-fluid">
-            <form name="form" id="form" th:object="${learnMoreReadDto}" action="#">
+        <div class="container">
+            <form name="form" id="form" th:object="${noticeBoardDto}" action="#">
                 <div class="page-header breadcrumbs">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h2 th:if="!*{idx}">Learn More Read Register</h2>
-                        <h2 th:if="*{idx}">Learn More Read Update</h2>
-
+                        <h2 th:if="!*{idx}">Notice Board Register</h2>
+                        <h2 th:if="*{idx}">Notice Board Update</h2>
                         <ol>
                             <li>Home</li>
-                            <li th:if="!*{idx}">Learn More Read Register</li>
-                            <li th:if="*{idx}">Learn More Read Update</li>
+                            <li th:if="!*{idx}">Notice Board Register</li>
+                            <li th:if="*{idx}">Notice Board Update</li>
                         </ol>
                     </div>
                 </div>
@@ -38,14 +34,17 @@
                             <col width="82.5%"/>
                         </colgroup>
                         <tr>
-                            <th colspan="2" class="sub-item-title">Learn More Information</th>
+                            <th colspan="2" class="sub-item-title">Notice Board Information</th>
                         </tr>
                         <tr>
                             <th>Title<span class="required-field">*</span></th>
                             <td><input type="text" name="title" id="title" class="form-control form-control-sm" th:value="*{title}"/></td>
                         </tr>
                         <tr>
-                            <th>Attached File(pdf file)<span class="required-field">*</span></th>
+                            <td colspan="2" style="width: 100%"><textarea name="content" id="summernote" class="summernote" th:text="*{content}"></textarea></td>
+                        </tr>
+                        <tr>
+                            <th>Attached File</th>
                             <td>
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" id="file" name="file">
@@ -112,15 +111,12 @@
                             <th>Views</th>
                             <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{views}"/></td>
                         </tr>
-                        <tr>
-                            <td colspan="10"></td>
-                        </tr>
                     </table>
                 </div>
 
                 <div class="row justify-content-between mt-5 mb-3">
                     <div class="col-auto mx-3">
-                        <a href="/learn-more-read/list" class="btn btn-secondary col-auto">Move to List</a>
+                        <a href="/notice-board/list" class="btn btn-secondary">Move to List</a>
                     </div>
                     <div class="col-auto mx-3">
                         <button th:if="!*{idx}" id="insert" type="button" class="btn-main">Register</button>
@@ -144,19 +140,25 @@
 <th:block th:replace="layout/script.html"></th:block>
 
 <!-- javascript -->
-<script th:inline="javascript">
+<script>
     var totalFileSize = 0;
     var insertFileArray = [];
     var deleteFileArray = [];
     var imgDataId = 0;
     var exit = null;
 
-    // 파일 Number validation
-    var insertFileArrayLength = 0;
-    var deleteFileArrayLength = 0;
-    var uploadedAttachedFileLength = [[${learnMoreReadDto.attachedFileList}]].length;
-
     $(document).ready(function () {
+        <!-- summernote setting -->
+        $("#summernote").summernote({
+            height: 500,	// 에디터 높이
+            minHeight: null,	// 최소 높이
+            maxHeight: null,	// 최대 높이
+            // focus: true,	// 에디터 로딩후 포커스를 맞출지 여부
+            lang: "ko-KR",// 한글 설정
+            placeholder: "The editor's max input size of bytes is 16777215(16 MB)."	//placeholder 설정
+        });
+        $("#summernote").summernote('fontSize', 14);
+
         <!-- File Drop -->
         $("#fileDrop").on("dragenter dragover", function (event) {
             event.preventDefault(); // 기본 이벤트 발생을 막음
@@ -167,13 +169,8 @@
     $("#file").change(function () {
         var files = document.getElementsByName("file")[0].files;
 
-        // 업로드하는 파일 개수가 number개가 넘어가는 경우, 파일 업로드 불가
-        if (!validateByFileNumber(files, 1)) {
-            return false;
-        }
-
         for (var i = 0; i < files.length; i++) {
-            if (validatePdfFile(files[i])) {
+            if (validateFile(files[i])) {
                 insertFileArray.push(files[i]);
                 document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
 
@@ -201,13 +198,8 @@
         // originalEvent : javascript의 이벤트
         var files = event.originalEvent.dataTransfer.files;
 
-        // 업로드하는 파일 개수가 number개가 넘어가는 경우, 파일 업로드 불가
-        if (!validateByFileNumber(files, 1)) {
-            return false;
-        }
-
         for (var i = 0; i < files.length; i++) {
-            if (validatePdfFile(files[i])) {
+            if (validateFile(files[i])) {
                 insertFileArray.push(files[i]);
                 document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
 
@@ -256,9 +248,9 @@
         deleteFileArray.push(idx);
     }
 
-    function deleteLearnMore(learnMoreReadIdx) {
+    function deleteNoticeBoard(noticeBoardIdx) {
         $.ajax({
-            url: moduleAppApiAddress + "/api/learn-more-reads/" + learnMoreReadIdx,
+            url: moduleAppApiAddress + "/api/notice-boards/" + noticeBoardIdx,
             type: "delete",
             dataType: "text",
             contentType: "application/json",
@@ -273,21 +265,18 @@
     }
 </script>
 
-<script th:if="!${learnMoreReadDto?.idx}">
+<script th:if="!${noticeBoardDto?.idx}">
     $("#insert").click(function () {
-        // 배열 요소가 null인 경우를 제외하여 배열 길이를 계산함
-        deleteArrayIndexIsNull();
-
         // validation (input tag mame, length or size)
-        if (!(validateByLengthAndBlank("title", 255) && validateByFileExist())) {
+        if (!(validateByLength("title", 255) && validateBySize("content", 16777215))) {
             return false;
         }
 
         var jsonData = $("#form").serializeObject();
-        var learnMoreReadIdx;
+        var noticeBoardIdx;
 
         $.ajax({
-            url: moduleAppApiAddress + "/api/learn-more-reads",
+            url: moduleAppApiAddress + "/api/notice-boards",
             type: "post",
             data: JSON.stringify(jsonData),
             dataType: "text",
@@ -295,7 +284,7 @@
             async: false,
         })
             .done(function (msg) {
-                learnMoreReadIdx = msg;
+                noticeBoardIdx = msg;
                 exit = false;
             })
             .fail(function (msg) {
@@ -312,11 +301,11 @@
             formData.append("files", insertFileArray[i]);
         }
 
-        formData.append("idx", learnMoreReadIdx);
+        formData.append("idx", noticeBoardIdx);
         formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
 
         $.ajax({
-            url: moduleAppApiAddress + "/api/learn-more-reads/attachedFile",
+            url: moduleAppApiAddress + "/api/notice-boards/attachedFile",
             type: "post",
             data: formData,
             dataType: "text",
@@ -326,31 +315,28 @@
             async: false,
         })
             .done(function (msg) {
-                localStorage.setItem("result", "/learn-more-read/register-success");
-                location.href = "/learn-more-read?idx=" + learnMoreReadIdx;
+                localStorage.setItem("result", "/notice-board/register-success");
+                location.href = "/notice-board?idx=" + noticeBoardIdx;
             })
             .fail(function (msg) {
                 parseErrorMsg(msg);
-                deleteLearnMore(learnMoreReadIdx);
+                deleteNoticeBoard(noticeBoardIdx);
             });
     });
 </script>
 
-<script th:if="${learnMoreReadDto?.idx}" th:inline="javascript">
+<script th:if="${noticeBoardDto?.idx}" th:inline="javascript">
     $("#update").click(function () {
-        // 배열 요소가 null인 경우를 제외하여 배열 길이를 계산함
-        deleteArrayIndexIsNull();
-
         // validation (input tag mame, length or size)
-        if (!(validateByLengthAndBlank("title", 255) && validateByFileExist())) {
+        if (!(validateByLength("title", 255) && validateBySize("content", 16777215))) {
             return false;
         }
 
         var jsonData = $("#form").serializeObject();
-        var learnMoreReadIdx = document.getElementsByName("idx")[0].value;
+        var noticeBoardIdx = document.getElementsByName("idx")[0].value;
 
         $.ajax({
-            url: moduleAppApiAddress + "/api/learn-more-reads/" + learnMoreReadIdx,
+            url: moduleAppApiAddress + "/api/notice-boards/" + noticeBoardIdx,
             type: "put",
             data: JSON.stringify(jsonData),
             dataType: "text",
@@ -369,8 +355,8 @@
 
         // 만일 파일이 수정되지 않은 경우 '파일 업로드' 및 '파일 삭제'를 수행하지 않음
         if (insertFileArray.length == 0 && deleteFileArray.length == 0) {
-            localStorage.setItem("result", "/learn-more-read/update-success");
-            location.href = "/learn-more-read?idx=" + learnMoreReadIdx;
+            localStorage.setItem("result", "/notice-board/update-success");
+            location.href = "/notice-board?idx=" + noticeBoardIdx;
 
             return true;
         }
@@ -378,7 +364,7 @@
         // 파일 삭제
         if (deleteFileArray.length > 0) {
             $.ajax({
-                url: moduleAppApiAddress + "/api/learn-more-reads/attachedFile",
+                url: moduleAppApiAddress + "/api/notice-boards/attachedFile",
                 type: "delete",
                 data: JSON.stringify(deleteFileArray),
                 contentType: "application/json",
@@ -396,8 +382,8 @@
         if (exit) return false;
 
         if (insertFileArray.length <= 0) {
-            localStorage.setItem("result", "/learn-more-read/update-success");
-            location.href = "/learn-more-read?idx=" + learnMoreReadIdx;
+            localStorage.setItem("result", "/notice-board/update-success");
+            location.href = "/notice-board?idx=" + noticeBoardIdx;
         }
 
         // 파일 업로드
@@ -407,11 +393,11 @@
             formData.append("files", insertFileArray[i]);
         }
 
-        formData.append("idx", learnMoreReadIdx);
+        formData.append("idx", noticeBoardIdx);
         formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
 
         $.ajax({
-            url: moduleAppApiAddress + "/api/learn-more-reads/attachedFile",
+            url: moduleAppApiAddress + "/api/notice-boards/attachedFile",
             type: "post",
             data: formData,
             dataType: "text",
@@ -421,12 +407,12 @@
             async: false,
         })
             .done(function (msg) {
-                localStorage.setItem("result", "/learn-more-read/update-success");
-                location.href = "/learn-more-read?idx=" + learnMoreReadIdx;
+                localStorage.setItem("result", "/notice-board/update-success");
+                location.href = "/notice-board?idx=" + noticeBoardIdx;
             })
             .fail(function (msg) {
                 parseErrorMsg(msg);
-                deleteLearnMore(learnMoreReadIdx);
+                deleteNoticeBoard(noticeBoardIdx);
             })
     });
 </script>

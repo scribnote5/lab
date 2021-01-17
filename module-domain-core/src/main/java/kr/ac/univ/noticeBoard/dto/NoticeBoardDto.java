@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
@@ -25,7 +27,9 @@ public class NoticeBoardDto extends CommonDto {
     @Editor(max = 16777215, message = "The editor's input size must be less than 16777215 bytes(16MB).")
     private String content;
 
-    private Long views = 0L;
+    @Max(value = 11, message = "The main page priority must be less than 11.")
+    @Min(value = 1, message = "The main page priority must be more than 1.")
+    private Long mainPagePriority;
 
     /* Attached File */
     private List<NoticeBoardAttachedFile> attachedFileList = new ArrayList<NoticeBoardAttachedFile>();

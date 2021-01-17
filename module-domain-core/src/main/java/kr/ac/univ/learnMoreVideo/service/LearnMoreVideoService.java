@@ -89,12 +89,12 @@ public class LearnMoreVideoService {
 
     @Transactional
     public Long updateLearnMore(Long idx, LearnMoreVideoDto learnMoreVideoDto) {
-        LearnMoreVideo persistLearnMore = learnMoreVideoRepository.getOne(idx);
+        LearnMoreVideo persistLearnMoreVideo = learnMoreVideoRepository.getOne(idx);
         LearnMoreVideo learnMoreVideo = LearnMoreVideoMapper.INSTANCE.toEntity(learnMoreVideoDto);
 
-        persistLearnMore.update(learnMoreVideo);
+        persistLearnMoreVideo.update(learnMoreVideo);
 
-        return learnMoreVideoRepository.save(learnMoreVideo).getIdx();
+        return learnMoreVideoRepository.save(persistLearnMoreVideo).getIdx();
     }
 
     public void deleteLearnMoreByIdx(Long idx) {

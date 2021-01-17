@@ -16,4 +16,5 @@ CREATE TABLE notice_board_comment
 
     notice_board_idx   long         null,
     content            mediumtext   null
-);
+) ENGINE = InnoDB
+  DEFAULT CHARSET = UTF8;

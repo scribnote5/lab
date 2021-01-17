@@ -41,8 +41,6 @@ public class SeminarDto extends CommonDto {
     @Editor(max = 16777215, message = "The editor's input size must be less than 16777215 bytes(16MB).")
     private String content;
 
-    private Long views = 0L;
-
     /* Attached File */
     private List<SeminarAttachedFile> attachedFileList = new ArrayList<SeminarAttachedFile>();
 }

@@ -99,7 +99,7 @@ public class AboutUsService {
 
         persistAboutUs.update(aboutUs);
 
-        return aboutUsRepository.save(aboutUs).getIdx();
+        return aboutUsRepository.save(persistAboutUs).getIdx();
     }
 
     public void deleteAboutUsByIdx(Long idx) {

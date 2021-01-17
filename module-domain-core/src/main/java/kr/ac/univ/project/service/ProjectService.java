@@ -108,7 +108,7 @@ public class ProjectService {
 
         persistProject.update(project);
 
-        return projectRepository.save(project).getIdx();
+        return projectRepository.save(persistProject).getIdx();
     }
 
     public void deleteProjectByIdx(Long idx) {

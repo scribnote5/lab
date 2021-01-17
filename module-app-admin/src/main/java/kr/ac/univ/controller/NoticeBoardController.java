@@ -48,6 +48,7 @@ public class NoticeBoardController {
             noticeBoardDto = noticeBoardAttachedFileService.findAttachedFileByNoticeBoardIdx(idx, noticeBoardDto);
 
             model.addAttribute("noticeBoardDto", noticeBoardDto);
+            model.addAttribute("noticeBoardDtoList", noticeBoardService.findAllByActiveStatusIsAndMainPagePriorityLessThanEqualOrderByMainPagePriorityAsc());
 
             returnPage = "noticeBoard/form";
         } else {

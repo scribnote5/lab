@@ -24,7 +24,6 @@
                         <h2 th:if="*{idx}">Publication Update</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
                             <li th:if="!*{idx}">Publication Register</li>
                             <li th:if="*{idx}">Publication Update</li>
                         </ol>
@@ -41,11 +40,11 @@
                             <th colspan="2" class="sub-item-title">Publication Information</th>
                         </tr>
                         <tr>
-                            <th>Title</th>
+                            <th>Title<span class="required-field">*</span></th>
                             <td><input type="text" name="title" class="form-control form-control-sm" th:value="*{title}"/></td>
                         </tr>
                         <tr>
-                            <th>Authors</th>
+                            <th>Authors<span class="required-field">*</span></th>
                             <td><input type="text" name="authors" class="form-control form-control-sm" th:value="*{authors}"/></td>
                         </tr>
                         <tr>
@@ -83,7 +82,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>Published In</th>
+                            <th>Published In<span class="required-field">*</span></th>
                             <td><input type="text" class="form-control form-control-sm" name="publishedIn" th:value="*{publishedIn}"/></td>
                         </tr>
                         <tr>
@@ -91,7 +90,7 @@
                             <td><input type="text" name="impactFactor" class="form-control form-control-sm" th:placeholder="*{#strings.isEmpty(impactFactor)} ? 'ex) IF: 0.861' : ''" th:value="*{impactFactor}"/></td>
                         </tr>
                         <tr>
-                            <th>Published Date</th>
+                            <th>Published Date<span class="required-field">*</span></th>
                             <td><input type="date" name="publishedDate" class="form-control form-control-sm" th:value="*{publishedDate}"/></td>
                         </tr>
                         <tr>
@@ -190,6 +189,9 @@
                         <tr th:if="*{idx}">
                             <th>Views</th>
                             <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{views}"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="10"></td>
                         </tr>
                     </table>
                 </div>
@@ -336,8 +338,20 @@
 </script>
 <script th:if="!${publicationDto?.idx}">
     $("#insert").click(function () {
-        // (input tag mame, length or size, message)
-        if (!(validateByLength("title", 255, "title")) || !(validateByLength("authors", 255, "authors"))) {
+        // validation (input tag mame, length or size)
+        if (!(validateByLengthAndBlank("title", 255) &&
+            validateByLengthAndBlank("authors", 255) &&
+            validateByLengthAndBlank("publishedIn", 255) &&
+            validateByLengthAndBlank("publishedDate", 255) &&
+
+            validateByLength("pages", 255) &&
+            validateByLength("volume", 255) &&
+            validateByLength("number", 255) &&
+            validateByLength("doi", 255) &&
+            validateByLength("uri", 255) &&
+            validateByLength("isbnIssn", 255) &&
+            validateByLength("remark", 255))) {
+
             return false;
         }
 
@@ -396,8 +410,20 @@
 </script>
 <script th:if="${publicationDto?.idx}" th:inline="javascript">
     $("#update").click(function () {
-        // (input tag mame, length or size, message)
-        if (!(validateByLength("title", 255, "title")) || !(validateByLength("authors", 255, "authors"))) {
+        // validation (input tag mame, length or size)
+        if (!(validateByLengthAndBlank("title", 255) &&
+            validateByLengthAndBlank("authors", 255) &&
+            validateByLengthAndBlank("publishedIn", 255) &&
+            validateByLengthAndBlank("publishedDate", 255) &&
+
+            validateByLength("pages", 255) &&
+            validateByLength("volume", 255) &&
+            validateByLength("number", 255) &&
+            validateByLength("doi", 255) &&
+            validateByLength("uri", 255) &&
+            validateByLength("isbnIssn", 255) &&
+            validateByLength("remark", 255))) {
+
             return false;
         }
 

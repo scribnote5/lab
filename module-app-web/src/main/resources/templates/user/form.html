@@ -20,7 +20,6 @@
                         <h2>Member Update</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
                             <li>Member Update</li>
                         </ol>
                     </div>
@@ -95,10 +94,10 @@
                             <td colspan="2">
                                 <select name="userType" th:field="*{userType}" class="form-control form-control-sm">
                                     <option th:value="FACULTY">Faculty</option>
-                                    <option th:value="FULL_TIME_PhD">Ph.D. - Full Time</option>
-                                    <option th:value="PART_TIME_PhD">Ph.D. - Part Time</option>
-                                    <option th:value="FULL_TIME_MS">M.S. - Full Time</option>
-                                    <option th:value="PART_TIME_MS">M.S. - Part Time</option>
+                                    <option th:value="FULL_TIME_PhD">Ph.D. Full Time</option>
+                                    <option th:value="PART_TIME_PhD">Ph.D. Part Time</option>
+                                    <option th:value="FULL_TIME_MS">M.S. Full Time</option>
+                                    <option th:value="PART_TIME_MS">M.S. Part Time</option>
                                     <option th:value="BS">B.S.</option>
                                 </select>
                             </td>
@@ -250,7 +249,7 @@
 
     $(document).ready(function () {
         <!-- summernote setting -->
-        $('#summernote').summernote({
+        $("#summernote").summernote({
             height: 500,	// 에디터 높이
             minHeight: null,	// 최소 높이
             maxHeight: null,	// 최대 높이
@@ -258,7 +257,7 @@
             lang: "ko-KR",// 한글 설정
             placeholder: "The editor's max input size of bytes is 16777215(16 MB)."	//placeholder 설정
         });
-        $('#summernote').summernote('fontSize', 14);
+        $("#summernote").summernote('fontSize', 14);
     });
 
     function deleteUser(userIdx) {
@@ -387,7 +386,7 @@
             privateEmailVaildation = true;
         } else if (!validateByWhiteSpace(privateEmail)) {
             document.getElementById("privateEmailCheckResult").innerHTML = "";
-            emailVaildation = true;
+            privateEmailVaildation = true;
         } else {
             document.getElementById("privateEmailCheckResult").innerHTML = "Email format is not valid.";
             document.getElementById("privateEmailCheckResult").style.color = "red";
@@ -406,7 +405,7 @@
             contactVaildation = true;
         } else if (!validateByWhiteSpace(contact)) {
             document.getElementById("privateEmailCheckResult").innerHTML = "";
-            emailVaildation = true;
+            contactVaildation = true;
         } else {
             document.getElementById("contactCheckResult").innerHTML = "Contact format is not valid.";
             document.getElementById("contactCheckResult").style.color = "red";
@@ -437,30 +436,33 @@
 </script>
 
 <script th:if="${userDto?.idx}" th:inline="javascript">
-    // 초기 valdiation을 모두 true로 설정한다.
+    // 초기 validation을 모두 true로 설정한다.
     passwordVaildation = true;
     emailVaildation = true;
     privateEmailVaildation = true;
     contactVaildation = true;
 
     $("#update").click(function () {
-        // validation
         var oriUsername = [[${userDto.username}]];
         var oriPassword = [[${userDto.password}]];
 
-        if (!validateByExternal("username", "ID", (document.getElementsByName("username")[0].value != oriUsername) && !usernameVaildation)) {
-            return false;
-        } else if (!validateByExternal("password", "password", (document.getElementsByName("password")[0].value != oriPassword) && !passwordVaildation)) {
-            return false;
-        } else if (!validateByBlank("koreanName", "Korean Name")) {
-            return false;
-        } else if (!validateByBlank("englishName", "English Name")) {
-            return false;
-        } else if (!validateByExternal("email", "email", !emailVaildation)) {
-            return false;
-        } else if (!validateByExternal("privateEmail", "private email", !privateEmailVaildation)) {
-            return false;
-        } else if (!validateByExternal("contact", "contact", !contactVaildation)) {
+        // validation (input tag mame, length or size)
+        if (!(validateByExternal("username", !usernameVaildation && (document.getElementsByName("username")[0].value != oriUsername), "ID")
+            && validateByExternal("password", !passwordVaildation && (document.getElementsByName("password")[0].value != oriPassword))
+            && validateByBlank("koreanName")
+            && validateByBlank("englishName")
+
+            && validateBySize("introduction", 16777215)
+
+            && validateByLength("workplace", 255)
+
+            && validateByExternal("email", emailVaildation ^ validateByEmpty(document.getElementsByName("email")[0].value))
+            && validateByExternal("privateEmail", privateEmailVaildation ^ validateByEmpty(document.getElementsByName("privateEmail")[0].value))
+            && validateByExternal("contact", contactVaildation ^ validateByEmpty(document.getElementsByName("contact")[0].value))
+            && validateByLength("messengerId", 255)
+            && validateByLength("github", 255)
+            && validateByLength("linkedIn", 255)
+        )) {
             return false;
         }
 
@@ -508,7 +510,7 @@
                 exit = true;
             });
 
-        if (exit) return flase;
+        if (exit) return false;
 
         // 파일 업로드
         var formData = new FormData();

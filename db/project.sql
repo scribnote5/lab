@@ -21,4 +21,5 @@ CREATE TABLE project
     research_establishment varchar(255) null,
     start_date             datetime     null,
     end_date               datetime     null
-);
+) ENGINE = InnoDB
+  DEFAULT CHARSET = UTF8;

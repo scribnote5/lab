@@ -22,7 +22,6 @@
                         <h2>User List</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
                             <li>User List</li>
                         </ol>
                     </div>
@@ -46,26 +45,19 @@
 
                 <div class="mt-5">
                     <table class="table table-hover">
-                        <colgroup>
-                            <col width="5%"/>
-                            <col width="10%"/>
-                            <col width="10%"/>
-                            <col width="20%"/>
-                            <col width="12.5%"/>
-                            <col width="12.5%"/>
-                            <col width="15%"/>
-                            <col width="15%"/>
-                        </colgroup>
                         <thead>
                         <tr>
-                            <th>No.</th>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>User Type</th>
-                            <th>Authority Type</th>
-                            <th>Created Date</th>
-                            <th>Modified Date</th>
+                            <th style="width: 5%">No.</th>
+                            <th style="width: 15%">ID</th>
+                            <th style="width: 10%">Korean Name</th>
+                            <th style="width: 10%">User Type</th>
+                            <th style="width: 10%">User Status</th>
+                            <th style="width: 10%">Authority Type</th>
+
+                            <th style="width: 12.5%">Created Date</th>
+                            <th style="width: 12.5%">Modified Date</th>
+                            <th style="width: 7.5%">Status</th>
+                            <th style="width: 7.5%">Views</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -76,27 +68,35 @@
                                 <img th:if="${userDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
                             <td th:text="${userDto.koreanName}"></td>
-                            <td th:text="${userDto.email}"></td>
 
                             <td th:if="${userDto.userType?.name() == 'FACULTY'}" th:text="Faculty"></td>
-                            <td th:if="${userDto.userType?.name() == 'FULL_TIME_PhD'}" th:text="'Ph.d. ' + '-' + ' Full Time'"></td>
-                            <td th:if="${userDto.userType?.name() == 'PART_TIME_PhD'}" th:text="'Ph.d.' + '-' + ' Part Time'"></td>
-                            <td th:if="${userDto.userType?.name() == 'FULL_TIME_MS'}" th:text="'M.S.' + '-' + ' Full Time'"></td>
-                            <td th:if="${userDto.userType?.name() == 'PART_TIME_MS'}" th:text="'M.S.' + '-' + ' Part Time'"></td>
+                            <td th:if="${userDto.userType?.name() == 'FULL_TIME_PhD'}" th:text="'Ph.d. Full Time'"></td>
+                            <td th:if="${userDto.userType?.name() == 'PART_TIME_PhD'}" th:text="'Ph.d. Part Time'"></td>
+                            <td th:if="${userDto.userType?.name() == 'FULL_TIME_MS'}" th:text="'M.S. Full Time'"></td>
+                            <td th:if="${userDto.userType?.name() == 'PART_TIME_MS'}" th:text="'M.S. Part Time'"></td>
                             <td th:if="${userDto.userType?.name() == 'B.S.'}" th:text="'B.S.'"></td>
 
-                            <td th:if="${userDto.authorityType?.name() == 'ROOT'}" th:text="root"></td>
-                            <td th:if="${userDto.authorityType?.name() == 'MANAGER'}" th:text="manager"></td>
-                            <td th:if="${userDto.authorityType?.name() == 'GENERAL'}" th:text="general"></td>
-                            <td th:if="${userDto.authorityType?.name() == 'NON_USER'}" th:text="non_user"></td>
+                            <td th:if="${userDto.userStatus?.name() == 'ATTENDING'}" th:text="Attending"></td>
+                            <td th:if="${userDto.userStatus?.name() == 'GRADUATED'}" th:text="Graduated"></td>
+
+                            <td th:if="${userDto.authorityType?.name() == 'ROOT'}" th:text="Root"></td>
+                            <td th:if="${userDto.authorityType?.name() == 'MANAGER'}" th:text="Manager"></td>
+                            <td th:if="${userDto.authorityType?.name() == 'GENERAL'}" th:text="General"></td>
+                            <td th:if="${userDto.authorityType?.name() == 'NON_USER'}" th:text="'Non ' + 'User'"></td>
 
                             <td th:text="${#temporals.format(userDto.createdDate,'yyyy-MM-dd HH:mm')}"></td>
                             <td th:text="${#temporals.format(userDto.lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
+                            <td th:if="${userDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active"></td>
+                            <td th:if="${userDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"></td>
+                            <td th:text="${userDto.views}">></td>
                         </tr>
                         <tr th:if="${userDtoList.totalElements == 0}">
                             <td colspan="10" class="no-posts">
                                 No users founded.
                             </td>
+                        </tr>
+                        <tr>
+                            <td colspan="10"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -123,7 +123,7 @@
                             <a class="page-link" th:href="@{/user/list(page=${page},searchType=*{searchType},keyword=*{keyword})}" th:text="${page}"><span class="sr-only"></span></a>
                         </li>
                         <li class="page-item" th:style="${userDtoList.last} ? 'display:none'">
-                            <a th:href="@{/user/list(page=${userDtoList.number}+2,searchType=*{searchType},keyword=*{keyword})}">&rsaquo;</a>
+                            <a class="page-link" th:href="@{/user/list(page=${userDtoList.number}+2,searchType=*{searchType},keyword=*{keyword})}">&rsaquo;</a>
                         </li>
                         <li class="page-item">
                             <a class="page-link" aria-label="Next" th:href="@{/user/list(page=${userDtoList.totalPages},searchType=*{searchType},keyword=*{keyword})}">&raquo;</a>

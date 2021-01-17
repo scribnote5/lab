@@ -44,17 +44,17 @@ function getByteSize(el) {
 
 /* ID 검사: 영어 소문자와 숫자 검사 */
 function validateById(str) {
-    var regexp = /^[a-z]+[a-z0-9]{3,19}$/g;
+    var regexp = /^[a-zA-Z0-9]{4,16}$/g;
+    console.log(document.getElementsByName("username")[0].value.length);
     if (regexp.test(str) == true) {
         return true;
     } else {
-        Alert.fire({
+        Toast.fire({
             icon: "error",
-            text: "The ID must be only lower case letters and numbers are available, more than 4 characters and less than 16 characters." +
-                "\n(Number of characters currently entered: " + document.getElementsByName("username")[0].value.length + ")."
+            html: "&nbsp;&nbsp;" + "The ID must be only lower case letters and numbers are available, more than 4 characters and less than 16 characters." +
+                "<br>" + "(Currently entered: " + document.getElementsByName("username")[0].value.length + " characters)."
         }).then((result) => {
             document.getElementsByName("username")[0].focus();
-            document.getElementsByName("username")[0].value = "";
             document.getElementById("usernameCheckResult").innerHTML = "";
         })
 
@@ -62,24 +62,43 @@ function validateById(str) {
     }
 }
 
-
-/* input tag validation - 문자열 길이 */
-function validateByLength(inputName, maxStrLength, title) {
+/* input tag validation - 문자열 길이 및 공백 */
+function validateByLengthAndBlank(inputName, maxStrLength) {
     var strLength = document.getElementsByName(inputName)[0].value.length;
+    var title = camelCaseToTitle(inputName);
 
     if (strLength > maxStrLength) {
-        Alert.fire({
+        Toast.fire({
             icon: "error",
-            text: "The " + title + " is up to " + maxStrLength + " characters long." +
-                "\n(Number of characters currently entered: " + strLength + ")",
+            html: "&nbsp;&nbsp;" + "The " + title + " must be less than " + maxStrLength + " characters." +
+                "<br/>" + "(Currently entered: " + strLength + " characters)",
         })
         document.getElementsByName(inputName)[0].focus();
 
         return false;
     } else if (!validateByWhiteSpace(document.getElementsByName(inputName)[0].value)) {
-        Alert.fire({
+        Toast.fire({
             icon: "error",
-            text: "The " + title + " must not be blank.",
+            html: "&nbsp;&nbsp;" + "The " + title + " must not be blank.",
+        })
+        document.getElementsByName(inputName)[0].focus();
+
+        return false;
+    } else {
+        return true;
+    }
+}
+
+/* input tag validation - 문자열 길이 */
+function validateByLength(inputName, maxStrLength) {
+    var strLength = document.getElementsByName(inputName)[0].value.length;
+    var title = camelCaseToTitle(inputName);
+
+    if (strLength > maxStrLength) {
+        Toast.fire({
+            icon: "error",
+            html: "&nbsp;&nbsp;" + "The " + title + " must be less than " + maxStrLength + " characters." +
+                "<br/>" + "(Currently entered: " + strLength + " characters)",
         })
         document.getElementsByName(inputName)[0].focus();
 
@@ -90,11 +109,13 @@ function validateByLength(inputName, maxStrLength, title) {
 }
 
 /* input tag validation - 공백을 제외한 문자열 */
-function validateByBlank(inputName, title) {
+function validateByBlank(inputName) {
+    var title = camelCaseToTitle(inputName);
+
     if (!validateByWhiteSpace(document.getElementsByName(inputName)[0].value)) {
-        Alert.fire({
+        Toast.fire({
             icon: "error",
-            text: "The " + title + " must not be blank.",
+            html: "&nbsp;&nbsp;" + "The " + title + " must not be blank.",
         })
         document.getElementsByName(inputName)[0].focus();
 
@@ -105,14 +126,15 @@ function validateByBlank(inputName, title) {
 }
 
 /* input tag validation - 문자열 크기 */
-function validateBySize(inputName, maxByteSize, title) {
+function validateBySize(inputName, maxByteSize) {
     var byteSize = getByteSize(document.getElementsByName(inputName)[0].value);
+    var title = camelCaseToTitle(inputName);
 
     if (byteSize > maxByteSize) {
-        Alert.fire({
+        Toast.fire({
             icon: "error",
-            text: "The " + title + "is up to " + maxByteSize + " bytes size." +
-                "\n(Size of characters currently entered: " + byteSize + " bytes)."
+            html: "&nbsp;&nbsp;" + "The " + title + " must be less than " + maxByteSize + " bytes size." +
+                "<br/>" + "(Currently entered: " + byteSize + " bytes).",
         })
         document.getElementsByName(inputName)[0].focus();
 
@@ -123,14 +145,15 @@ function validateBySize(inputName, maxByteSize, title) {
 }
 
 /* select tag validation - inactive or delete option인지 확인 */
-function validateBySelect(inputName, title) {
+function validateBySelect(inputName) {
     var target = document.getElementsByName(inputName)[0];
+    var title = camelCaseToTitle(inputName);
 
     if (target.options[target.selectedIndex].value == -1) {
-        Alert.fire({
+        Toast.fire({
             icon: "error",
-            text: "The " + title + " is inactive or deleted." +
-                "\nPlease check validate " + title + ".",
+            html: "&nbsp;&nbsp;" + "The " + title + " is inactive or deleted." +
+                "<br/>" + "Please check validate " + title + ".",
         })
 
         return false;
@@ -140,11 +163,19 @@ function validateBySelect(inputName, title) {
 }
 
 /* external validation - 외부 조건에 따른 결과 출력 */
-function validateByExternal(inputName, title, result) {
+function validateByExternal(inputName, result, replaceTitle) {
+    var title = null;
+
+    if (isEmpty(replaceTitle)) {
+        title = camelCaseToTitle(inputName);
+    } else {
+        title = replaceTitle;
+    }
+
     if (result) {
-        Alert.fire({
+        Toast.fire({
             icon: "error",
-            text: "Please check " + title + ".",
+            html: "&nbsp;&nbsp;" + "Please check " + title + ".",
         })
         document.getElementsByName(inputName)[0].focus();
 
@@ -171,10 +202,10 @@ function validateByFileExist() {
     deleteArrayIndexIsNull();
 
     if (uploadedAttachedFileLength + insertFileArrayLength - deleteFileArrayLength !== 1) {
-        Alert.fire({
+        Toast.fire({
             icon: "error",
-            text: "The upload file does not exist." +
-                "\nPlease upload file.",
+            html: "&nbsp;&nbsp;" + "The upload file does not exist." +
+                "<br>" + "Please upload file.",
         })
 
         return false;
@@ -189,9 +220,9 @@ function validateByFileNumber(files, number) {
     deleteArrayIndexIsNull();
 
     if (files.length > number || (uploadedAttachedFileLength - insertFileArrayLength - deleteFileArrayLength !== 0)) {
-        Alert.fire({
+        Toast.fire({
             icon: "error",
-            text: "The number of file that must be uploaded is 1."
+            html: "&nbsp;&nbsp;" + "The number of file that must be uploaded is 1."
         })
 
         return false;
@@ -231,9 +262,9 @@ function validateImageFile(file) {
         }
 
         if (!result) {
-            Alert.fire({
+            Toast.fire({
                 icon: "error",
-                text: "The attached file only uses [" + includeArray.join(', ') + "] extension. "
+                html: "&nbsp;&nbsp;" + "The attached file only uses [" + includeArray.join(', ') + "] extension. "
             })
             $("#file").replaceWith($("#file").clone(true));
             $("#file").val('');
@@ -243,9 +274,9 @@ function validateImageFile(file) {
 
         /* 파일 크기 검사 */
         if (fileSize > maxSize) {
-            Alert.fire({
+            Toast.fire({
                 icon: "error",
-                text: "The attached file can upload within 20 MB size."
+                html: "&nbsp;&nbsp;" + "The attached file can upload within 20 MB size."
             })
             $("#file").replaceWith($("#file").clone(true));
             $("#file").val('');
@@ -255,9 +286,9 @@ function validateImageFile(file) {
 
         /* 모든 파일 크기 검사 */
         if (fileSize + totalFileSize > maxSize) {
-            Alert.fire({
+            Toast.fire({
                 icon: "error",
-                text: "All attached files must be within 20 MB size."
+                html: "&nbsp;&nbsp;" + "All attached files must be within 20 MB size."
             })
             $("#file").replaceWith($("#file").clone(true));
             $("#file").val('');
@@ -302,9 +333,9 @@ function validatePdfFile(file) {
         }
 
         if (!result) {
-            Alert.fire({
+            Toast.fire({
                 icon: "error",
-                text: "The attached file only uses [" + includeArray.join(', ') + "] extension. "
+                html: "&nbsp;&nbsp;" + "The attached file only uses [" + includeArray.join(', ') + "] extension. "
             })
             $("#file").replaceWith($("#file").clone(true));
             $("#file").val('');
@@ -314,9 +345,9 @@ function validatePdfFile(file) {
 
         /* 파일 크기 검사 */
         if (fileSize > maxSize) {
-            Alert.fire({
+            Toast.fire({
                 icon: "error",
-                text: "The attached file can upload within 20 MB size."
+                html: "&nbsp;&nbsp;" + "The attached file can upload within 20 MB size."
             })
             $("#file").replaceWith($("#file").clone(true));
             $("#file").val('');
@@ -326,9 +357,9 @@ function validatePdfFile(file) {
 
         /* 모든 파일 크기 검사 */
         if (fileSize + totalFileSize > maxSize) {
-            Alert.fire({
+            Toast.fire({
                 icon: "error",
-                text: "All attached files must be within 20 MB size."
+                html: "&nbsp;&nbsp;" + "All attached files must be within 20 MB size."
             })
             $("#file").replaceWith($("#file").clone(true));
             $("#file").val('');
@@ -373,9 +404,9 @@ function validateVideoFile(file) {
         }
 
         if (!result) {
-            Alert.fire({
+            Toast.fire({
                 icon: "error",
-                text: "The attached file only uses [" + includeArray.join(', ') + "] extension. "
+                html: "&nbsp;&nbsp;" + "The attached file only uses [" + includeArray.join(', ') + "] extension. "
             })
             $("#file").replaceWith($("#file").clone(true));
             $("#file").val('');
@@ -385,9 +416,9 @@ function validateVideoFile(file) {
 
         /* 파일 크기 검사 */
         if (fileSize > maxSize) {
-            Alert.fire({
+            Toast.fire({
                 icon: "error",
-                text: "The attached file can upload within 20 MB size."
+                html: "&nbsp;&nbsp;" + "The attached file can upload within 20 MB size."
             })
             $("#file").replaceWith($("#file").clone(true));
             $("#file").val('');
@@ -397,9 +428,9 @@ function validateVideoFile(file) {
 
         /* 모든 파일 크기 검사 */
         if (fileSize + totalFileSize > maxSize) {
-            Alert.fire({
+            Toast.fire({
                 icon: "error",
-                text: "All attached files must be within 20 MB size."
+                html: "&nbsp;&nbsp;" + "All attached files must be within 20 MB size."
             })
             $("#file").replaceWith($("#file").clone(true));
             $("#file").val('');
@@ -437,9 +468,9 @@ function validateFile(file) {
         /* 확장자명 검사 */
         for (var i = 0; i < excludeArray.length; i++) {
             if (extensionName == excludeArray[i]) {
-                Alert.fire({
+                Toast.fire({
                     icon: "error",
-                    text: "[" + extensionName + "] extension doesn't support uploading attached file.",
+                    html: "&nbsp;&nbsp;" + "[" + extensionName + "] extension doesn't support uploading attached file.",
                 })
                 $("#file").val('');
                 $("#file").replaceWith($("#file").clone(true));
@@ -450,9 +481,9 @@ function validateFile(file) {
 
         /* 파일 크기 검사 */
         if (fileSize > maxSize) {
-            Alert.fire({
+            Toast.fire({
                 icon: "error",
-                text: "The attached file can upload within 20 MB size.",
+                html: "&nbsp;&nbsp;" + "The attached file can upload within 20 MB size.",
             })
             $("#file").replaceWith($("#file").clone(true));
             $("#file").val('');
@@ -462,9 +493,9 @@ function validateFile(file) {
 
         /* 모든 파일 크기 검사 */
         if (fileSize + totalFileSize > maxSize) {
-            Alert.fire({
+            Toast.fire({
                 icon: "error",
-                text: "All attached files must be within 20 MB size.",
+                html: "&nbsp;&nbsp;" + "All attached files must be within 20 MB size.",
             })
             $("#file").replaceWith($("#file").clone(true));
             $("#file").val('');
@@ -491,7 +522,7 @@ function parseErrorMsg(msg) {
         if (isEmpty(parseMsg.errors)) {
             alertMsg = parseMsg.message;
         } else {
-            alertMsg = parseMsg.message + "\n" + parseMsg.errors[0].reason;
+            alertMsg = parseMsg.message + "<br>" + parseMsg.errors[0].reason;
         }
     } else {
         alertMsg = "NetworkError: Failed to execute 'send' on 'XMLHttpRequest'.";
@@ -500,6 +531,6 @@ function parseErrorMsg(msg) {
     Toast.fire({
         icon: "error",
         title: "Error occurred.",
-        text: alertMsg
+        html: "&nbsp;&nbsp;" + alertMsg
     })
 }

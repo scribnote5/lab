@@ -4,7 +4,7 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title th:text="${@environment.getProperty('title')} + ' | NoticeBoard List'"></title>
+    <title th:text="${@environment.getProperty('title')} + ' | Notice Board List'"></title>
 </head>
 <body>
 <div class="d-flex" id="wrapper">
@@ -19,11 +19,10 @@
             <form name="form" id="form" th:object="${searchDto}" action="#">
                 <div class="page-header breadcrumbs">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h2>NoticeBoard List</h2>
+                        <h2>Notice Board List</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
-                            <li>NoticeBoard List</li>
+                            <li>Notice Board List</li>
                         </ol>
                     </div>
                 </div>
@@ -51,17 +50,19 @@
                             <th style="width: 5%">No.</th>
                             <th style="width: 45%">Title</th>
                             <th style="width: 10%">ID</th>
-                            <th style="width: 15%">Created Date</th>
-                            <th style="width: 15%">Modified Date</th>
-                            <th style="width: 5%">Status</th>
-                            <th style="width: 5%">Views</th>
+                            <th style="width: 12.5%">Created Date</th>
+                            <th style="width: 12.5%">Modified Date</th>
+                            <th style="width: 7.5%">Status</th>
+                            <th style="width: 7.5%">Views</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="noticeBoardDto : ${noticeBoardDtoList}">
                             <td th:text="${noticeBoardDto.idx}"></td>
                             <td>
-                                <a th:href="'/notice-board?idx='+${noticeBoardDto.idx}" th:text="${noticeBoardDto.title}" class="link"></a>
+                                <img th:if="${noticeBoardDto.mainPagePriority != 11}" th:attr="src=@{|/images/speaker-icon.jpg|}" class="new-icon"/>
+                                <a th:href="'/notice-board?idx='+${noticeBoardDto.idx}" class="link"
+                                   th:text="${#strings.length(noticeBoardDto.title)} < 45 ? ${noticeBoardDto.title} : ${#strings.substring(noticeBoardDto.title, 0, 45)} + '...'"></a>
                                 <img th:if="${noticeBoardDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
                             <td th:text="${noticeBoardDto.createdBy}">></td>
@@ -75,6 +76,9 @@
                             <td colspan="10" class="no-posts">
                                 No posts founded.
                             </td>
+                        </tr>
+                        <tr>
+                            <td colspan="10"></td>
                         </tr>
                         </tbody>
                     </table>

@@ -24,7 +24,6 @@
                         <h2 th:if="*{idx}">Album Update</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
                             <li th:if="!*{idx}">Album Register</li>
                             <li th:if="*{idx}">Album Update</li>
                         </ol>
@@ -42,7 +41,7 @@
                             <th colspan="3" class="sub-item-title">Album Information</th>
                         </tr>
                         <tr>
-                            <th>Title</th>
+                            <th>Title<span class="required-field">*</span></th>
                             <td colspan="2"><input type="text" name="title" id="title" class="form-control form-control-sm" th:value="*{title}"/></td>
                         </tr>
                         <tr>
@@ -72,7 +71,7 @@
                             <td colspan="2"><input type="text" name="mainHashTag" id="mainHashTag" class="form-control form-control-sm" th:value="*{mainHashTag}" readonly/></td>
                         </tr>
                         <tr>
-                            <th>Hash Tags</th>
+                            <th>Hash Tags<span class="required-field">*</span></th>
                             <td id="hashTagsTd" colspan="2">
                                 <input th:if="!*{idx}" type="text" id="hashTag" class="form-control form-control-sm" placeholder="#Hash Tag ↵ (Special character is not available.)"/>
                                 <input th:if="*{idx}" type="text" id="hashTag" class="form-control form-control-sm" placeholder="#Hash Tag ↵ (Special character is not available.)"/>
@@ -80,7 +79,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>Attached File</th>
+                            <th>Attached File(img file)<span class="required-field">*</span></th>
                             <td>
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" id="file" name="file">
@@ -134,23 +133,26 @@
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created Date</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Last Modified Date</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created By</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{createdBy}"/></td>
+                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{createdBy}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Last Modified By</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{lastModifiedBy}"/></td>
+                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{lastModifiedBy}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Views</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{views}"/></td>
+                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{views}"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="10"></td>
                         </tr>
                     </table>
                 </div>
@@ -385,7 +387,6 @@
         var albumDto = [[${albumDto}]];
         document.getElementsByName("mainPagePriority")[0].style.display = "inline";
 
-
         // register || update 일 때의 mainPagePriority
         if (!(albumDto.mainPagePriority == null || albumDto.mainPagePriority == -1)) {
             document.getElementsByName("mainPagePriority")[0].options.item(albumDto.mainPagePriority - 1).selected = true;
@@ -394,7 +395,7 @@
 </script>
 
 <script th:if="!${albumDto?.idx}">
-    $('#insert').click(function () {
+    $("#insert").click(function () {
         // input name hashTags에 hashTag 추가
         document.getElementsByName("hashTags")[0].value = "";
 
@@ -405,8 +406,8 @@
             }
         }
 
-        // (input tag mame, length or size, message)
-        if (!(validateByLength("title", 255, "title") && validateByLength("hashTags", 255, "hashTags") && validateByFileExist())) {
+        // validation (input tag mame, length or size)
+        if (!(validateByLengthAndBlank("title", 255) && validateByLengthAndBlank("hashTags", 255) && validateByFileExist())) {
             return false;
         }
 
@@ -480,7 +481,7 @@
         hashTagId++;
     }
 
-    $('#update').click(function () {
+    $("#update").click(function () {
         // input name hashTags에 hashTag 추가
         document.getElementsByName("hashTags")[0].value = "";
 
@@ -491,8 +492,8 @@
             }
         }
 
-        // (input tag mame, length or size, message)
-        if (!(validateByLength("title", 255, "title") && validateByLength("hashTags", 255, "hashTags") && validateByFileExist())) {
+        // validation (input tag mame, length or size)
+        if (!(validateByLengthAndBlank("title", 255) && validateByLengthAndBlank("hashTags", 255) && validateByFileExist())) {
             return false;
         }
 
@@ -521,6 +522,8 @@
         if (insertFileArray.length == 0 && deleteFileArray.length == 0) {
             localStorage.setItem("result", "/album/update-success");
             location.href = "/album?idx=" + albumIdx;
+
+            return true;
         }
 
         // 파일 삭제

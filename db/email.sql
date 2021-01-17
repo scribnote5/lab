@@ -17,4 +17,5 @@ CREATE TABLE email
     email_address      varchar(255) null,
     note               mediumtext   null,
     receiver_type      varchar(255) null
-);
+) ENGINE = InnoDB
+  DEFAULT CHARSET = UTF8;

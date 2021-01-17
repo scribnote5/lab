@@ -23,7 +23,6 @@
                         <h2>Alumni Association Read</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
                             <li>Alumni Association Read</li>
                         </ol>
                     </div>
@@ -36,17 +35,21 @@
                             <col width="82.5%"/>
                         </colgroup>
                         <tr>
-                            <th colspan="2" class="sub-item-title"><h5>Alumni Association Information</h5></th>
+                            <th colspan="2" class="sub-item-title">Alumni Association Information</th>
                         </tr>
                         <tr>
                             <th>Title</th>
                             <td><span id="title" th:text="*{title}"></span></td>
                         </tr>
                         <tr>
+                            <th>Main Page Priority</th>
+                            <td colspan="2"><span id="mainPagePriority" class="main-page-priority" th:text="*{mainPagePriority == 11} ? 'This post not shown on the main page.' : *{mainPagePriority}"/></td>
+                        </tr>
+                        <tr>
                             <td colspan="2"><span class="form-control form-control-sm content" id="content" th:utext="*{content}"></span></td>
                         </tr>
                         <tr>
-                            <th colspan="2" class="sub-item-title"><h5>Additional Information</h5></th>
+                            <th colspan="2" class="sub-item-title">Additional Information</th>
                         </tr>
                         <tr>
                             <th>Active Status</th>
@@ -76,6 +79,9 @@
                         <tr>
                             <th>Views</th>
                             <td><span th:text="*{views}"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="10"></td>
                         </tr>
                     </table>
                 </div>

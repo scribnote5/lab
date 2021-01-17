@@ -93,7 +93,7 @@ public class CategoryService {
 
         persistCategory.update(category);
 
-        return categoryRepository.save(category).getIdx();
+        return categoryRepository.save(persistCategory).getIdx();
     }
 
     public void deleteCategoryByIdx(Long idx) {

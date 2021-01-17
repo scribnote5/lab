@@ -61,7 +61,7 @@ public class NoticeBoardCommentService {
 
         persistNoticeBoardComment.update(noticeBoardComment);
 
-        return noticeBoardCommentRepository.save(noticeBoardComment).getIdx();
+        return noticeBoardCommentRepository.save(persistNoticeBoardComment).getIdx();
     }
 
 

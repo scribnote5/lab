@@ -22,7 +22,6 @@
                         <h2>Publication List</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
                             <li>Publication List</li>
                         </ol>
                     </div>
@@ -55,10 +54,10 @@
                     <table class="table table-hover">
                         <colgroup>
                             <col width="5%"/>
-                            <col width="40%"/>
-                            <col width="25%"/>
-                            <col width="15%"/>
-                            <col width="15%"/>
+                            <col width="45%"/>
+                            <col width="20%"/>
+                            <col width="17.5%"/>
+                            <col width="12.5%"/>
                         </colgroup>
                         <thead>
                         <tr>
@@ -73,7 +72,8 @@
                         <tr th:each="publicationDto : ${publicationDtoList}">
                             <td th:text="${publicationDto.idx}"></td>
                             <td>
-                                <a th:href="'/publication?idx='+${publicationDto.idx}" class="link" th:text="${#strings.length(publicationDto.title)} < 40 ? ${publicationDto.title} : ${#strings.substring(publicationDto.title, 0, 40)} + '...'"></a>
+                                <a th:href="'/publication?idx='+${publicationDto.idx}" class="link"
+                                   th:text="${#strings.length(publicationDto.title)} < 45 ? ${publicationDto.title} : ${#strings.substring(publicationDto.title, 0, 45)} + '...'"></a>
                                 <img th:if="${publicationDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
                             <td th:text="${#strings.length(publicationDto.authors)} < 20 ? ${publicationDto.authors} : ${#strings.substring(publicationDto.authors, 0, 20)} + '...'"></td>
@@ -85,6 +85,9 @@
                             <td colspan="10" class="no-posts">
                                 No posts founded.
                             </td>
+                        </tr>
+                        <tr>
+                            <td colspan="10"></td>
                         </tr>
                     </table>
                 </div>

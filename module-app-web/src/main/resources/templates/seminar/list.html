@@ -19,7 +19,6 @@
                         <h2>Seminar List</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
                             <li>Seminar List</li>
                         </ol>
                     </div>
@@ -46,17 +45,17 @@
                     <table class="table table-hover">
                         <thead>
                         <tr>
-                            <th style="width: 65%">Title</th>
-                            <th style="width: 15%">Created By</th>
-                            <th style="width: 15%">Created Date</th>
-                            <th style="width: 5%">Views</th>
+                            <th style="width: 67.5%">Title</th>
+                            <th style="width: 12.5%">Created By</th>
+                            <th style="width: 12.5%">Created Date</th>
+                            <th style="width: 7.5%">Views</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="seminarDto : ${seminarDtoList}">
                             <td>
                                 <a th:href="'/seminar?idx='+${seminarDto.idx}" class="link"
-                                   th:text="${#strings.length(seminarDto.title)} < 40 ? ${seminarDto.title} : ${#strings.substring(seminarDto.title, 0, 40)} + '...'"></a>
+                                   th:text="${#strings.length(seminarDto.title)} < 68 ? ${seminarDto.title} : ${#strings.substring(seminarDto.title, 0, 68)} + '...'"></a>
                                 <img th:if="${seminarDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
                             <td th:text="${seminarDto.createdBy}">></td>

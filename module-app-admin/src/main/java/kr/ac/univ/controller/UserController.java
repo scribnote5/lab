@@ -50,7 +50,7 @@ public class UserController {
         }
         // 사용자가 로그인한 경우 /main/home 페이지로 이동
         else {
-            returnPage = "main/home";
+            returnPage = "redirect:/main/home";
         }
 
         return returnPage;
@@ -65,9 +65,9 @@ public class UserController {
 
     // Logout
     @GetMapping("/logout/success")
-    public RedirectView  logout(Model model) {
+    public RedirectView logout(Model model) {
 
-        return new RedirectView ("/user/login");
+        return new RedirectView("/user/login");
     }
 
     // Permission Denied
@@ -93,7 +93,7 @@ public class UserController {
 
     // List
     @GetMapping("/list")
-    public String noticeBoardList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
+    public String userList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
         model.addAttribute("userDtoList", userService.findUserList(pageable, searchDto));
 
         return "user/list";
@@ -121,7 +121,7 @@ public class UserController {
 
     // Read
     @GetMapping({"", "/"})
-    public String noticeBoardRead(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
+    public String userRead(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
         UserDto userDto = userService.findUserByIdx(idx);
         String returnPage = null;
 

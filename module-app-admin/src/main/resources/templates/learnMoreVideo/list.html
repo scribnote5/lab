@@ -4,7 +4,7 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title th:text="${@environment.getProperty('title')} + ' | LearnMore Video List'"></title>
+    <title th:text="${@environment.getProperty('title')} + ' | Learn More Video List'"></title>
 </head>
 <body>
 
@@ -20,11 +20,10 @@
             <form name="form" id="form" th:object="${searchDto}" action="#">
                 <div class="page-header breadcrumbs">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h2>LearnMore Video List</h2>
+                        <h2>Learn More Video List</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
-                            <li>LearnMore Video List</li>
+                            <li>Learn More Video List</li>
                         </ol>
                     </div>
                 </div>
@@ -53,9 +52,10 @@
                             <th style="width: 5%">No.</th>
                             <th style="width: 45%">Title</th>
                             <th style="width: 10%">ID</th>
-                            <th style="width: 15%">Created Date</th>
-                            <th style="width: 15%">Modified Date</th>
-                            <th style="width: 5%">Status</th>
+                            <th style="width: 12.5%">Created Date</th>
+                            <th style="width: 12.5%">Modified Date</th>
+                            <th style="width: 7.5%">Status</th>
+                            <th style="width: 7.5%">Views</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -63,7 +63,7 @@
                             <td th:text="${learnMoreVideoDto.idx}"></td>
                             <td>
                                 <a th:href="'/learn-more-video?idx='+${learnMoreVideoDto.idx}" class="link"
-                                   th:text="${#strings.length(learnMoreVideoDto.title)} < 40 ? ${learnMoreVideoDto.title} : ${#strings.substring(learnMoreVideoDto.title, 0, 40)} + '...'"></a>
+                                   th:text="${#strings.length(learnMoreVideoDto.title)} < 45 ? ${learnMoreVideoDto.title} : ${#strings.substring(learnMoreVideoDto.title, 0, 45)} + '...'"></a>
                                 <img th:if="${learnMoreVideoDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
                             <td th:text="${learnMoreVideoDto.createdBy}">></td>
@@ -71,11 +71,15 @@
                             <td th:text="${#temporals.format(learnMoreVideoDto.lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
                             <td th:if="${learnMoreVideoDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active"></td>
                             <td th:if="${learnMoreVideoDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"></td>
+                            <td th:text="${learnMoreVideoDto.views}">></td>
                         </tr>
                         <tr th:if="${learnMoreVideoDtoList.totalElements == 0}">
                             <td colspan="10" class="no-posts">
                                 No posts founded.
                             </td>
+                        </tr>
+                        <tr>
+                            <td colspan="10"></td>
                         </tr>
                         </tbody>
                     </table>

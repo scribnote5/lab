@@ -24,7 +24,8 @@ CREATE TABLE setting
     user_count_content                  varchar(255) null,
     publication_count_content           varchar(255) null,
     project_count_content               varchar(255) null
-);
+) ENGINE = InnoDB
+  DEFAULT CHARSET = UTF8;
 
 /* don't change idx(primary key) */
 INSERT INTO setting

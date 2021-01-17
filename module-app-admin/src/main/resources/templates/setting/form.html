@@ -24,7 +24,6 @@
                         <h2 th:if="*{idx}">Setting Update</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
                             <li th:if="!*{idx}">Setting Register</li>
                             <li th:if="*{idx}">Setting Update</li>
                         </ol>
@@ -117,15 +116,15 @@
                             <th>Views</th>
                             <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{views}"/></td>
                         </tr>
+                        <tr>
+                            <td colspan="2"></td>
+                        </tr>
                     </table>
                 </div>
 
                 <div class="row justify-content-between mt-5 mb-3">
+                    <div class="col-auto mx-3"></div>
                     <div class="col-auto mx-3">
-                        <a href="/setting/list" class="btn btn-secondary">Move to List</a>
-                    </div>
-                    <div class="col-auto mx-3">
-                        <button th:if="!*{idx}" id="insert" type="button" class="btn-main">Register</button>
                         <button th:if="*{idx}" id="update" type="button" class="btn btn-info">Update</button>
                     </div>
                 </div>
@@ -147,7 +146,7 @@
 
 <!-- javascript -->
 <script th:if="${settingDto?.idx}" th:inline="javascript">
-    $('#update').click(function () {
+    $("#update").click(function () {
         var jsonData = $("#form").serializeObject();
         var settingIdx = document.getElementsByName("idx")[0].value;
 

@@ -80,7 +80,7 @@ public class UserDto extends CommonDto {
     private String externalWebPage;
 
     /* Additional Information */
-    @NotNull(message = "The authority type must be null.")
+    @NotNull(message = "The authority type must be not null.")
     private AuthorityType authorityType;
 
     /* Attached File */

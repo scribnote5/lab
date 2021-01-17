@@ -22,7 +22,6 @@
                         <h2>Introduction Image Read</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
                             <li>Introduction Image Read</li>
                         </ol>
                     </div>
@@ -73,23 +72,26 @@
                         </tr>
                         <tr>
                             <th>Created Date</th>
-                            <td><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td colspan="2"><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr>
                             <th>Last Modified Date</th>
-                            <td><span th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td colspan="2"><span th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr>
                             <th>Created By</th>
-                            <td><span th:text="*{createdBy}"/></td>
+                            <td colspan="2"><span th:text="*{createdBy}"/></td>
                         </tr>
                         <tr>
                             <th>Last Created By</th>
-                            <td><span th:text="*{lastModifiedBy}"/></td>
+                            <td colspan="2"><span th:text="*{lastModifiedBy}"/></td>
                         </tr>
                         <tr>
                             <th>Views</th>
-                            <td><span th:text="*{views}"/></td>
+                            <td colspan="2"><span th:text="*{views}"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="10"></td>
                         </tr>
                     </table>
                 </div>

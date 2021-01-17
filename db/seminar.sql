@@ -21,4 +21,5 @@ CREATE TABLE seminar
     presenter          varchar(255) null,
     category_idx       bigint       null,
     content            mediumtext   null
-);
+) ENGINE = InnoDB
+  DEFAULT CHARSET = UTF8;

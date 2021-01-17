@@ -24,7 +24,6 @@
                         <h2 th:if="*{idx}">Project Update</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
                             <li th:if="!*{idx}">Project Register</li>
                             <li th:if="*{idx}">Project Update</li>
                         </ol>
@@ -41,7 +40,7 @@
                             <th colspan="2" class="sub-item-title">Project Information</th>
                         </tr>
                         <tr>
-                            <th>Title</th>
+                            <th>Title<span class="required-field">*</span></th>
                             <td><input type="text" name="title" id="title" class="form-control form-control-sm" th:value="*{title}"/></td>
                         </tr>
                         <tr>
@@ -149,6 +148,9 @@
                             <th>Views</th>
                             <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{views}"/></td>
                         </tr>
+                        <tr>
+                            <td colspan="10"></td>
+                        </tr>
                     </table>
                 </div>
 
@@ -187,7 +189,7 @@
 
     $(document).ready(function () {
         <!-- summernote setting -->
-        $('#summernote').summernote({
+        $("#summernote").summernote({
             height: 500,	// 에디터 높이
             minHeight: null,	// 최소 높이
             maxHeight: null,	// 최대 높이
@@ -195,7 +197,7 @@
             lang: "ko-KR",// 한글 설정
             placeholder: "The editor's max input size of bytes is 16777215(16 MB)."	//placeholder 설정
         });
-        $('#summernote').summernote('fontSize', 14);
+        $("#summernote").summernote('fontSize', 14);
 
         <!-- File Drop -->
         $("#fileDrop").on("dragenter dragover", function (event) {
@@ -305,8 +307,8 @@
 
 <script th:if="!${projectDto?.idx}">
     $("#insert").click(function () {
-        // (input tag mame, length or size, message)
-        if (!(validateByLength("title", 255, "title") && validateBySize("content", 16777215, "content") && validateByBlank("startDate", "Start Date") && validateByBlank("endDate", "End Date"))) {
+        // validation (input tag mame, length or size)
+        if (!(validateByLengthAndBlank("title", 255) && validateBySize("content", 16777215) && validateByBlank("startDate") && validateByBlank("endDate"))) {
             return false;
         }
 
@@ -366,8 +368,8 @@
 
 <script th:if="${projectDto?.idx}" th:inline="javascript">
     $("#update").click(function () {
-        // (input tag mame, length or size, message)
-        if (!(validateByLength("title", 255, "title") && validateBySize("content", 16777215, "content") && validateByBlank("startDate", "Start Date") && validateByBlank("endDate", "End Date"))) {
+        // validation (input tag mame, length or size)
+        if (!(validateByLengthAndBlank("title", 255) && validateBySize("content", 16777215) && validateByBlank("startDate") && validateByBlank("endDate"))) {
             return false;
         }
 
@@ -396,6 +398,8 @@
         if (insertFileArray.length == 0 && deleteFileArray.length == 0) {
             localStorage.setItem("result", "/project/update-success");
             location.href = "/project?idx=" + projectIdx;
+
+            return true;
         }
 
         // 파일 삭제

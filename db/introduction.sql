@@ -16,4 +16,5 @@ CREATE TABLE introduction
 
     title              varchar(255) null,
     content            mediumtext   null
-);
+) ENGINE = InnoDB
+  DEFAULT CHARSET = UTF8;

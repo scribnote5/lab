@@ -22,21 +22,25 @@ import javax.persistence.Table;
 public class AlumniAssociation extends CommonAudit {
     private String title;
 
+    private Long mainPagePriority;
+
     private String content;
 
     @Builder
-    public AlumniAssociation(Long idx, String createdBy, String lastModifiedBy, ActiveStatus activeStatus, String title, String content) {
+    public AlumniAssociation(Long idx, String createdBy, String lastModifiedBy, ActiveStatus activeStatus, String title, Long mainPagePriority, String content) {
         setIdx(idx);
         setCreatedBy(createdBy);
         setLastModifiedBy(lastModifiedBy);
         setActiveStatus(activeStatus);
         this.title = title;
+        this.mainPagePriority = mainPagePriority;
         this.content = content;
     }
 
     public void update(AlumniAssociation alumniAssociation) {
         setActiveStatus(alumniAssociation.getActiveStatus());
         this.title = alumniAssociation.getTitle();
+        this.mainPagePriority = alumniAssociation.getMainPagePriority();
         this.content = alumniAssociation.getContent();
     }
 }

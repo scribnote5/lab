@@ -17,4 +17,5 @@ CREATE TABLE research_field
     title              varchar(255) null,
     content            mediumtext   null,
     category_idx       bigint       null
-);
+) ENGINE = InnoDB
+  DEFAULT CHARSET = UTF8;

@@ -1,15 +1,15 @@
 package kr.ac.univ.aboutUs.dto;
 
-import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.CommonDto;
 import kr.ac.univ.common.validation.Editor;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -42,19 +42,4 @@ public class AboutUsDto extends CommonDto {
     private String publicationCountContent;
 
     private String projectCountContent;
-
-    @Builder
-    public AboutUsDto(LocalDate labStartDate, int labMaintenanceYears, Long attendingMsUserCount, Long attendingPhdUserCount, Long publicationCount, Long projectCount,
-                      String labMaintenanceYearsCountContent, String userCountContent, String publicationCountContent, String projectCountContent) {
-        this.labStartDate = labStartDate;
-        this.labMaintenanceYears = labMaintenanceYears;
-        this.attendingMsUserCount = attendingMsUserCount;
-        this.attendingPhdUserCount = attendingPhdUserCount;
-        this.publicationCount = publicationCount;
-        this.projectCount = projectCount;
-        this.labMaintenanceYearsCountContent = labMaintenanceYearsCountContent;
-        this.userCountContent = userCountContent;
-        this.publicationCountContent = publicationCountContent;
-        this.projectCountContent = projectCountContent;
-    }
 }

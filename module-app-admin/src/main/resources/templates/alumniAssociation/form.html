@@ -22,12 +22,11 @@
                 <div class="page-header breadcrumbs">
                     <div class="d-flex justify-content-between align-items-center">
                         <h2 th:if="!*{idx}">Alumni Association Register</h2>
-                        <h2 th:if="*{idx}">Alumni Association Update></h2>
+                        <h2 th:if="*{idx}">Alumni Association Update</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
                             <li th:if="!*{idx}">Alumni Association Register</li>
-                            <li th:if="*{idx}">Alumni Association Update></li>
+                            <li th:if="*{idx}">Alumni Association Update</li>
                         </ol>
                     </div>
                 </div>
@@ -39,19 +38,38 @@
                             <col width="82.5%"/>
                         </colgroup>
                         <tr>
-                            <th colspan="2" class="sub-item-title"><h5>AlumniAssociation Information</h5></th>
+                            <th colspan="2" class="sub-item-title">Alumni Association Information</th>
                         </tr>
                         <tr>
-                            <th>Title</th>
+                            <th>Title<span class="required-field">*</span></th>
                             <td>
                                 <input type="text" name="title" class="form-control form-control-sm" th:value="*{title}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Main Page Priority</th>
+                            <td colspan="2">
+                                <div class="mb-3">
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <input type="radio" id="mainPageNonCheck" name="mainPage" class="custom-control-input" th:checked="*{mainPagePriority == 11 ||  mainPagePriority == null}">
+                                        <label class="custom-control-label" for="mainPageNonCheck"><strong>Don't show main page.</strong></label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <input type="radio" id="mainPageCheck" name="mainPage" class="custom-control-input" th:checked="*{mainPagePriority >= 1 && mainPagePriority <= 10}">
+                                        <label class="custom-control-label" for="mainPageCheck"><strong>Show main page and set priority.</strong></label>
+                                    </div>
+                                </div>
+                                <select class="custom-select custom-select-sm main-page-priority" name="mainPagePriority" th:field="*{mainPagePriority}"
+                                        th:style="*{mainPagePriority >= 1 && mainPagePriority <= 10} ? 'display: inline;' : 'display: none'">
+                                    <option th:value="11" th:text="'Don\'t show main page.'" th:style="'display: none;'" selected></option>
+                                </select>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="2"><textarea name="content" id="summernote" class="summernote" th:text="*{content}"></textarea></td>
                         </tr>
                         <tr>
-                            <th colspan="2" class="sub-item-title"><h5>Additional Information</h5></th>
+                            <th colspan="2" class="sub-item-title">Additional Information</th>
                         </tr>
                         <tr>
                             <th>Active Status</th>
@@ -84,10 +102,13 @@
                             <th>Views</th>
                             <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{views}"/></td>
                         </tr>
+                        <tr>
+                            <td colspan="10"></td>
+                        </tr>
                     </table>
                 </div>
 
-                <div class="row justify-content-between">
+                <div class="row justify-content-between mt-5 mb-3">
                     <div class="col-auto mx-3">
                         <a href="/alumni-association/list" class="btn btn-secondary col-auto">Move to List</a>
                     </div>
@@ -116,7 +137,7 @@
 <script th:inline="javascript">
     $(document).ready(function () {
         <!-- summernote setting -->
-        $('#summernote').summernote({
+        $("#summernote").summernote({
             height: 500,	// 에디터 높이
             minHeight: null,	// 최소 높이
             maxHeight: null,	// 최대 높이
@@ -124,7 +145,34 @@
             lang: "ko-KR",// 한글 설정
             placeholder: "The editor's max input size of bytes is 16777215(16 MB)."	//placeholder 설정
         });
-        $('#summernote').summernote('fontSize', 14);
+        $("#summernote").summernote('fontSize', 14);
+
+        <!-- Main Page Priority -->
+        var mainPagePrioritySelect = document.getElementsByName("mainPagePriority")[0];
+        var alumniAssociationDtoList = [[${alumniAssociationDtoList}]];
+        var alumniAssociationDto = [[${alumniAssociationDto}]];
+
+        for (var i = 0; i < 10; i++) {
+            var option = document.createElement("option");
+            option.text = i + 1;
+            option.value = i + 1;
+            mainPagePrioritySelect.options.add(option, i + 1);
+        }
+
+        for (var i = 0; i < alumniAssociationDtoList.length; i++) {
+            var mainPagePriority = alumniAssociationDtoList[i].mainPagePriority;
+
+            // 현재 alumniAssociation의 mainPagePriority인 경우(select)
+            if (mainPagePriority == alumniAssociationDto.mainPagePriority) {
+                mainPagePrioritySelect.options.item(mainPagePriority).selected = true;
+            }
+            // 다른 alumniAssociation의 mainPagePriority인 경우(disable)
+            else {
+                mainPagePrioritySelect.options.item(mainPagePriority).text += " has been set by '" + alumniAssociationDtoList[i].title + "'.(disabled)";
+                mainPagePrioritySelect.options.item(mainPagePriority).className = "disable";
+                mainPagePrioritySelect.options.item(mainPagePriority).disabled = true;
+            }
+        }
     });
 
     function deleteAlumniAssociation(alumniAssociationIdx) {
@@ -142,12 +190,28 @@
                 parseErrorMsg(msg);
             });
     }
+
+    // Main Page Priority 변경
+    $("#mainPageNonCheck").on("change", function () {
+        document.getElementsByName("mainPagePriority")[0].style.display = "none";
+        document.getElementsByName("mainPagePriority")[0].value = 11;
+    });
+
+    $("#mainPageCheck").on("change", function () {
+        var alumniAssociationDto = [[${alumniAssociationDto}]];
+        document.getElementsByName("mainPagePriority")[0].style.display = "inline";
+
+        // register || update 일 때의 mainPagePriority
+        if (!(alumniAssociationDto.mainPagePriority == null || alumniAssociationDto.mainPagePriority == 11)) {
+            document.getElementsByName("mainPagePriority")[0].options.item(alumniAssociationDto.mainPagePriority - 1).selected = true;
+        }
+    });
 </script>
 
 <script th:if="!${alumniAssociationDto?.idx}">
-    $('#insert').click(function () {
-        // (input tag mame, length or size, message)
-        if (!(validateByLength("title", 255, "title") && validateBySize("content", 16777215, "content"))) {
+    $("#insert").click(function () {
+        // validation (input tag mame, length or size)
+        if (!(validateByLengthAndBlank("title", 255) && validateBySize("content", 16777215))) {
             return false;
         }
 
@@ -172,9 +236,9 @@
 </script>
 
 <script th:if="${alumniAssociationDto?.idx}" th:inline="javascript">
-    $('#update').click(function () {
-        // (input tag mame, length or size, message)
-        if (!(validateByLength("title", 255, "title") && validateBySize("content", 16777215, "content"))) {
+    $("#update").click(function () {
+        // validation (input tag mame, length or size)
+        if (!(validateByLengthAndBlank("title", 255) && validateBySize("content", 16777215))) {
             return false;
         }
 

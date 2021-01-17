@@ -1,5 +1,7 @@
 package kr.ac.univ.noticeBoard.service;
 
+import kr.ac.univ.album.dto.AlbumDto;
+import kr.ac.univ.album.dto.mapper.AlbumMapper;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.SearchDto;
 import kr.ac.univ.noticeBoard.dto.NoticeBoardDto;
@@ -67,9 +69,9 @@ public class NoticeBoardService {
                 break;
             default:
                 if ("module-app-admin".equals(moduleName)) {
-                    noticeBoardList = noticeBoardRepository.findAll(pageable);
+                    noticeBoardList = noticeBoardRepository.findAllByOrderByMainPagePriorityAsc(pageable);
                 } else if ("module-app-web".equals(moduleName)) {
-                    noticeBoardList = noticeBoardRepository.findAllByActiveStatusIs(pageable, ActiveStatus.ACTIVE);
+                    noticeBoardList = noticeBoardRepository.findAllByActiveStatusIsOrderByMainPagePriorityAsc(pageable, ActiveStatus.ACTIVE);
                 } else {
                     noticeBoardList = null;
                 }
@@ -86,8 +88,8 @@ public class NoticeBoardService {
         return noticeBoardDtoList;
     }
 
-    public List<NoticeBoardDto> findNoticeBoardList() {
-        List<NoticeBoardDto> noticeBoardDtoList = NoticeBoardMapper.INSTANCE.toDto(noticeBoardRepository.findTop10ByOrderByIdxDesc());
+    public List<NoticeBoardDto> findTop10ByOrderByIdxDesc() {
+        List<NoticeBoardDto> noticeBoardDtoList = NoticeBoardMapper.INSTANCE.toDto(noticeBoardRepository.findTop10ByOrderByMainPagePriorityAscIdxDesc());
 
         // NewIcon 판별
         for (NoticeBoardDto noticeBoardDto : noticeBoardDtoList) {
@@ -97,8 +99,11 @@ public class NoticeBoardService {
         return noticeBoardDtoList;
     }
 
-    public Long insertNoticeBoard(NoticeBoardDto noticeBoardDto) {
+    public List<NoticeBoardDto> findAllByActiveStatusIsAndMainPagePriorityLessThanEqualOrderByMainPagePriorityAsc() {
+        return NoticeBoardMapper.INSTANCE.toDto(noticeBoardRepository.findAllByActiveStatusIsAndMainPagePriorityLessThanEqualOrderByMainPagePriorityAsc(ActiveStatus.ACTIVE, 10L));
+    }
 
+    public Long insertNoticeBoard(NoticeBoardDto noticeBoardDto) {
         return noticeBoardRepository.save(NoticeBoardMapper.INSTANCE.toEntity(noticeBoardDto)).getIdx();
     }
 
@@ -130,7 +135,7 @@ public class NoticeBoardService {
 
         persistNoticeBoard.update(noticeBoard);
 
-        return noticeBoardRepository.save(noticeBoard).getIdx();
+        return noticeBoardRepository.save(persistNoticeBoard).getIdx();
     }
 
     public void deleteNoticeBoardByIdx(Long idx) {

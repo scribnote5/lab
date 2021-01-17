@@ -23,7 +23,6 @@
                         <h2>Email List</h2>
                         <ol>
                             <li>Home</li>
-                            <img src="/images/chevron-right.svg">
                             <li>Email List</li>
                         </ol>
                     </div>
@@ -50,12 +49,13 @@
                         <thead>
                         <tr>
                             <th style="width: 5%">No.</th>
-                            <th style="width: 30%">Email Address</th>
+                            <th style="width: 35%">Email Address</th>
                             <th style="width: 10%">Receiver Type</th>
                             <th style="width: 10%">ID</th>
-                            <th style="width: 15%">Created Date</th>
-                            <th style="width: 15%">Modified Date</th>
-                            <th style="width: 5%">Status</th>
+                            <th style="width: 12.5%">Created Date</th>
+                            <th style="width: 12.5%">Modified Date</th>
+                            <th style="width: 7.5%">Status</th>
+                            <th style="width: 7.5%">Views</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -63,7 +63,7 @@
                             <td th:text="${emailDto.idx}"></td>
                             <td>
                                 <a th:href="'/email?idx='+${emailDto.idx}" class="link"
-                                   th:text="${#strings.length(emailDto.emailAddress)} < 40 ? ${emailDto.emailAddress} : ${#strings.substring(emailDto.emailAddress, 0, 40)} + '...'"></a>
+                                   th:text="${#strings.length(emailDto.emailAddress)} < 35 ? ${emailDto.emailAddress} : ${#strings.substring(emailDto.emailAddress, 0, 35)} + '...'"></a>
                                 <img th:if="${emailDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
                             </td>
                             <td th:if="${emailDto.receiverType?.name() == 'ADMIN'}" th:text="Admin"></td>
@@ -73,11 +73,15 @@
                             <td th:text="${#temporals.format(emailDto.lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
                             <td th:if="${emailDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active"></td>
                             <td th:if="${emailDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"></td>
+                            <td th:text="${emailDto.views}">></td>
                         </tr>
                         <tr th:if="${emailDtoList.totalElements == 0}">
                             <td colspan="10" class="no-posts">
                                 No posts founded.
                             </td>
+                        </tr>
+                        <tr>
+                            <td colspan="10"></td>
                         </tr>
                         </tbody>
                     </table>

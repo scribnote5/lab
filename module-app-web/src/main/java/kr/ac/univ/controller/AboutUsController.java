@@ -75,18 +75,16 @@ public class AboutUsController {
             learnMoreVideoAttachedFileService.findAttachedFileByLearnMoreIdx(learnMoreVideoDto.getIdx(), learnMoreVideoDto);
         }
 
-        aboutUsDto = AboutUsDto.builder()
-                .labStartDate(settingDto.getLabStartDate())
-                .labMaintenanceYears(settingDto.getLabStartDate().getDayOfYear())
-                .publicationCount(publicationService.countAllByActiveStatusIs())
-                .projectCount(projectService.countAllByActiveStatusIsAndProjectStatus())
-                .attendingPhdUserCount(userService.countAllByActiveStatusIsAndUserStatusIsAndUserTypeIs(UserType.FULL_TIME_PhD))
-                .attendingMsUserCount(userService.countAllByActiveStatusIsAndUserStatusIsAndUserTypeIs(UserType.FULL_TIME_MS))
-                .labMaintenanceYearsCountContent(settingDto.getLabMaintenanceYearsCountContent())
-                .userCountContent(settingDto.getLabMaintenanceYearsCountContent())
-                .publicationCountContent(settingDto.getPublicationCountContent())
-                .projectCountContent(settingDto.getProjectCountContent())
-                .build();
+        aboutUsDto.setLabStartDate(settingDto.getLabStartDate());
+        aboutUsDto.setLabMaintenanceYears(settingDto.getLabStartDate().getDayOfYear());
+        aboutUsDto.setPublicationCount(publicationService.countAllByActiveStatusIs());
+        aboutUsDto.setProjectCount(projectService.countAllByActiveStatusIsAndProjectStatus());
+        aboutUsDto.setAttendingPhdUserCount(userService.countAllByActiveStatusIsAndUserStatusIsAndUserTypeIs(UserType.FULL_TIME_PhD));
+        aboutUsDto.setAttendingMsUserCount(userService.countAllByActiveStatusIsAndUserStatusIsAndUserTypeIs(UserType.FULL_TIME_MS));
+        aboutUsDto.setLabMaintenanceYearsCountContent(settingDto.getLabMaintenanceYearsCountContent());
+        aboutUsDto.setUserCountContent(settingDto.getLabMaintenanceYearsCountContent());
+        aboutUsDto.setPublicationCountContent(settingDto.getPublicationCountContent());
+        aboutUsDto.setProjectCountContent(settingDto.getProjectCountContent());
 
         model.addAttribute("aboutUsDto", aboutUsDto);
         model.addAttribute("learnMoreReadDtoList", learnMoreReadDtoList);

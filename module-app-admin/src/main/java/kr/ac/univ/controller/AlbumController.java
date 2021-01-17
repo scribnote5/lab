@@ -42,7 +42,7 @@ public class AlbumController {
             albumDto = albumAttachedFileService.findAttachedFileByAlbumIdx(idx, albumDto);
 
             model.addAttribute("albumDto", albumDto);
-            model.addAttribute("albumDtoList", albumService.findAlbumListByActiveStatusIs());
+            model.addAttribute("albumDtoList", albumService.findAllByActiveStatusIsAndMainPagePriorityGreaterThanEqualOrderByMainPagePriorityAsc());
 
             returnPage = "album/form";
         } else {

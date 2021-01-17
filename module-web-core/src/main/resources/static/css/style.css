@@ -20,7 +20,7 @@
 }
 
 .date {
-    font-size: var(--regular-font-size);
+    font-size: var(--small-font-size);
     color: var(--lighter-black);
 }
 
@@ -33,7 +33,7 @@
 
 .content {
     overflow: auto;
-    min-height: 500px;
+    min-height: 450px;
     height: auto;
     resize: none;
 }

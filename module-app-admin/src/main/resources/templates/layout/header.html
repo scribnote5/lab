@@ -14,7 +14,7 @@
         <div id="navbarSupportedContent" class="collapse navbar-collapse">
             <ul class="navbar-nav ml-auto mt-2">
                 <div class="nav-item user-information">
-                    <a th:href="'user?idx='+${#authentication.principal.idx}"><img src="/images/user-information-icon.svg" class="user-information-icon"></a>
+                    <a th:href="'/user?idx='+${#authentication.principal.idx}"><img src="/images/user-information-icon.svg" class="user-information-icon"></a>
                     <span class="username" th:text="${#authentication.principal.username}"> </span>
                     <img src="/images/logout-icon.svg" class="logout-icon" id="logout">
                 </div>
