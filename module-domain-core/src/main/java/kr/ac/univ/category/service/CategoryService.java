@@ -7,6 +7,7 @@ import kr.ac.univ.category.repository.CategoryRepository;
 import kr.ac.univ.category.repository.CategoryRepositoryImpl;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.SearchDto;
+import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.AccessCheck;
 import kr.ac.univ.util.NewIconCheck;
 import org.springframework.data.domain.*;
@@ -19,10 +20,12 @@ import java.util.List;
 public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryRepositoryImpl categoryRepositoryImpl;
+    private final UserRepository userRepository;
 
-    public CategoryService(CategoryRepository categoryRepository, CategoryRepositoryImpl categoryRepositoryImpl) {
+    public CategoryService(CategoryRepository categoryRepository, CategoryRepositoryImpl categoryRepositoryImpl, UserRepository userRepository) {
         this.categoryRepository = categoryRepository;
         this.categoryRepositoryImpl = categoryRepositoryImpl;
+        this.userRepository = userRepository;
     }
 
     public Page<CategoryDto> findCategoryList(Pageable pageable, SearchDto searchDto) {
@@ -43,7 +46,7 @@ public class CategoryService {
                 break;
         }
 
-        categoryDtoList = new PageImpl<CategoryDto>(CategoryMapper.INSTANCE.toDto(categoryList.getContent()), pageable, categoryList.getTotalElements());
+        categoryDtoList = new PageImpl<>(CategoryMapper.INSTANCE.toDto(categoryList.getContent()), pageable, categoryList.getTotalElements());
 
         // NewIcon 판별
         for (CategoryDto categoryDto : categoryDtoList) {
@@ -70,10 +73,9 @@ public class CategoryService {
             categoryDto.setAccess(true);
         }
         // Update: isAccess 메소드에 따라 접근 가능 및 불가
-        else if (AccessCheck.isAccessInModuleWeb(categoryDto.getCreatedBy())) {
-            categoryDto.setAccess(true);
-        } else {
-            categoryDto.setAccess(false);
+        // Update: isAccessInGeneral 메소드에 따라 접근 가능 및 불가
+        else {
+            categoryDto.setAccess(AccessCheck.isAccessInGeneral(categoryDto.getCreatedBy(), userRepository.findByUsername(categoryDto.getCreatedBy()).getAuthorityType().name()));
         }
 
         categoryRepositoryImpl.updateViewsByIdx(idx);

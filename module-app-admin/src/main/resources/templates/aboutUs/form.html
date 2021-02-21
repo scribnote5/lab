@@ -30,76 +30,78 @@
                     </div>
                 </div>
 
-                <div class="mt-5">
-                    <table class="table">
+                <div class="page-content">
+                    <table class="table mobile-table-form mt-4">
                         <colgroup>
                             <col width="17.5%"/>
                             <col width="82.5%"/>
                         </colgroup>
+
                         <tr>
                             <th colspan="2" class="sub-item-title">AboutUs Information</th>
                         </tr>
                         <tr>
                             <th>Title<span class="required-field">*</span></th>
-                            <td><input type="text" name="title" id="title" class="form-control form-control-sm" th:value="*{title}"/></td>
+                            <td><input type="text" name="title" class="form-control form-control-sm" th:value="*{title}"/></td>
                         </tr>
                         <tr>
-                            <td colspan="2" style="width: 100%"><textarea name="content" id="summernote" class="summernote" th:text="*{content}"></textarea></td>
+                            <td colspan="2">
+                                <div name="content" id="content" th:utext="*{content}"></div>
+                            </td>
                         </tr>
+
                         <tr>
                             <th colspan="2" class="sub-item-title">Additional Information</th>
                         </tr>
                         <tr>
                             <th>Active Status</th>
                             <td>
-                                <div class="pull-left">
-                                    <select class="custom-select custom-select-sm" name="activeStatus" th:field="*{activeStatus}">
-                                        <option th:value="ACTIVE">Active</option>
-                                        <option th:value="INACTIVE">Inactive</option>
-                                    </select>
-                                </div>
+                                <select class="custom-select custom-select-sm" name="activeStatus" th:field="*{activeStatus}">
+                                    <option th:value="ACTIVE">Active</option>
+                                    <option th:value="INACTIVE">Inactive</option>
+                                </select>
                             </td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created Date</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Last Modified Date</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created By</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{createdBy}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{createdBy}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Last Modified By</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{lastModifiedBy}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{lastModifiedBy}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Views</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{views}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{views}"/></td>
                         </tr>
                         <tr>
                             <td colspan="10"></td>
                         </tr>
                     </table>
-                </div>
 
-                <div class="row justify-content-between mt-5 mb-3">
-                    <div class="col-auto mx-3">
-                        <a href="/about-us/list" class="btn btn-secondary">Move to List</a>
+                    <div class="row justify-content-between mt-4 mb-4">
+                        <div class="col-auto">
+                            <a href="/about-us/list" class="btn btn-sm btn-secondary">Move to List</a>
+                        </div>
+                        <div class="col-auto ml-2">
+                            <button th:if="!*{idx}" id="insert" type="button" class="btn-main btn-sm">Register</button>
+                            <button th:if="*{idx}" id="update" type="button" class="btn btn-sm btn-info">Update</button>
+                        </div>
                     </div>
-                    <div class="col-auto mx-3">
-                        <button th:if="!*{idx}" id="insert" type="button" class="btn-main">Register</button>
-                        <button th:if="*{idx}" id="update" type="button" class="btn btn-info">Update</button>
-                    </div>
-                </div>
 
-                <!-- input type="hidden" -->
-                <input type="hidden" name="idx" th:value="*{idx}"/>
-                <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
-                <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
+                    <!-- input type="hidden" -->
+                    <input type="hidden" name="idx" th:value="*{idx}"/>
+                    <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
+                    <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
+                </div>
             </form>
         </div>
     </div>
@@ -112,20 +114,9 @@
 <th:block th:replace="layout/script.html"></th:block>
 
 <!-- javascript -->
-<script>
-    $(document).ready(function () {
-        <!-- summernote setting -->
-        $("#summernote").summernote({
-            height: 500,	// 에디터 높이
-            minHeight: null,	// 최소 높이
-            maxHeight: null,	// 최대 높이
-            // focus: true,	// 에디터 로딩후 포커스를 맞출지 여부
-            lang: "ko-KR",// 한글 설정
-            placeholder: "The editor's max input size of bytes is 16777215(16 MB)."	//placeholder 설정
-        });
-        $("#summernote").summernote('fontSize', 14);
-    });
+<script th:src="@{/js/ckeditor-editor-init.js}"></script>
 
+<script>
     function deleteAboutUs(aboutUsIdx) {
         $.ajax({
             url: moduleAppApiAddress + "/api/aboutUss/" + aboutUsIdx,
@@ -139,6 +130,7 @@
             })
             .fail(function (msg) {
                 parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
             });
     }
 </script>
@@ -146,11 +138,15 @@
 <script th:if="!${aboutUsDto?.idx}">
     $("#insert").click(function () {
         // validation (input tag mame, length or size)
-        if (!(validateByLengthAndBlank("title", 255) && validateBySize("content", 16777215))) {
+        if (!(validateByLengthAndBlank("title", 255) && validateByEditor(editor.getData(), 16777215))) {
             return false;
         }
 
+        // duplicate submit check
+        if (duplicateSubmitCheck()) return false;
+
         var jsonData = $("#form").serializeObject();
+        jsonData.content = editor.getData();
 
         $.ajax({
             url: moduleAppApiAddress + "/api/about-us",
@@ -166,6 +162,7 @@
             })
             .fail(function (msg) {
                 parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
             });
     });
 </script>
@@ -173,11 +170,15 @@
 <script th:if="${aboutUsDto?.idx}" th:inline="javascript">
     $("#update").click(function () {
         // validation (input tag mame, length or size)
-        if (!(validateByLengthAndBlank("title", 255) && validateBySize("content", 16777215))) {
+        if (!(validateByLengthAndBlank("title", 255) && validateByEditor(editor.getData(), 16777215))) {
             return false;
         }
 
+        // duplicate submit check
+        if (duplicateSubmitCheck()) return false;
+
         var jsonData = $("#form").serializeObject();
+        jsonData.content = editor.getData();
         var aboutUsIdx = document.getElementsByName("idx")[0].value;
 
         $.ajax({
@@ -194,6 +195,7 @@
             })
             .fail(function (msg) {
                 parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
             });
     });
 </script>

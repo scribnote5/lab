@@ -1,35 +1,45 @@
 :root {
     /* font-weight */
     --strong-font-weight: 700;
-    --regular-font-weight: 500;
+    --medium-font-weight: 500;
+    --regular-font-weight: 400;
     --light-font-weight: 300;
     --thin-font-weight: 100;
 
     /* font-size */
-    --largest-font-size: 1.6rem;
     --larger-font-size: 1.1rem;
     --large-font-size: 1rem;
     --regular-font-size: .9rem;
     --small-font-size: .8rem;
-    --smaller-font-size: .7rem;
 
     /* color */
     --black: rgb(0, 0, 0);
+    --light-black: rgb(7.5, 7.5, 7.5);
+    --lighter-black: rgb(15, 15, 15);
+    --lightest-black: rgb(25, 25, 25);
 
     --main-black: rgb(36, 36, 36);
-    --light-black: rgb(48, 48, 48);
-    --lighter-black: rgb(64, 64, 64);
+    --light-main-black: rgb(48, 48, 48);
+    --lighter-main-black: rgb(64, 64, 64);
 
-    --darker-grey: rgb(84, 84, 84);
-    --dark-grey: rgb(96, 96, 96);
-    --main-grey: rgb(128, 128, 128);
-    --light-grey: rgb(160, 160, 160);
-    --lighter-grey: rgb(192, 192, 192);
-    --lightest-grey: rgb(224, 224, 224);
+    /* --gray-dark:#343a40; */
+    --dark-main-grey: rgb(52, 58, 64);
 
-    --darkest-white: rgb(232, 232, 232);
+    --darkest-grey: rgb(56, 56, 56);
+    --darker-grey: rgb(80, 80, 80);
+    --dark-grey: rgb(104, 104, 104);
+    --grey: rgb(128, 128, 128);
+    --light-grey: rgb(152, 152, 152);
+    --lighter-grey: rgb(176, 176, 176);
+    --lightest-grey: rgb(200, 200, 200);
+
+    --darker-main-white: rgb(196, 196, 196);
+    --dark-main-white: rgb(208, 208, 208);
+    --main-white: rgb(220, 220, 220);
+
+    --darkest-white: rgb(230, 230, 230);
     --darker-white: rgb(240, 240, 240);
-    --dark-white: rgb(248, 248, 248);
+    --dark-white: rgb(247.5, 247.5, 247.5);
     --white: rgb(255, 255, 255);
 
     --lightest-red: rgb(233, 37, 47);

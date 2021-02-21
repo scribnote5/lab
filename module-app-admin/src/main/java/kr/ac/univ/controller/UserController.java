@@ -93,13 +93,13 @@ public class UserController {
 
     // List
     @GetMapping("/list")
-    public String userList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
+    public String userList(Pageable pageable, SearchDto searchDto, Model model) {
         model.addAttribute("userDtoList", userService.findUserList(pageable, searchDto));
 
         return "user/list";
     }
 
-    // Form Update
+    // Form
     @GetMapping("/form{idx}")
     public String loginForm(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
         UserDto userDto = userService.findUserByIdx(idx);

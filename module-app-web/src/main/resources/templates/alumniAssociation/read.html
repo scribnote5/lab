@@ -7,57 +7,77 @@
     <title th:text="${@environment.getProperty('title')} + ' | Alumni Association Detail'"></title>
 </head>
 <body>
-<div id="wrapper">
-    <div id="page-content-wrapper">
-        <!-- header -->
-        <div th:replace="layout/header::header"></div>
+<div id="page-content-wrapper">
+    <!-- header -->
+    <div th:replace="layout/header::header"></div>
 
-        <div class="container">
-            <form name="form" id="form" th:object="${alumniAssociationDto}" action="#">
-                <div class="page-header breadcrumbs" data-aos="fade-up" data-aos-delay="100">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h2>Alumni Association Detail</h2>
-                        <ol>
-                            <li>Home</li>
-                            <li>Alumni Association Detail</li>
-                        </ol>
-                    </div>
+    <div class="container">
+        <form name="form" id="form" th:object="${alumniAssociationDto}" action="#">
+            <div class="page-header breadcrumbs">
+                <div class="d-flex justify-content-between align-items-center" data-aos="fade-up">
+                    <h2>Alumni Association Detail</h2>
+                    <ol>
+                        <li>Home</li>
+                        <li>Alumni Association Detail</li>
+                    </ol>
                 </div>
+            </div>
 
-                <div class="mt-4" data-aos="fade-up" data-aos-delay="150">
-                    <div class="mb-2 text-right">
-                        <strong class="date">&nbsp;&nbsp;Created Date: </strong>
-                        <span class="date" th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/> </span><br>
+            <div id="loading" class="row justify-content-center">
+                <img th:src="@{/images/loading.gif}" alt="Loading…"/>
+            </div>
 
-                        <strong class="date">Modified Date: </strong>
-                        <span class="date" th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></span>
-                    </div>
+            <div class="page-content" data-aos="fade-up">
+                <table class="table mobile-table-read mt-4">
+                    <colgroup>
+                        <col width="12.5%"/>
+                        <col width="87.5%"/>
+                    </colgroup>
 
-                    <table class="table">
-                        <colgroup>
-                            <col width="12.5%"/>
-                            <col width="87.5%"/>
-                        </colgroup>
-                        <tr>
-                            <th>Title</th>
-                            <td><span id="title" th:text="*{title}"></span></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2"><span class="form-control form-control-sm content" id="content" th:utext="*{content}"></span></td>
-                        </tr>
-                    </table>
-                </div>
+                    <!-- Desktop -->
+                    <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                        <td class="text-right border-0" colspan="10">
+                            <strong class="additional-information">Created By: </strong><span th:text="*{createdBy}" class="additional-information"></span> &nbsp;&nbsp;&nbsp;
+                            <strong class="additional-information">Created Date: </strong><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}" class="additional-information"></span> &nbsp;&nbsp;&nbsp;
+                            <strong class="additional-information">Views: </strong> <span th:text="*{views}" class="additional-information"/></span>
+                        </td>
+                    </tr>
+                    <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                        <th>Title</th>
+                        <td th:text="*{title}"></td>
+                    </tr>
 
-                <div class="row justify-content-between mt-5 mb-4">
-                    <div class="col-auto mx-3">
-                        <a href="/alumni-association/list" class="btn btn-secondary">Move to List</a>
+                    <!-- Mobile -->
+                    <tr class="d-print-none d-sm-table-row d-md-table-row d-lg-none d-xl-none d-table-row">
+                        <td colspan="2">
+                            <h4 th:text="*{title}" class="mobile-title"></h4>
+
+                            <div class="text-right">
+                                <span th:text="*{createdBy}"></span>&nbsp;&nbsp;
+                                <span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}" class="mobile-additional-information"></span>&nbsp;&nbsp;
+                                <span th:text="'Views: ' + *{views}" class="mobile-additional-information"/>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Common -->
+                    <tr>
+                        <td colspan="2">
+                            <div class="content" th:utext="*{content}"></div>
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="row justify-content-between mt-4 mb-4">
+                    <div class="col-auto">
+                        <a href="/alumni-association/list" class="btn btn-sm btn-secondary">Move to List</a>
                     </div>
                 </div>
 
                 <!-- input type="hidden" -->
                 <input type="hidden" name="idx" th:value="*{idx}"/>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 </div>
 

@@ -1,3 +1,15 @@
+/* 중복 submit 검사 */
+var duplicateSubmitFlag = false;
+
+function duplicateSubmitCheck() {
+    if (duplicateSubmitFlag) {
+        return true;
+    } else {
+        duplicateSubmitFlag = true;
+        return false;
+    }
+}
+
 /* 공백 및 공란 검사 */
 function validateByWhiteSpace(str) {
     if (str.trim().length == 0) {
@@ -44,8 +56,8 @@ function getByteSize(el) {
 
 /* ID 검사: 영어 소문자와 숫자 검사 */
 function validateById(str) {
-    var regexp = /^[a-zA-Z0-9]{4,16}$/g;
-    console.log(document.getElementsByName("username")[0].value.length);
+    var regexp = /^[a-z0-9]{4,16}$/g;
+
     if (regexp.test(str) == true) {
         return true;
     } else {
@@ -55,7 +67,6 @@ function validateById(str) {
                 "<br>" + "(Currently entered: " + document.getElementsByName("username")[0].value.length + " characters)."
         }).then((result) => {
             document.getElementsByName("username")[0].focus();
-            document.getElementById("usernameCheckResult").innerHTML = "";
         })
 
         return false;
@@ -144,16 +155,33 @@ function validateBySize(inputName, maxByteSize) {
     }
 }
 
+/* input tag validation - 문자열 크기 */
+function validateByEditor(data, maxByteSize) {
+    var byteSize = getByteSize(data);
+
+    if (byteSize > maxByteSize) {
+        Toast.fire({
+            icon: "error",
+            html: "&nbsp;&nbsp;" + "The editor must be less than " + maxByteSize + " bytes size." +
+                "<br/>" + "(Currently entered: " + byteSize + " bytes).",
+        })
+
+        return false;
+    } else {
+        return true;
+    }
+}
+
 /* select tag validation - inactive or delete option인지 확인 */
 function validateBySelect(inputName) {
     var target = document.getElementsByName(inputName)[0];
-    var title = camelCaseToTitle(inputName);
+    var title = (camelCaseToTitle(inputName)).split(" ")[0];
 
     if (target.options[target.selectedIndex].value == -1) {
         Toast.fire({
             icon: "error",
-            html: "&nbsp;&nbsp;" + "The " + title + " is inactive or deleted." +
-                "<br/>" + "Please check validate " + title + ".",
+            html: "&nbsp;&nbsp;" + "The " + title + " is not valid." +
+                "<br/>" + "Please check " + title + ".",
         })
 
         return false;
@@ -208,6 +236,8 @@ function validateByFileExist() {
                 "<br>" + "Please upload file.",
         })
 
+        document.getElementsByName("file")[0].focus();
+
         return false;
     } else {
         return true;
@@ -248,8 +278,8 @@ function validateImageFile(file) {
     var result = false;
     // 첨부 파일 크기
     var fileSize = file.size;
-    // 업로드 가능한 파일 크기: 20 MB
-    var maxSize = 20 * 1024 * 1024;
+    // 업로드 가능한 파일 크기: 50MB
+    var maxSize = 50 * 1024 * 1024;
 
     // 첨부 파일이 있는 경우
     if (fileName != "") {
@@ -276,7 +306,7 @@ function validateImageFile(file) {
         if (fileSize > maxSize) {
             Toast.fire({
                 icon: "error",
-                html: "&nbsp;&nbsp;" + "The attached file can upload within 20 MB size."
+                html: "&nbsp;&nbsp;" + "The attached file can upload within 50MB size."
             })
             $("#file").replaceWith($("#file").clone(true));
             $("#file").val('');
@@ -288,7 +318,7 @@ function validateImageFile(file) {
         if (fileSize + totalFileSize > maxSize) {
             Toast.fire({
                 icon: "error",
-                html: "&nbsp;&nbsp;" + "All attached files must be within 20 MB size."
+                html: "&nbsp;&nbsp;" + "All attached files must be within 50MB size."
             })
             $("#file").replaceWith($("#file").clone(true));
             $("#file").val('');
@@ -319,8 +349,8 @@ function validatePdfFile(file) {
     var result = false;
     // 첨부 파일 크기
     var fileSize = file.size;
-    // 업로드 가능한 파일 크기: 20 MB
-    var maxSize = 20 * 1024 * 1024;
+    // 업로드 가능한 파일 크기: 50MB
+    var maxSize = 50 * 1024 * 1024;
 
     // 첨부 파일이 있는 경우
     if (fileName != "") {
@@ -347,7 +377,7 @@ function validatePdfFile(file) {
         if (fileSize > maxSize) {
             Toast.fire({
                 icon: "error",
-                html: "&nbsp;&nbsp;" + "The attached file can upload within 20 MB size."
+                html: "&nbsp;&nbsp;" + "The attached file can upload within 50MB size."
             })
             $("#file").replaceWith($("#file").clone(true));
             $("#file").val('');
@@ -359,7 +389,7 @@ function validatePdfFile(file) {
         if (fileSize + totalFileSize > maxSize) {
             Toast.fire({
                 icon: "error",
-                html: "&nbsp;&nbsp;" + "All attached files must be within 20 MB size."
+                html: "&nbsp;&nbsp;" + "All attached files must be within 50MB size."
             })
             $("#file").replaceWith($("#file").clone(true));
             $("#file").val('');
@@ -390,8 +420,8 @@ function validateVideoFile(file) {
     var result = false;
     // 첨부 파일 크기
     var fileSize = file.size;
-    // 업로드 가능한 파일 크기: 20 MB
-    var maxSize = 20 * 1024 * 1024;
+    // 업로드 가능한 파일 크기: 50MB
+    var maxSize = 50 * 1024 * 1024;
 
     // 첨부 파일이 있는 경우
     if (fileName != "") {
@@ -418,7 +448,7 @@ function validateVideoFile(file) {
         if (fileSize > maxSize) {
             Toast.fire({
                 icon: "error",
-                html: "&nbsp;&nbsp;" + "The attached file can upload within 20 MB size."
+                html: "&nbsp;&nbsp;" + "The attached file can upload within 50MB size."
             })
             $("#file").replaceWith($("#file").clone(true));
             $("#file").val('');
@@ -430,7 +460,7 @@ function validateVideoFile(file) {
         if (fileSize + totalFileSize > maxSize) {
             Toast.fire({
                 icon: "error",
-                html: "&nbsp;&nbsp;" + "All attached files must be within 20 MB size."
+                html: "&nbsp;&nbsp;" + "All attached files must be within 50MB size."
             })
             $("#file").replaceWith($("#file").clone(true));
             $("#file").val('');
@@ -461,8 +491,8 @@ function validateFile(file) {
     var extensionName = fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
     // 첨부 파일 크기
     var fileSize = file.size;
-    // 업로드 가능한 파일 크기: 20 MB
-    var maxSize = 20 * 1024 * 1024;
+    // 업로드 가능한 파일 크기: 50MB
+    var maxSize = 50 * 1024 * 1024;
 
     if (fileName != "") {
         /* 확장자명 검사 */
@@ -483,7 +513,7 @@ function validateFile(file) {
         if (fileSize > maxSize) {
             Toast.fire({
                 icon: "error",
-                html: "&nbsp;&nbsp;" + "The attached file can upload within 20 MB size.",
+                html: "&nbsp;&nbsp;" + "The attached file can upload within 50MB size.",
             })
             $("#file").replaceWith($("#file").clone(true));
             $("#file").val('');
@@ -495,7 +525,7 @@ function validateFile(file) {
         if (fileSize + totalFileSize > maxSize) {
             Toast.fire({
                 icon: "error",
-                html: "&nbsp;&nbsp;" + "All attached files must be within 20 MB size.",
+                html: "&nbsp;&nbsp;" + "All attached files must be within 50MB size.",
             })
             $("#file").replaceWith($("#file").clone(true));
             $("#file").val('');

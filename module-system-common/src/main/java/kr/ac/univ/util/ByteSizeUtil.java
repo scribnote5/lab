@@ -1,7 +1,5 @@
 package kr.ac.univ.util;
 
-import java.io.UnsupportedEncodingException;
-
 public class ByteSizeUtil {
 
     public static int getByteSize(String str) {

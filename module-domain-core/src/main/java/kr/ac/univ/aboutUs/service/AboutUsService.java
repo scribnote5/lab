@@ -7,6 +7,7 @@ import kr.ac.univ.aboutUs.repository.AboutUsRepository;
 import kr.ac.univ.aboutUs.repository.AboutUsRepositoryImpl;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.SearchDto;
+import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.AccessCheck;
 import kr.ac.univ.util.NewIconCheck;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +15,6 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 @Service
 public class AboutUsService {
@@ -22,10 +22,12 @@ public class AboutUsService {
     private String moduleName;
     private final AboutUsRepository aboutUsRepository;
     private final AboutUsRepositoryImpl aboutUsRepositoryImpl;
+    private final UserRepository userRepository;
 
-    public AboutUsService(AboutUsRepository aboutUsRepository, AboutUsRepositoryImpl aboutUsRepositoryImpl) {
+    public AboutUsService(AboutUsRepository aboutUsRepository, AboutUsRepositoryImpl aboutUsRepositoryImpl, UserRepository userRepository) {
         this.aboutUsRepository = aboutUsRepository;
         this.aboutUsRepositoryImpl = aboutUsRepositoryImpl;
+        this.userRepository = userRepository;
     }
 
     public Page<AboutUsDto> findAboutUsList(Pageable pageable, SearchDto searchDto) {
@@ -49,7 +51,7 @@ public class AboutUsService {
                 break;
         }
 
-        aboutUsDtoList = new PageImpl<AboutUsDto>(AboutUsMapper.INSTANCE.toDto(aboutUsList.getContent()), pageable, aboutUsList.getTotalElements());
+        aboutUsDtoList = new PageImpl<>(AboutUsMapper.INSTANCE.toDto(aboutUsList.getContent()), pageable, aboutUsList.getTotalElements());
 
         // NewIcon 판별
         for (AboutUsDto aboutUsDto : aboutUsDtoList) {
@@ -79,11 +81,9 @@ public class AboutUsService {
         if (idx == 0) {
             aboutUsDto.setAccess(true);
         }
-        // Update: isAccess 메소드에 따라 접근 가능 및 불가
-        else if (AccessCheck.isAccessInModuleWeb(aboutUsDto.getCreatedBy())) {
-            aboutUsDto.setAccess(true);
-        } else {
-            aboutUsDto.setAccess(false);
+        // Update: isAccessInGeneral 메소드에 따라 접근 가능 및 불가
+        else {
+            aboutUsDto.setAccess(AccessCheck.isAccessInGeneral(aboutUsDto.getCreatedBy(), userRepository.findByUsername(aboutUsDto.getCreatedBy()).getAuthorityType().name()));
         }
 
         aboutUsRepositoryImpl.updateViewsByIdx(idx);

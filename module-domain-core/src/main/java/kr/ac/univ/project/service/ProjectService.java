@@ -24,10 +24,12 @@ public class ProjectService {
     private String moduleName;
     private final ProjectRepository projectRepository;
     private final ProjectRepositoryImpl projectRepositoryImpl;
+    private final UserRepository userRepository;
 
-    public ProjectService(ProjectRepository projectRepository, ProjectRepositoryImpl projectRepositoryImpl) {
+    public ProjectService(ProjectRepository projectRepository, ProjectRepositoryImpl projectRepositoryImpl, UserRepository userRepository) {
         this.projectRepository = projectRepository;
         this.projectRepositoryImpl = projectRepositoryImpl;
+        this.userRepository = userRepository;
     }
 
     public Page<ProjectDto> findProjectList(Pageable pageable, SearchDto searchDto) {
@@ -51,7 +53,7 @@ public class ProjectService {
                 break;
         }
 
-        projectDtoList = new PageImpl<ProjectDto>(ProjectMapper.INSTANCE.toDto(projectList.getContent()), pageable, projectList.getTotalElements());
+        projectDtoList = new PageImpl<>(ProjectMapper.INSTANCE.toDto(projectList.getContent()), pageable, projectList.getTotalElements());
 
         // NewIcon 판별
         for (ProjectDto projectDto : projectDtoList) {
@@ -88,11 +90,9 @@ public class ProjectService {
         if (idx == 0) {
             projectDto.setAccess(true);
         }
-        // Update: isAccess 메소드에 따라 접근 가능 및 불가
-        else if (AccessCheck.isAccessInModuleWeb(projectDto.getCreatedBy())) {
-            projectDto.setAccess(true);
-        } else {
-            projectDto.setAccess(false);
+        // Update: isAccessInGeneral 메소드에 따라 접근 가능 및 불가
+        else {
+            projectDto.setAccess(AccessCheck.isAccessInGeneral(projectDto.getCreatedBy(), userRepository.findByUsername(projectDto.getCreatedBy()).getAuthorityType().name()));
         }
 
         projectRepositoryImpl.updateViewsByIdx(idx);

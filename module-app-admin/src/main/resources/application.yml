@@ -7,8 +7,10 @@ spring:
       enabled: true
     restart:
       enabled: true
-  thymeleaf:
-    cache: false
+  data:
+    web:
+      pageable:
+        default-page-size: 15
 module:
   name: module-app-admin
 title: ESLAB
@@ -20,6 +22,8 @@ server:
 ---
 spring:
   profiles: test
+  thymeleaf:
+    cache: false
   jpa:
     hibernate:
       ddl-auto: create
@@ -58,6 +62,8 @@ module-app-api:
 ---
 spring:
   profiles: local
+  thymeleaf:
+    cache: false
   #  jpa:
   #    hibernate:
   #      ddl-auto: create
@@ -90,6 +96,8 @@ module-app-api:
 ---
 spring:
   profiles: dev
+  thymeleaf:
+    cache: true
   #  jpa:
   #    hibernate:
   #      ddl-auto: create

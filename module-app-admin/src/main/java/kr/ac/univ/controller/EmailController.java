@@ -22,13 +22,13 @@ public class EmailController {
 
     // List
     @GetMapping("/list")
-    public String emailList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
+    public String emailList(Pageable pageable, SearchDto searchDto, Model model) {
         model.addAttribute("emailDtoList", emailService.findEmailList(pageable, searchDto));
 
         return "email/list";
     }
 
-    // Form Update
+    // Form
     @GetMapping("/form{idx}")
     public String emailForm(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
         EmailDto emailDto = emailService.findEmailByIdx(idx);

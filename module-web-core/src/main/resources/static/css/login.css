@@ -5,10 +5,14 @@
     margin-bottom: 1.5rem;
 }
 
+.brand-wrapper img {
+    height: 60px;
+}
+
 .login-card-outline {
+    margin-top: 20vh;
     height: 60vh;
-    margin-top: 22.5vh;
-    margin-bottom: 17.5vh;
+    margin-bottom: 20vh;
 }
 
 .login-card {
@@ -19,7 +23,7 @@
 }
 
 .login-card .card-side {
-    background-color: var(--red);
+    background-color: var(--main-red);
 }
 
 .login-card .card-body {
@@ -31,22 +35,38 @@
     height: auto;
 }
 
+.login-card-description {
+    font-size: 2rem;
+    color: #000;
+    font-weight: var(--strong-font-weight);
+    margin-bottom: 2rem;
+}
+
 @media (max-width: 575px) {
+    .brand-wrapper {
+        margin-bottom: 1rem;
+    }
+
+    .brand-wrapper img {
+        height: 40px;
+    }
+
     .login-card .card-body {
-        padding: 2rem 2.5rem 2rem 1.5rem;
+        padding: 2.5rem 3.5rem 1.5rem 3.5rem;
+    }
+
+    .login-card .card-side {
+        width: 0%;
     }
 
     .login-card .login-logo  {
         width: 225px;
         height: auto;
     }
-}
 
-.login-card-description {
-    font-size: 2rem;
-    color: #000;
-    font-weight: var(--strong-font-weight);
-    margin-bottom: 2rem;
+    .login-card-description {
+        font-size: 1.7rem;
+    }
 }
 
 .login-card .form-control {
@@ -99,7 +119,7 @@
 
 .login-card .forgot-password-link {
     font-size: 1.1rem;
-    color:var(--main-grey);
+    color:var(--grey);
     margin-bottom: 1rem;
 }
 

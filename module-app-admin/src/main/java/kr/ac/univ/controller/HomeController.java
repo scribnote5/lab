@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
-public class MainController {
+public class HomeController {
     private final DataHistoryService dataHistoryService;
     private final LoginHistoryService loginHistoryService;
     private final NoticeBoardService noticeBoardService;
     private final UserService userService;
 
-    public MainController(DataHistoryService dataHistoryService, LoginHistoryService loginHistoryService, NoticeBoardService noticeBoardService, UserService userService) {
+    public HomeController(DataHistoryService dataHistoryService, LoginHistoryService loginHistoryService, NoticeBoardService noticeBoardService, UserService userService) {
         this.dataHistoryService = dataHistoryService;
         this.loginHistoryService = loginHistoryService;
         this.noticeBoardService = noticeBoardService;

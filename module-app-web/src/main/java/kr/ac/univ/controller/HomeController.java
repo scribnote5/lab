@@ -26,7 +26,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/")
-public class MainController {
+public class HomeController {
     private final AlbumService albumService;
     private final AlbumAttachedFileService albumAttachedFileService;
     private final IntroductionService introductionService;
@@ -38,7 +38,7 @@ public class MainController {
     private final SeminarService seminarService;
     private final SettingService settingService;
 
-    public MainController(AlbumService albumService, AlbumAttachedFileService albumAttachedFileService,
+    public HomeController(AlbumService albumService, AlbumAttachedFileService albumAttachedFileService,
                           IntroductionService introductionService,
                           IntroductionImageService introductionImageService, IntroductionImageAttachedFileService introductionImageAttachedFileService,
                           ResearchFieldService researchFieldService, ResearchFieldAttachedFileService researchFieldAttachedFileService,
@@ -65,7 +65,7 @@ public class MainController {
             introductionImageAttachedFileService.findAttachedFileByIntroductionImageIdx(introductionImageDto.getIdx(), introductionImageDto);
         }
 
-        List<ResearchFieldDto> researchFieldDtoList = researchFieldService.findResearchFieldListByActiveStatusIs();
+        List<ResearchFieldDto> researchFieldDtoList = researchFieldService.findAllByActiveStatusIsAndResearchFieldStatusIs();
         for (ResearchFieldDto researchFieldDto : researchFieldDtoList) {
             researchFieldAttachedFileService.findAttachedFileByResearchFieldIdx(researchFieldDto.getIdx(), researchFieldDto);
         }

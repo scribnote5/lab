@@ -1,6 +1,7 @@
 package kr.ac.univ.album.service;
 
 import kr.ac.univ.album.domain.Album;
+import kr.ac.univ.album.domain.enums.MainHashTagStatus;
 import kr.ac.univ.album.dto.AlbumDto;
 import kr.ac.univ.album.dto.mapper.AlbumMapper;
 import kr.ac.univ.album.repository.AlbumRepository;
@@ -23,10 +24,12 @@ public class AlbumService {
     private String moduleName;
     private final AlbumRepository albumRepository;
     private final AlbumRepositoryImpl albumRepositoryImpl;
+    private final UserRepository userRepository;
 
-    public AlbumService(AlbumRepository albumRepository, AlbumRepositoryImpl albumRepositoryImpl) {
+    public AlbumService(AlbumRepository albumRepository, AlbumRepositoryImpl albumRepositoryImpl, UserRepository userRepository) {
         this.albumRepository = albumRepository;
         this.albumRepositoryImpl = albumRepositoryImpl;
+        this.userRepository = userRepository;
     }
 
     public Page<AlbumDto> findAlbumList(Pageable pageable, SearchDto searchDto) {
@@ -74,7 +77,7 @@ public class AlbumService {
                 break;
         }
 
-        albumDtoList = new PageImpl<AlbumDto>(AlbumMapper.INSTANCE.toDto(albumList.getContent()), pageable, albumList.getTotalElements());
+        albumDtoList = new PageImpl<>(AlbumMapper.INSTANCE.toDto(albumList.getContent()), pageable, albumList.getTotalElements());
 
         // NewIcon 판별
         for (AlbumDto albumDto : albumDtoList) {
@@ -87,13 +90,21 @@ public class AlbumService {
     public List<AlbumDto> findAllByActiveStatusIsOrderByMainHashTagDescIdxDesc() {
         List<AlbumDto> albumDtoList = AlbumMapper.INSTANCE.toDto(albumRepository.findAllByActiveStatusIsOrderByMainHashTagDescIdxDesc(ActiveStatus.ACTIVE));
         String mainHashTag = "";
+        boolean secondAlbumByMainHashTag = false;
 
         for (AlbumDto albumDto : albumDtoList) {
+            // 사용자 album 페이지에서 mainHashTag 출력 여부를 결정
             if (!mainHashTag.equals(albumDto.getMainHashTag())) {
-                albumDto.setMainHashTagPrint(true);
+                albumDto.setMainHashTagStatus(MainHashTagStatus.PRINT);
                 mainHashTag = albumDto.getMainHashTag();
+                secondAlbumByMainHashTag = true;
+            }
+            // mainHashTag를 출력한 다음의(두 번째) album은 mainHashTag를 출력하지 않고 공간만 유지
+            else if (secondAlbumByMainHashTag) {
+                albumDto.setMainHashTagStatus(MainHashTagStatus.KEEP_SPACE);
+                secondAlbumByMainHashTag = false;
             } else {
-                albumDto.setMainHashTagPrint(false);
+                albumDto.setMainHashTagStatus(MainHashTagStatus.NON_PRINT);
             }
         }
 
@@ -119,11 +130,9 @@ public class AlbumService {
         if (idx == 0) {
             albumDto.setAccess(true);
         }
-        // Update: isAccess 메소드에 따라 접근 가능 및 불가
-        else if (AccessCheck.isAccessInModuleWeb(albumDto.getCreatedBy())) {
-            albumDto.setAccess(true);
-        } else {
-            albumDto.setAccess(false);
+        // Update: isAccessInGeneral 메소드에 따라 접근 가능 및 불가
+        else {
+            albumDto.setAccess(AccessCheck.isAccessInGeneral(albumDto.getCreatedBy(), userRepository.findByUsername(albumDto.getCreatedBy()).getAuthorityType().name()));
         }
 
         albumRepositoryImpl.updateViewsByIdx(idx);

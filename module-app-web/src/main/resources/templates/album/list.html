@@ -7,49 +7,46 @@
     <title th:text="${@environment.getProperty('title')} + ' | Album List'"></title>
 </head>
 <body>
-<div id="wrapper">
-    <div id="page-content-wrapper">
-        <!-- header -->
-        <div th:replace="layout/header::header"></div>
 
-        <div class="container album">
-            <div class="page-header page-title breadcrumbs" data-aos="fade-up" data-aos-delay="100">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h1>Album List</h1>
-                    <ol>
-                        <li>Home</li>
-                        <li>Album List</li>
-                    </ol>
-                </div>
+<div id="page-content-wrapper">
+    <!-- header -->
+    <div th:replace="layout/header::header"></div>
+
+    <div class="container album-page">
+        <div class="page-header page-title breadcrumbs" data-aos="fade-up">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2>Album List</h2>
+                <ol>
+                    <li>Home</li>
+                    <li>Album List</li>
+                </ol>
             </div>
+        </div>
 
-            <div class="mt-5">
-                <div class="row mt-4 ml-2" data-aos="fade-up" data-aos-delay="200">
-                    <div th:each="albumDto : ${albumDtoList}" class="col-12 album-item">
-                        <div th:if="${albumDto.mainHashTagPrint}" class="mt-3">
-                            <h2 th:text="${albumDto.mainHashTag}"></h2>
-                        </div>
+        <div id="loading" class="row justify-content-center mt-5">
+            <img th:src="@{/images/loading.gif}" alt="Loading…"/>
+        </div>
 
-                        <div class="album-wrap" style="width: 600px">
-                            <img th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/${albumDto.attachedFileList[0].savedFileName}|}" style="width: 600px; height: auto"/>
+        <div class="page-content">
+            <div class="row mt-4">
+                <div th:each="albumDto : ${albumDtoList}" class="col-lg-6 col-md-12" data-aos="fade-up">
+                    <div th:if="${albumDto.mainHashTagStatus?.name() == 'PRINT' || albumDto.mainHashTagStatus?.name() == 'KEEP_SPACE'}" class="album-main-hash-tag-wrap">
+                        <h2 th:if="${albumDto.mainHashTagStatus?.name() == 'PRINT'}" th:text="${albumDto.mainHashTag}" class="album-main-hash-tag"></h2>
+                    </div>
+
+                    <div class="album-wrap">
+                        <a th:href="@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/${albumDto.attachedFileList[0].savedFileName}|}"
+                           data-gall="albumGallery" class="venobox" th:title="${albumDto.title}">
+                            <img th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-image/${albumDto.attachedFileList[0].savedFileName}|}"/>
 
                             <div class="album-info">
-                                <h5 th:text="${#strings.length(albumDto.title)} < 20 ? ${albumDto.title} : ${#strings.substring(albumDto.title, 0, 20)} + '...'"></h5>
-                                <span th:each="hashTag : ${#strings.arraySplit(albumDto.hashTags,'#')}" th:text="'#' + ${hashTag}"></span>
-
-                                <div class="album-links">
-                                    <a th:href="@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/${albumDto.attachedFileList[0].savedFileName}|}" data-gall="portfolioGallery" class="venobox"
-                                       th:title="${albumDto.title}">
-                                        <img src="/images/plus.svg"/>
-                                    </a>
-                                </div>
+                                <h2 th:text="${albumDto.title}"></h2>
+                                <span th:each="hashTag : ${#strings.arraySplit(albumDto.hashTags,'#')}" th:text="'#' + ${hashTag}" class="hash-tag"></span>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 </div>
             </div>
-
-            <div class="row justify-content-end mt-5 mb-3"></div>
         </div>
     </div>
 </div>
@@ -60,12 +57,65 @@
 <!-- script file -->
 <th:block th:replace="layout/script.html"></th:block>
 
+<!-- javascript -->
+
 <script>
-    $('#search').click(function () {
+    $("#search").click(function () {
         document.form.action = "/album/list";
         document.form.method = "get";
         document.form.submit();
     });
+
+    // lazy loading
+    document.addEventListener("DOMContentLoaded", function () {
+        var lazyloadImages;
+
+        if ("IntersectionObserver" in window) {
+            lazyloadImages = document.querySelectorAll(".lazy");
+            var imageObserver = new IntersectionObserver(function (entries, observer) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        var image = entry.target;
+                        image.src = image.dataset.src;
+                        image.classList.remove("lazy");
+                        imageObserver.unobserve(image);
+                    }
+                });
+            });
+
+            lazyloadImages.forEach(function (image) {
+                imageObserver.observe(image);
+            });
+        } else {
+            var lazyloadThrottleTimeout;
+            lazyloadImages = document.querySelectorAll(".lazy");
+
+            function lazyload() {
+                if (lazyloadThrottleTimeout) {
+                    clearTimeout(lazyloadThrottleTimeout);
+                }
+
+                lazyloadThrottleTimeout = setTimeout(function () {
+                    var scrollTop = window.pageYOffset;
+                    lazyloadImages.forEach(function (img) {
+                        if (img.offsetTop < (window.innerHeight + scrollTop)) {
+                            img.src = img.dataset.src;
+                            img.classList.remove('lazy');
+                        }
+                    });
+                    if (lazyloadImages.length == 0) {
+                        document.removeEventListener("scroll", lazyload);
+                        window.removeEventListener("resize", lazyload);
+                        window.removeEventListener("orientationChange", lazyload);
+                    }
+                }, 20);
+            }
+
+            document.addEventListener("scroll", lazyload);
+            window.addEventListener("resize", lazyload);
+            window.addEventListener("orientationChange", lazyload);
+        }
+    })
 </script>
 
 </body>

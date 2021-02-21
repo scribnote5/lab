@@ -3,10 +3,10 @@ package kr.ac.univ.publication.dto.enums;
 public enum PublicationSearchType {
     SHOW_ALL("Show All"),
 
-    // International Journal은 KCI, SCOPUS, SCI로 구분된다.
+    // International Journal은 KCI, SCOPUS, SCIE로 구분된다.
     INTERNATIONAL_JOURNAL("International Journal"),
     INTERNATIONAL_JOURNAL_SCOPUS("International Journal - SCOPUS"),
-    INTERNATIONAL_JOURNAL_SCI("International Journal - SCI"),
+    INTERNATIONAL_JOURNAL_SCIE("International Journal - SCIE"),
 
     // Conference는 Poster, Regular, Demo, Workshop으로 구분된다.
     INTERNATIONAL_CONFERENCE("International Conference"),
@@ -14,6 +14,7 @@ public enum PublicationSearchType {
     INTERNATIONAL_REGULAR("International Conference - Regular"),
     INTERNATIONAL_DEMO("International Conference - Demo"),
     INTERNATIONAL_WORKSHOP("International Conference - Workshop"),
+    INTERNATIONAL_WORKINPROCESSS("International Conference - Work In Process"),
 
     // Domestic Journal은 KCI로 구분된다.
     DOMESTIC_JOURNAL("Domestic Journal"),

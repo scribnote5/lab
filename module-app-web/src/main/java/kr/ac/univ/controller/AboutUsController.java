@@ -61,7 +61,7 @@ public class AboutUsController {
 
     // Read
     @GetMapping("/")
-    public String aboutUsList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
+    public String aboutUsList(Pageable pageable, SearchDto searchDto, Model model) {
         AboutUsDto aboutUsDto = aboutUsService.findAboutUsByActiveStatusIs();
         SettingDto settingDto = settingService.findSettingByIdx(1L);
 
@@ -75,16 +75,17 @@ public class AboutUsController {
             learnMoreVideoAttachedFileService.findAttachedFileByLearnMoreIdx(learnMoreVideoDto.getIdx(), learnMoreVideoDto);
         }
 
-        aboutUsDto.setLabStartDate(settingDto.getLabStartDate());
-        aboutUsDto.setLabMaintenanceYears(settingDto.getLabStartDate().getDayOfYear());
-        aboutUsDto.setPublicationCount(publicationService.countAllByActiveStatusIs());
-        aboutUsDto.setProjectCount(projectService.countAllByActiveStatusIsAndProjectStatus());
-        aboutUsDto.setAttendingPhdUserCount(userService.countAllByActiveStatusIsAndUserStatusIsAndUserTypeIs(UserType.FULL_TIME_PhD));
-        aboutUsDto.setAttendingMsUserCount(userService.countAllByActiveStatusIsAndUserStatusIsAndUserTypeIs(UserType.FULL_TIME_MS));
-        aboutUsDto.setLabMaintenanceYearsCountContent(settingDto.getLabMaintenanceYearsCountContent());
-        aboutUsDto.setUserCountContent(settingDto.getLabMaintenanceYearsCountContent());
-        aboutUsDto.setPublicationCountContent(settingDto.getPublicationCountContent());
-        aboutUsDto.setProjectCountContent(settingDto.getProjectCountContent());
+
+        model.addAttribute("labStartDate", settingDto.getLabStartDate());
+        model.addAttribute("labMaintenanceYears", settingDto.getLabStartDate().getDayOfYear());
+        model.addAttribute("publicationCount", publicationService.countAllByActiveStatusIs());
+        model.addAttribute("projectCount", projectService.countAllByActiveStatusIsAndProjectStatus());
+        model.addAttribute("attendingPhdUserCount", userService.countAllByActiveStatusIsAndUserStatusIsAndUserTypeIs(UserType.B_FULL_TIME_PHD));
+        model.addAttribute("attendingMsUserCount", userService.countAllByActiveStatusIsAndUserStatusIsAndUserTypeIs(UserType.C_FULL_TIME_MS));
+        model.addAttribute("labMaintenanceYearsCountContent", settingDto.getLabMaintenanceYearsCountContent());
+        model.addAttribute("userCountContent", settingDto.getLabMaintenanceYearsCountContent());
+        model.addAttribute("publicationCountContent", settingDto.getPublicationCountContent());
+        model.addAttribute("projectCountContent", settingDto.getProjectCountContent());
 
         model.addAttribute("aboutUsDto", aboutUsDto);
         model.addAttribute("learnMoreReadDtoList", learnMoreReadDtoList);

@@ -14,6 +14,7 @@ import kr.ac.univ.publication.repository.PublicationRepository;
 import kr.ac.univ.publication.repository.PublicationRepositoryImpl;
 import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.AccessCheck;
+import kr.ac.univ.util.EmptyUtil;
 import kr.ac.univ.util.NewIconCheck;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -32,19 +33,22 @@ public class PublicationService {
     private String moduleName;
     private final PublicationRepository publicationRepository;
     private final PublicationRepositoryImpl publicationRepositoryImpl;
+    private final UserRepository userRepository;
 
-    public PublicationService(PublicationRepository publicationRepository, PublicationRepositoryImpl publicationRepositoryImpl) {
+    public PublicationService(PublicationRepository publicationRepository, PublicationRepositoryImpl publicationRepositoryImpl, UserRepository userRepository) {
         this.publicationRepository = publicationRepository;
         this.publicationRepositoryImpl = publicationRepositoryImpl;
+        this.userRepository = userRepository;
     }
 
     public Page<PublicationDto> findPublicationList(Pageable pageable, PublicationSearchDto publicationSearchDto) {
         Page<Publication> publicationList = null;
         Page<PublicationDto> publicationDtoList = null;
+        String publicationSearchType = EmptyUtil.isEmpty(publicationSearchDto.getPublicationSearchType()) ? "Show All" : publicationSearchDto.getPublicationSearchType().getSearchPublicationType();
 
         pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1, pageable.getPageSize(), Sort.Direction.DESC, "idx");
 
-        if ("Show All".equals(publicationSearchDto.getPublicationSearchType().getSearchPublicationType())) {
+        if ("Show All".equals(publicationSearchType)) {
             switch (publicationSearchDto.getSearchType()) {
                 case "TITLE":
                     publicationList = publicationRepository.findAllByTitleContaining(pageable, publicationSearchDto.getKeyword());
@@ -88,7 +92,7 @@ public class PublicationService {
             }
         }
 
-        publicationDtoList = new PageImpl<PublicationDto>(PublicationMapper.INSTANCE.toDto(publicationList.getContent()), pageable, publicationList.getTotalElements());
+        publicationDtoList = new PageImpl<>(PublicationMapper.INSTANCE.toDto(publicationList.getContent()), pageable, publicationList.getTotalElements());
 
         // NewIcon 판별
         for (PublicationDto publicationDto : publicationDtoList) {
@@ -102,7 +106,7 @@ public class PublicationService {
         List<Publication> publicationList = null;
         List<PublicationDto> publicationDtoList = null;
 
-        publicationList = publicationRepositoryImpl.findTop10ByPublicationSearchDto(lastIdx, publicationSearchDto);
+        publicationList = publicationRepositoryImpl.findTop15ByPublicationSearchDto(lastIdx, publicationSearchDto);
 
         // Publication -> PublicationDto
         publicationDtoList = PublicationMapper.INSTANCE.toDto(publicationList);
@@ -126,11 +130,9 @@ public class PublicationService {
         if (idx == 0) {
             publicationDto.setAccess(true);
         }
-        // Update: isAccess 메소드에 따라 접근 가능 및 불가
-        else if (AccessCheck.isAccessInModuleWeb(publicationDto.getCreatedBy())) {
-            publicationDto.setAccess(true);
-        } else {
-            publicationDto.setAccess(false);
+        // Update: isAccessInGeneral 메소드에 따라 접근 가능 및 불가
+        else {
+            publicationDto.setAccess(AccessCheck.isAccessInGeneral(publicationDto.getCreatedBy(), userRepository.findByUsername(publicationDto.getCreatedBy()).getAuthorityType().name()));
         }
 
         publicationRepositoryImpl.updateViewsByIdx(idx);

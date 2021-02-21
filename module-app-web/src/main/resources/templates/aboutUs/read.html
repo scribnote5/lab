@@ -8,68 +8,82 @@
 </head>
 
 <body>
-<div id="wrapper">
-    <div id="page-content-wrapper">
-        <!-- header -->
-        <div th:replace="layout/header::header"></div>
+<div id="page-content-wrapper">
+    <!-- header -->
+    <div th:replace="layout/header::header"></div>
 
-        <div class="container">
-            <div class="page-header breadcrumbs" data-aos="fade-up" data-aos-delay="100">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h2>About Us</h2>
-                    <ol>
-                        <li>Home</li>
-                        <li>About Us Detail</li>
-                    </ol>
-                </div>
+    <div class="container">
+        <div class="page-header breadcrumbs" data-aos="fade-up">
+            <div class="d-flex justify-content-between align-items-center" data-aos="fade-up">
+                <h2>About Us</h2>
+                <ol>
+                    <li>Home</li>
+                    <li>About Us Detail</li>
+                </ol>
             </div>
+        </div>
 
-            <div class="mt-5 ml-2 about-us" data-aos="fade-up" data-aos-delay="150">
-                <div class="row">
-                    <div class="who-we-are col-lg-6 order-1 order-lg-1">
-                        <h3 class="mb-4">Who we are</h3>
-                        <span th:utext="${#strings.isEmpty(aboutUsDto)} ? 'No content.' : ${aboutUsDto.content}"></span>
+        <div id="loading" class="row justify-content-center">
+            <img th:src="@{/images/loading.gif}" alt="Loading…"/>
+        </div>
+
+        <div class="page-content" data-aos="fade-up">
+            <div class="mt-5 ml-2 about-us">
+                <div class="who-we-are">
+                    <h3 class="mb-3">Who we are</h3>
+                    <span th:utext="${#strings.isEmpty(aboutUsDto)} ? 'No content.' : ${aboutUsDto.content}"></span>
+                </div>
+
+                <div class="row mt-5">
+                    <div class="col-md-6 d-md-flex align-items-md-stretch">
+                        <div class="count-box">
+                            <i class="far fa-calendar"></i>
+                            <span class="count-number" data-toggle="counter-up" th:text="${labMaintenanceYears}"></span>
+                            <span class="count-title">&nbsp;Years</span><br>
+
+                            <span class="count-info" th:text="'Since ' + ${#temporals.format(labStartDate,'yyyy-MM-dd')}"></span> <br>
+                            <span class="count-content" th:text="${labMaintenanceYearsCountContent}"></span>
+                        </div>
                     </div>
-                    <div class="lab-status col-lg-6 order-2 order-lg-2">
-                        <div class="row">
-                            <div class="col-md-6 d-md-flex align-items-md-stretch">
-                                <div class="count-box">
-                                    <i class="icofont-clock-time"></i>
-                                    <span class="count-number" data-toggle="counter-up" th:text="${aboutUsDto.labMaintenanceYears}"></span> <br>
-                                    <span class="count-info" th:text="'Since ' + ${#temporals.format(aboutUsDto.labStartDate,'yyyy-MM-dd')}"></span> <br>
-                                    <span class="count-content" th:text="${aboutUsDto.labMaintenanceYearsCountContent}"></span>
-                                </div>
-                            </div>
+                    <div class="col-md-6 d-md-flex align-items-md-stretch">
+                        <div class="count-box">
+                            <i class="fas fa-users"></i>
+                            <span class="count-number" data-toggle="counter-up" th:text="${attendingPhdUserCount + attendingMsUserCount}"></span>
+                            <span class="count-title">&nbsp;Members</span><br>
 
-                            <div class="col-md-6 d-md-flex align-items-md-stretch">
-                                <div class="count-box">
-                                    <i class="icofont-people"></i>
-                                    <span class="count-number" data-toggle="counter-up" th:text="${aboutUsDto.attendingPhdUserCount + aboutUsDto.attendingMsUserCount}  "></span> <br>
-                                    <span class="count-info" th:text="'Ph.D Students: ' + ${aboutUsDto.attendingPhdUserCount}"></span>, <span class="count-info" th:text="'M.S Students: ' + ${aboutUsDto.attendingMsUserCount}"></span> <br>
-                                    <span class="count-content" th:text="${aboutUsDto.userCountContent}"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6 d-md-flex align-items-md-stretch">
-                                <div class="count-box">
-                                    <i class="icofont-papers"></i>
-                                    <span class="count-number" data-toggle="counter-up" th:text="${aboutUsDto.publicationCount}"></span> <br>
-                                    <span class="count-content" th:text="${aboutUsDto.publicationCountContent}">
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="col-md-6 d-md-flex align-items-md-stretch">
-                                <div class="count-box">
-                                    <i class="icofont-document-folder"></i>
-                                    <span class="count-number" data-toggle="counter-up" th:text="${aboutUsDto.projectCount}"></span> <br>
-                                    <span class="count-content" th:text="${aboutUsDto.projectCountContent}"></span>
-                                </div>
-                            </div>
+                            <span class="count-info" th:text="'Ph.D Students: ' + ${attendingPhdUserCount}"></span>, <span class="count-info" th:text="'M.S Students: ' + ${attendingMsUserCount}"></span><br>
+                            <span class="count-content" th:text="${userCountContent}"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 d-md-flex align-items-md-stretch">
+                        <div class="count-box">
+                            <i class="fas fa-copy"></i>
+                            <span class="count-number" data-toggle="counter-up" th:text="${publicationCount}"></span>
+                            <span class="count-title">&nbsp;Papers</span><br>
+
+                            <span class="count-content" th:text="${publicationCountContent}"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 d-md-flex align-items-md-stretch">
+                        <div class="count-box">
+                            <i class="fas fa-folder-open"></i>
+                            <span class="count-number" data-toggle="counter-up" th:text="${projectCount}"></span>
+                            <span class="count-title">&nbsp;Projects</span><br>
+
+                            <span class="count-content" th:text="${projectCountContent}"></span>
                         </div>
                     </div>
                 </div>
+
+                <div class="count-box">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <span class="count-title"> Location</span><br>
+
+                    <iframe class="mt-3" th:attr="src=@{|${@environment.getProperty('google.map.embeded.api.url')}|}" allow="fullscreen" frameborder="0"></iframe>
+                </div>
             </div>
 
-            <nav class="mt-5" data-aos="fade-up" data-aos-delay="200">
+            <nav class="mt-5">
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     <a class="nav-item nav-link link-black active" id="learn-more-read-tab" data-toggle="tab" href="#learn-more-read" role="tab" aria-controls="learn-more-read" aria-selected="false">Learn More Read</a>
                     <a class="nav-item nav-link link-black" id="learn-more-video-tab" data-toggle="tab" href="#learn-more-video" role="tab" aria-controls="learn-more-video" aria-selected="false">Learn More Video</a>
@@ -79,8 +93,8 @@
                 <div class="tab-pane fade show active mt-4 learn-more-read-wrapper" id="learn-more-read" role="tabpanel" aria-labelledby="learn-more-read-tab">
                     <div th:if="!${#lists.isEmpty(learnMoreReadDtoList)}">
                         <div>
-                            <button id="prev" class="btn-main">Previous</button>
-                            <button id="next" class="btn-main mx-3">Next</button>
+                            <button id="prev" class="btn-main btn-sm mr-2">Previous</button>
+                            <button id="next" class="btn-main btn-sm">Next</button>
                             <span class="float-right"> Page: <span id="page_num"></span> / <span id="page_count"></span> </span>
                         </div>
                         <canvas id="the-canvas" class="learn-more-read-content img-thumbnail"></canvas>
@@ -93,8 +107,6 @@
                     </video>
                 </div>
             </div>
-
-            <div class="mt-5 mb-3"></div>
         </div>
     </div>
 </div>

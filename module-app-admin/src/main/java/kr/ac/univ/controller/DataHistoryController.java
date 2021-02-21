@@ -22,7 +22,7 @@ public class DataHistoryController {
 
     // List
     @GetMapping("/list")
-    public String dataHistoryList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
+    public String dataHistoryList(Pageable pageable, SearchDto searchDto, Model model) {
         model.addAttribute("dataHistoryDtoList", dataHistoryService.findDataHistoryList(pageable, searchDto));
 
         return "dataHistory/list";

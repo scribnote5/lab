@@ -8,226 +8,247 @@
     <title th:if="${userDto.idx}" th:text="${@environment.getProperty('title')} + ' | User Update'"></title>
 </head>
 <body>
-<div id="wrapper">
-    <div id="page-content-wrapper">
-        <!-- header -->
-        <div th:replace="layout/header::header"></div>
+<div id="page-content-wrapper">
+    <!-- header -->
+    <div th:replace="layout/header::header"></div>
 
-        <div class="container">
-            <form name="form" id="form" th:object="${userDto}" action="#">
-                <div class="page-header breadcrumbs" data-aos="fade-up" data-aos-delay="100">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h2>Member Update</h2>
-                        <ol>
-                            <li>Home</li>
-                            <li>Member Update</li>
-                        </ol>
-                    </div>
+    <div class="container member-form">
+        <form name="form" id="form" th:object="${userDto}" action="#">
+            <div class="page-header breadcrumbs">
+                <div class="d-flex justify-content-between align-items-center" data-aos="fade-up">
+                    <h2 th:if="!*{idx}">Member Register</h2>
+                    <h2 th:if="*{idx}">Member Update</h2>
+                    <ol>
+                        <li>Home</li>
+                        <li th:if="!*{idx}">Member Register</li>
+                        <li th:if="*{idx}">Member Update</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div id="loading" class="row justify-content-center">
+                <img th:src="@{/images/loading.gif}" alt="Loading…"/>
+            </div>
+
+            <div class="page-content" data-aos="fade-up">
+                <div class="mt-4 mb-2 text-right">
+                    <span class="required-field">*</span>: Required field.<br>
+                    <span class="user-page-show-field">*</span>: User page show field.
                 </div>
 
-                <div class="mt-5" data-aos="fade-up" data-aos-delay="150">
-                    <div class="mb-2 text-right">
-                        <span class="required-field">*</span>: Required field.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <br>
-                        <span class="user-page-show-field">*</span>: User page show field.
-                    </div>
+                <table class="table mobile-table-form">
+                    <colgroup>
+                        <col width="17.5%"/>
+                        <col width="82.5%"/>
+                    </colgroup>
 
-                    <table class="table">
-                        <colgroup>
-                            <col width="17.5%"/>
-                            <col width="42.5%"/>
-                            <col width="17.5%"/>
-                            <col width="22.5%"/>
-                        </colgroup>
-                        <tr>
-                            <th colspan="4" class="sub-item-title">Required Information</th>
-                        </tr>
-                        <tr>
-                            <th>ID<span class="required-field">*</span></th>
-                            <td><input type="text" name="username" id="username" class="form-control form-control-sm" th:value="*{username}"/></td>
-                            <td>
-                                <button id="validationUsername" type="button" class="btn-main">Duplicate check</button>
-                            </td>
-                            <td><span id="usernameCheckResult"></span></td>
-                        </tr>
-                        <tr>
-                            <th>Password<span class="required-field">*</span></th>
-                            <td colspan="2"><input type="password" name="password" id="password" class="form-control form-control-sm" onchange="validatePassword()"/></td>
-                            <td colspan="2"></td>
-                        </tr>
-                        <tr>
-                            <th>Password Check<span class="required-field">*</span></th>
-                            <td colspan="2"><input type="password" name="checkPassword" id="checkPassword" onchange="validatePassword()" class="form-control form-control-sm"/></td>
-                            <td><span id="passwordCheckResult"></span></td>
-                        </tr>
-                        <tr>
-                            <th>Photo<span class="required-field">*</span><span class="user-page-show-field">*</span></th>
-                            <td colspan="2">
-                                <div class="custom-file py-md-4">
-                                    <input type="file" class="custom-file-input" id="file" name="file">
-                                    <label class="custom-file-label" for="file">Choose file.</label>
-                                </div>
-                                Uploaded Photo File:
-                                <span id="imgData" th:if="*{attachedFileList.size()} == 0" th:text="No + ' ' + file."></span>
-                                <span id="imgData" th:if="*{attachedFileList.size()} != 0"
+                    <tr>
+                        <th colspan="2" class="sub-item-title">Required Information</th>
+                    </tr>
+                    <tr>
+                        <th>ID<span class="required-field">*</span></th>
+                        <td>
+                            <input th:readonly="*{idx}" type="text" name="username" id="username" class="form-control form-control-sm mb-1" th:value="*{username}"/>
+                            <span id="usernameCheckResult" class="mt-2"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Password<span class="required-field">*</span></th>
+                        <td><input type="password" name="password" class="form-control form-control-sm" onchange="validatePassword()"/></td>
+                    </tr>
+                    <tr>
+                        <th>Password Check<span class="required-field">*</span></th>
+                        <td>
+                            <input type="password" name="checkPassword" onchange="validatePassword()" class="form-control form-control-sm mb-1"/>
+                            <span id="passwordCheckResult"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Photo<span class="user-page-show-field">*</span></th>
+                        <td>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="file" name="file">
+                                <label class="custom-file-label col-form-label-sm" for="file">Choose file.</label>
+                            </div>
+                            <div class="mt-1">
+                                <strong>Uploaded Photo File:</strong>
+                                <span th:if="*{attachedFileList.size()} == 0" th:text="No + ' ' + file."></span>
+                                <span th:if="*{attachedFileList.size()} != 0"
                                       th:attr="onclick=|location.href='${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/*{attachedFileList[0].savedFileName}'|"
                                       th:text="*{attachedFileList[0].fileName} + ',&nbsp;' + 'File size: ' + *{attachedFileList[0].fileSize}"></span>
-                            </td>
-                            <td>
-                                <img id="imgPreview" th:if="*{attachedFileList.size()} == 0" class="img-thumbnail user-img-preview float-right" th:attr="src=@{/images/no-preview-available.jpg}"/>
-                                <img id="imgPreview" th:if="*{attachedFileList.size()} != 0" class="img-thumbnail user-img-preview float-right"
-                                     th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Korean Name<span class="required-field">*</span><span class="user-page-show-field">*</span></th>
-                            <td colspan="2"><input type="text" name="koreanName" id="koreanName" class="form-control form-control-sm" th:value="*{koreanName}"/></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <th>English Name<span class="required-field">*</span><span class="user-page-show-field">*</span></th>
-                            <td colspan="2"><input type="text" name="englishName" id="englishName" class="form-control form-control-sm" th:value="*{englishName}"/></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <th>User Type<span class="required-field">*</span><span class="user-page-show-field">*</span></th>
-                            <td colspan="2">
-                                <select name="userType" th:field="*{userType}" class="form-control form-control-sm">
-                                    <option th:value="FACULTY">Faculty</option>
-                                    <option th:value="FULL_TIME_PhD">Ph.D. Full Time</option>
-                                    <option th:value="PART_TIME_PhD">Ph.D. Part Time</option>
-                                    <option th:value="FULL_TIME_MS">M.S. Full Time</option>
-                                    <option th:value="PART_TIME_MS">M.S. Part Time</option>
-                                    <option th:value="BS">B.S.</option>
-                                </select>
-                            </td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <th>User Status<span class="required-field">*</span><span class="user-page-show-field">*</span></th>
-                            <td colspan="2">
-                                <select name="userStatus" th:field="*{userStatus}" class="form-control form-control-sm">
-                                    <option th:value="ATTENDING">Attending</option>
-                                    <option th:value="GRADUATED">Graduated</option>
-                                </select>
-                            </td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <th colspan="4" class="sub-item-title">Self Introduction<span class="user-page-show-field">*</span></th>
-                        </tr>
-                        <!-- summernote -->
-                        <td colspan="4"><textarea name="introduction" id="summernote" class="summernote" th:text="*{introduction}"></textarea></td>
-                        </tr>
-                        <tr>
-                            <th colspan="4" class="sub-item-title">Personal Information</th>
-                        </tr>
-                        <tr>
-                            <th>Admission Date</th>
-                            <td colspan="2"><input type="date" name="admissionDate" class="form-control form-control-sm admission-graduated-date" th:value="*{admissionDate}"/></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <th>Graduated Date<span class="user-page-show-field">*</span></th>
-                            <td colspan="2"><input type="date" name="graduatedDate" class="form-control form-control-sm admission-graduated-date" th:value="*{graduatedDate}"/></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <th>Gender</th>
-                            <td colspan="2">
-                                <div class="custom-control custom-radio custom-control-inline">
-                                    <input type="radio" class="custom-control-input" name="gender" id="male" th:value="MALE" th:checked="*{gender?.name() == 'MALE' ||  gender?.name() == null}">
-                                    <label class="custom-control-label" th:for="male"><strong> Male </strong></label>
-                                </div>
-                                <div class="custom-control custom-radio custom-control-inline">
-                                    <input type="radio" class="custom-control-input" name="gender" id="female" th:value="FEMALE" th:checked="*{gender?.name() == 'FEMALE'}">
-                                    <label class="custom-control-label" th:for="female"><strong> Female </strong></label>
-                                </div>
-                            </td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <th>Birth Date</th>
-                            <td colspan="2"><input type="date" name="birthDate" id="birthDate" class="form-control form-control-sm birth-date" th:value="*{birthDate}"/></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <th>Workplace<span class="user-page-show-field">*</span></th>
-                            <td colspan="2"><input type="text" name="workplace" class="form-control form-control-sm" th:value="*{workplace}"/></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <th colspan="4" class="sub-item-title">Contact Information</th>
-                        </tr>
-                        <tr>
-                            <th>Contact</th>
-                            <td colspan="2"><input type="tel" name="contact" id="contact" class="form-control form-control-sm" th:value="*{contact}" placeholder="000-0000-0000"/></td>
-                            <td><span id="contactCheckResult"></span></td>
-                        </tr>
-                        <tr>
-                            <th>Messenger ID(Skype)<span class="user-page-show-field">*</span></th>
-                            <td colspan="2"><input type="text" name="messengerId" id="messengerId" class="form-control form-control-sm" th:value="*{messengerId}"/></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <th>Email<span class="user-page-show-field">*</span></th>
-                            <td colspan="2"><input type="text" name="email" id="email" class="form-control form-control-sm" th:value="*{email}"/></td>
-                            <td><span id="emailCheckResult"></span></td>
-                        </tr>
-                        <tr>
-                            <th>Private Email</th>
-                            <td colspan="2"><input type="text" name="privateEmail" id="privateEmail" class="form-control form-control-sm" th:value="*{privateEmail}"/></td>
-                            <td><span id="privateEmailCheckResult"></span></td>
-                        </tr>
-                        <tr>
-                            <th>Github<span class="user-page-show-field">*</span></th>
-                            <td colspan="2"><input type="text" name="github" class="form-control form-control-sm" th:value="*{github}"/></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <th>Linked In<span class="user-page-show-field">*</span></th>
-                            <td colspan="2"><input type="text" name="linkedIn" class="form-control form-control-sm" th:value="*{linkedIn}"/></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <th>External Web Page<span class="user-page-show-field">*</span></th>
-                            <td colspan="2"><input type="text" name="externalWebPage" class="form-control form-control-sm" th:value="*{externalWebPage}"/></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <th colspan="4" class="sub-item-title">Additional Information</th>
-                        </tr>
-                        <tr th:if="*{idx}">
-                            <th>Created Date</th>
-                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
-                            <td></td>
-                        </tr>
-                        <tr th:if="*{idx}">
-                            <th>Modified Date</th>
-                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
-                            <td></td>
-                        </tr>
-                    </table>
-                </div>
+                            </div>
+                            <div class="mt-2">
+                                <img th:if="*{attachedFileList.size()} == 0" id="imgPreview" class="img-thumbnail user-img-preview float-right" th:attr="src=@{/images/no-preview-available.jpg}"/>
+                                <a th:if="*{attachedFileList.size()} != 0" th:href="@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-image/*{attachedFileList[0].savedFileName}|}"
+                                   data-gall="userPhoto" class="venobox" th:title="*{englishName}">
+                                    <img id="imgPreview" class="img-thumbnail user-img-preview float-right"
+                                         th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-image/*{attachedFileList[0].savedFileName}|}"/>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Korean Name<span class="required-field">*</span><span class="user-page-show-field">*</span></th>
+                        <td><input type="text" name="koreanName" class="form-control form-control-sm" th:value="*{koreanName}"/></td>
+                    </tr>
+                    <tr>
+                        <th>English Name<span class="required-field">*</span><span class="user-page-show-field">*</span></th>
+                        <td><input type="text" name="englishName" class="form-control form-control-sm" th:value="*{englishName}"/></td>
+                    </tr>
+                    <tr>
+                        <th>User Type<span class="required-field">*</span><span class="user-page-show-field">*</span></th>
+                        <td>
+                            <select name="userType" th:field="*{userType}" class="form-control form-control-sm">
+                                <option th:value="A_FACULTY">Faculty</option>
+                                <option th:value="B_FULL_TIME_PHD">Ph.D. Full Time</option>
+                                <option th:value="C_FULL_TIME_MS">M.S. Full Time</option>
+                                <option th:value="D_PART_TIME_PHD">Ph.D. Part Time</option>
+                                <option th:value="E_PART_TIME_MS">M.S. Part Time</option>
+                                <option th:value="F_BS">B.S.</option>
+                            </select>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>User Status<span class="required-field">*</span><span class="user-page-show-field">*</span></th>
+                        <td>
+                            <select name="userStatus" th:field="*{userStatus}" class="form-control form-control-sm">
+                                <option th:value="ATTENDING">Attending</option>
+                                <option th:value="GRADUATED">Graduated</option>
+                            </select>
+                        </td>
+                    </tr>
 
-                <div class="row justify-content-between mt-5 mb-4">
-                    <div class="col-auto mx-3">
-                        <a href="/user/list" class="btn btn-secondary col-auto">Move to List</a>
+                    <tr>
+                        <th colspan="2" class="sub-item-title">Self Introduction<span class="user-page-show-field">*</span></th>
+                    </tr>
+                    <td colspan="2">
+                        <div name="introduction" id="content" th:utext="*{introduction}"></div>
+                    </td>
+                    <tr>
+                        <th colspan="2" class="sub-item-title">Personal Information</th>
+                    </tr>
+                    <tr>
+                        <th>Admission Date</th>
+                        <td><input type="date" name="admissionDate" class="form-control form-control-sm" th:value="*{admissionDate}"/></td>
+                    </tr>
+                    <tr>
+                        <th>Graduated Date<span class="user-page-show-field">*</span></th>
+                        <td><input type="date" name="graduatedDate" class="form-control form-control-sm" th:value="*{graduatedDate}"/></td>
+                    </tr>
+                    <tr>
+                        <th>Gender</th>
+                        <td>
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" class="custom-control-input" name="gender" id="male" th:value="MALE" th:checked="*{gender?.name() == 'MALE' ||  gender?.name() == null}">
+                                <label class="custom-control-label" th:for="male"><strong> Male </strong></label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" class="custom-control-input" name="gender" id="female" th:value="FEMALE" th:checked="*{gender?.name() == 'FEMALE'}">
+                                <label class="custom-control-label" th:for="female"><strong> Female </strong></label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Birth Date</th>
+                        <td><input type="date" name="birthDate" class="form-control form-control-sm" th:value="*{birthDate}"/></td>
+                    </tr>
+                    <tr>
+                        <th>Workplace<span class="user-page-show-field">*</span></th>
+                        <td><input type="text" name="workplace" class="form-control form-control-sm" th:value="*{workplace}"/></td>
+                    </tr>
+
+                    <tr>
+                        <th colspan="2" class="sub-item-title">Contact Information</th>
+                    </tr>
+                    <tr>
+                        <th>Contact</th>
+                        <td>
+                            <input type="tel" name="contact" id="contact" class="form-control form-control-sm mb-1" th:value="*{contact}" placeholder="000-0000-0000"/>
+                            <span id="contactCheckResult"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Messenger ID(Skype)<span class="user-page-show-field">*</span></th>
+                        <td><input type="text" name="messengerId" class="form-control form-control-sm" th:value="*{messengerId}"/></td>
+                    </tr>
+                    <tr>
+                        <th>Email<span class="user-page-show-field">*</span></th>
+                        <td><input type="text" name="email" id="email" class="form-control form-control-sm mb-1" th:value="*{email}"/>
+                            <span id="emailCheckResult"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Private Email</th>
+                        <td>
+                            <input type="text" name="privateEmail" id="privateEmail" class="form-control form-control-sm mb-1" th:value="*{privateEmail}"/>
+                            <span id="privateEmailCheckResult"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Github<span class="user-page-show-field">*</span></th>
+                        <td><input type="text" name="github" class="form-control form-control-sm" th:value="*{github}"/></td>
+                    </tr>
+                    <tr>
+                        <th>Linked In<span class="user-page-show-field">*</span></th>
+                        <td><input type="text" name="linkedIn" class="form-control form-control-sm" th:value="*{linkedIn}"/></td>
+                    </tr>
+                    <tr>
+                        <th>External Web Page<span class="user-page-show-field">*</span></th>
+                        <td><input type="text" name="externalWebPage" class="form-control form-control-sm" th:value="*{externalWebPage}"/></td>
+                    </tr>
+
+                    <tr th:if="*{idx}">
+                        <th colspan="2" class="sub-item-title">Additional Information</th>
+                    </tr>
+                    <tr th:if="*{idx}">
+                        <th>Created Date</th>
+                        <td><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                    </tr>
+                    <tr th:if="*{idx}">
+                        <th>Last Modified Date</th>
+                        <td><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                    </tr>
+                    <tr th:if="*{idx}">
+                        <th>Created By</th>
+                        <td><input type="text" class="form-control form-control-sm" readonly th:value="*{createdBy}"/></td>
+                    </tr>
+                    <tr th:if="*{idx}">
+                        <th>Last Modified By</th>
+                        <td><input type="text" class="form-control form-control-sm" readonly th:value="*{lastModifiedBy}"/></td>
+                    </tr>
+                    <tr th:if="*{idx}">
+                        <th>Views</th>
+                        <td><input type="text" class="form-control form-control-sm" readonly th:value="*{views}"/></td>
+                    </tr>
+                    <tr th:if="!*{idx}">
+                        <td colspan="2" class="text-right">
+                            <span class="notice"><i class="fas fa-exclamation"></i> &nbsp; You can use the account if the manager approves it.</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="10"></td>
+                    </tr>
+                </table>
+
+                <div class="row justify-content-between mt-4 mb-4">
+                    <div class="col-auto">
+                        <a href="/user/list" class="btn btn-sm btn-secondary col-auto">Move to List</a>
                     </div>
-                    <div class="col-auto mx-3">
-                        <button th:if="!*{idx}" id="insert" type="button" class="btn btn-primary cold-auto">Register</button>
-                        <button th:if="*{idx}" id="update" type="button" class="btn btn-primary col-auto">Update</button>
+                    <div class="col-auto ml-2">
+                        <button th:if="!*{idx}" id="insert" type="button" class="btn btn-sm btn-primary cold-auto">Register</button>
+                        <button th:if="*{idx}" id="update" type="button" class="btn btn-sm btn-primary col-auto">Update</button>
                     </div>
                 </div>
 
                 <!-- input type="hidden" -->
                 <input type="hidden" name="idx" th:value="*{idx}"/>
-                <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
-                <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
-                <input type="hidden" name="activeStatus" th:value="*{activeStatus}"/>
-                <input type="hidden" name="authorityType" th:value="*{authorityType}"/>
-            </form>
-        </div>
+                <input type="hidden" name="createdBy"/>
+                <input type="hidden" name="lastModifiedBy"/>
+                <input type="hidden" name="activeStatus" th:value="'ACTIVE'"/>
+                <input type="hidden" name="authorityType" th:value="!*{idx} ? 'NON_USER' : *{authorityType}"/>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -238,30 +259,17 @@
 <th:block th:replace="layout/script.html"></th:block>
 
 <!-- javascript -->
-<script th:inline="javascript">
-    var totalFileSize = 0;
-    var exit = null;
-    var usernameVaildation = false;
-    var passwordVaildation = false;
-    var emailVaildation = false;
-    var privateEmailVaildation = false;
-    var contactVaildation = false;
+<script th:src="@{/js/ckeditor-editor-init.js}"></script>
+<script th:src="@{/js/file-upload/single-img-file-upload-input.js}"></script>
 
-    $(document).ready(function () {
-        <!-- summernote setting -->
-        $("#summernote").summernote({
-            height: 500,	// 에디터 높이
-            minHeight: null,	// 최소 높이
-            maxHeight: null,	// 최대 높이
-            // focus: true,	// 에디터 로딩후 포커스를 맞출지 여부
-            lang: "ko-KR",// 한글 설정
-            placeholder: "The editor's max input size of bytes is 16777215(16 MB)."	//placeholder 설정
-        });
-        $("#summernote").summernote('fontSize', 14);
-    });
+<script th:inline="javascript">
+    var usernameValidation = false;
+    var passwordValidation = false;
+    var emailValidation = true;
+    var privateEmailValidation = true;
+    var contactValidation = true;
 
     function deleteUser(userIdx) {
-        // 회원 삭제
         $.ajax({
             url: moduleAppApiAddress + "/api/users/" + document.getElementsByName("idx")[0].value,
             type: "delete",
@@ -279,46 +287,37 @@
 
     /* username 검사 */
     $("#username").on("change", function () {
+        usernameValidation = false;
+
         if (!validateById(document.getElementsByName("username")[0].value)) {
-            Alert.fire({
-                icon: "error",
-                text: "The ID must be only lower case letters and numbers are available, more than 4 characters and less than 16 characters." +
-                    "\n(Number of characters currently entered: " + document.getElementsByName("username")[0].value.length + ")."
-            }).then((result) => {
-                document.getElementsByName("username")[0].focus();
-                document.getElementsByName("username")[0].value = "";
-                document.getElementById("usernameCheckResult").innerHTML = "";
-            })
+            document.getElementById("usernameCheckResult").innerHTML = "This ID is not valid.";
+            document.getElementById("usernameCheckResult").style.color = "red";
+            usernameValidation = false;
 
             return false;
         } else {
-            return true;
+            $.ajax({
+                url: moduleAppApiAddress + "/api/users/validation/username/" + document.getElementsByName("username")[0].value,
+                type: "get",
+                dataType: "text",
+                contentType: "application/json",
+                async: false,
+            })
+                .done(function (msg) {
+                    if (msg == "false") {
+                        document.getElementById("usernameCheckResult").innerHTML = "This ID is not duplicated.";
+                        document.getElementById("usernameCheckResult").style.color = "blue";
+                        usernameValidation = true;
+                    } else {
+                        document.getElementById("usernameCheckResult").innerHTML = "This ID is already in use.";
+                        document.getElementById("usernameCheckResult").style.color = "red";
+                        usernameValidation = false;
+                    }
+                })
+                .fail(function (msg) {
+                    parseErrorMsg(msg);
+                })
         }
-    });
-
-    /* username 중복 검사 */
-    $("#validationUsername").click(function () {
-        $.ajax({
-            url: moduleAppApiAddress + "/api/users/validation/username/" + document.getElementsByName("username")[0].value,
-            type: "get",
-            dataType: "text",
-            contentType: "application/json",
-            async: false,
-        })
-            .done(function (msg) {
-                if (msg == "false") {
-                    document.getElementById("usernameCheckResult").innerHTML = "This user id is not duplicated.";
-                    document.getElementById("usernameCheckResult").style.color = "blue";
-                    usernameVaildation = true;
-                } else {
-                    document.getElementById("usernameCheckResult").innerHTML = "This user id is already in use.";
-                    document.getElementById("usernameCheckResult").style.color = "red";
-                    usernameVaildation = false;
-                }
-            })
-            .fail(function (msg) {
-                parseErrorMsg(msg);
-            })
     });
 
     /* passowrd 검사 */
@@ -331,18 +330,18 @@
                 if (password == checkPassword) {
                     document.getElementById("passwordCheckResult").innerHTML = "Password matches.";
                     document.getElementById("passwordCheckResult").style.color = "blue";
-                    passwordVaildation = true;
+                    passwordValidation = true;
                 } else {
                     document.getElementById("passwordCheckResult").innerHTML = "Passwords do not match.";
                     document.getElementById("passwordCheckResult").style.color = "red";
-                    passwordVaildation = false;
+                    passwordValidation = false;
                 }
             } else if (password != "" && checkPassword == "") {
                 document.getElementById("passwordCheckResult").innerHTML = "Check password.";
                 document.getElementById("passwordCheckResult").style.color = "red";
-                passwordVaildation = false;
+                passwordValidation = false;
             } else {
-                passwordVaildation = false;
+                passwordValidation = false;
             }
         } else {
             Alert.fire({
@@ -364,14 +363,14 @@
         if (regExp.test(email)) {
             document.getElementById("emailCheckResult").innerHTML = "Email format is valid.";
             document.getElementById("emailCheckResult").style.color = "blue";
-            emailVaildation = true;
+            emailValidation = true;
         } else if (!validateByWhiteSpace(email)) {
             document.getElementById("emailCheckResult").innerHTML = "";
-            emailVaildation = true;
+            emailValidation = true;
         } else {
             document.getElementById("emailCheckResult").innerHTML = "Email format is not valid.";
             document.getElementById("emailCheckResult").style.color = "red";
-            emailVaildation = false;
+            emailValidation = false;
         }
     });
 
@@ -383,14 +382,14 @@
         if (regExp.test(privateEmail)) {
             document.getElementById("privateEmailCheckResult").innerHTML = "Email format is valid.";
             document.getElementById("privateEmailCheckResult").style.color = "blue";
-            privateEmailVaildation = true;
+            privateEmailValidation = true;
         } else if (!validateByWhiteSpace(privateEmail)) {
             document.getElementById("privateEmailCheckResult").innerHTML = "";
-            privateEmailVaildation = true;
+            privateEmailValidation = true;
         } else {
             document.getElementById("privateEmailCheckResult").innerHTML = "Email format is not valid.";
             document.getElementById("privateEmailCheckResult").style.color = "red";
-            privateEmailVaildation = false;
+            privateEmailValidation = false;
         }
     });
 
@@ -402,63 +401,33 @@
         if (regExp.test(contact)) {
             document.getElementById("contactCheckResult").innerHTML = "Contact format is valid.";
             document.getElementById("contactCheckResult").style.color = "blue";
-            contactVaildation = true;
+            contactValidation = true;
         } else if (!validateByWhiteSpace(contact)) {
-            document.getElementById("privateEmailCheckResult").innerHTML = "";
-            contactVaildation = true;
+            document.getElementById("contactCheckResult").innerHTML = "";
+            contactValidation = true;
         } else {
             document.getElementById("contactCheckResult").innerHTML = "Contact format is not valid.";
             document.getElementById("contactCheckResult").style.color = "red";
-            contactVaildation = false;
+            contactValidation = false;
         }
     });
-
-    $("#file").on("change", function () {
-        if (validateImageFile(this.files[0])) {
-            document.getElementById("imgData").innerHTML = this.files[0].name + ", File size: " + convertFileSize(this.files[0].size);
-            readURL(this);
-        } else {
-            return false;
-        }
-    });
-
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                $('#imgPreview').attr('src', e.target.result);
-            }
-
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
 </script>
 
-<script th:if="${userDto?.idx}" th:inline="javascript">
-    // 초기 validation을 모두 true로 설정한다.
-    passwordVaildation = true;
-    emailVaildation = true;
-    privateEmailVaildation = true;
-    contactVaildation = true;
-
-    $("#update").click(function () {
-        var oriUsername = [[${userDto.username}]];
-        var oriPassword = [[${userDto.password}]];
-
+<script th:if="!${userDto?.idx}">
+    $("#insert").click(function () {
         // validation (input tag mame, length or size)
-        if (!(validateByExternal("username", !usernameVaildation && (document.getElementsByName("username")[0].value != oriUsername), "ID")
-            && validateByExternal("password", !passwordVaildation && (document.getElementsByName("password")[0].value != oriPassword))
+        if (!(validateByExternal("username", !usernameValidation, "ID")
+            && validateByExternal("password", !passwordValidation)
             && validateByBlank("koreanName")
             && validateByBlank("englishName")
 
-            && validateBySize("introduction", 16777215)
+            && validateByEditor(editor.getData(), 16777215)
 
             && validateByLength("workplace", 255)
 
-            && validateByExternal("email", emailVaildation ^ validateByEmpty(document.getElementsByName("email")[0].value))
-            && validateByExternal("privateEmail", privateEmailVaildation ^ validateByEmpty(document.getElementsByName("privateEmail")[0].value))
-            && validateByExternal("contact", contactVaildation ^ validateByEmpty(document.getElementsByName("contact")[0].value))
+            && validateByExternal("contact", !contactValidation)
+            && validateByExternal("email", !emailValidation)
+            && validateByExternal("privateEmail", !privateEmailValidation)
             && validateByLength("messengerId", 255)
             && validateByLength("github", 255)
             && validateByLength("linkedIn", 255)
@@ -466,8 +435,100 @@
             return false;
         }
 
+        // duplicate submit check
+        if (duplicateSubmitCheck()) return false;
+
+        // 회원 업로드
+        var jsonData = $("#form").serializeObject();
+        jsonData.content = editor.getData();
+        jsonData.createdBy = jsonData.username;
+        jsonData.lastModifiedBy = jsonData.username;
+        var userIdx = 0;
+
+        $.ajax({
+            url: moduleAppApiAddress + "/api/users",
+            type: "post",
+            data: JSON.stringify(jsonData),
+            dataType: "json",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                userIdx = msg;
+                exit = false;
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
+                exit = true;
+            });
+
+        if (exit) return false;
+
+        // 파일 업로드
+        var formData = new FormData();
+
+        formData.append("files", document.getElementsByName("file")[0].files[0]);
+        formData.append("idx", userIdx);
+        formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
+
+        $.ajax({
+            url: moduleAppApiAddress + "/api/users/attachedFile",
+            type: "post",
+            data: formData,
+            dataType: "text",
+            enctype: "multipart/form-data",
+            processData: false,
+            contentType: false,
+            async: false,
+        })
+            .done(function (msg) {
+                localStorage.setItem("result", "/user/login");
+                location.href = "/user?idx=" + userIdx;
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
+                deleteUser(userIdx);
+            });
+    });
+</script>
+
+<script th:if="${userDto?.idx}" th:inline="javascript">
+    // 초기 validation을 모두 true로 설정한다.
+    passwordValidation = true;
+    emailValidation = true;
+    privateEmailValidation = true;
+    contactValidation = true;
+
+    $("#update").click(function () {
+        var oriPassword = [[${userDto.password}]];
+
+        // validation (input tag mame, length or size)
+        if (!(validateByExternal("password", !passwordValidation && (document.getElementsByName("password")[0].value != oriPassword))
+            && validateByBlank("koreanName")
+            && validateByBlank("englishName")
+
+            && validateByEditor(editor.getData(), 16777215)
+
+            && validateByLength("workplace", 255)
+
+            && validateByExternal("contact", !contactValidation)
+            && validateByExternal("email", !emailValidation)
+            && validateByExternal("privateEmail", !privateEmailValidation)
+            && validateByLength("messengerId", 255)
+            && validateByLength("github", 255)
+            && validateByLength("linkedIn", 255)
+        )) {
+            return false;
+        }
+
+        // duplicate submit check
+        if (duplicateSubmitCheck()) return false;
+
         // 회원 수정
         var jsonData = $("#form").serializeObject();
+        jsonData.content = editor.getData();
         var userIdx = +document.getElementsByName("idx")[0].value;
 
         $.ajax({
@@ -490,6 +551,7 @@
             })
             .fail(function (msg) {
                 parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
                 exit = true;
             })
 
@@ -507,6 +569,7 @@
             })
             .fail(function (msg) {
                 parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
                 exit = true;
             });
 
@@ -534,9 +597,8 @@
             })
             .fail(function (msg) {
                 parseErrorMsg(msg);
-                deleteUser(userIdx);
+                duplicateSubmitFlag = false;
             });
-
     });
 </script>
 

@@ -1,7 +1,5 @@
 package kr.ac.univ.noticeBoard.service;
 
-import kr.ac.univ.album.dto.AlbumDto;
-import kr.ac.univ.album.dto.mapper.AlbumMapper;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.SearchDto;
 import kr.ac.univ.noticeBoard.dto.NoticeBoardDto;
@@ -78,7 +76,7 @@ public class NoticeBoardService {
                 break;
         }
 
-        noticeBoardDtoList = new PageImpl<NoticeBoardDto>(NoticeBoardMapper.INSTANCE.toDto(noticeBoardList.getContent()), pageable, noticeBoardList.getTotalElements());
+        noticeBoardDtoList = new PageImpl<>(NoticeBoardMapper.INSTANCE.toDto(noticeBoardList.getContent()), pageable, noticeBoardList.getTotalElements());
 
         // NewIcon 판별
         for (NoticeBoardDto noticeBoardDto : noticeBoardDtoList) {
@@ -115,11 +113,9 @@ public class NoticeBoardService {
         if (idx == 0) {
             noticeBoardDto.setAccess(true);
         }
-        // Update: isAccess 메소드에 따라 접근 가능 및 불가
-        else if (AccessCheck.isAccessInModuleWeb(noticeBoardDto.getCreatedBy())) {
-            noticeBoardDto.setAccess(true);
-        } else {
-            noticeBoardDto.setAccess(false);
+        // Update: isAccessInGeneral 메소드에 따라 접근 가능 및 불가
+        else {
+            noticeBoardDto.setAccess(AccessCheck.isAccessInGeneral(noticeBoardDto.getCreatedBy(), userRepository.findByUsername(noticeBoardDto.getCreatedBy()).getAuthorityType().name()));
         }
 
         noticeBoardRepositoryImpl.updateViewsByIdx(idx);

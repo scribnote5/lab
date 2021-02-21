@@ -26,7 +26,7 @@ public class AlbumController {
 
     // List
     @GetMapping("/list")
-    public String albumList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
+    public String albumList(Pageable pageable, SearchDto searchDto, Model model) {
         List<AlbumDto> albumDtoList = albumService.findAllByActiveStatusIsOrderByMainHashTagDescIdxDesc();
         for(AlbumDto albumDto: albumDtoList) {
             albumAttachedFileService.findAttachedFileByAlbumIdx(albumDto.getIdx(), albumDto);

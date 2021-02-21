@@ -1,22 +1,23 @@
-<script th:src="@{/js/jquery.min.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
 <script th:src="@{/js/jquery.serialize-object.min.js}"></script>
 
-<script th:src="@{/js/jquery.easing.min.js}"></script>
-<script th:src="@{/js/jquery.waypoints.min.js}"></script>
-<script th:src="@{/js/counterup.min.js}"></script>
-<script th:src="@{/js/owl.carousel.min.js}"></script>
-<script th:src="@{/js/isotope.pkgd.min.js}"></script>
-<script th:src="@{/js/venobox.min.js}"></script>
-<script th:src="@{/js/aos.js}"></script>
-<script th:src="@{/js/sweetalert2.all.min.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://kit.fontawesome.com/6b69fd4398.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery.easing@1.4.1/jquery.easing.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/waypoints@4.0.1/lib/jquery.waypoints.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.counterup@2.1.0/jquery.counterup.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/owl.carousel@2.3.4/dist/owl.carousel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/venobox@1.9.2/venobox/venobox.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.min.js"></script>
+
+<script th:src="@{/pdfjs/build/pdf.js}"></script>
+<script th:src="@{/js/ckeditor.js}"></script>
 
 <script th:src="@{/js/util.js}"></script>
 <script th:src="@{/js/validation.js}"></script>
 <script th:src="@{/js/alert.js}"></script>
-<script th:src="@{/pdfjs/build/pdf.js}"></script>
-
-<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
-<script th:src="@{/summernote/summernote-bs4.min.js}"></script>
 
 <script>
     var moduleAppApiAddress = "[[${@environment.getProperty('module-app-api.address')}]]";
@@ -25,10 +26,16 @@
 <script th:inline="javascript">
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
+
     $(function () {
         $(document).ajaxSend(function (e, xhr, options) {
             xhr.setRequestHeader(header, token);
         });
+    });
+
+    // DOM
+    $(document).ready(function () {
+        $("#loading").hide();
     });
 
     !(function ($) {
@@ -59,7 +66,7 @@
 
                     if ($('body').hasClass('mobile-nav-active')) {
                         $('body').removeClass('mobile-nav-active');
-                        $('.mobile-nav-toggle i').toggleClass('icofont-navigation-menu icofont-close');
+                        $('.mobile-nav-toggle i').toggleClass('far fa-bars fa-times-circle');
                         $('.mobile-nav-overly').fadeOut();
                     }
                     return false;
@@ -86,12 +93,12 @@
                 class: 'mobile-nav d-lg-none'
             });
             $('body').append($mobile_nav);
-            $('body').prepend('<button type="button" class="mobile-nav-toggle d-lg-none"><i class="icofont-navigation-menu"></i></button>');
+            $('body').prepend('<button type="button" class="mobile-nav-toggle d-lg-none"><i class="fas fa-bars"></i></button>');
             $('body').append('<div class="mobile-nav-overly"></div>');
 
-            $(document).on('click', '.mobile-nav-toggle', function(e) {
+            $(document).on('click', '.mobile-nav-toggle', function (e) {
                 $('body').toggleClass('mobile-nav-active');
-                $('.mobile-nav-toggle i').toggleClass('icofont-navigation-menu icofont-close');
+                $('.mobile-nav-toggle i').toggleClass('fas fa-bars far fa-times-circle');
                 $('.mobile-nav-overly').toggle();
             });
 
@@ -106,7 +113,7 @@
                 if (!container.is(e.target) && container.has(e.target).length === 0) {
                     if ($('body').hasClass('mobile-nav-active')) {
                         $('body').removeClass('mobile-nav-active');
-                        $('.mobile-nav-toggle i').toggleClass('icofont-navigation-menu icofont-close');
+                        $('.mobile-nav-toggle i').toggleClass('fas fa-bars far fa-times-circle');
                         $('.mobile-nav-overly').fadeOut();
                     }
                 }
@@ -176,9 +183,21 @@
         // Introduction-image carousel
         $(".introduction-image-carousel").owlCarousel({
             autoplay: true,
+            lazyLoad: true,
             dots: true,
             loop: true,
-            items: 1
+            items: 1,
+            autoHeight: true,
+            transitionStyle: "fade"
+        });
+
+        $('.venobox').venobox({
+            framewidth: 'auto',
+            frameheight: '625px',
+            border: '2px',
+            numeratio: true,
+            infinigall: true,
+            spinner: 'three-bounce'
         });
 
         // Init AOS
@@ -196,11 +215,6 @@
         });
 
     })(jQuery);
-
-    // Initiate venobox (lightbox feature used in portofilo)
-    $(document).ready(function() {
-        $('.venobox').venobox();
-    });
 
     function login() {
         location.href = "/user/login";

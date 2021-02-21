@@ -4,7 +4,7 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title th:text="${@environment.getProperty('title')} + ' | ResearchField Read'"></title>
+    <title th:text="${@environment.getProperty('title')} + ' | Research Field Read'"></title>
 </head>
 <body>
 <div class="d-flex" id="wrapper">
@@ -19,83 +19,136 @@
             <form name="form" id="form" th:object="${researchFieldDto}" action="#">
                 <div class="page-header breadcrumbs">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h2>ResearchField Read</h2>
+                        <h2>Research Field Read</h2>
                         <ol>
                             <li>Home</li>
-                            <li>ResearchField Read</li>
+                            <li>Research Field Read</li>
                         </ol>
                     </div>
                 </div>
 
-                <div class="mt-5">
-                    <table class="table">
+                <div class="page-content">
+                    <table class="table mobile-table-read mt-4">
                         <colgroup>
                             <col width="17.5%"/>
-                            <col width="47.5%"/>
-                            <col width="35%"/>
+                            <col width="82.5%"/>
                         </colgroup>
+
                         <tr>
-                            <th colspan="3" class="sub-item-title">ResearchField Information</th>
+                            <th colspan="2" class="sub-item-title">Research Field Information</th>
                         </tr>
+                        <!-- Desktop -->
                         <tr>
                             <th>Title</th>
-                            <td colspan="2"><span id="title" th:text="*{title}"></span></td>
+                            <td th:text="*{title}"></span></td>
                         </tr>
                         <tr>
                             <th>Category</th>
-                            <td colspan="2">
+                            <td>
                                 <span th:if="!${#strings.isEmpty(categoryDto)}" th:text="${categoryDto.title}"></span>
-                                <span th:if="${#strings.isEmpty(categoryDto)}" th:text="'This field is inactive or deleted.'"></span>
+                                <span th:if="${#strings.isEmpty(categoryDto)}" th:text="'This field is not valid.'"></span>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="3"><span class="content form-control form-control-sm" id="content" th:text="*{content}"></span></td>
-                        </tr>
-                        <tr>
-                            <th>Uploaded Attached File</th>
+                            <th>Research Field Status</th>
                             <td>
-                                <div id="attachedFileList" th:each="attachedFile : *{attachedFileList}">
-                                <span th:attr="onclick=|location.href='${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/${attachedFile.savedFileName}'|"
-                                      th:text="${attachedFile.fileName} + ',&nbsp;' + 'File size: ' + ${attachedFile.fileSize}"></span>
-                                </div>
-                            </td>
-                            <td>
-                                <img th:if="*{attachedFileList.size()} == 0" th:attr="src=@{/images/no-preview-available.jpg}" class="float-right general-img-preview"/>
-                                <img th:if="*{attachedFileList.size()} != 0" th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}"
-                                     class="float-right general-img-preview img-thumbnail"/>
+                                <span th:if="*{researchFieldStatus?.name() == 'CURRENT'}" th:text="Current"> </span>
+                                <span th:if="*{researchFieldStatus?.name() == 'PREVIOUS'}" th:text="Previous"> </span>
                             </td>
                         </tr>
-                        <tr>
-                            <th colspan="3" class="sub-item-title">Additional Information</th>
-                        </tr>
-                        <tr>
-                            <th>Active Status</th>
+
+                        <!-- Mobile -->
+                        <tr class="d-print-none d-sm-table-row d-md-table-row d-lg-none d-xl-none d-table-row">
                             <td colspan="2">
-                                <div>
-                                    <span th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active"> </span>
-                                    <span th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"> </span>
-                                </div>
+                                <h4 th:text="*{title}" class="mobile-title"></h4>
+                            </td>
+                        </tr>
+                        <tr class="d-print-none d-sm-table-row d-md-table-row d-lg-none d-xl-none d-table-row">
+                            <td colspan="2">
+                                <strong class="mobile-default">Category: </strong>
+                                <span th:if="!${#strings.isEmpty(categoryDto)}" th:text="${categoryDto.title}"></span>
+                                <span th:if="${#strings.isEmpty(categoryDto)}" th:text="'This field is not valid.'"></span><br>
+
+                                <strong class="mobile-default">Research Field Status: </strong>
+                                <span th:if="*{researchFieldStatus?.name() == 'CURRENT'}" th:text="Current"> </span>
+                                <span th:if="*{researchFieldStatus?.name() == 'PREVIOUS'}" th:text="Previous"> </span>
+                            </td>
+                        </tr>
+
+                        <!-- Common -->
+                        <tr>
+                            <td colspan="2">
+                                <div class="content" th:utext="*{content}"></div>
                             </td>
                         </tr>
                         <tr>
+                            <th class="d-none d-sm-none d-md-none d-lg-table-cell">Uploaded Attached File</th>
+                            <td colspan="2">
+                                <strong class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline mobile-default">Uploaded Attached File</strong>
+                                <div id="attachedFileList" th:each="attachedFile : *{attachedFileList}">
+                                    <span th:attr="onclick=|location.href='${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/${attachedFile.savedFileName}'|"
+                                          th:text="${attachedFile.fileName} + ',&nbsp;' + 'File size: ' + ${attachedFile.fileSize}"></span>
+                                </div>
+                                <div class="mt-2">
+                                    <img th:if="*{attachedFileList.size()} == 0" id="imgPreview" class="float-right general-img-preview img-thumbnail" th:attr="src=@{/images/no-preview-available.jpg}"/>
+                                    <a th:if="*{attachedFileList.size()} != 0" th:href="@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-image/*{attachedFileList[0].savedFileName}|}"
+                                       data-gall="introductionImage" class="venobox" th:title="*{title}">
+                                        <img id="imgPreview" class="float-right general-img-preview img-thumbnail"
+                                             th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-image/*{attachedFileList[0].savedFileName}|}"/>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Additional Information</th>
+                        </tr>
+                        <!-- Desktop -->
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Active Status</th>
+                            <td>
+                                <span th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active"> </span>
+                                <span th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"> </span>
+                            </td>
+                        </tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Created Date</th>
-                            <td colspan="2"><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Last Modified Date</th>
-                            <td colspan="2"><span th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Created By</th>
-                            <td colspan="2"><span th:text="*{createdBy}"/></td>
+                            <td th:text="*{createdBy}"></td>
                         </tr>
-                        <tr>
-                            <th>Last Created By</th>
-                            <td colspan="2"><span th:text="*{lastModifiedBy}"/></td>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Last Modified By</th>
+                            <td th:text="*{lastModifiedBy}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Views</th>
-                            <td colspan="2"><span th:text="*{views}"/></td>
+                            <td th:text="*{views}"></td>
+                        </tr>
+
+                        <!-- Mobile -->
+                        <tr class="d-print-none d-sm-table-row d-md-table-row d-lg-none d-xl-none d-table-row">
+                            <td colspan="2">
+                                <strong class="mobile-default">Active Status: </strong>
+                                <span th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active"> </span>
+                                <span th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"> </span><br>
+
+                                <strong class="mobile-default">Created Date: </strong><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Last Modified Date: </strong><span th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Created By: </strong><span th:text="*{createdBy}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Last Modified By: </strong><span th:text="*{lastModifiedBy}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Views: </strong> <span th:text="*{views}" class="mobile-default"></span>
+                            </td>
                         </tr>
                         <tr>
                             <td colspan="10"></td>
@@ -103,13 +156,13 @@
                     </table>
                 </div>
 
-                <div class="row justify-content-between mt-5 mb-3">
-                    <div class="col-auto mx-3">
-                        <a href="/research-field/list" class="btn btn-secondary">Move to List</a>
+                <div class="row justify-content-between mt-4 mb-4">
+                    <div class="col-auto">
+                        <a href="/research-field/list" class="btn btn-sm btn-secondary">Move to List</a>
                     </div>
-                    <div th:if="*{access}" class="col-auto mx-3">
-                        <a th:href="'/research-field/form?idx='+*{idx}" class="btn btn-info mx-1">Update</a>
-                        <button type="button" class="btn btn-danger mx-1" id="delete">Delete</button>
+                    <div th:if="*{access}" class="col-auto ml-2">
+                        <a th:href="'/research-field/form?idx='+*{idx}" class="btn btn-sm btn-info mx-1">Update</a>
+                        <button type="button" class="btn btn-sm btn-danger mx-1" id="delete">Delete</button>
                     </div>
                 </div>
 

@@ -4,7 +4,7 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title th:text="${@environment.getProperty('title')} + ' | ResearchField List'"></title>
+    <title th:text="${@environment.getProperty('title')} + ' | Research Field List'"></title>
 </head>
 <body>
 <div class="d-flex" id="wrapper">
@@ -19,56 +19,74 @@
             <form name="form" id="form" th:object="${searchDto}" action="#">
                 <div class="page-header breadcrumbs">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h2>ResearchField List</h2>
+                        <h2>Research Field List</h2>
                         <ol>
                             <li>Home</li>
-                            <li>ResearchField List</li>
+                            <li>Research Field List</li>
                         </ol>
                     </div>
                 </div>
 
-                <div class="row justify-content-end mt-3">
-                    <div class="col-auto px-1">
-                        <select class="custom-select custom-select-sm" name="searchType" th:field="*{searchType}">
-                            <option th:value="TITLE">Title</option>
-                            <option th:value="ID">ID</option>
-                        </select>
-                    </div>
-                    <div class="col-auto px-1">
-                        <input type="text" name="keyword" class="form-control form-control-sm" th:value="${searchDto?.keyword}"/>
-                    </div>
-                    <div class="col-auto px-3">
-                        <button id="search" type="button" class="btn-main">Search</button>
+                <div class="page-search">
+                    <div class="row justify-content-end mt-4">
+                        <div class="pt-2 pr-3">
+                            <select class="custom-select custom-select-sm" name="searchType" th:field="*{searchType}">
+                                <option th:value="TITLE">Title</option>
+                                <option th:value="ID">ID</option>
+                            </select>
+                        </div>
+                        <div class="pt-2 pr-2">
+                            <input type="search" class="custom-search-input" name="keyword" placeholder="Search" th:value="${searchDto?.keyword}">
+                        </div>
+                        <div class="pt-2">
+                            <i id="search" class="fas fa-search search-icon"></i>
+                        </div>
                     </div>
                 </div>
 
-                <div class="mt-5">
-                    <table class="table table-hover">
+                <div class="page-content">
+                    <table class="table table-hover mobile-table-list mt-4">
                         <thead>
-                        <tr>
-                            <th style="width: 5%">No.</th>
-                            <th style="width: 45%">Title</th>
-                            <th style="width: 10%">ID</th>
-                            <th style="width: 12.5%">Created Date</th>
-                            <th style="width: 12.5%">Modified Date</th>
-                            <th style="width: 7.5%">Status</th>
-                            <th style="width: 7.5%">Views</th>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th style="width: 7.5%" class="text-center">No.</th>
+                            <th style="width: 45%" class="text-center">Title</th>
+                            <th style="width: 15%">Created By</th>
+                            <th style="width: 17.5%" class="text-center">Created Date</th>
+                            <th style="width: 7.5%" class="text-center">Status</th>
+                            <th style="width: 7.5%" class="text-center">Views</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="researchFieldDto : ${researchFieldDtoList}">
-                            <td th:text="${researchFieldDto.idx}"></td>
+                            <td th:text="${researchFieldDto.idx}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td>
-                                <a th:href="'/research-field?idx='+${researchFieldDto.idx}" class="link"
-                                   th:text="${#strings.length(researchFieldDto.title)} < 45 ? ${researchFieldDto.title} : ${#strings.substring(researchFieldDto.title, 0, 45)} + '...'"></a>
+                                <!-- Mobile No. -->
+                                <span th:text="${researchFieldDto.idx} + '.'" class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline"></span>
+
+                                <!-- Common -->
+                                <a th:href="'/research-field?idx='+${researchFieldDto.idx}" class="link" th:text="${researchFieldDto.title}"></a>
                                 <img th:if="${researchFieldDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
+
+                                <!-- Mobile -->
+                                <div class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline">
+                                    <div class="d-flex align-center">
+                                        <span th:text="${researchFieldDto.createdBy}" class="mobile-additional-information"> </span> &nbsp;&nbsp;
+                                        <span th:text="${#temporals.format(researchFieldDto.createdDate,'yyyy-MM-dd HH:mm')}" class="mobile-additional-information"></span> &nbsp;&nbsp;
+                                        <span th:text="'Views: ' + ${researchFieldDto.views}" class="mobile-additional-information"></span>
+                                    </div>
+                                    <div class="d-flex align-center">
+                                        <span th:if="${researchFieldDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active" class="mobile-additional-information"></span>
+                                        <span th:if="${researchFieldDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive" class="mobile-additional-information"></span>
+                                    </div>
+                                </div>
                             </td>
-                            <td th:text="${researchFieldDto.createdBy}">></td>
-                            <td th:text="${#temporals.format(researchFieldDto.createdDate,'yyyy-MM-dd HH:mm')}"></td>
-                            <td th:text="${#temporals.format(researchFieldDto.lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
-                            <td th:if="${researchFieldDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active"></td>
-                            <td th:if="${researchFieldDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"></td>
-                            <td th:text="${researchFieldDto.views}">></td>
+
+                            <!-- Desktop -->
+                            <td th:text="${researchFieldDto.createdBy}" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:text="${#temporals.format(researchFieldDto.createdDate,'yyyy-MM-dd HH:mm')}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:if="${researchFieldDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:if="${researchFieldDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:text="${researchFieldDto.views}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                         </tr>
                         <tr th:if="${researchFieldDtoList.totalElements == 0}">
                             <td colspan="10" class="no-posts">
@@ -82,14 +100,14 @@
                     </table>
                 </div>
 
-                <div class="row justify-content-end mt-5 mb-3">
-                    <div class="col-auto mx-3">
-                        <a href="/research-field/form" class="btn-main">Register</a>
+                <div class="row justify-content-end mt-4 mb-4">
+                    <div class="col-auto">
+                        <a href="/research-field/form" class="btn-main btn-sm">Register</a>
                     </div>
                 </div>
 
                 <!-- Pagination -->
-                <div class="row justify-content-center" aria-label="Page navigation">
+                <div class="row justify-content-center mb-4" aria-label="Page navigation">
                     <ul class="pagination "
                         th:with="startNumber=${T(Math).floor(researchFieldDtoList.number/10)}*10+1, endNumber=(${researchFieldDtoList.totalPages} > ${startNumber}+9) ? ${startNumber}+9 : (${researchFieldDtoList.totalPages} == 0 ? 1 : ${researchFieldDtoList.totalPages})">
                         <li class="page-item">

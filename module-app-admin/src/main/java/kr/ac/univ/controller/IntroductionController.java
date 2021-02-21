@@ -22,13 +22,13 @@ public class IntroductionController {
 
     // List
     @GetMapping("/list")
-    public String introductionList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
+    public String introductionList(Pageable pageable, SearchDto searchDto, Model model) {
         model.addAttribute("introductionDtoList", introductionService.findIntroductionList(pageable, searchDto));
 
         return "introduction/list";
     }
 
-    // Form Update
+    // Form
     @GetMapping("/form{idx}")
     public String introductionForm(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
         IntroductionDto introductionDto = introductionService.findIntroductionByIdx(idx);

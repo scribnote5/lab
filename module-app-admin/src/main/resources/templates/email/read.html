@@ -27,83 +27,119 @@
                     </div>
                 </div>
 
-                <div class="mt-5">
-                    <table class="table">
+                <div class="page-content">
+                    <table class="table mobile-table-read mt-4">
                         <colgroup>
                             <col width="17.5%"/>
                             <col width="82.5%"/>
                         </colgroup>
+
                         <tr>
                             <th colspan="2" class="sub-item-title">Email Information</th>
                         </tr>
-                        <tr>
+                        <!-- Desktop -->
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Email Address</th>
-                            <td><span id="title" th:text="*{emailAddress}"></span></td>
+                            <td th:text="*{emailAddress}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Receiver Type</th>
                             <td>
-                                <div>
-                                    <span th:if="*{receiverType?.name() == 'ADMIN'}" th:text="Admin"> </span>
-                                    <span th:if="*{receiverType?.name() == 'DEVELOPER'}" th:text="Developer"> </span>
-                                </div>
+                                <span th:if="*{receiverType?.name() == 'ADMIN'}" th:text="Admin"> </span>
+                                <span th:if="*{receiverType?.name() == 'DEVELOPER'}" th:text="Developer"> </span>
                             </td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Note</th>
-                            <td><span th:text="*{note}"></span></td>
+                            <td th:text="*{note}"></td>
                         </tr>
+
+                        <!-- Mobile -->
+                        <tr class="d-print-none d-sm-table-row d-md-table-row d-lg-none d-xl-none d-table-row">
+                            <td colspan="2">
+                                <h4 th:text="*{emailAddress}" class="mobile-title"></h4>
+                            </td>
+                        </tr>
+                        <tr class="d-print-none d-sm-table-row d-md-table-row d-lg-none d-xl-none d-table-row">
+                            <td colspan="2">
+                                <strong class="mobile-default">Receiver Type: </strong>
+                                <span th:if="*{receiverType?.name() == 'ADMIN'}" th:text="Admin" class="mobile-default"> </span>
+                                <span th:if="*{receiverType?.name() == 'DEVELOPER'}" th:text="Developer" class="mobile-default"> </span><br>
+
+                                <strong class="mobile-default">Note: </strong>
+                                <span th:text="*{note}" class="mobile-default"> </span>
+                            </td>
+                        </tr>
+
                         <tr>
                             <th colspan="2" class="sub-item-title">Additional Information</th>
                         </tr>
-                        <tr>
+                        <!-- Desktop -->
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Active Status</th>
                             <td>
-                                <div>
-                                    <span th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active"> </span>
-                                    <span th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"> </span>
-                                </div>
+                                <span th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active"> </span>
+                                <span th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"> </span>
                             </td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Created Date</th>
-                            <td><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Last Modified Date</th>
-                            <td><span th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Created By</th>
-                            <td><span th:text="*{createdBy}"/></td>
+                            <td th:text="*{createdBy}"></td>
                         </tr>
-                        <tr>
-                            <th>Last Created By</th>
-                            <td><span th:text="*{lastModifiedBy}"/></td>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Last Modified By</th>
+                            <td th:text="*{lastModifiedBy}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Views</th>
-                            <td><span th:text="*{views}"/></td>
+                            <td th:text="*{views}"></td>
+                        </tr>
+
+                        <!-- Mobile -->
+                        <tr class="d-print-none d-sm-table-row d-md-table-row d-lg-none d-xl-none d-table-row">
+                            <td colspan="2">
+                                <strong class="mobile-default">Active Status: </strong>
+                                <span th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active" class="mobile-default"> </span>
+                                <span th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive" class="mobile-default"> </span><br>
+
+                                <strong class="mobile-default">Created Date: </strong><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Last Modified Date: </strong><span th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Created By: </strong><span th:text="*{createdBy}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Last Modified By: </strong><span th:text="*{lastModifiedBy}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Views: </strong> <span th:text="*{views}" class="mobile-default"></span>
+                            </td>
                         </tr>
                         <tr>
                             <td colspan="10"></td>
                         </tr>
                     </table>
-                </div>
 
-                <div class="row justify-content-between mt-5 mb-3">
-                    <div class="col-auto mx-3">
-                        <a href="/email/list" class="btn btn-secondary">Move to List</a>
+                    <div class="row justify-content-between mt-4 mb-4">
+                        <div class="col-auto">
+                            <a href="/email/list" class="btn btn-sm btn-secondary">Move to List</a>
+                        </div>
+
+                        <div th:if="*{access}" class="col-auto ml-2">
+                            <a th:href="'/email/form?idx='+*{idx}" class="btn btn-sm btn-info mx-1">Update</a>
+                            <button type="button" class="btn btn-sm btn-danger mx-1" id="delete">Delete</button>
+                        </div>
                     </div>
 
-                    <div th:if="*{access}" class="col-auto mx-3">
-                        <a th:href="'/email/form?idx='+*{idx}" class="btn btn-info mx-1">Update</a>
-                        <button type="button" class="btn btn-danger mx-1" id="delete">Delete</button>
-                    </div>
+                    <!-- input type="hidden" -->
+                    <input type="hidden" name="idx" th:value="*{idx}"/>
                 </div>
-
-                <!-- input type="hidden" -->
-                <input type="hidden" name="idx" th:value="*{idx}"/>
             </form>
         </div>
     </div>

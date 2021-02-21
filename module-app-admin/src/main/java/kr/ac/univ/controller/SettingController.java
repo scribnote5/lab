@@ -20,7 +20,7 @@ public class SettingController {
         this.settingService = settingService;
     }
 
-    // Form Update
+    // Form
     @GetMapping("/form{idx}")
     public String settingForm(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
         model.addAttribute("settingDto", settingService.findSettingByIdx(idx));

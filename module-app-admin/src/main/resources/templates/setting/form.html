@@ -88,33 +88,31 @@
                         <tr>
                             <th>Active Status</th>
                             <td>
-                                <div class="pull-left">
-                                    <select class="custom-select custom-select-sm" name="activeStatus" th:field="*{activeStatus}">
-                                        <option th:value="ACTIVE">Active</option>
-                                        <option th:value="INACTIVE">Inactive</option>
-                                    </select>
-                                </div>
+                                <select class="custom-select custom-select-sm" name="activeStatus" th:field="*{activeStatus}">
+                                    <option th:value="ACTIVE">Active</option>
+                                    <option th:value="INACTIVE">Inactive</option>
+                                </select>
                             </td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created Date</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Last Modified Date</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created By</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{createdBy}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{createdBy}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Last Modified By</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{lastModifiedBy}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{lastModifiedBy}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Views</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{views}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{views}"/></td>
                         </tr>
                         <tr>
                             <td colspan="2"></td>
@@ -122,9 +120,9 @@
                     </table>
                 </div>
 
-                <div class="row justify-content-between mt-5 mb-3">
-                    <div class="col-auto mx-3"></div>
-                    <div class="col-auto mx-3">
+                <div class="row justify-content-between mt-4 mb-4">
+                    <div class="col-auto"></div>
+                    <div class="col-auto ml-2">
                         <button th:if="*{idx}" id="update" type="button" class="btn btn-info">Update</button>
                     </div>
                 </div>

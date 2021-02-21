@@ -25,13 +25,15 @@ public class PublicationController {
 
     // List
     @GetMapping("/list")
-    public String publicationList(@PageableDefault Pageable pageable, PublicationSearchDto publicationSearchDto, Model model) {
+    public String publicationList(Pageable pageable, PublicationSearchDto publicationSearchDto, Model model) {
+        System.out.println("publicationSearchDto: " + publicationSearchDto);
+
         model.addAttribute("publicationDtoList", publicationService.findPublicationList(pageable, publicationSearchDto));
 
         return "publication/list";
     }
 
-    // Form Update
+    // Form
     @GetMapping("/form{idx}")
     public String publicationForm(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
         PublicationDto publicationDto = publicationService.findPublicationByIdx(idx);

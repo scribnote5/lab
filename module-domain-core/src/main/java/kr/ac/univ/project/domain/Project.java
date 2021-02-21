@@ -9,10 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Getter
@@ -30,6 +27,7 @@ public class Project extends CommonAudit {
 
     private String researchEstablishment;
 
+    @Enumerated(EnumType.STRING)
     private ProjectStatus projectStatus;
 
     private LocalDate startDate;

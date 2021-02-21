@@ -14,7 +14,7 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR(500, "C005", "Internal Server Error."),
 
     // File
-    FILE_SIZE_ERROR(500, "F001", "The upload file size must be less than 20 MB."),
+    FILE_SIZE_ERROR(500, "F001", "The upload file size must be less than 50MB."),
     FILE_TYPE_ERROR(500, "F002", "The upload file type is supposed to dangerous and malicious."),
     FILE_NUMBER_EXCEEDED(500, "F003", "The upload file number is exceeded."),
 

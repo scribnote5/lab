@@ -29,5 +29,5 @@ CREATE TABLE setting
 
 /* don't change idx(primary key) */
 INSERT INTO setting
-(idx, created_by, created_date, last_modified_by, last_modified_date, active_status, lab_address, email_recipient, email_address, callee, phone_number, lab_start_date)
-VALUES (1, 'root', current_time, 'root', current_time, 'ACTIVE', '', '', '', '', '', current_date);
+(idx, created_by, created_date, last_modified_by, last_modified_date, active_status, views, lab_address, email_recipient, email_address, callee, phone_number, lab_start_date)
+VALUES (1, 'root', current_time, 'root', current_time, 'ACTIVE', 0, '', '', '', '', '', current_date);

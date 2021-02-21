@@ -26,7 +26,7 @@ public class LearnMoreReadController {
 
     // List
     @GetMapping("/list")
-    public String learnMoreReadList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
+    public String learnMoreReadList(Pageable pageable, SearchDto searchDto, Model model) {
         if ("DOWNLOAD_FILE_TYPE".equals(searchDto.getSearchType()) && !("READ".equals(searchDto.getKeyword()) || "VIDEO".equals(searchDto.getKeyword()))) {
             throw new BusinessException("Please Check keyword 'READ' or 'VIDEO'.");
         }
@@ -36,7 +36,7 @@ public class LearnMoreReadController {
         return "learnMoreRead/list";
     }
 
-    // Form Update
+    // Form
     @GetMapping("/form{idx}")
     public String learnMoreReadForm(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
         LearnMoreReadDto learnMoreReadDto = learnMoreReadService.findLearnMoreByIdx(idx);

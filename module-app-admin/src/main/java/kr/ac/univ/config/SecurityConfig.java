@@ -52,7 +52,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().ignoringAntMatchers("/console/**") // h2-console csrf 제외
                 .and()
                 .headers().addHeaderWriter(new XFrameOptionsHeaderWriter(new WhiteListedAllowFromStrategy(Arrays.asList("localhost")))) // he-console X-Frame-Options 제외
-                .frameOptions().sameOrigin()
+                // iframe 동일 도메인 접근 허용
+                //.frameOptions().sameOrigin()
                 .and()
                 // 로그인 설정
                 .formLogin()

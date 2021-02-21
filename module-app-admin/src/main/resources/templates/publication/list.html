@@ -27,58 +27,75 @@
                     </div>
                 </div>
 
-                <div class="row justify-content-end mt-3">
-                    <div class="col-auto px-1">
-                        <select name="publicationSearchType" th:field="*{publicationSearchType}" class="form-control form-control-sm input-sm">
-                            <option th:each="publicationSearchType : ${T(kr.ac.univ.publication.dto.enums.PublicationSearchType).values()}"
-                                    th:value="${publicationSearchType}"
-                                    th:text="${publicationSearchType.getSearchPublicationType()}"></option>
-                        </select>
-                    </div>
-                    <div class="col-auto px-1">
-                        <select class="custom-select custom-select-sm" name="searchType" th:field="*{searchType}">
-                            <option th:value="TITLE">Title</option>
-                            <option th:value="AUTHORS">Authors</option>
-                            <option th:value="PUBLISHED_IN">Published In</option>
-                        </select>
-                    </div>
-                    <div class="col-auto px-1">
-                        <input type="text" name="keyword" class="form-control form-control-sm" th:value="${searchDto?.keyword}"/>
-                    </div>
-                    <div class="col-auto px-3">
-                        <button id="search" type="button" class="btn-main">Search</button>
+                <div class="page-search">
+                    <div class="row justify-content-end mt-4">
+                        <div class="pt-2 pr-3">
+                            <select name="publicationSearchType" th:field="*{publicationSearchType}" class="form-control form-control-sm">
+                                <option th:each="publicationSearchTyp : ${T(kr.ac.univ.publication.dto.enums.PublicationSearchType).values()}"
+                                        th:value="${publicationSearchTyp}"
+                                        th:text="${publicationSearchTyp.getSearchPublicationType()}">
+                                </option>
+                            </select>
+                        </div>
+                        <div class="pt-2 pr-3">
+                            <select class="custom-select custom-select-sm" name="searchType" th:field="*{searchType}">
+                                <option th:value="TITLE">Title</option>
+                                <option th:value="AUTHORS">Authors</option>
+                                <option th:value="PUBLISHED_IN">Published In</option>
+                            </select>
+                        </div>
+                        <div class="pt-2 pr-2">
+                            <input type="search" class="custom-search-input" name="keyword" placeholder="Search" th:value="${searchDto?.keyword}">
+                        </div>
+                        <div class="pt-2">
+                            <i id="search" class="fas fa-search search-icon"></i>
+                        </div>
                     </div>
                 </div>
 
-                <div class="mt-5">
-                    <table class="table table-hover">
-                        <colgroup>
-                            <col width="5%"/>
-                            <col width="45%"/>
-                            <col width="20%"/>
-                            <col width="17.5%"/>
-                            <col width="12.5%"/>
-                        </colgroup>
+                <div class="page-content">
+                    <table class="table table-hover mobile-table-list mt-4">
                         <thead>
-                        <tr>
-                            <th>No.</th>
-                            <th>Title</th>
-                            <th>Authors</th>
-                            <th>Published In</th>
-                            <th>Published Date</th>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th style="width: 7.5%" class="text-center">No.</th>
+                            <th style="width: 45%" class="text-center">Title</th>
+                            <th style="width: 20%">Authors</th>
+                            <th style="width: 15%" class="text-center">Published In</th>
+                            <th style="width: 15%" class="text-center">Published Date</th>
+                            <th style="width: 7.5%" class="text-center">Status</th>
                         </tr>
                         </thead>
-
+                        <tbody>
                         <tr th:each="publicationDto : ${publicationDtoList}">
-                            <td th:text="${publicationDto.idx}"></td>
+                            <td th:text="${publicationDto.idx}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td>
-                                <a th:href="'/publication?idx='+${publicationDto.idx}" class="link"
-                                   th:text="${#strings.length(publicationDto.title)} < 45 ? ${publicationDto.title} : ${#strings.substring(publicationDto.title, 0, 45)} + '...'"></a>
+                                <!-- Mobile No. -->
+                                <span th:text="${publicationDto.idx} + '.'" class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline"></span>
+
+                                <!-- Common -->
+                                <a th:href="'/publication?idx='+${publicationDto.idx}" class="link" th:text="${publicationDto.title}"></a>
                                 <img th:if="${publicationDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
+
+                                <!-- Mobile -->
+                                <div class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline">
+                                    <div class="d-flex align-center">
+                                        <span th:text="${publicationDto.authors}" class="mobile-additional-information"> </span> &nbsp;&nbsp;
+                                        <span th:text="${publicationDto.publishedIn}" class="mobile-additional-information"> </span> &nbsp;&nbsp;
+                                        <span th:text="${#temporals.format(publicationDto.publishedDate,'yyyy-MM-dd')}" class="mobile-additional-information"></span> &nbsp;&nbsp;
+                                    </div>
+                                    <div class="d-flex align-center">
+                                        <span th:if="${publicationDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active" class="mobile-additional-information"></span>
+                                        <span th:if="${publicationDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive" class="mobile-additional-information"></span>
+                                    </div>
+                                </div>
                             </td>
-                            <td th:text="${#strings.length(publicationDto.authors)} < 20 ? ${publicationDto.authors} : ${#strings.substring(publicationDto.authors, 0, 20)} + '...'"></td>
-                            <td th:text="${publicationDto.publishedIn}"></td>
-                            <td th:text="${#temporals.format(publicationDto.publishedDate,'yyyy-MM-dd')}"></td>
+
+                            <!-- Desktop -->
+                            <td th:text="${publicationDto.authors}" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:text="${publicationDto.publishedIn}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:text="${#temporals.format(publicationDto.publishedDate,'yyyy-MM-dd')}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:if="${publicationDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:if="${publicationDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                         </tr>
                         </tbody>
                         <tr th:if="${publicationDtoList.totalElements == 0}">
@@ -90,37 +107,38 @@
                             <td colspan="10"></td>
                         </tr>
                     </table>
-                </div>
-            </form>
 
-            <div class="row justify-content-end mt-5 mb-3">
-                <div class="col-auto mx-3">
-                    <a href="/publication/form" class="btn-main">Register</a>
-                </div>
-            </div>
+                    <div class="row justify-content-end mt-4 mb-4">
+                        <div class="col-auto">
+                            <a href="/publication/form" class="btn-main btn-sm">Register</a>
+                        </div>
+                    </div>
 
-            <!-- Pagination -->
-            <div class="row justify-content-center" aria-label="Page navigation">
-                <ul class="pagination"
-                    th:with="startNumber=${T(Math).floor(publicationDtoList.number/10)}*10+1, endNumber=(${publicationDtoList.totalPages} > ${startNumber}+9) ? ${startNumber}+9 : (${publicationDtoList.totalPages} == 0 ? 1 : ${publicationDtoList.totalPages})">
-                    <li class="page-item">
-                        <a class="page-link" aria-label="Previous" th:href="@{/publication/list(page=1,publicationSearchType=*{publicationSearchType},searchType=*{searchType},keyword=*{keyword})}">&laquo;</a>
-                    </li>
-                    <li class="page-item" th:style="${publicationDtoList.first} ? 'display:none'">
-                        <a class="page-link" th:href="@{/publication/list(page=${publicationDtoList.number},publicationSearchType=*{publicationSearchType},searchType=*{searchType},keyword=*{keyword})}">&lsaquo;</a>
-                    </li>
-                    <li class="page-item" th:each="page :${#numbers.sequence(startNumber, endNumber)}" th:class="(${page} == ${publicationDtoList.number}+1) ? 'page-item active'">
-                        <a class="page-link" th:href="@{/publication/list(page=${page},publicationSearchType=*{publicationSearchType},searchType=*{searchType},keyword=*{keyword})}" th:text="${page}"><span class="sr-only"></span></a>
-                    </li>
-                    <li class="page-item" th:style="${publicationDtoList.last} ? 'display:none'">
-                        <a class="page-link" th:href="@{/publication/list(page=${publicationDtoList.number}+2,publicationSearchType=*{publicationSearchType},searchType=*{searchType},keyword=*{keyword})}">&rsaquo;</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" aria-label="Next" th:href="@{/publication/list(page=${publicationDtoList.totalPages},publicationSearchType=*{publicationSearchType},searchType=*{searchType},keyword=*{keyword})}">&raquo;</a>
-                    </li>
-                </ul>
-            </div>
-            <!-- /Pagination -->
+                    <!-- Pagination -->
+                    <div class="row justify-content-center mb-4" aria-label="Page navigation">
+                        <ul class="pagination"
+                            th:with="startNumber=${T(Math).floor(publicationDtoList.number/10)}*10+1, endNumber=(${publicationDtoList.totalPages} > ${startNumber}+9) ? ${startNumber}+9 : (${publicationDtoList.totalPages} == 0 ? 1 : ${publicationDtoList.totalPages})">
+                            <li class="page-item">
+                                <a class="page-link" aria-label="Previous" th:href="@{/publication/list(page=1,searchType=*{searchType},keyword=*{keyword},publicationSearchType=*{publicationSearchType})}">&laquo;</a>
+                            </li>
+                            <li class="page-item" th:style="${publicationDtoList.first} ? 'display:none'">
+                                <a class="page-link" th:href="@{/publication/list(page=${publicationDtoList.number},searchType=*{searchType},keyword=*{keyword},publicationSearchType=*{publicationSearchType})}">&lsaquo;</a>
+                            </li>
+                            <li class="page-item" th:each="page :${#numbers.sequence(startNumber, endNumber)}" th:class="(${page} == ${publicationDtoList.number}+1) ? 'page-item active'">
+                                <a class="page-link" th:href="@{/publication/list(page=${page},searchType=*{searchType},keyword=*{keyword},publicationSearchType=*{publicationSearchType})}" th:text="${page}"><span class="sr-only"></span></a>
+                            </li>
+                            <li class="page-item" th:style="${publicationDtoList.last} ? 'display:none'">
+                                <a class="page-link" th:href="@{/publication/list(page=${publicationDtoList.number}+2,searchType=*{searchType},keyword=*{keyword},publicationSearchType=*{publicationSearchType})}">&rsaquo;</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" aria-label="Next"
+                                   th:href="@{/publication/list(page=${publicationDtoList.totalPages},searchType=*{searchType},keyword=*{keyword},publicationSearchType=*{publicationSearchType})}">&raquo;
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /Pagination -->
+                </div>
             </form>
         </div>
     </div>

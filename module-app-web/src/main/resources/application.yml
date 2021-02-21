@@ -7,8 +7,10 @@ spring:
       enabled: true
     restart:
       enabled: true
-  thymeleaf:
-    cache: false
+  data:
+    web:
+      pageable:
+        default-page-size: 15
 module:
   name: module-app-web
 title: ESLAB
@@ -17,9 +19,16 @@ server:
     session:
       cookie:
         name: module-app-web
+google:
+  map:
+    embeded:
+      api:
+        url: https://www.google.com/maps/embed/v1/place?key=AIzaSyB-r0uWaGG6vgoPkJ0WHREGu9AT_f_V7gM&q=%EB%8C%80%EC%A0%84%EA%B4%91%EC%97%AD%EC%8B%9C+%EA%B6%81%EB%8F%99+%EC%B6%A9%EB%82%A8%EB%8C%80%ED%95%99%EA%B5%90+%EA%B3%B5%EA%B3%BC%EB%8C%80%ED%95%995%ED%98%B8%EA%B4%80%2C%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD&zoom=17
 ---
 spring:
   profiles: test
+  thymeleaf:
+    cache: false
   jpa:
     hibernate:
       ddl-auto: create
@@ -58,6 +67,8 @@ module-app-api:
 ---
 spring:
   profiles: local
+  thymeleaf:
+    cache: false
   #  jpa:
   #    hibernate:
   #      ddl-auto: create
@@ -90,6 +101,8 @@ module-app-api:
 ---
 spring:
   profiles: dev
+  thymeleaf:
+    cache: true
   #  jpa:
   #    hibernate:
   #      ddl-auto: create

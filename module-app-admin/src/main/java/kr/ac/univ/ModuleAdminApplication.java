@@ -3,6 +3,9 @@ package kr.ac.univ;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.noticeBoard.domain.NoticeBoard;
 import kr.ac.univ.noticeBoard.repository.NoticeBoardRepository;
+import kr.ac.univ.publication.domain.Publication;
+import kr.ac.univ.publication.domain.enums.PublicationType;
+import kr.ac.univ.publication.domain.enums.PublishingArea;
 import kr.ac.univ.publication.repository.PublicationRepository;
 import kr.ac.univ.user.domain.User;
 import kr.ac.univ.user.domain.enums.AuthorityType;
@@ -15,6 +18,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.stream.IntStream;
 
 @RestController
@@ -124,7 +128,7 @@ public class ModuleAdminApplication {
                             .authors("저자" + index)
                             .publishedIn("KSC 2018")
                             .publishedDate(LocalDate.now())
-                            .publicationType(PublicationType.POSTER)
+                            .publicationType(PublicationType.CONFERENCE_REGULAR)
                             .publishingArea(PublishingArea.DOMESTIC)
                             .volume("" + index)
                             .number("" + index)
@@ -140,6 +144,7 @@ public class ModuleAdminApplication {
                             .publishedDate(LocalDate.now())
                             .publicationType(PublicationType.JOURNAL)
                             .publishingArea(PublishingArea.INTERNATIONAL)
+                            .impactFactor("IF: 0.861")
                             .volume("" + index)
                             .number("" + index)
                             .activeStatus(ActiveStatus.ACTIVE)
@@ -152,7 +157,7 @@ public class ModuleAdminApplication {
                             .authors("저자" + index)
                             .publishedIn("ICNGC 2016")
                             .publishedDate(LocalDate.now())
-                            .publicationType(PublicationType.POSTER)
+                            .publicationType(PublicationType.CONFERENCE_POSTER)
                             .publishingArea(PublishingArea.INTERNATIONAL)
                             .volume("" + index)
                             .number("" + index)

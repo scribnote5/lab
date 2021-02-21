@@ -6,6 +6,7 @@ import kr.ac.univ.email.dto.EmailDto;
 import kr.ac.univ.email.dto.mapper.EmailMapper;
 import kr.ac.univ.email.repository.EmailRepository;
 import kr.ac.univ.email.repository.EmailRepositoryImpl;
+import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.AccessCheck;
 import kr.ac.univ.util.NewIconCheck;
 import org.springframework.data.domain.*;
@@ -17,10 +18,12 @@ import javax.transaction.Transactional;
 public class EmailService {
     private final EmailRepository emailRepository;
     private final EmailRepositoryImpl emailRepositoryImpl;
+    private final UserRepository userRepository;
 
-    public EmailService(EmailRepository emailRepository, EmailRepositoryImpl emailRepositoryImpl) {
+    public EmailService(EmailRepository emailRepository, EmailRepositoryImpl emailRepositoryImpl, UserRepository userRepository) {
         this.emailRepository = emailRepository;
         this.emailRepositoryImpl = emailRepositoryImpl;
+        this.userRepository = userRepository;
     }
 
     public Page<EmailDto> findEmailList(Pageable pageable, SearchDto searchDto) {
@@ -44,7 +47,7 @@ public class EmailService {
                 break;
         }
 
-        emailDtoList = new PageImpl<EmailDto>(EmailMapper.INSTANCE.toDto(emailList.getContent()), pageable, emailList.getTotalElements());
+        emailDtoList = new PageImpl<>(EmailMapper.INSTANCE.toDto(emailList.getContent()), pageable, emailList.getTotalElements());
 
         // NewIcon 판별
         for (EmailDto emailDto : emailDtoList) {
@@ -67,11 +70,9 @@ public class EmailService {
         if (idx == 0) {
             emailDto.setAccess(true);
         }
-        // Update: isAccess 메소드에 따라 접근 가능 및 불가
-        else if (AccessCheck.isAccessInModuleWeb(emailDto.getCreatedBy())) {
-            emailDto.setAccess(true);
-        } else {
-            emailDto.setAccess(false);
+        // Update: isAccessInGeneral 메소드에 따라 접근 가능 및 불가
+        else {
+            emailDto.setAccess(AccessCheck.isAccessInGeneral(emailDto.getCreatedBy(), userRepository.findByUsername(emailDto.getCreatedBy()).getAuthorityType().name()));
         }
 
         emailRepositoryImpl.updateViewsByIdx(idx);

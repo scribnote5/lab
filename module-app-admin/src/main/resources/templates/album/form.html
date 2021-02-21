@@ -30,28 +30,28 @@
                     </div>
                 </div>
 
-                <div class="mt-5">
-                    <table class="table">
+                <div class="page-content">
+                    <table class="table mobile-table-form mt-4">
                         <colgroup>
                             <col width="17.5%"/>
-                            <col width="47.5%"/>
-                            <col width="35%"/>
+                            <col width="82.5%"/>
                         </colgroup>
+
                         <tr>
-                            <th colspan="3" class="sub-item-title">Album Information</th>
+                            <th colspan="2" class="sub-item-title">Album Information</th>
                         </tr>
                         <tr>
                             <th>Title<span class="required-field">*</span></th>
-                            <td colspan="2"><input type="text" name="title" id="title" class="form-control form-control-sm" th:value="*{title}"/></td>
+                            <td><input type="text" name="title" class="form-control form-control-sm" th:value="*{title}"/></td>
                         </tr>
                         <tr>
                             <th>Photo Taken Date</th>
-                            <td colspan="2"><input type="date" name="photoTakenDate" id="photoTakenDate" class="form-control form-control-sm" th:value="*{photoTakenDate}"/></td>
+                            <td><input type="date" name="photoTakenDate" class="form-control form-control-sm" th:value="*{photoTakenDate}"/></td>
                         </tr>
                         <tr>
                             <th>Main Page Priority</th>
-                            <td colspan="2">
-                                <div class="mb-3">
+                            <td>
+                                <div>
                                     <div class="custom-control custom-radio custom-control-inline">
                                         <input type="radio" id="mainPageNonCheck" name="mainPage" class="custom-control-input" th:checked="*{mainPagePriority == -1 ||  mainPagePriority == null}">
                                         <label class="custom-control-label" for="mainPageNonCheck"><strong>Don't show main page.</strong></label>
@@ -61,20 +61,19 @@
                                         <label class="custom-control-label" for="mainPageCheck"><strong>Show main page and set priority.</strong></label>
                                     </div>
                                 </div>
-                                <select class="custom-select custom-select-sm main-page-priority" name="mainPagePriority" th:field="*{mainPagePriority}" th:style="*{mainPagePriority >= 0} ? 'display: inline;' : 'display: none'">
+                                <select class="custom-select custom-select-sm main-page-priority mt-2" name="mainPagePriority" th:field="*{mainPagePriority}" th:style="*{mainPagePriority >= 0} ? 'display: inline;' : 'display: none'">
                                     <option th:value="-1" th:text="'Don\'t show main page.'" th:style="'display: none;'" selected></option>
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <th>Main Hash Tag</th>
-                            <td colspan="2"><input type="text" name="mainHashTag" id="mainHashTag" class="form-control form-control-sm" th:value="*{mainHashTag}" readonly/></td>
+                            <td><input type="text" name="mainHashTag" class="form-control form-control-sm" th:value="*{mainHashTag}" readonly/></td>
                         </tr>
                         <tr>
                             <th>Hash Tags<span class="required-field">*</span></th>
-                            <td id="hashTagsTd" colspan="2">
-                                <input th:if="!*{idx}" type="text" id="hashTag" class="form-control form-control-sm" placeholder="#Hash Tag ↵ (Special character is not available.)"/>
-                                <input th:if="*{idx}" type="text" id="hashTag" class="form-control form-control-sm" placeholder="#Hash Tag ↵ (Special character is not available.)"/>
+                            <td id="hashTagsWrapper">
+                                <input type="text" id="hashTag" class="form-control form-control-sm" placeholder="#Hash Tag ↵ (Special character is not available.)"/>
                                 <input type="hidden" name="hashTags" id="hashTags" class="form-control form-control-sm" readonly/>
                             </td>
                         </tr>
@@ -85,92 +84,97 @@
                                     <input type="file" class="custom-file-input" id="file" name="file">
                                     <label class="custom-file-label" for="file">Choose file.</label>
                                 </div>
-                                <div id="fileDrop" class="fileDrop">
-                                    <strong>Drop files here.</strong>
-                                </div>
-                            </td>
-                            <td>
-                                <img th:if="*{attachedFileList.size()} == 0" id="imgPreview" class="float-right general-img-preview img-thumbnail" th:attr="src=@{/images/no-preview-available.jpg}"/>
-                                <img th:if="*{attachedFileList.size()} != 0" id="imgPreview" class="float-right general-img-preview img-thumbnail"
-                                     th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Total file size</th>
-                            <td colspan="2">
-                                <div><span id="totalFileSize"> 0 MB</span>, Up to 20 MB</div>
-                            </td>
-                        <tr>
-                            <th>Upload Attached File</th>
-                            <td colspan="2">
-                                <div id="attachedFileList"></div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Uploaded Attached File</th>
-                            <td colspan="2">
-                                <div id="uploadedAttachedFileList" th:each="attachedFile : *{attachedFileList}">
-                                    <div th:id="imgData + ${attachedFileStat.index}">
-                                        <span th:text="${attachedFile.fileName} + ',&nbsp;' + 'File Size: ' + ${attachedFile.fileSize}"></span>
-                                        <img th:attr="src=@{|/images/cancel-icon.png|}, onclick=|deleteFile('${attachedFileStat.index}','${attachedFile.idx}','${attachedFile.savedFileName}')|" class="cancel-icon"/>
+                                <div class="row ml-0 mr-0 mt-2">
+                                    <div id="fileDrop" class="fileDrop col-xl-6 col-lg-6 order-1 order-lg-1">
+                                        <strong>Drop files here.</strong>
+                                    </div>
+                                    <div class="col-xl-6 col-lg-6 order-2 order-lg-2 mt-lg-0 mt-2 pr-0">
+                                        <img th:if="*{attachedFileList.size()} == 0" id="imgPreview" class="float-right general-img-preview img-thumbnail" th:attr="src=@{/images/no-preview-available.jpg}"/>
+                                        <a th:if="*{attachedFileList.size()} != 0" th:href="@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-image/*{attachedFileList[0].savedFileName}|}"
+                                           data-gall="userPhoto" class="venobox" th:title="*{title}">
+                                            <img id="imgPreview" class="float-right general-img-preview img-thumbnail"
+                                                 th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-image/*{attachedFileList[0].savedFileName}|}"/>
+                                        </a>
                                     </div>
                                 </div>
                             </td>
                         </tr>
                         <tr>
+                            <th>Total file size</th>
+                            <td>
+                                <div><span id="totalFileSize">0MB</span>, Up to 50MB</div>
+                            </td>
+                        <tr>
+                            <th>Upload Attached File</th>
+                            <td>
+                                <div id="attachedFileList"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Uploaded Attached File</th>
+                            <td>
+                                <div id="uploadedAttachedFileList" th:each="attachedFile : *{attachedFileList}">
+                                    <div th:id="imgData + ${attachedFileStat.index}">
+                                        <span th:text="${attachedFile.fileName} + ',&nbsp;' + 'File Size: ' + ${attachedFile.fileSize}"></span>
+                                        <!-- &nbsp; skip -->
+                                        <i th:attr="onclick=|deleteFile('${attachedFileStat.index}','${attachedFile.idx}','${attachedFile.savedFileName}')|" class="far fa-times-circle"></i>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
                             <th colspan="2" class="sub-item-title">Additional Information</th>
                         </tr>
                         <tr>
                             <th>Active Status</th>
-                            <td colspan="2">
-                                <div class="pull-left">
-                                    <select class="custom-select custom-select-sm" name="activeStatus" th:field="*{activeStatus}">
-                                        <option th:value="ACTIVE">Active</option>
-                                        <option th:value="INACTIVE">Inactive</option>
-                                    </select>
-                                </div>
+                            <td>
+                                <select class="custom-select custom-select-sm" name="activeStatus" th:field="*{activeStatus}">
+                                    <option th:value="ACTIVE">Active</option>
+                                    <option th:value="INACTIVE">Inactive</option>
+                                </select>
                             </td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created Date</th>
-                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Last Modified Date</th>
-                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created By</th>
-                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{createdBy}"/></td>
+                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly th:value="*{createdBy}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Last Modified By</th>
-                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{lastModifiedBy}"/></td>
+                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly th:value="*{lastModifiedBy}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Views</th>
-                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{views}"/></td>
+                            <td colspan="2"><input type="text" class="form-control form-control-sm" readonly th:value="*{views}"/></td>
                         </tr>
                         <tr>
                             <td colspan="10"></td>
                         </tr>
                     </table>
-                </div>
 
-                <div class="row justify-content-between mt-5 mb-3">
-                    <div class="col-auto mx-3">
-                        <a href="/album/list" class="btn btn-secondary">Move to List</a>
+                    <div class="row justify-content-between mt-4 mb-4">
+                        <div class="col-auto">
+                            <a href="/album/list" class="btn btn-sm btn-secondary">Move to List</a>
+                        </div>
+                        <div class="col-auto ml-2">
+                            <button th:if="!*{idx}" id="insert" type="button" class="btn-main btn-sm">Register</button>
+                            <button th:if="*{idx}" id="update" type="button" class="btn btn-sm btn-info">Update</button>
+                        </div>
                     </div>
-                    <div class="col-auto mx-3">
-                        <button th:if="!*{idx}" id="insert" type="button" class="btn-main">Register</button>
-                        <button th:if="*{idx}" id="update" type="button" class="btn btn-info">Update</button>
-                    </div>
-                </div>
 
-                <!-- input type="hidden" -->
-                <input type="hidden" name="idx" th:value="*{idx}"/>
-                <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
-                <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
+                    <!-- input type="hidden" -->
+                    <input type="hidden" name="idx" th:value="*{idx}"/>
+                    <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
+                    <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
+                </div>
             </form>
         </div>
     </div>
@@ -183,198 +187,41 @@
 <th:block th:replace="layout/script.html"></th:block>
 
 <!-- javascript -->
-<script th:inline="javascript">
-    var totalFileSize = 0;
-    var insertFileArray = [];
-    var deleteFileArray = [];
-    var imgDataId = 0;
-    var exit = null;
+<script th:src="@{/js/file-upload/single-img-file-upload.js}"></script>
 
+<script th:inline="javascript">
     // 파일 Number validation
     var insertFileArrayLength = 0;
     var deleteFileArrayLength = 0;
     var uploadedAttachedFileLength = [[${albumDto.attachedFileList}]].length;
 
+    <!-- Main Page Priority -->
+    var mainPagePrioritySelect = document.getElementsByName("mainPagePriority")[0];
+    var albumDtoList = [[${albumDtoList}]];
+    var albumDto = [[${albumDto}]];
+
     var hashTagId = 0;
 
-    $(document).ready(function () {
-        <!-- File Drop -->
-        $("#fileDrop").on("dragenter dragover", function (event) {
-            event.preventDefault(); // 기본 이벤트 발생을 막음
-        });
-
-        <!-- Main Page Priority -->
-        var mainPagePrioritySelect = document.getElementsByName("mainPagePriority")[0];
-        var albumDtoList = [[${albumDtoList}]];
-        var albumDto = [[${albumDto}]];
-
-        for (var i = 0; i < 25; i++) {
-            var option = document.createElement("option");
-            option.text = i + 1;
-            option.value = i + 1;
-            mainPagePrioritySelect.options.add(option, i + 1);
-        }
-
-        for (var i = 0; i < albumDtoList.length; i++) {
-            var mainPagePriority = albumDtoList[i].mainPagePriority;
-
-            // 현재 album의 mainPagePriority인 경우(select)
-            if (mainPagePriority == albumDto.mainPagePriority) {
-                mainPagePrioritySelect.options.item(mainPagePriority).selected = true;
-            }
-            // 다른 album의 mainPagePriority인 경우(disable)
-            else {
-                mainPagePrioritySelect.options.item(mainPagePriority).text += " has been set by '" + albumDtoList[i].title + "'.(disabled)";
-                mainPagePrioritySelect.options.item(mainPagePriority).className = "disable";
-                mainPagePrioritySelect.options.item(mainPagePriority).disabled = true;
-            }
-        }
-    });
-
-    /* input tag event */
-    $("#file").change(function () {
-        var files = document.getElementsByName("file")[0].files;
-
-        // 업로드하는 파일 개수가 number개가 넘어가는 경우, 파일 업로드 불가
-        if (!validateByFileNumber(files, 1)) {
-            return false;
-        }
-
-        for (var i = 0; i < files.length; i++) {
-            if (validateImageFile(files[i])) {
-                insertFileArray.push(files[i]);
-                document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
-
-                $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
-                    + '<span>'
-                    + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size)
-                    + '<img src="/images/cancel-icon.png" class="cancel-icon" onClick="cancelFile(' + imgDataId + ')"/>'
-                    + '</span>'
-                    + '</div>');
-
-                imgDataId++;
-                readURL(this);
-            } else {
-                return false;
-            }
-        }
-    });
-
-    /* Drag & drop event */
-    $("#fileDrop").on("drop", function (event) {
-        event.preventDefault(); // 기본 효과를 막음
-        document.getElementById("fileDrop").style.opacity = 1;
-
-        // 드래그된 파일의 정보
-        // event : jQuery의 이벤트
-        // originalEvent : javascript의 이벤트
-        var files = event.originalEvent.dataTransfer.files;
-
-        // 업로드하는 파일 개수가 number개가 넘어가는 경우, 파일 업로드 불가
-        if (!validateByFileNumber(files, 1)) {
-            return false;
-        }
-
-        for (var i = 0; i < files.length; i++) {
-            if (validateImageFile(files[i])) {
-                insertFileArray.push(files[i]);
-                document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
-
-                $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
-                    + '<span>'
-                    + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size)
-                    + '<img src="/images/cancel-icon.png" class="cancel-icon" onClick="cancelFile(' + imgDataId + ')" />'
-                    + '</span>'
-                    + '</div>');
-
-                imgDataId++;
-                readURL(this);
-            } else {
-                return false;
-            }
-        }
-    });
-
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                $('#imgPreview').attr('src', e.target.result);
-            }
-
-            reader.readAsDataURL(input.files[0]);
-        }
+    for (var i = 0; i < 25; i++) {
+        var option = document.createElement("option");
+        option.text = i + 1;
+        option.value = i + 1;
+        mainPagePrioritySelect.options.add(option, i + 1);
     }
 
-    $("#fileDrop").on("dragover", function (event) {
-        event.stopPropagation();
-        event.preventDefault();
+    for (var i = 0; i < albumDtoList.length; i++) {
+        var mainPagePriority = albumDtoList[i].mainPagePriority;
 
-        document.getElementById("fileDrop").style.opacity = 0.25;
-    });
-
-    $("#fileDrop").on("dragleave", function (event) {
-        event.stopPropagation();
-        event.preventDefault();
-
-        document.getElementById("fileDrop").style.opacity = 1;
-    });
-
-    // 새로 업로드한 파일을 취소하는 경우
-    function cancelFile(fileId) {
-        $('#imgData' + fileId).remove();
-
-        totalFileSize -= insertFileArray[fileId].size;
-        insertFileArray[fileId] = null;
-
-        document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
-        document.getElementById("imgPreview").src = "/images/no-preview-available.jpg";
-    }
-
-    // 기존 업로드한 파일을 삭제하는 경우
-    function deleteFile(fileId, idx, savedFileName) {
-        $('#imgData' + fileId).remove();
-
-        deleteFileArray.push(idx);
-        document.getElementById("imgPreview").src = "/images/no-preview-available.jpg";
-    }
-
-    function deleteAlbum(albumIdx) {
-        $.ajax({
-            url: moduleAppApiAddress + "/api/albums/" + albumIdx,
-            type: "delete",
-            dataType: "text",
-            contentType: "application/json",
-            async: false,
-        })
-            .done(function (msg) {
-
-            })
-            .fail(function (msg) {
-                parseErrorMsg(msg);
-            });
-    }
-
-    /* Hash Tag 추가 */
-    $("#hashTag").on("change", function () {
-        var regExp = /^[#][a-zA-Zㄱ-힣0-9|s]*$/;
-        var hashTag = document.getElementById("hashTag").value;
-
-        if (regExp.test(hashTag)) {
-            $("#hashTagsTd").append('<span id="hashTagData' + hashTagId + '" class="hash-tag mt-2">'
-                + hashTag
-                + '<img src="/images/cancel-icon.png" class="cancel-icon" onClick="cancelHashTag(' + hashTagId + ')" />'
-                + '</span>');
-
-            document.getElementById("hashTag").value = "";
-            hashTagId++;
+        // 현재 album의 mainPagePriority인 경우(select)
+        if (mainPagePriority == albumDto.mainPagePriority) {
+            mainPagePrioritySelect.options.item(mainPagePriority).selected = true;
         }
-    });
-
-    // 새로 업로드한 Hash Tag를 취소하는 경우
-    function cancelHashTag(hashTagId) {
-        $('#hashTagData' + hashTagId).remove();
+        // 다른 album의 mainPagePriority인 경우(disable)
+        else {
+            mainPagePrioritySelect.options.item(mainPagePriority).text += " has been set by '" + albumDtoList[i].title + "'.(disabled)";
+            mainPagePrioritySelect.options.item(mainPagePriority).className = "disable";
+            mainPagePrioritySelect.options.item(mainPagePriority).disabled = true;
+        }
     }
 
     // Main Page Priority 변경
@@ -392,6 +239,43 @@
             document.getElementsByName("mainPagePriority")[0].options.item(albumDto.mainPagePriority - 1).selected = true;
         }
     });
+
+    /* Hash Tag 추가 */
+    $("#hashTag").on("change", function () {
+        var regExp = /^[#][a-zA-Zㄱ-힣0-9|s]*$/;
+        var hashTag = document.getElementById("hashTag").value;
+
+        if (regExp.test(hashTag)) {
+            $("#hashTagsWrapper").append('<span id="hashTagData' + hashTagId + '" class="hash-tag mt-2">'
+                + hashTag + "&nbsp;"
+                + '<i class="far fa-times-circle" onClick="cancelHashTag(' + hashTagId + ')" />'
+                + '</span>');
+
+            document.getElementById("hashTag").value = "";
+            hashTagId++;
+        }
+    });
+
+    /* 새로 업로드한 Hash Tag를 취소하는 경우 */
+    function cancelHashTag(hashTagId) {
+        $('#hashTagData' + hashTagId).remove();
+    }
+
+    function deleteAlbum(albumIdx) {
+        $.ajax({
+            url: moduleAppApiAddress + "/api/albums/" + albumIdx,
+            type: "delete",
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+            });
+    }
 </script>
 
 <script th:if="!${albumDto?.idx}">
@@ -411,6 +295,9 @@
             return false;
         }
 
+        // duplicate submit check
+        if (duplicateSubmitCheck()) return false;
+
         var jsonData = $("#form").serializeObject();
         var albumIdx;
 
@@ -428,6 +315,7 @@
             })
             .fail(function (msg) {
                 parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
                 exit = true;
             });
 
@@ -459,6 +347,7 @@
             })
             .fail(function (msg) {
                 parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
                 deleteAlbum(albumIdx);
             });
 
@@ -473,9 +362,9 @@
     document.getElementsByName("hashTags")[0].value = "";
 
     for (var i = 1; i < hashTagArray.length; i++) {
-        $("#hashTagsTd").append('<span id="hashTagData' + hashTagId + '" class="hash-tag mt-2">'
-            + '#' + hashTagArray[i]
-            + '<img src="/images/cancel-icon.png" class="cancel-icon" onClick="cancelHashTag(' + hashTagId + ')" />'
+        $("#hashTagsWrapper").append('<span id="hashTagData' + hashTagId + '" class="hash-tag mt-2">'
+            + '#' + hashTagArray[i] + "&nbsp;"
+            + '<i onClick="cancelHashTag(' + hashTagId + ')" class="far fa-times-circle" />'
             + '</span>');
 
         hashTagId++;
@@ -497,6 +386,9 @@
             return false;
         }
 
+        // duplicate submit check
+        if (duplicateSubmitCheck()) return false;
+
         var jsonData = $("#form").serializeObject();
         var albumIdx = document.getElementsByName("idx")[0].value;
 
@@ -513,6 +405,7 @@
             })
             .fail(function (msg) {
                 parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
                 exit = true;
             });
 
@@ -540,6 +433,7 @@
                 })
                 .fail(function (msg) {
                     parseErrorMsg(msg);
+                    duplicateSubmitFlag = false;
                     exit = true;
                 });
         }
@@ -549,6 +443,8 @@
         if (insertFileArray.length <= 0) {
             localStorage.setItem("result", "/album/update-success");
             location.href = "/album?idx=" + albumIdx;
+
+            return true;
         }
 
         // 파일 업로드
@@ -577,7 +473,7 @@
             })
             .fail(function (msg) {
                 parseErrorMsg(msg);
-                deleteAlbum(albumIdx);
+                duplicateSubmitFlag = false;
             })
     });
 </script>

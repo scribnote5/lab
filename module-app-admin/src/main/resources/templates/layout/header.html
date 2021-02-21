@@ -1,26 +1,22 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <!--header-->
-<div th:fragment="header">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom" style="min-height: 4rem">
-        <div id="menu-toggle">
-            <img src="/images/sidebar.svg" class="sidebar-icon img-thumbnail">
-        </div>
+<div th:fragment="header" lass="float-left">
+    <div class="bg-light border-bottom" style="height: 3.75rem">
+        <div class="d-flex flex-wrap align-content-center justify-content-between">
+            <div class="mt-2 ml-3">
+                <img id="menu-toggle" src="/images/sidebar.svg" class="sidebar-icon img-thumbnail">
+            </div>
 
-        <div class="navbar-toggler" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" style="border: none">
-            <img src="/images/menu.svg" class="menu-icon img-thumbnail">
-        </div>
-
-        <div id="navbarSupportedContent" class="collapse navbar-collapse">
-            <ul class="navbar-nav ml-auto mt-2">
-                <div class="nav-item user-information">
+            <div class="mt-2 mr-3">
+                <div class="user-information">
                     <a th:href="'/user?idx='+${#authentication.principal.idx}"><img src="/images/user-information-icon.svg" class="user-information-icon"></a>
                     <span class="username" th:text="${#authentication.principal.username}"> </span>
                     <img src="/images/logout-icon.svg" class="logout-icon" id="logout">
                 </div>
-            </ul>
+            </div>
         </div>
-    </nav>
+    </div>
 </div>
 <!--/header-->
 </html>

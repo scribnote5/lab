@@ -31,25 +31,24 @@
                     </div>
                 </div>
 
-                <div class="mt-5">
-                    <table class="table">
+                <div class="page-content">
+                    <table class="table mobile-table-form mt-4">
                         <colgroup>
                             <col width="17.5%"/>
                             <col width="82.5%"/>
                         </colgroup>
+
                         <tr>
                             <th colspan="2" class="sub-item-title">Alumni Association Information</th>
                         </tr>
                         <tr>
                             <th>Title<span class="required-field">*</span></th>
-                            <td>
-                                <input type="text" name="title" class="form-control form-control-sm" th:value="*{title}"/>
-                            </td>
+                            <td><input type="text" name="title" class="form-control form-control-sm" th:value="*{title}"/></td>
                         </tr>
                         <tr>
                             <th>Main Page Priority</th>
                             <td colspan="2">
-                                <div class="mb-3">
+                                <div>
                                     <div class="custom-control custom-radio custom-control-inline">
                                         <input type="radio" id="mainPageNonCheck" name="mainPage" class="custom-control-input" th:checked="*{mainPagePriority == 11 ||  mainPagePriority == null}">
                                         <label class="custom-control-label" for="mainPageNonCheck"><strong>Don't show main page.</strong></label>
@@ -59,48 +58,49 @@
                                         <label class="custom-control-label" for="mainPageCheck"><strong>Show main page and set priority.</strong></label>
                                     </div>
                                 </div>
-                                <select class="custom-select custom-select-sm main-page-priority" name="mainPagePriority" th:field="*{mainPagePriority}"
+                                <select class="custom-select custom-select-sm main-page-priority mt-2" name="mainPagePriority" th:field="*{mainPagePriority}"
                                         th:style="*{mainPagePriority >= 1 && mainPagePriority <= 10} ? 'display: inline;' : 'display: none'">
                                     <option th:value="11" th:text="'Don\'t show main page.'" th:style="'display: none;'" selected></option>
                                 </select>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2"><textarea name="content" id="summernote" class="summernote" th:text="*{content}"></textarea></td>
+                            <td colspan="2">
+                                <div name="content" id="content" th:utext="*{content}"></div>
+                            </td>
                         </tr>
+
                         <tr>
                             <th colspan="2" class="sub-item-title">Additional Information</th>
                         </tr>
                         <tr>
                             <th>Active Status</th>
                             <td>
-                                <div class="pull-left">
-                                    <select class="custom-select custom-select-sm" name="activeStatus" th:field="*{activeStatus}">
-                                        <option th:value="ACTIVE">Active</option>
-                                        <option th:value="INACTIVE">Inactive</option>
-                                    </select>
-                                </div>
+                                <select class="custom-select custom-select-sm" name="activeStatus" th:field="*{activeStatus}">
+                                    <option th:value="ACTIVE">Active</option>
+                                    <option th:value="INACTIVE">Inactive</option>
+                                </select>
                             </td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created Date</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Last Modified Date</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created By</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{createdBy}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{createdBy}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Last Modified By</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{lastModifiedBy}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{lastModifiedBy}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Views</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{views}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{views}"/></td>
                         </tr>
                         <tr>
                             <td colspan="10"></td>
@@ -108,13 +108,13 @@
                     </table>
                 </div>
 
-                <div class="row justify-content-between mt-5 mb-3">
-                    <div class="col-auto mx-3">
-                        <a href="/alumni-association/list" class="btn btn-secondary col-auto">Move to List</a>
+                <div class="row justify-content-between mt-4 mb-4">
+                    <div class="col-auto">
+                        <a href="/alumni-association/list" class="btn btn-sm btn-secondary col-auto">Move to List</a>
                     </div>
-                    <div class="col-auto mx-3">
-                        <button th:if="!*{idx}" id="insert" type="button" class="btn-main col-auto">Register</button>
-                        <button th:if="*{idx}" id="update" type="button" class="btn btn-info col-auto">Update</button>
+                    <div class="col-auto ml-2">
+                        <button th:if="!*{idx}" id="insert" type="button" class="btn-main btn-sm col-auto">Register</button>
+                        <button th:if="*{idx}" id="update" type="button" class="btn btn-sm btn-info col-auto">Update</button>
                     </div>
                 </div>
 
@@ -134,61 +134,34 @@
 <th:block th:replace="layout/script.html"></th:block>
 
 <!-- javascript -->
+<script th:src="@{/js/ckeditor-editor-init.js}"></script>
+
 <script th:inline="javascript">
-    $(document).ready(function () {
-        <!-- summernote setting -->
-        $("#summernote").summernote({
-            height: 500,	// 에디터 높이
-            minHeight: null,	// 최소 높이
-            maxHeight: null,	// 최대 높이
-            // focus: true,	// 에디터 로딩후 포커스를 맞출지 여부
-            lang: "ko-KR",// 한글 설정
-            placeholder: "The editor's max input size of bytes is 16777215(16 MB)."	//placeholder 설정
-        });
-        $("#summernote").summernote('fontSize', 14);
+    <!-- Main Page Priority -->
+    var mainPagePrioritySelect = document.getElementsByName("mainPagePriority")[0];
+    var alumniAssociationDtoList = [[${alumniAssociationDtoList}]];
+    var alumniAssociationDto = [[${alumniAssociationDto}]];
 
-        <!-- Main Page Priority -->
-        var mainPagePrioritySelect = document.getElementsByName("mainPagePriority")[0];
-        var alumniAssociationDtoList = [[${alumniAssociationDtoList}]];
-        var alumniAssociationDto = [[${alumniAssociationDto}]];
+    for (var i = 0; i < 10; i++) {
+        var option = document.createElement("option");
+        option.text = i + 1;
+        option.value = i + 1;
+        mainPagePrioritySelect.options.add(option, i + 1);
+    }
 
-        for (var i = 0; i < 10; i++) {
-            var option = document.createElement("option");
-            option.text = i + 1;
-            option.value = i + 1;
-            mainPagePrioritySelect.options.add(option, i + 1);
+    for (var i = 0; i < alumniAssociationDtoList.length; i++) {
+        var mainPagePriority = alumniAssociationDtoList[i].mainPagePriority;
+
+        // 현재 alumniAssociation의 mainPagePriority인 경우(select)
+        if (mainPagePriority == alumniAssociationDto.mainPagePriority) {
+            mainPagePrioritySelect.options.item(mainPagePriority).selected = true;
         }
-
-        for (var i = 0; i < alumniAssociationDtoList.length; i++) {
-            var mainPagePriority = alumniAssociationDtoList[i].mainPagePriority;
-
-            // 현재 alumniAssociation의 mainPagePriority인 경우(select)
-            if (mainPagePriority == alumniAssociationDto.mainPagePriority) {
-                mainPagePrioritySelect.options.item(mainPagePriority).selected = true;
-            }
-            // 다른 alumniAssociation의 mainPagePriority인 경우(disable)
-            else {
-                mainPagePrioritySelect.options.item(mainPagePriority).text += " has been set by '" + alumniAssociationDtoList[i].title + "'.(disabled)";
-                mainPagePrioritySelect.options.item(mainPagePriority).className = "disable";
-                mainPagePrioritySelect.options.item(mainPagePriority).disabled = true;
-            }
+        // 다른 alumniAssociation의 mainPagePriority인 경우(disable)
+        else {
+            mainPagePrioritySelect.options.item(mainPagePriority).text += " has been set by '" + alumniAssociationDtoList[i].title + "'.(disabled)";
+            mainPagePrioritySelect.options.item(mainPagePriority).className = "disable";
+            mainPagePrioritySelect.options.item(mainPagePriority).disabled = true;
         }
-    });
-
-    function deleteAlumniAssociation(alumniAssociationIdx) {
-        $.ajax({
-            url: moduleAppApiAddress + "/api/alumni_associations/" + alumniAssociationIdx,
-            type: "delete",
-            dataType: "text",
-            contentType: "application/json",
-            async: false,
-        })
-            .done(function (msg) {
-
-            })
-            .fail(function (msg) {
-                parseErrorMsg(msg);
-            });
     }
 
     // Main Page Priority 변경
@@ -206,16 +179,38 @@
             document.getElementsByName("mainPagePriority")[0].options.item(alumniAssociationDto.mainPagePriority - 1).selected = true;
         }
     });
+
+    function deleteAlumniAssociation(alumniAssociationIdx) {
+        $.ajax({
+            url: moduleAppApiAddress + "/api/alumni_associations/" + alumniAssociationIdx,
+            type: "delete",
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
+            });
+    }
 </script>
 
 <script th:if="!${alumniAssociationDto?.idx}">
     $("#insert").click(function () {
         // validation (input tag mame, length or size)
-        if (!(validateByLengthAndBlank("title", 255) && validateBySize("content", 16777215))) {
+        if (!(validateByLengthAndBlank("title", 255) && validateByEditor(editor.getData(), 16777215))) {
             return false;
         }
 
+        // duplicate submit check
+        if (duplicateSubmitCheck()) return false;
+
         var jsonData = $("#form").serializeObject();
+        jsonData.content = editor.getData();
+        var alumniAssociationIdx;
 
         $.ajax({
             url: moduleAppApiAddress + "/api/alumni-associations",
@@ -226,11 +221,13 @@
             async: false,
         })
             .done(function (msg) {
+                alumniAssociationIdx = msg
                 localStorage.setItem("result", "/alumni-association/register-success");
-                location.href = "/alumni-association?idx=" + msg;
+                location.href = "/alumni-association?idx=" + alumniAssociationIdx;
             })
             .fail(function (msg) {
                 parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
             });
     });
 </script>
@@ -238,9 +235,12 @@
 <script th:if="${alumniAssociationDto?.idx}" th:inline="javascript">
     $("#update").click(function () {
         // validation (input tag mame, length or size)
-        if (!(validateByLengthAndBlank("title", 255) && validateBySize("content", 16777215))) {
+        if (!(validateByLengthAndBlank("title", 255) && validateByEditor(editor.getData(), 16777215))) {
             return false;
         }
+
+        // duplicate submit check
+        if (duplicateSubmitCheck()) return false;
 
         var jsonData = $("#form").serializeObject();
         var alumniAssociationIdx = document.getElementsByName("idx")[0].value;
@@ -259,7 +259,7 @@
             })
             .fail(function (msg) {
                 parseErrorMsg(msg);
-                exit = true;
+                duplicateSubmitFlag = false;
             });
     });
 </script>

@@ -30,11 +30,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Page<User> findAllByEmailContaining(Pageable pageable, String email);
 
-    Page<User> findAllByUsernameNotAndActiveStatusIs(Pageable pageable, String rootName, ActiveStatus activeStatus);
+    Page<User> findAllByAuthorityTypeInAndActiveStatusIs(Pageable pageable, List<AuthorityType> authorityType, ActiveStatus activeStatus);
 
-    Page<User> findAllByUsernameNotAndEnglishNameContainingAndActiveStatusIs(Pageable pageable, String rootName, String englishName, ActiveStatus activeStatus);
+    Page<User> findAllByAuthorityTypeInAndEnglishNameContainingAndActiveStatusIs(Pageable pageable, List<AuthorityType> authorityType, String englishName, ActiveStatus activeStatus);
 
-    Page<User> findAllByUsernameNotAndKoreanNameContainingAndActiveStatusIs(Pageable pageable, String rootName, String koreanName, ActiveStatus activeStatus);
+    Page<User> findAllByAuthorityTypeInAndKoreanNameContainingAndActiveStatusIs(Pageable pageable, List<AuthorityType> authorityType, String koreanName, ActiveStatus activeStatus);
 
-    Page<User> findAllByUsernameNotAndEmailContainingAndActiveStatusIs(Pageable pageable, String rootName, String email, ActiveStatus activeStatus);
+    Page<User> findAllByAuthorityTypeInAndEmailContainingAndActiveStatusIs(Pageable pageable, List<AuthorityType> authorityType, String email, ActiveStatus activeStatus);
 }

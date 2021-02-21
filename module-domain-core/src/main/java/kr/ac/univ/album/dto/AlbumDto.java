@@ -1,6 +1,7 @@
 package kr.ac.univ.album.dto;
 
 import kr.ac.univ.album.domain.AlbumAttachedFile;
+import kr.ac.univ.album.domain.enums.MainHashTagStatus;
 import kr.ac.univ.common.dto.CommonDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,7 +37,7 @@ public class AlbumDto extends CommonDto {
     @Size(max = 255, message = "The main hash tag must be less than 255 characters.")
     private String mainHashTag;
 
-    private boolean isMainHashTagPrint;
+    private MainHashTagStatus mainHashTagStatus;
 
     /* Attached File */
     private List<AlbumAttachedFile> attachedFileList = new ArrayList<AlbumAttachedFile>();

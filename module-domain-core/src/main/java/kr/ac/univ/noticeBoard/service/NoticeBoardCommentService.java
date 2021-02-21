@@ -39,11 +39,8 @@ public class NoticeBoardCommentService {
             noticeBoardCommentDto.setNewIcon(NewIconCheck.isNew(noticeBoardCommentDto.getCreatedDate()));
 
             // 권한 설정
-            if (AccessCheck.isAccessInModuleWeb(noticeBoardCommentDto.getCreatedBy())) {
-                noticeBoardCommentDto.setAccess(true);
-            } else {
-                noticeBoardCommentDto.setAccess(false);
-            }
+            // Update: isAccessInGeneral 메소드에 따라 접근 가능 및 불가
+            noticeBoardCommentDto.setAccess(AccessCheck.isAccessInGeneral(noticeBoardCommentDto.getCreatedBy(), userRepository.findByUsername(noticeBoardCommentDto.getCreatedBy()).getAuthorityType().name()));
         }
 
         return noticeBoardCommentDtoList;

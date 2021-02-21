@@ -27,68 +27,86 @@
                     </div>
                 </div>
 
-                <div class="row justify-content-end mt-3">
-                    <div class="col-auto px-1">
-                        <select name="searchType" th:field="*{searchType}" class="form-control form-control-sm">
-                            <option th:value="USER_ID">User ID</option>
-                            <option th:value="KOREAN_NAME">Korean Name</option>
-                            <option th:value="Email">Email</option>
-                        </select>
-                    </div>
-                    <div class="col-auto px-1">
-                        <input type="text" name="keyword" class="form-control form-control-sm" th:value="${searchDto?.keyword}"/>
-                    </div>
-                    <div class="col-auto px-3">
-                        <button id="search" type="button" class="btn-main">Search</button>
+                <div class="page-search">
+                    <div class="row justify-content-end mt-4">
+                        <div class="pt-2 pr-3">
+                            <select class="custom-select custom-select-sm" name="searchType" th:field="*{searchType}">
+                                <option th:value="USER_ID">User ID</option>
+                                <option th:value="KOREAN_NAME">Korean Name</option>
+                                <option th:value="Email">Email</option>
+                            </select>
+                        </div>
+                        <div class="pt-2 pr-2">
+                            <input type="search" class="custom-search-input" name="keyword" placeholder="Search" th:value="${searchDto?.keyword}">
+                        </div>
+                        <div class="pt-2">
+                            <i id="search" class="fas fa-search search-icon"></i>
+                        </div>
                     </div>
                 </div>
 
-                <div class="mt-5">
-                    <table class="table table-hover">
+                <div class="page-content">
+                    <table class="table table-hover mobile-table-list mt-4">
                         <thead>
-                        <tr>
-                            <th style="width: 5%">No.</th>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th style="width: 7.5%" class="text-center">No.</th>
                             <th style="width: 15%">ID</th>
                             <th style="width: 10%">Korean Name</th>
-                            <th style="width: 10%">User Type</th>
+                            <th style="width: 12.5%">User Type</th>
                             <th style="width: 10%">User Status</th>
-                            <th style="width: 10%">Authority Type</th>
-
-                            <th style="width: 12.5%">Created Date</th>
-                            <th style="width: 12.5%">Modified Date</th>
-                            <th style="width: 7.5%">Status</th>
-                            <th style="width: 7.5%">Views</th>
+                            <th style="width: 12.5%">Authority Type</th>
+                            <th style="width: 17.5%" class="text-center">Created Date</th>
+                            <th style="width: 7.5%" class="text-center">Status</th>
+                            <th style="width: 7.5%" class="text-center">Views</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="userDto : ${userDtoList}">
-                            <td th:text="${userDto.idx}"></td>
+                            <td th:text="${userDto.idx}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td>
+                                <!-- Mobile No. -->
+                                <span th:text="${userDto.idx} + '.'" class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline"></span>
+
+                                <!-- Common -->
                                 <a th:href="'/user?idx='+${userDto.idx}" th:text="${userDto.username}" class="link"></a>
                                 <img th:if="${userDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
+
+                                <!-- Mobile -->
+                                <div class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline">
+                                    <div class="d-flex align-center">
+                                        <span th:text="${userDto.createdBy}" class="mobile-additional-information"> </span> &nbsp;&nbsp;
+                                        <span th:text="${#temporals.format(userDto.createdDate,'yyyy-MM-dd HH:mm')}" class="mobile-additional-information"></span> &nbsp;&nbsp;
+                                        <span th:text="'Views: ' + ${userDto.views}" class="mobile-additional-information"></span>
+                                    </div>
+                                    <div class="d-flex align-center">
+                                        <span th:if="${userDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active" class="mobile-additional-information"></span>
+                                        <span th:if="${userDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive" class="mobile-additional-information"></span>
+                                    </div>
+                                </div>
                             </td>
-                            <td th:text="${userDto.koreanName}"></td>
 
-                            <td th:if="${userDto.userType?.name() == 'FACULTY'}" th:text="Faculty"></td>
-                            <td th:if="${userDto.userType?.name() == 'FULL_TIME_PhD'}" th:text="'Ph.d. Full Time'"></td>
-                            <td th:if="${userDto.userType?.name() == 'PART_TIME_PhD'}" th:text="'Ph.d. Part Time'"></td>
-                            <td th:if="${userDto.userType?.name() == 'FULL_TIME_MS'}" th:text="'M.S. Full Time'"></td>
-                            <td th:if="${userDto.userType?.name() == 'PART_TIME_MS'}" th:text="'M.S. Part Time'"></td>
-                            <td th:if="${userDto.userType?.name() == 'B.S.'}" th:text="'B.S.'"></td>
+                            <!-- Desktop -->
+                            <td th:text="${userDto.koreanName}" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
 
-                            <td th:if="${userDto.userStatus?.name() == 'ATTENDING'}" th:text="Attending"></td>
-                            <td th:if="${userDto.userStatus?.name() == 'GRADUATED'}" th:text="Graduated"></td>
+                            <td th:if="${userDto.userType?.name() == 'A_FACULTY'}" th:text="Faculty" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:if="${userDto.userType?.name() == 'B_FULL_TIME_PHD'}" th:text="'Ph.d. Full Time'" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:if="${userDto.userType?.name() == 'C_FULL_TIME_MS'}" th:text="'M.S. Full Time'" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:if="${userDto.userType?.name() == 'D_PART_TIME_PHD'}" th:text="'Ph.d. Part Time'" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:if="${userDto.userType?.name() == 'E_PART_TIME_MS'}" th:text="'M.S. Part Time'" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:if="${userDto.userType?.name() == 'F_B.S.'}" th:text="'B.S.'" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
 
-                            <td th:if="${userDto.authorityType?.name() == 'ROOT'}" th:text="Root"></td>
-                            <td th:if="${userDto.authorityType?.name() == 'MANAGER'}" th:text="Manager"></td>
-                            <td th:if="${userDto.authorityType?.name() == 'GENERAL'}" th:text="General"></td>
-                            <td th:if="${userDto.authorityType?.name() == 'NON_USER'}" th:text="'Non ' + 'User'"></td>
+                            <td th:if="${userDto.userStatus?.name() == 'ATTENDING'}" th:text="Attending" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:if="${userDto.userStatus?.name() == 'GRADUATED'}" th:text="Graduated" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
 
-                            <td th:text="${#temporals.format(userDto.createdDate,'yyyy-MM-dd HH:mm')}"></td>
-                            <td th:text="${#temporals.format(userDto.lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
-                            <td th:if="${userDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active"></td>
-                            <td th:if="${userDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"></td>
-                            <td th:text="${userDto.views}">></td>
+                            <td th:if="${userDto.authorityType?.name() == 'ROOT'}" th:text="Root" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:if="${userDto.authorityType?.name() == 'MANAGER'}" th:text="Manager" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:if="${userDto.authorityType?.name() == 'GENERAL'}" th:text="General" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:if="${userDto.authorityType?.name() == 'NON_USER'}" th:text="'Non ' + 'User'" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
+
+                            <td th:text="${#temporals.format(userDto.createdDate,'yyyy-MM-dd HH:mm')}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:if="${userDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:if="${userDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:text="${userDto.views}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                         </tr>
                         <tr th:if="${userDtoList.totalElements == 0}">
                             <td colspan="10" class="no-posts">
@@ -100,37 +118,36 @@
                         </tr>
                         </tbody>
                     </table>
-                </div>
-                <br>
 
-                <div class="row justify-content-end mt-5 mb-3">
-                    <div class="col-auto mx-3">
-                        <a href="/user/form" class="btn-main">Register</a>
+                    <div class="row justify-content-end mt-4 mb-4">
+                        <div class="col-auto">
+                            <a href="/user/form" class="btn-main btn-sm">Register</a>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Pagination -->
-                <div class="row justify-content-center" aria-label="Page navigation">
-                    <ul class="pagination"
-                        th:with="startNumber=${T(Math).floor(userDtoList.number/10)}*10+1, endNumber=(${userDtoList.totalPages} > ${startNumber}+9) ? ${startNumber}+9 : (${userDtoList.totalPages} == 0 ? 1 : ${userDtoList.totalPages})">
-                        <li class="page-item">
-                            <a class="page-link" aria-label="Previous" th:href="@{/user/list(page=1,searchType=*{searchType},keyword=*{keyword})}">&laquo;</a>
-                        </li>
-                        <li class="page-item" th:style="${userDtoList.first} ? 'display:none'">
-                            <a class="page-link" th:href="@{/user/list(page=${userDtoList.number},searchType=*{searchType},keyword=*{keyword})}">&lsaquo;</a>
-                        </li>
-                        <li th:each="page :${#numbers.sequence(startNumber, endNumber)}" th:class="(${page} == ${userDtoList.number}+1) ? 'page-item active'">
-                            <a class="page-link" th:href="@{/user/list(page=${page},searchType=*{searchType},keyword=*{keyword})}" th:text="${page}"><span class="sr-only"></span></a>
-                        </li>
-                        <li class="page-item" th:style="${userDtoList.last} ? 'display:none'">
-                            <a class="page-link" th:href="@{/user/list(page=${userDtoList.number}+2,searchType=*{searchType},keyword=*{keyword})}">&rsaquo;</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" aria-label="Next" th:href="@{/user/list(page=${userDtoList.totalPages},searchType=*{searchType},keyword=*{keyword})}">&raquo;</a>
-                        </li>
-                    </ul>
+                    <!-- Pagination -->
+                    <div class="row justify-content-center mb-4" aria-label="Page navigation">
+                        <ul class="pagination"
+                            th:with="startNumber=${T(Math).floor(userDtoList.number/10)}*10+1, endNumber=(${userDtoList.totalPages} > ${startNumber}+9) ? ${startNumber}+9 : (${userDtoList.totalPages} == 0 ? 1 : ${userDtoList.totalPages})">
+                            <li class="page-item">
+                                <a class="page-link" aria-label="Previous" th:href="@{/user/list(page=1,searchType=*{searchType},keyword=*{keyword})}">&laquo;</a>
+                            </li>
+                            <li class="page-item" th:style="${userDtoList.first} ? 'display:none'">
+                                <a class="page-link" th:href="@{/user/list(page=${userDtoList.number},searchType=*{searchType},keyword=*{keyword})}">&lsaquo;</a>
+                            </li>
+                            <li th:each="page :${#numbers.sequence(startNumber, endNumber)}" th:class="(${page} == ${userDtoList.number}+1) ? 'page-item active'">
+                                <a class="page-link" th:href="@{/user/list(page=${page},searchType=*{searchType},keyword=*{keyword})}" th:text="${page}"><span class="sr-only"></span></a>
+                            </li>
+                            <li class="page-item" th:style="${userDtoList.last} ? 'display:none'">
+                                <a class="page-link" th:href="@{/user/list(page=${userDtoList.number}+2,searchType=*{searchType},keyword=*{keyword})}">&rsaquo;</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" aria-label="Next" th:href="@{/user/list(page=${userDtoList.totalPages},searchType=*{searchType},keyword=*{keyword})}">&raquo;</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /Pagination -->
                 </div>
-                <!-- /Pagination -->
             </form>
         </div>
     </div>

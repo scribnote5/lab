@@ -7,116 +7,133 @@
     <title th:text="${@environment.getProperty('title')} + ' | Notice Board Detail'"></title>
 </head>
 <body>
-<div id="wrapper">
-    <div id="page-content-wrapper">
-        <!-- header -->
-        <div th:replace="layout/header::header"></div>
+<div id="page-content-wrapper">
+    <!-- header -->
+    <div th:replace="layout/header::header"></div>
 
-        <div class="container">
-            <form name="form" id="form" th:object="${noticeBoardDto}" action="#">
-                <div class="page-header breadcrumbs" data-aos="fade-up" data-aos-delay="100">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h2>Notice Board Detail</h2>
-                        <ol>
-                            <li>Home</li>
-                            <li>Notice Board Detail</li>
-                        </ol>
-                    </div>
+    <div class="container">
+        <form name="form" id="form" th:object="${noticeBoardDto}" action="#">
+            <div class="page-header breadcrumbs" data-aos="fade-up">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2>Notice Board Detail</h2>
+                    <ol>
+                        <li>Home</li>
+                        <li>Notice Board Detail</li>
+                    </ol>
                 </div>
+            </div>
 
-                <div class="mt-4" data-aos="fade-up" data-aos-delay="150">
-                    <div class="mb-2 text-right">
-                        <strong class="date">&nbsp;&nbsp;Created Date: </strong>
-                        <span class="date" th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/> </span><br>
+            <div id="loading" class="row justify-content-center">
+                <img th:src="@{/images/loading.gif}" alt="Loading…"/>
+            </div>
 
-                        <strong class="date">Modified Date: </strong>
-                        <span class="date" th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></span>
-                    </div>
+            <div class="page-content" data-aos="fade-up">
+                <table class="table mobile-table-read mt-4">
+                    <colgroup>
+                        <col width="17.5%"/>
+                        <col width="82.5%"/>
+                    </colgroup>
 
-                    <table class="table">
-                        <colgroup>
-                            <col width="17.5%"/>
-                            <col width="82.5%"/>
-                        </colgroup>
-                        <tr>
-                            <th>Title</th>
-                            <td><span id="title" th:text="*{title}"></span></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2"><span id="content" class="form-control form-control-sm content" th:utext="*{content}"></span></td>
-                        </tr>
-                        <tr th:if="!*{#lists.isEmpty(attachedFileList)}">
-                            <th>Uploaded Attached File</th>
-                            <td>
-                                <div id="attachedFileList" th:each="attachedFile : *{attachedFileList}">
+                    <!-- Desktop -->
+                    <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                        <td class="text-right border-0" colspan="10">
+                            <strong class="additional-information">Created By: </strong><span th:text="*{createdBy}" class="additional-information"></span> &nbsp;&nbsp;&nbsp;
+                            <strong class="additional-information">Created Date: </strong><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}" class="additional-information"></span> &nbsp;&nbsp;&nbsp;
+                            <strong class="additional-information">Views: </strong> <span th:text="*{views}" class="additional-information"/></span>
+                        </td>
+                    </tr>
+                    <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                        <th>Title</th>
+                        <td th:text="*{title}"></td>
+                    </tr>
+
+                    <!-- Mobile -->
+                    <tr class="d-print-none d-sm-table-row d-md-table-row d-lg-none d-xl-none d-table-row">
+                        <td colspan="2">
+                            <h4 th:text="*{title}" class="mobile-title"></h4>
+
+                            <div class="text-right">
+                                <span th:text="*{createdBy}"></span>&nbsp;&nbsp;
+                                <span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}" class="mobile-additional-information"></span>&nbsp;&nbsp;
+                                <span th:text="'Views: ' + *{views}" class="mobile-additional-information"/>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Common -->
+                    <tr>
+                        <td colspan="2">
+                            <div class="content" th:utext="*{content}"></div>
+                        </td>
+                    </tr>
+                    <tr th:if="!*{#lists.isEmpty(attachedFileList)}">
+                        <th class="d-none d-sm-none d-md-none d-lg-table-cell">Uploaded Attached File</th>
+                        <td colspan="2">
+                            <strong class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline mobile-default">Uploaded Attached File</strong>
+                            <div id="attachedFileList" th:each="attachedFile : *{attachedFileList}">
                                 <span th:attr="onclick=|location.href='${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/${attachedFile.savedFileName}'|"
                                       th:text="${attachedFile.fileName} + ',&nbsp;' + 'File size: ' + ${attachedFile.fileSize}"></span>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="10"></td>
+                    </tr>
+                </table>
 
-                <div class="mt-3">
-                    <table class="table">
-                        <colgroup>
-                            <col width="17.5%"/>
-                            <col width="82.5%"/>
-                        </colgroup>
-                        <tr>
-                            <th colspan="2" class="sub-item-title">Comments</th>
-                        </tr>
-                        <tr th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}">
-                            <td colspan="2">
-                                <textarea class="form-control form-control-sm comment" name="content" id="comment"></textarea>
-                                <button type="button" class="btn btn-primary mt-3" id="insertComment">Register</button>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-
+                <!-- Comment -->
+                <table class="table mt-3">
+                    <colgroup>
+                        <col width="17.5%"/>
+                        <col width="82.5%"/>
+                    </colgroup>
+                    <tr>
+                        <th colspan="2" class="sub-item-title">Comments</th>
+                    </tr>
+                    <tr th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}">
+                        <td colspan="2">
+                            <textarea class="form-control comment" name="content" id="comment"></textarea>
+                            <button type="button" class="btn btn-sm btn-primary mt-3" id="insertComment">Register</button>
+                        </td>
+                    </tr>
+                </table>
                 <div th:if="!${#lists.isEmpty(noticeBoardCommentDtoList)}" class="mt-3">
                     <table class="table table-hover">
-                        <colgroup>
-                            <col width="17.5%"/>
-                            <col width="82.5%"/>
-                        </colgroup>
                         <tr th:each="noticeBoardCommentDto : ${noticeBoardCommentDtoList}">
-                            <td colspan="2">
-                                <div class="mx-3">
-                                    <span th:class="createdBy" th:text="${noticeBoardCommentDto.createdBy}"></span><br>
-                                    <span th:class="createdDate"
-                                          th:text="${#temporals.format(noticeBoardCommentDto.createdDate,'yyyy-MM-dd HH:mm')}"></span>
-                                    <img th:class="new-icon" th:if="${noticeBoardCommentDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}"/>
-                                </div>
-                                <div class="mx-3 my-3">
-                                    <span th:id="content + ${noticeBoardCommentDtoStat.index}"
-                                          th:text="${noticeBoardCommentDto.content}"></span>
-                                    <textarea class="form-control form-control-sm comment"
+                            <td>
+                                <span th:text="${noticeBoardCommentDto.createdBy}"></span>&nbsp;&nbsp;
+                                <span th:text="${#temporals.format(noticeBoardCommentDto.createdDate,'yyyy-MM-dd HH:mm')}" class="comment-additional-information"></span>
+                                <img th:class="new-icon" th:if="${noticeBoardCommentDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}"/>
+
+                                <div class="mt-2">
+                                    <span th:id="commentContent + ${noticeBoardCommentDtoStat.index}"
+                                          th:utext="${noticeBoardCommentDto.content}"
+                                          class="comment">
+                                    </span>
+                                    <textarea th:id="updateCommentContent + ${noticeBoardCommentDtoStat.index}"
+                                              th:text="${noticeBoardCommentDto.content}"
+                                              class="form-control comment"
                                               style="display: none;"
-                                              name="updateContent"
-                                              th:id="updateContent + ${noticeBoardCommentDtoStat.index}"
-                                              th:text="${noticeBoardCommentDto.content}">
+                                              name="updateContent">
 					                </textarea>
                                 </div>
-                                <div th:if="${noticeBoardCommentDto.access}">
-                                    <button type="button" class="btn btn-outline-info mx-1"
+                                <div th:if="${noticeBoardCommentDto.access}" class="mt-3">
+                                    <button type="button" class="btn btn-sm btn-outline-info mr-2"
                                             th:id="displayComment + ${noticeBoardCommentDtoStat.index}"
                                             th:onclick="displayComment([[${noticeBoardCommentDtoStat.index}]])">
                                         Update
                                     </button>
-                                    <button type="button" class="btn btn-outline-danger mx-1"
+                                    <button type="button" class="btn btn-sm btn-outline-danger"
                                             th:id="deleteComment + ${noticeBoardCommentDtoStat.index}"
                                             th:onclick="deleteComment([[${noticeBoardCommentDto.idx}]], [[${noticeBoardCommentDtoStat.index}]])">
                                         Delete
                                     </button>
-
-                                    <button type="button" style="display:none;" class="btn btn-outline-primary mx-1"
+                                    <button type="button" style="display:none;" class="btn btn-sm btn-outline-primary mr-2"
                                             th:id="updateComment + ${noticeBoardCommentDtoStat.index}"
                                             th:onclick="updateComment([[${noticeBoardCommentDto.idx}]], [[${noticeBoardCommentDto.createdBy}]], [[${noticeBoardCommentDto.activeStatus}]],[[${noticeBoardCommentDtoStat.index}]])">
                                         Register
                                     </button>
-                                    <button type="button" style="display:none;" class="btn btn-outline-danger mx-1" th:id="cancelComment + ${noticeBoardCommentDtoStat.index}"
+                                    <button type="button" style="display:none;" class="btn btn-sm btn-outline-danger" th:id="cancelComment + ${noticeBoardCommentDtoStat.index}"
                                             th:onclick="cancelComment([[${noticeBoardCommentDtoStat.index}]])">
                                         Cancel
                                     </button>
@@ -126,13 +143,13 @@
                     </table>
                 </div>
 
-                <div class="row justify-content-between mt-5 mb-4">
-                    <div class="col-auto mx-3">
-                        <a href="/notice-board/list" class="btn btn-secondary">Move to List</a>
+                <div class="row justify-content-between mt-4 mb-4">
+                    <div class="col-auto">
+                        <a href="/notice-board/list" class="btn btn-sm btn-secondary">Move to List</a>
                     </div>
-                    <div th:if="*{access}" class="col-auto mx-3">
-                        <a th:href="'/notice-board/form?idx='+*{idx}" class="btn btn-info mx-1">Update</a>
-                        <button type="button" class="btn btn-danger mx-1" id="delete">Delete</button>
+                    <div th:if="*{access}" class="col-auto ml-2">
+                        <a th:href="'/notice-board/form?idx='+*{idx}" class="btn btn-sm btn-info mx-1">Update</a>
+                        <button type="button" class="btn btn-sm btn-danger mx-1" id="delete">Delete</button>
                     </div>
                 </div>
 
@@ -141,8 +158,8 @@
                 <input type="hidden" name="createdBy" th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}" th:value="${#authentication.principal.username}"/>
                 <input type="hidden" name="lastModifiedBy" th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}" th:value="${#authentication.principal.username}"/>
                 <input type="hidden" name="activeStatus" th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}" th:value="ACTIVE"/>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -188,8 +205,11 @@
                 lastModifiedBy: document.getElementsByName("lastModifiedBy")[0].value,
                 activeStatus: document.getElementsByName("activeStatus")[0].value,
                 noticeBoardIdx: document.getElementsByName("idx")[0].value,
-                content: document.getElementsByName("content")[0].value
+                content: document.getElementsByName("content")[0].value.replace(/\n/g, "<br>")
             }
+
+        // duplicate submit check
+        if (duplicateSubmitCheck()) return false;
 
         $.ajax({
             url: moduleAppApiAddress + "/api/notice-boards-comments/",
@@ -205,6 +225,7 @@
             })
             .fail(function (msg) {
                 parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
             })
     });
 
@@ -216,8 +237,11 @@
                 lastModifiedBy: document.getElementsByName("lastModifiedBy")[0].value,
                 activeStatus: activeStatus,
                 noticeBoardIdx: document.getElementsByName("idx")[0].value,
-                content: document.getElementsByName("updateContent")[commentId].value
+                content: document.getElementsByName("updateContent")[commentId].value.replace(/\n/g, "<br>")
             }
+
+        // duplicate submit check
+        if (duplicateSubmitCheck()) return false;
 
         $.ajax({
             url: moduleAppApiAddress + "/api/notice-boards-comments/" + idx,
@@ -233,6 +257,7 @@
             })
             .fail(function (msg) {
                 parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
             })
     }
 
@@ -264,7 +289,7 @@
 
     function displayComment(index) {
         document.getElementsByName("updateContent")[index].style.display = "inline";
-        document.getElementById("content" + index).style.display = "none";
+        document.getElementById("commentContent" + index).style.display = "none";
 
         document.getElementById("displayComment" + index).style.display = "none";
         document.getElementById("deleteComment" + index).style.display = "none";
@@ -274,7 +299,7 @@
 
     function cancelComment(index) {
         document.getElementsByName("updateContent")[index].style.display = "none";
-        document.getElementById("content" + index).style.display = "inline";
+        document.getElementById("commentContent" + index).style.display = "inline";
 
         document.getElementById("displayComment" + index).style.display = "inline";
         document.getElementById("deleteComment" + index).style.display = "inline";

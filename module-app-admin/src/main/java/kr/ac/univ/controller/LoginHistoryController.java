@@ -22,7 +22,7 @@ public class LoginHistoryController {
 
     // List
     @GetMapping("/list")
-    public String loginHistoryList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
+    public String loginHistoryList(Pageable pageable, SearchDto searchDto, Model model) {
         model.addAttribute("loginHistoryDtoList", loginHistoryService.findLoginHistoryList(pageable, searchDto));
 
         return "loginHistory/list";

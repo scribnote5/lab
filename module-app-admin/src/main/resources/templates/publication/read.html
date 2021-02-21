@@ -26,145 +26,212 @@
                     </div>
                 </div>
 
-                <div class="mt-5">
-                    <table class="table">
+                <div class="page-content">
+                    <table class="table mobile-table-read mt-4">
                         <colgroup>
                             <col width="17.5%"/>
                             <col width="82.5%"/>
                         </colgroup>
+
                         <tr>
-                            <th colspan="4" class="sub-item-title">Publication Information</th>
+                            <th colspan="2" class="sub-item-title">Publication Information</th>
                         </tr>
-                        <tr>
+                        <!-- Desktop -->
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Title</th>
-                            <td><span id="title" th:text="*{title}"></span></td>
+                            <td th:text="*{title}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Authors</th>
-                            <td><span id="authors" th:text="*{authors}"></span></td>
+                            <td th:text="*{authors}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Publishing Area</th>
                             <td>
                                 <span th:if="*{publishingArea?.name() == 'DOMESTIC'}" th:text="Domestic"> </span>
                                 <span th:if="*{publishingArea?.name() == 'INTERNATIONAL'}" th:text="International"> </span>
                             </td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Publication Type</th>
                             <td>
                                 <span th:if="*{publicationType?.name() == 'JOURNAL'}" th:text="Journal"> </span>
                                 <span th:if="*{publicationType?.name() == 'JOURNAL_KCI'}" th:text="'Journal - KCI'"> </span>
                                 <span th:if="*{publicationType?.name() == 'JOURNAL_SCOPUS'}" th:text="'Journal - SCOPUS'"> </span>
-                                <span th:if="*{publicationType?.name() == 'JOURNAL_SCI'}" th:text="'Journal - SCI'"> </span>
+                                <span th:if="*{publicationType?.name() == 'JOURNAL_SCIE'}" th:text="'Journal - SCIE'"> </span>
                                 <span th:if="*{publicationType?.name() == 'POSTER'}" th:text="'Conference- Poster'"> </span>
                                 <span th:if="*{publicationType?.name() == 'REGULAR'}" th:text="'Conference- Regular'"> </span>
                                 <span th:if="*{publicationType?.name() == 'DEMO'}" th:text="'Conference- Demo'"> </span>
                                 <span th:if="*{publicationType?.name() == 'WORKSHOP'}" th:text="'Conference- Workshop'"> </span>
                             </td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Published In</th>
-                            <td><span id="publishedIn" th:text="*{publishedIn}"></span></td>
+                            <td th:text="*{publishedIn}"></td>
                         </tr>
-                        <tr>
-                            <th>Impact Factor(SCI or SCOPUS)</th>
-                            <td><span id="impactFactor" th:text="*{impactFactor}"></span>
-                            </td>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Impact Factor(SCIE or SCOPUS)</th>
+                            <td th:text="*{impactFactor}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Published Date</th>
-                            <td><span id="publishedDate" th:text="*{#temporals.format(publishedDate,'yyyy-MM-dd')}"/></td>
+                            <td th:text="*{#temporals.format(publishedDate,'yyyy-MM-dd')}"/>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Pages</th>
-                            <td><span id="pages" th:text="*{pages}"></span></td>
+                            <td th:text="*{pages}">/td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Volume</th>
-                            <td><span id="volume" th:text="*{volume}"></span></td>
+                            <td th:text="*{volume}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Number</th>
-                            <td><span id="number" th:text="*{number}"></span></td>
+                            <td th:text="*{number}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Doi</th>
-                            <td><span id="Doi" th:text="*{Doi}"></span></td>
+                            <td th:text="*{doi}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>URI</th>
-                            <td><span id="uri" th:text="*{Doi}"></span></td>
+                            <td th:text="*{uri}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>ISBN/ISSN</th>
-                            <td><span id="ISBN/ISSN" th:text="*{isbnIssn}"></span></td>
+                            <td th:text="*{isbnIssn}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Remark</th>
-                            <td><span id="remark" th:text="*{remark}"></span></td>
+                            <td th:text="*{remark}"></td>
                         </tr>
 
-                        <tr>
-                            <th>Uploaded Attached File</th>
-                            <td>
+                        <!-- Mobile -->
+                        <tr class="d-print-none d-sm-table-row d-md-table-row d-lg-none d-xl-none d-table-row">
+                            <td colspan="2">
+                                <h4 th:text="*{title}" class="mobile-title"></h4>
+                            </td>
+                        </tr>
+                        <tr class="d-print-none d-sm-table-row d-md-table-row d-lg-none d-xl-none d-table-row">
+                            <td colspan="2">
+                                <strong class="mobile-default">Authors </strong><span th:text="*{authors}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Publishing Area </strong>
+                                <span th:if="*{publishingArea?.name() == 'DOMESTIC'}" th:text="Domestic" class="mobile-default"> </span>
+                                <span th:if="*{publishingArea?.name() == 'INTERNATIONAL'}" th:text="International" class="mobile-default"> </span><br>
+
+                                <strong class="mobile-default">Publication Type </strong>
+                                <span th:if="*{publicationType?.name() == 'JOURNAL'}" th:text="Journal" class="mobile-default"> </span>
+                                <span th:if="*{publicationType?.name() == 'JOURNAL_KCI'}" th:text="'Journal - KCI'" class="mobile-default"> </span>
+                                <span th:if="*{publicationType?.name() == 'JOURNAL_SCOPUS'}" th:text="'Journal - SCOPUS'" class="mobile-default"> </span>
+                                <span th:if="*{publicationType?.name() == 'JOURNAL_SCIE'}" th:text="'Journal - SCIE'" class="mobile-default"> </span>
+                                <span th:if="*{publicationType?.name() == 'POSTER'}" th:text="'Conference- Poster'" class="mobile-default"> </span>
+                                <span th:if="*{publicationType?.name() == 'REGULAR'}" th:text="'Conference- Regular'" class="mobile-default"> </span>
+                                <span th:if="*{publicationType?.name() == 'DEMO'}" th:text="'Conference- Demo'" class="mobile-default"> </span>
+                                <span th:if="*{publicationType?.name() == 'WORKSHOP'}" th:text="'Conference- Workshop'" class="mobile-default"> </span><br>
+
+                                <strong class="mobile-default">Published In </strong><span th:text="*{publishedIn}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Impact Factor(SCIE or SCOPUS) </strong><span th:text="*{impactFactor}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Published Date </strong><span th:text="*{#temporals.format(publishedDate,'yyyy-MM-dd')}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Pages </strong><span th:text="*{pages}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Volume </strong><span th:text="*{volume}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Number </strong><span th:text="*{number}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Doi </strong><span th:text="*{doi}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">URI </strong><span th:text="*{uri}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">ISBN/ISSN </strong><span th:text="*{isbnIssn}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Remark </strong><span th:text="*{remark}" class="mobile-default"></span>
+                            </td>
+                        </tr>
+
+                        <!-- Common -->
+                        <tr th:if="!*{#lists.isEmpty(attachedFileList)}">
+                            <th class="d-none d-sm-none d-md-none d-lg-table-cell">Uploaded Attached File</th>
+                            <td colspan="2">
+                                <strong class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline mobile-default">Uploaded Attached File</strong>
                                 <div id="attachedFileList" th:each="attachedFile : *{attachedFileList}">
                                 <span th:attr="onclick=|location.href='${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/${attachedFile.savedFileName}'|"
                                       th:text="${attachedFile.fileName} + ',&nbsp;' + 'File size: ' + ${attachedFile.fileSize}"></span>
                                 </div>
                             </td>
                         </tr>
+
                         <tr>
                             <th colspan="2" class="sub-item-title">Additional Information</th>
                         </tr>
-                        <tr>
+                        <!-- Desktop -->
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Active Status</th>
                             <td>
-                                <div>
-                                    <span th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active"> </span>
-                                    <span th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"> </span>
-                                </div>
-                            </td>
+                                <span th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active"> </span>
+                                <span th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"> </span>
                             </td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Created Date</th>
-                            <td><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Last Modified Date</th>
-                            <td><span th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Created By</th>
-                            <td><span th:text="*{createdBy}"/></td>
+                            <td th:text="*{createdBy}"></td>
                         </tr>
-                        <tr>
-                            <th>Last Created By</th>
-                            <td><span th:text="*{lastModifiedBy}"/></td>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Last Modified By</th>
+                            <td th:text="*{lastModifiedBy}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Views</th>
-                            <td><span th:text="*{views}"/></td>
+                            <td th:text="*{views}"></td>
+                        </tr>
+
+                        <!-- Mobile -->
+                        <tr class="d-print-none d-sm-table-row d-md-table-row d-lg-none d-xl-none d-table-row">
+                            <td colspan="2">
+                                <strong class="mobile-default">Active Status: </strong>
+                                <span th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active" class="mobile-default"> </span>
+                                <span th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive" class="mobile-default"> </span><br>
+
+                                <strong class="mobile-default">Created Date: </strong><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Last Modified Date: </strong><span th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Created By: </strong><span th:text="*{createdBy}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Last Modified By: </strong><span th:text="*{lastModifiedBy}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Views: </strong> <span th:text="*{views}" class="mobile-default"></span>
+                            </td>
                         </tr>
                         <tr>
                             <td colspan="10"></td>
                         </tr>
                     </table>
-                </div>
 
-                <div class="row justify-content-between mt-5 mb-3">
-                    <div class="col-auto mx-3">
-                        <a href="/publication/list" class="btn btn-secondary">Move to List</a>
+                    <div class="row justify-content-between mt-4 mb-4">
+                        <div class="col-auto">
+                            <a href="/publication/list" class="btn btn-sm btn-secondary">Move to List</a>
+                        </div>
+                        <div th:if="*{access}" class="col-auto ml-2">
+                            <a th:href="'/publication/form?idx='+*{idx}" class="btn btn-sm btn-info mx-1">Update</a>
+                            <button type="button" class="btn btn-sm btn-danger mx-1" id="delete">Delete</button>
+                        </div>
                     </div>
-                    <div th:if="*{access}" class="col-auto mx-3">
-                        <a th:href="'/publication/form?idx='+*{idx}" class="btn btn-info mx-1">Update</a>
-                        <button type="button" class="btn btn-danger mx-1" id="delete">Delete</button>
-                    </div>
-                </div>
 
-                <!-- input type="hidden" -->
-                <input type="hidden" name="idx" th:value="*{idx}"/>
+                    <!-- input type="hidden" -->
+                    <input type="hidden" name="idx" th:value="*{idx}"/>
+                </div>
             </form>
         </div>
     </div>

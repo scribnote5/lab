@@ -99,9 +99,9 @@ public class UserController {
 
     // List
     @GetMapping("/list")
-    public String noticeBoardList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
+    public String userList(Pageable pageable, SearchDto searchDto, Model model) {
         Page<UserDto> userDtoList = userService.findUserList(pageable, searchDto);
-        for(UserDto userDto: userDtoList) {
+        for (UserDto userDto : userDtoList) {
             userAttachedFileService.findAttachedFileByUserIdx(userDto.getIdx(), userDto);
         }
 
@@ -110,9 +110,17 @@ public class UserController {
         return "user/list";
     }
 
-    // Form Update
+    // Form
+    @GetMapping("/register")
+    public String userRegisterForm(Model model) {
+        model.addAttribute("userDto", new UserDto());
+
+        return "user/form";
+    }
+
+    // Form
     @GetMapping("/form{idx}")
-    public String loginForm(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
+    public String userUpdateForm(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
         UserDto userDto = userService.findUserByIdx(idx);
         String returnPage = null;
 
@@ -132,7 +140,7 @@ public class UserController {
 
     // Read
     @GetMapping({"", "/"})
-    public String noticeBoardRead(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
+    public String userRead(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
         UserDto userDto = userService.findUserByIdx(idx);
         userDto = userAttachedFileService.findAttachedFileByUserIdx(idx, userDto);
 

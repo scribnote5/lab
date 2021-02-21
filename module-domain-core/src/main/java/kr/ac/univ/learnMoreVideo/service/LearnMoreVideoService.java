@@ -20,10 +20,12 @@ import java.util.List;
 public class LearnMoreVideoService {
     private final LearnMoreVideoRepository learnMoreVideoRepository;
     private final LearnMoreVideoRepositoryImpl learnMoreVideoRepositoryImpl;
+    private final UserRepository userRepository;
 
-    public LearnMoreVideoService(LearnMoreVideoRepository learnMoreVideoRepository, LearnMoreVideoRepositoryImpl learnMoreVideoRepositoryImpl) {
+    public LearnMoreVideoService(LearnMoreVideoRepository learnMoreVideoRepository, LearnMoreVideoRepositoryImpl learnMoreVideoRepositoryImpl, UserRepository userRepository) {
         this.learnMoreVideoRepository = learnMoreVideoRepository;
         this.learnMoreVideoRepositoryImpl = learnMoreVideoRepositoryImpl;
+        this.userRepository = userRepository;
     }
 
     public Page<LearnMoreVideoDto> findLearnMoreList(Pageable pageable, SearchDto searchDto) {
@@ -44,7 +46,7 @@ public class LearnMoreVideoService {
                 break;
         }
 
-        learnMoreVideoDtoList = new PageImpl<LearnMoreVideoDto>(LearnMoreVideoMapper.INSTANCE.toDto(learnMoreVideoList.getContent()), pageable, learnMoreVideoList.getTotalElements());
+        learnMoreVideoDtoList = new PageImpl<>(LearnMoreVideoMapper.INSTANCE.toDto(learnMoreVideoList.getContent()), pageable, learnMoreVideoList.getTotalElements());
 
         // NewIcon 판별
         for (LearnMoreVideoDto learnMoreVideoDto : learnMoreVideoDtoList) {
@@ -74,11 +76,9 @@ public class LearnMoreVideoService {
         if (idx == 0) {
             learnMoreVideoDto.setAccess(true);
         }
-        // Update: isAccess 메소드에 따라 접근 가능 및 불가
-        else if (AccessCheck.isAccessInModuleWeb(learnMoreVideoDto.getCreatedBy())) {
-            learnMoreVideoDto.setAccess(true);
-        } else {
-            learnMoreVideoDto.setAccess(false);
+        // Update: isAccessInGeneral 메소드에 따라 접근 가능 및 불가
+        else {
+            learnMoreVideoDto.setAccess(AccessCheck.isAccessInGeneral(learnMoreVideoDto.getCreatedBy(), userRepository.findByUsername(learnMoreVideoDto.getCreatedBy()).getAuthorityType().name()));
         }
 
         learnMoreVideoRepositoryImpl.updateViewsByIdx(idx);

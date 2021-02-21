@@ -14,8 +14,8 @@
 
         <div class="container publication">
             <form name="form" id="form" th:object="${publicationSearchDto}" action="#">
-                <div class="page-header breadcrumbs" data-aos="fade-up" data-aos-delay="100">
-                    <div class="d-flex justify-content-between align-items-center">
+                <div class="page-header breadcrumbs">
+                    <div class="d-flex justify-content-between align-items-center" data-aos="fade-up">
                         <h2>Publication List</h2>
                         <ol>
                             <li>Home</li>
@@ -24,99 +24,109 @@
                     </div>
                 </div>
 
-                <div class="row justify-content-end mt-3" data-aos="fade-up" data-aos-delay="100">
-                    <div class="custom-control custom-radio mx-2">
-                        <input type="radio" class="custom-control-input" name="publicationSearchType" id="showAll"
-                               th:value="SHOW_ALL"
-                               th:checked="*{publicationSearchType?.name() == 'SHOW_ALL' ||  publicationSearchType?.name() == null}">
-                        <label class="custom-control-label" th:for="showAll"> Show All </label>
-                    </div>
-                    <div class="custom-control custom-radio mx-2">
-                        <input type="radio" class="custom-control-input" name="publicationSearchType" id="internationalJournal"
-                               th:value="INTERNATIONAL_JOURNAL"
-                               th:checked="*{publicationSearchType?.name() == 'INTERNATIONAL_JOURNAL'}">
-                        <label class="custom-control-label" th:for="internationalJournal"> International Journal </label>
-                    </div>
-                    <div class="custom-control custom-radio mx-2">
-                        <input type="radio" class="custom-control-input" name="publicationSearchType"
-                               id="internationalConference"
-                               th:value="INTERNATIONAL_CONFERENCE"
-                               th:checked="*{publicationSearchType?.name() == 'INTERNATIONAL_CONFERENCE'}">
-                        <label class="custom-control-label" th:for="internationalConference"> International Conference </label>
-                    </div>
-                    <div class="custom-control custom-radio mx-2">
-                        <input type="radio" class="custom-control-input" name="publicationSearchType" id="domesticJournal"
-                               th:value="DOMESTIC_JOURNAL"
-                               th:checked="*{publicationSearchType?.name() == 'DOMESTIC_JOURNAL'}">
-                        <label class="custom-control-label" th:for="domesticJournal"> Domestic Journal </label>
-                    </div>
-                    <div class="custom-control custom-radio mx-2">
-                        <input type="radio" class="custom-control-input" name="publicationSearchType" id="domesticConference"
-                               th:value="DOMESTIC_CONFERENCE"
-                               th:checked="*{publicationSearchType?.name() == 'DOMESTIC_CONFERENCE'}">
-                        <label class="custom-control-label" th:for="domesticConference"> Domestic Conference </label>
-                    </div>
+                <div id="loading" class="row justify-content-center">
+                    <img th:src="@{/images/loading.gif}" alt="Loading…"/>
                 </div>
 
-                <div class="row justify-content-end mt-3" data-aos="fade-up" data-aos-delay="100">
-                    <div>
-                        <select name="searchType" th:field="*{searchType}" class="form-control form-control-sm">
-                            <option th:value="TITLE">title</option>
-                            <option th:value="AUTHORS">authors</option>
-                            <option th:value="PUBLISHED_IN">published in</option>
-                        </select>
-                    </div>
-
-                    <div class="col-auto px-1">
-                        <input type="text" name="keyword" class="form-control form-control-sm" th:value="${searchDto?.keyword}"/>
-                    </div>
-                    <div class="col-auto px-3">
-                        <button id="search" type="button" class="btn-main">Search</button>
-                    </div>
-                </div>
-
-                <div id="publications" class="mt-5" data-aos="fade-up" data-aos-delay="150">
-                    <div th:id="publicationData0" th:each="publicationDto : ${publicationDtoList}" class="publication-wrap mt-4">
-                        <a th:if="!${#strings.isEmpty(publicationDto.uri)}" th:href="${publicationDto.uri}" th:id="publicationTitle" class="my-1" th:text="${publicationDto.title}" th:class="title" target="_blank"></a>
-                        <span th:if="${#strings.isEmpty(publicationDto.uri)}" th:id="publicationTitle" class="my-1" th:text="${publicationDto.title}" th:class="title"></span><br>
-
-                        <span th:text="${publicationDto.authors}" th:id="publicationAuthors" class="authors my-1"></span><br>
-
-                        <span th:if="!${#strings.isEmpty(publicationDto.publishedIn)}" th:text="${publicationDto.publishedIn}"></span>
-                        <span th:if="!${#strings.isEmpty(publicationDto.publishedDate)}" th:text="', ' + ${#temporals.format(publicationDto.publishedDate, 'MMMM', new java.util.Locale('en', 'EN'))}"></span>
-                        <span th:if="!${#strings.isEmpty(publicationDto.publishedDate)}" th:text="', ' + ${#temporals.format(publicationDto.publishedDate,'yyyy')}"></span>
-                        <span th:if="!${#strings.isEmpty(publicationDto.volume)}" th:text="', Vol. ' + ${publicationDto.volume} "></span>
-                        <span th:if="!${#strings.isEmpty(publicationDto.number)}" th:text="', No. ' + ${publicationDto.number}"></span>
-                        <span th:if="!${#strings.isEmpty(publicationDto.pages)}" th:text="', pp. ' + ${publicationDto.pages}"></span>
-                        <span th:if="!${#strings.isEmpty(publicationDto.isbnIssn)}" th:text="', ' + ${publicationDto.isbnIssn}"></span>
-
-                        <div class="mt-2">
-                        <span th:if="${#strings.equals(publicationDto.publishingArea, 'INTERNATIONAL') && #strings.equals(publicationDto.publicationType, 'JOURNAL_SCI') || #strings.equals(publicationDto.publicationType, 'JOURNAL_SCOPUS')}"
-                              th:text="${publicationDto.publishingArea.publishingArea} + ' ' + ${publicationDto.publicationType.publicationType} + (${#strings.isEmpty(publicationDto.impactFactor)} ? '' : ${publicationDto.impactFactor})"
-                              class="btn-primary btn-sm"></span>
-                            <span th:if="${#strings.equals(publicationDto.publishingArea, 'INTERNATIONAL') && !(#strings.equals(publicationDto.publicationType, 'JOURNAL_SCI') || #strings.equals(publicationDto.publicationType, 'JOURNAL_SCOPUS'))}"
-                                  th:text="${publicationDto.publishingArea.publishingArea} + ' ' + ${publicationDto.publicationType.publicationType}"
-                                  class="btn-info btn-sm"></span>
-                            <span th:if="${#strings.equals(publicationDto.publishingArea, 'DOMESTIC') && #strings.equals(publicationDto.publicationType, 'JOURNAL')}"
-                                  th:text="${publicationDto.publishingArea.publishingArea} + ' ' + ${publicationDto.publicationType.publicationType} "
-                                  class="btn-success btn-sm"></span>
-                            <span th:if="${#strings.equals(publicationDto.publishingArea, 'DOMESTIC') && !(#strings.equals(publicationDto.publicationType, 'JOURNAL'))}"
-                                  th:text="${publicationDto.publishingArea.publishingArea} + ' ' + ${publicationDto.publicationType.publicationType}"
-                                  class="btn-warning btn-sm"></span>
+                <div class="page-search" data-aos="fade-up">
+                    <div class="row justify-content-end mt-4">
+                        <div class="custom-control custom-radio col-auto">
+                            <input type="radio" class="custom-control-input" name="publicationSearchType" id="showAll"
+                                   th:value="SHOW_ALL"
+                                   th:checked="*{publicationSearchType?.name() == 'SHOW_ALL' ||  publicationSearchType?.name() == null}">
+                            <label class="custom-control-label" th:for="showAll"> Show All </label>
                         </div>
-                    </div>
-                    <div th:if="${#lists.size(publicationDtoList) == 0}">
-                        <div class="no-posts">
-                            No posts founded.
+                        <div class="custom-control custom-radio col-auto">
+                            <input type="radio" class="custom-control-input" name="publicationSearchType" id="internationalJournal"
+                                   th:value="INTERNATIONAL_JOURNAL"
+                                   th:checked="*{publicationSearchType?.name() == 'INTERNATIONAL_JOURNAL'}">
+                            <label class="custom-control-label" th:for="internationalJournal"> International Journal </label>
+                        </div>
+                        <div class="custom-control custom-radio col-auto">
+                            <input type="radio" class="custom-control-input" name="publicationSearchType"
+                                   id="internationalConference"
+                                   th:value="INTERNATIONAL_CONFERENCE"
+                                   th:checked="*{publicationSearchType?.name() == 'INTERNATIONAL_CONFERENCE'}">
+                            <label class="custom-control-label" th:for="internationalConference"> International Conference </label>
+                        </div>
+                        <div class="custom-control custom-radio col-auto">
+                            <input type="radio" class="custom-control-input" name="publicationSearchType" id="domesticJournal"
+                                   th:value="DOMESTIC_JOURNAL"
+                                   th:checked="*{publicationSearchType?.name() == 'DOMESTIC_JOURNAL'}">
+                            <label class="custom-control-label" th:for="domesticJournal"> Domestic Journal </label>
+                        </div>
+                        <div class="custom-control custom-radio col-auto">
+                            <input type="radio" class="custom-control-input" name="publicationSearchType" id="domesticConference"
+                                   th:value="DOMESTIC_CONFERENCE"
+                                   th:checked="*{publicationSearchType?.name() == 'DOMESTIC_CONFERENCE'}">
+                            <label class="custom-control-label" th:for="domesticConference"> Domestic Conference </label>
                         </div>
                     </div>
 
-                    <div id="loading" class="row justify-content-center">
-                        <img th:src="@{/images/loading.gif}" alt="Loading…"/>
+                    <div class="row justify-content-end mt-2">
+                        <div class="pt-2 pr-3">
+                            <select class="custom-select custom-select-sm" name="searchType" th:field="*{searchType}">
+                                <option th:value="TITLE">Title</option>
+                                <option th:value="AUTHORS">Authors</option>
+                                <option th:value="PUBLISHED_IN">ID</option>
+                            </select>
+                        </div>
+                        <div class="pt-2 pr-2">
+                            <input type="search" class="custom-search-input" name="keyword" placeholder="Search" th:value="${searchDto?.keyword}">
+                        </div>
+                        <div class="pt-2">
+                            <i id="search" class="fas fa-search search-icon"></i>
+                        </div>
                     </div>
                 </div>
 
-                <div class="row justify-content-end mt-5 mb-3"></div>
+                <!-- Common -->
+                <div class="page-content" data-aos="fade-up">
+                    <div id="publications" class="mt-4">
+                        <div th:id="publicationData0" th:each="publicationDto : ${publicationDtoList}" class="publication-wrap mt-4">
+                            <span class="my-1">
+                                <a th:if="!${#strings.isEmpty(publicationDto.doi)}" th:href="${publicationDto.doi}" th:id="publicationTitle" th:text="${publicationDto.title}" th:class="title" target="_blank"></a>
+                                <a th:if="${#strings.isEmpty(publicationDto.doi) and !#strings.isEmpty(publicationDto.uri)}" th:href="${publicationDto.uri}" th:id="publicationTitle" th:text="${publicationDto.title}" th:class="title"
+                                   target="_blank"></a>
+                                <span th:if="${#strings.isEmpty(publicationDto.doi) and #strings.isEmpty(publicationDto.uri)}" th:id="publicationTitle" th:text="${publicationDto.title}" th:class="title"></span><br>
+                            </span>
+
+                            <span th:text="${publicationDto.authors}" th:id="publicationAuthors" class="authors my-1"></span><br>
+
+                            <span th:if="!${#strings.isEmpty(publicationDto.publishedIn)}" th:text="${publicationDto.publishedIn}"></span>
+                            <span th:if="!${#strings.isEmpty(publicationDto.publishedDate)}" th:text="', ' + ${#temporals.format(publicationDto.publishedDate, 'MMMM', new java.util.Locale('en', 'EN'))}"></span>
+                            <span th:if="!${#strings.isEmpty(publicationDto.publishedDate)}" th:text="', ' + ${#temporals.format(publicationDto.publishedDate,'yyyy')}"></span>
+                            <span th:if="!${#strings.isEmpty(publicationDto.volume)}" th:text="', Vol. ' + ${publicationDto.volume} "></span>
+                            <span th:if="!${#strings.isEmpty(publicationDto.number)}" th:text="', No. ' + ${publicationDto.number}"></span>
+                            <span th:if="!${#strings.isEmpty(publicationDto.pages)}" th:text="', pp. ' + ${publicationDto.pages}"></span>
+                            <span th:if="!${#strings.isEmpty(publicationDto.isbnIssn)}" th:text="', ' + ${publicationDto.isbnIssn}"></span>
+
+                            <div class="mt-2">
+                                <span th:if="${#strings.equals(publicationDto.publishingArea, 'INTERNATIONAL') && (#strings.equals(publicationDto.publicationType, 'JOURNAL_SCIE') || #strings.equals(publicationDto.publicationType, 'JOURNAL_SCOPUS'))}"
+                                      th:text="${publicationDto.publishingArea.publishingArea} + ' ' + ${publicationDto.publicationType.publicationType} + (${#strings.isEmpty(publicationDto.impactFactor)} ? '' : '(' + ${publicationDto.impactFactor} + ')')"
+                                      class="btn-primary btn-sm"></span>
+                                <span th:if="${#strings.equals(publicationDto.publishingArea, 'INTERNATIONAL') && !(#strings.equals(publicationDto.publicationType, 'JOURNAL_SCIE') || #strings.equals(publicationDto.publicationType, 'JOURNAL_SCOPUS'))}"
+                                      th:text="${publicationDto.publishingArea.publishingArea} + ' ' + ${publicationDto.publicationType.publicationType}"
+                                      class="btn-info btn-sm"></span>
+                                <span th:if="${#strings.equals(publicationDto.publishingArea, 'DOMESTIC') && #strings.equals(publicationDto.publicationType, 'JOURNAL')}"
+                                      th:text="${publicationDto.publishingArea.publishingArea} + ' ' + ${publicationDto.publicationType.publicationType} "
+                                      class="btn-success btn-sm"></span>
+                                <span th:if="${#strings.equals(publicationDto.publishingArea, 'DOMESTIC') && !(#strings.equals(publicationDto.publicationType, 'JOURNAL'))}"
+                                      th:text="${publicationDto.publishingArea.publishingArea} + ' ' + ${publicationDto.publicationType.publicationType}"
+                                      class="btn-warning btn-sm"></span>
+                            </div>
+                        </div>
+                        <div th:if="${#lists.size(publicationDtoList) == 0}">
+                            <div class="no-posts">
+                                No posts founded.
+                            </div>
+                        </div>
+
+                        <div id="loadingScroll" class="row justify-content-center">
+                            <img th:src="@{/images/loading.gif}" alt="Loading…"/>
+                        </div>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
@@ -135,8 +145,9 @@
     var uri = null;
 
     // 조회하는 데이터가 10개 보다 적은 경우 loading.gif를 hide
-    if (list.length < 10) {
-        $("#loading").hide();
+    if (list.length < 15) {
+        $("#loadingScroll").hide();
+        isLast = true;
     }
     // 처음 발생하는 scroll event에서 데이터를 가져오는 기준이 된다.(마지막 배열 요소의 idx)
     else {
@@ -152,12 +163,11 @@
             if ($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
                 // 더이상 가져오는 데이터가 없는 경우
                 if (isLast) {
-                    $('#loading').hide();
-                    return;
+                    $('#loadingScroll').hide();
+                    return true;
                 }
-                console.log("lastIdx: " + lastIdx);
 
-                $('#loading').show();
+                $('#loadingScroll').show();
 
                 // 처음과 마지막 데이터가 중복되는 경우를 제거하기 위해서 lastIdx에서 1을 뺀다.
                 uri = {lastIdx: lastIdx - 1};
@@ -178,7 +188,7 @@
                         // 가져오는 데이터가 없는 경우
                         if (publicationList.length == 0) {
                             isLast = true;
-                            return;
+                            return true;
                         }
 
                         // 다음 발생하는 scroll event에서 데이터를 가져오는 기준이 된다.(마지막 배열 요소의 idx)
@@ -188,7 +198,7 @@
                             "July", "August", "September", "October", "November", "December"
                         ];
 
-                        $("#loading").hide();
+                        $("#loadingScroll").hide();
 
                         // ajax를 통하여 받은 데이터를 html에 출력한다.
                         for (var i = 0; i < publicationList.length; i++) {
@@ -196,29 +206,46 @@
                             var publishedDate = publicationList[i].publishedDate.split('-');
                             publishedDate[1] = monthNames[publishedDate[1] - 1];
 
-                            if (publicationList[i].publishingArea == 'INTERNATIONAL' && publicationList[i].publicationType == 'JOURNAL') {
-                                str = "<span class='btn-primary btn-sm'>" + capitalize(publicationList[i].publishingArea) + ' ' + capitalize(publicationList[i].publicationType) + '-' + publicationList[i].impactFactor + "</span>";
-                            } else if (publicationList[i].publishingArea == 'INTERNATIONAL' && !(publicationList[i].publicationType == 'JOURNAL')) {
-                                str = "<span class='btn-info btn-sm'>" + capitalize(publicationList[i].publishingArea) + ' ' + capitalize(publicationList[i].publicationType) + "</span>";
+                            if (publicationList[i].publishingArea == 'INTERNATIONAL' && (publicationList[i].publicationType == 'JOURNAL_SCIE' || publicationList[i].publicationType == 'JOURNAL_SCOPUS')) {
+                                str = "<span class='btn-primary btn-sm'>" + capitalize(publicationList[i].publishingArea) + ' ' + convertPublicationType(publicationList[i].publicationType) +
+                                    convertImpactFactor(publicationList[i].impactFactor) + "</span>";
+                            } else if (publicationList[i].publishingArea == 'INTERNATIONAL' && !(publicationList[i].publicationType == 'JOURNAL_SCIE' || publicationList[i].publicationType == 'JOURNAL_SCOPUS')) {
+                                str = "<span class='btn-info btn-sm'>" + capitalize(publicationList[i].publishingArea) + ' ' + convertPublicationType(publicationList[i].publicationType) + "</span>";
                             } else if (publicationList[i].publishingArea == 'DOMESTIC' && publicationList[i].publicationType == 'JOURNAL') {
-                                str = "<span class='btn-success btn-sm'>" + capitalize(publicationList[i].publishingArea) + ' ' + capitalize(publicationList[i].publicationType) + "</span>";
+                                str = "<span class='btn-success btn-sm'>" + capitalize(publicationList[i].publishingArea) + ' ' + convertPublicationType(publicationList[i].publicationType) + "</span>";
                             } else if (publicationList[i].publishingArea == 'DOMESTIC' && !(publicationList[i].publicationType == 'JOURNAL')) {
-                                str = "<span class='btn-warning btn-sm'>" + capitalize(publicationList[i].publishingArea) + ' ' + capitalize(publicationList[i].publicationType) + "</span>";
+                                str = "<span class='btn-warning btn-sm'>" + capitalize(publicationList[i].publishingArea) + ' ' + convertPublicationType(publicationList[i].publicationType) + "</span>";
                             } else {
                                 str = "";
                             }
 
+                            var link = '<span class="my-1">';
+
+                            if (!isEmpty(publicationList[i].doi)) {
+                                link += '<a id="publicationTitle"' + publicationId + ' href="' + publicationList[i].doi + '" class="title" target="_blank">' + publicationList[i].title + '</a>'
+                            } else if (isEmpty(publicationList[i].doi) && !isEmpty(publicationList[i].uri)) {
+                                link += '<a id="publicationTitle"' + publicationId + ' href="' + publicationList[i].uri + '" class="title" target="_blank">' + publicationList[i].title + '</a>'
+                            } else {
+                                link += '<span id="publicationTitle"' + publicationId + ' class="title">' + publicationList[i].title + '</span>'
+                            }
+
+                            link += '</span><br>'
+
+                            var number = !isEmpty(publicationList[i].number) ? '<span>, No. ' + publicationList[i].number + '</span>' : '';
+                            var pages = !isEmpty(publicationList[i].pages) ? '<span>, pp. ' + publicationList[i].pages + '</span>' : '';
+                            var isbnIssn = !isEmpty(publicationList[i].isbnIssn) ? '<span>, ' + publicationList[i].isbnIssn + '</span>' : '';
+
                             $("#publications").append(
                                 '<div id="publicationData' + publicationId + '" class="publication-wrap mt-4">'
-                                + '<a id="publicationTitle"' + publicationId + ' href="publicationList[i].uri" class="my-1 title">' + publicationList[i].title + '</a><br>'
+                                + link
                                 + '<span id="publicationAuthors"' + publicationId + ' class="authors my-1">' + publicationList[i].authors + '</span><br>'
                                 + '<span>' + publicationList[i].publishedIn + '</span>'
                                 + '<span>, ' + publishedDate[1] + '</span>'
                                 + '<span>, ' + publishedDate[0] + '</span>'
                                 + '<span>, Vol. ' + publicationList[i].volume + '</span>'
-                                + '<span>, No. ' + publicationList[i].number + '</span>'
-                                + '<span>, pp. ' + publicationList[i].pages + '</span>'
-                                + '<span>, ' + publicationList[i].isbnIssn + '</span>'
+                                + number
+                                + pages
+                                + isbnIssn
                                 + '<div class="mt-2">'
                                 + str
                                 + '</div>'
@@ -229,7 +256,7 @@
                     })
                     .fail(function (msg) {
                         searchFail();
-                        $('#loading').hide();
+                        $('#loadingScroll').hide();
                     })
             }
         });

@@ -1,0 +1,23 @@
+/*
+ * Common
+ */
+
+.more {
+    color: var(--grey);
+    display: inline-block;
+    font-size: var(--small-font-size);
+}
+
+.more:hover {
+    color: var(--lighter-grey);
+    text-decoration: none;
+}
+
+.hash-tag {
+    background-color: var(--darkest-white);
+    color: var(--darkest-grey);
+    border-radius: .5rem;
+    display: inline-block;
+    padding: .25rem;
+    margin-right: .5rem;
+}

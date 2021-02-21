@@ -106,13 +106,13 @@ public class PublicationRepositoryImpl extends QuerydslRepositorySupport {
         if (publicationSearchDto.getPublicationSearchType() == PublicationSearchType.INTERNATIONAL_JOURNAL) {
             result = publication.publishingArea.eq(PublishingArea.INTERNATIONAL)
                     .and(publication.publicationType.eq(PublicationType.JOURNAL)
-                            .or(publication.publicationType.eq(PublicationType.JOURNAL_SCI))
+                            .or(publication.publicationType.eq(PublicationType.JOURNAL_SCIE))
                             .or(publication.publicationType.eq(PublicationType.JOURNAL_SCOPUS))
                     );
         } else if (publicationSearchDto.getPublicationSearchType() == PublicationSearchType.INTERNATIONAL_CONFERENCE) {
             result = publication.publishingArea.eq(PublishingArea.INTERNATIONAL)
                     .and(publication.publicationType.ne(PublicationType.JOURNAL)
-                            .and(publication.publicationType.ne(PublicationType.JOURNAL_SCI))
+                            .and(publication.publicationType.ne(PublicationType.JOURNAL_SCIE))
                             .and(publication.publicationType.ne(PublicationType.JOURNAL_SCOPUS))
                     );
         } else if (publicationSearchDto.getPublicationSearchType() == PublicationSearchType.DOMESTIC_JOURNAL) {
@@ -123,14 +123,14 @@ public class PublicationRepositoryImpl extends QuerydslRepositorySupport {
         } else if (publicationSearchDto.getPublicationSearchType() == PublicationSearchType.DOMESTIC_CONFERENCE) {
             result = publication.publishingArea.eq(PublishingArea.DOMESTIC)
                     .and(publication.publicationType.ne(PublicationType.JOURNAL)
-                            .and(publication.publicationType.eq(PublicationType.JOURNAL_KCI))
+                            .and(publication.publicationType.ne(PublicationType.JOURNAL_KCI))
                     );
         }
 
         return result;
     }
 
-    public List<Publication> findTop10ByPublicationSearchDto(Long lastIdx, PublicationSearchDto publicationSearchDto) {
+    public List<Publication> findTop15ByPublicationSearchDto(Long lastIdx, PublicationSearchDto publicationSearchDto) {
         QPublication publication = QPublication.publication;
         /*
          * SELECT *
@@ -148,7 +148,7 @@ public class PublicationRepositoryImpl extends QuerydslRepositorySupport {
                         eqSearchType(publicationSearchDto),
                         eqPublicationSearchType(publicationSearchDto))
                 .orderBy(publication.idx.desc())
-                .limit(10)
+                .limit(15)
                 .fetch();
     }
 

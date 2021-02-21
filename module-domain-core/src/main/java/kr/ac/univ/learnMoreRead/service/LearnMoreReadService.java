@@ -20,10 +20,12 @@ import java.util.List;
 public class LearnMoreReadService {
     private final LearnMoreReadRepository learnMoreReadRepository;
     private final LearnMoreReadRepositoryImpl learnMoreReadRepositoryImpl;
+    private final UserRepository userRepository;
 
-    public LearnMoreReadService(LearnMoreReadRepository learnMoreReadRepository, LearnMoreReadRepositoryImpl learnMoreReadRepositoryImpl) {
+    public LearnMoreReadService(LearnMoreReadRepository learnMoreReadRepository, LearnMoreReadRepositoryImpl learnMoreReadRepositoryImpl, UserRepository userRepository) {
         this.learnMoreReadRepository = learnMoreReadRepository;
         this.learnMoreReadRepositoryImpl = learnMoreReadRepositoryImpl;
+        this.userRepository = userRepository;
     }
 
     public Page<LearnMoreReadDto> findLearnMoreList(Pageable pageable, SearchDto searchDto) {
@@ -44,7 +46,7 @@ public class LearnMoreReadService {
                 break;
         }
 
-        learnMoreReadDtoList = new PageImpl<LearnMoreReadDto>(LearnMoreReadMapper.INSTANCE.toDto(learnMoreReadList.getContent()), pageable, learnMoreReadList.getTotalElements());
+        learnMoreReadDtoList = new PageImpl<>(LearnMoreReadMapper.INSTANCE.toDto(learnMoreReadList.getContent()), pageable, learnMoreReadList.getTotalElements());
 
         // NewIcon 판별
         for (LearnMoreReadDto learnMoreReadDto : learnMoreReadDtoList) {
@@ -74,11 +76,9 @@ public class LearnMoreReadService {
         if (idx == 0) {
             learnMoreReadDto.setAccess(true);
         }
-        // Update: isAccess 메소드에 따라 접근 가능 및 불가
-        else if (AccessCheck.isAccessInModuleWeb(learnMoreReadDto.getCreatedBy())) {
-            learnMoreReadDto.setAccess(true);
-        } else {
-            learnMoreReadDto.setAccess(false);
+        // Update: isAccessInGeneral 메소드에 따라 접근 가능 및 불가
+        else {
+            learnMoreReadDto.setAccess(AccessCheck.isAccessInGeneral(learnMoreReadDto.getCreatedBy(), userRepository.findByUsername(learnMoreReadDto.getCreatedBy()).getAuthorityType().name()));
         }
 
         learnMoreReadRepositoryImpl.updateViewsByIdx(idx);

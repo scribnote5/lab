@@ -26,8 +26,7 @@ public class SeminarRestController {
 
     @PostMapping
     public ResponseEntity<?> postSeminar(@RequestBody @Valid SeminarDto seminarDto) {
-          Long idx = seminarService.insertSeminar(seminarDto);
-
+        Long idx = seminarService.insertSeminar(seminarDto);
 
         return new ResponseEntity<>(idx, HttpStatus.CREATED);
     }

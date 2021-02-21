@@ -1,24 +1,21 @@
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
-html * {
-    font-family: 'Spoqa Han Sans', san-serif;
+* {
+    font-family: 'Spoqa Han Sans Neo', san-serif;
     font-weight: var(--regular-font-weight);
-    font-size: 13px;
+    font-size: var(--regular-font-size);
     color: var(--main-black);
 }
 
 body .container-fluid {
-    padding: 1.5rem;
-}
-
-#wrapper {
-    overflow-x: hidden;
-    overflow-y: hidden;
+    padding-top: .75rem;
 }
 
 label {
     font-weight: var(--strong-font-weight);
+    word-break: break-all;
+    white-space: normal;
 }
 
 table th {
@@ -27,6 +24,10 @@ table th {
 
 table td {
     word-break: break-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 0;
 }
 
 .no-posts {
@@ -57,6 +58,10 @@ table td {
     color: var(--white);
 }
 
+.btn-main i {
+    color: var(--white);
+}
+
 .link {
     color: var(--main-red);
     text-decoration: none;
@@ -77,34 +82,294 @@ table td {
     text-decoration: none;
 }
 
-.more {
-    color: var(--main-grey);
-    display: inline-block;
-    font-size: var(--small-font-size);
-}
-
-.more:hover {
-    color: var(--lighter-grey);
-    text-decoration: none;
-}
-
 .filed-introduction {
     text-align: right;
-    text-justify: inter-word;
+}
+
+.disable {
+    background-color: var(--lightest-grey);
+}
+
+#attachedFileList, #uploadedAttachedFileList {
+    word-break: break-all;
+    white-space: normal;
+}
+
+/*
+ * CKeditor
+ */
+.ck.ck-editor {
+    min-height: 500px;
+}
+
+.ck-editor__editable {
+    min-height: 500px;
+}
+
+.image-style-align-left {
+    float: left;
+}
+
+.image-style-align-center {
+    margin-left: auto;
+    margin-right: auto
+}
+
+.image-style-align-right {
+    float: right;
+}
+
+/*
+ * Change bootstrap
+ */
+.table td, .table th {
+    padding: .65rem !important;
+    min-width: 100px;
+}
+
+.page-link {
+    color: var(--main-red) !important;
+}
+
+.page-link:hover {
+    color: var(--lighter-red) !important;
+}
+
+.page-link:focus {
+    box-shadow: 0 0 0 .2rem rgba(158, 37, 41, .25) !important;
+}
+
+.page-item.active .page-link {
+    color: var(--white) !important;
+    background-color: var(--main-red) !important;
+    border-color: var(--main-red) !important;
+}
+
+.page-item.active .page-link:hover {
+    color: var(--white) !important;
+    background-color: var(--lighter-red) !important;
+}
+
+@media (max-width: 767px) {
+    .pagination .page-link {
+        padding: .35rem .5rem !important;
+        font-size: var(--small-font-size) !important;
+    }
+}
+
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+    color: var(--main-red) !important;
+}
+
+.btn-warning {
+    color: var(--white) !important;
+}
+
+.custom-file-input {
+    height: calc(1.5em + .5rem + 2px) !important;
+    font-size: .875rem !important;
+}
+
+.custom-file-label {
+    height: calc(1.5em + .5rem + 2px) !important;
+    padding-top: calc(.25rem + 1px) !important;
+    padding-bottom: calc(.25rem + 1px) !important;
+    font-size: 0.875rem !important;
+}
+
+.custom-file-label::after {
+    height: calc(1.5em + .5rem + 0px) !important;
+    padding-top: calc(.25rem + 1px) !important;
+    padding-bottom: calc(.25rem + 1px) !important;
+    font-size: 0.875rem !important;
+}
+
+/*
+ * Change VenoBox
+ */
+.vbox-title {
+    font-size: 22px !important;
+}
+
+/*
+ * File
+ */
+#fileDrop {
+    line-height: 10rem;
+    border: .1rem dashed gray;
+    text-align: center;
+    color: grey;
+    border-radius: 1rem;
+}
+
+/*
+ * Board
+ */
+.sub-item-title {
+    font-weight: var(--strong-font-weight);
+    font-size: var(--larger-font-size);
+    text-align: center;
+}
+
+.additional-information {
+    color: var(--darkest-grey);
+}
+
+.small-content {
+    overflow: auto;
+    min-height: 200px;
+    height: auto;
+    resize: none;
+}
+
+.small-content img {
+    max-width: 100%;
+    height: auto;
+}
+
+.content {
+    width: 100%;
+    min-height: 400px;
+}
+
+.content img {
+    max-width: 100%;
+    height: auto;
+}
+
+#comment.comment {
+    height: 10rem;
+    resize: none;
+}
+
+[id^="commentContent"].comment {
+    display: block;
+    word-break: break-all;
+    white-space: normal;
+}
+
+[id^="updateCommentContent"].comment {
+    height: 10rem;
+    resize: none;
+}
+
+.required-field {
+    margin-left: .2rem;
+    color: red;
+    font-weight: var(--strong-font-weight);
+}
+
+.user-page-show-field {
+    margin-left: .2rem;
+    color: blue;
+    font-weight: var(--strong-font-weight);
+}
+
+.page-search {
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.custom-search-input {
+    border: none;
+    border-bottom: 2px solid #757575;
+    outline: none;
+    padding-bottom: 5px;
+    max-width: 150px;
+}
+
+.search-icon {
+    font-size: 18px;
+    margin-right: 3px;
+    line-height: 1.5 !important;
+}
+
+.search-icon:hover {
+    cursor: pointer;
+}
+
+input[type="search"]::-webkit-search-cancel-button {
+    position: relative;
+    right: -4px;
+
+    -webkit-appearance: none;
+    height: 12px;
+    width: 12px;
+    border-radius: 25px;
+    background: url(https://pro.fontawesome.com/releases/v5.10.0/svgs/solid/times-circle.svg) no-repeat 50% 50%;
+    background-size: contain;
+    opacity: 0;
+    pointer-events: none;
+}
+
+input[type="search"]:focus::-webkit-search-cancel-button {
+    opacity: .5;
+    pointer-events: all;
+}
+
+#loading {
+    margin-top: 20vh;
+}
+
+.comment-additional-information {
+    color: var(--dark-grey);
+}
+
+#imgData {
+    word-break: break-all;
+    white-space: normal;
+}
+
+
+/*
+ * Mobile Board
+ */
+.mobile-table-list .mobile-additional-information {
+    font-size: var(--small-font-size);
+    color: var(--dark-grey);
+    line-height: 1.5rem;
+}
+
+/* mobile table tr td new line */
+.mobile-table-read tr td {
+    white-space: normal;
+}
+
+.mobile-table-read .mobile-title {
+    font-weight: var(--strong-font-weight);
+    line-height: 2.25rem;
+}
+
+.mobile-table-read .mobile-additional-information {
+    color: var(--dark-grey);
+}
+
+.mobile-table-read .mobile-default {
+    font-size: var(--large-font-size);
+    color: var(--darkest-grey);
+    line-height: 2rem;
 }
 
 /*
  * Breadcrumbs
  */
+.breadcrumbs {
+    padding: 1rem;
+    min-height: 40px;
+    background-color: var(--dark-main-grey);
+}
+
 .breadcrumbs h2 {
     font-weight: var(--strong-font-weight);
+    color: var(--dark-white);
 }
 
 .breadcrumbs ol {
     display: flex;
+    justify-content: flex-end;
     flex-wrap: wrap;
     list-style: none;
-    padding: 0;
+    padding-top: 25px;
     margin: 0;
     font-size: 1rem;
 }
@@ -115,6 +380,10 @@ table td {
     }
 }
 
+.breadcrumbs ol li {
+    color: var(--darker-white);
+}
+
 .breadcrumbs ol li + li {
     padding-left: 10px;
 }
@@ -122,7 +391,7 @@ table td {
 .breadcrumbs ol li + li::before {
     display: inline-block;
     padding-right: 10px;
-    color: var(--lighter-black);
+    color: var(--darkest-white);
     content: "/";
 }
 
@@ -132,7 +401,7 @@ table td {
     }
 
     .breadcrumbs ol {
-        display: block;
+        padding: 0;
     }
 
     .breadcrumbs ol li {
@@ -140,70 +409,9 @@ table td {
     }
 }
 
-.breadcrumbs img {
-    width: 1rem;
-    height: 1rem;
-    margin: .25rem;
-}
-
 /*
- * sweetalert2
+ * Sweetalert2
  */
-
-.page-header {
-    position: relative;
-}
-
-.position-absolute {
-    position: absolute;
-}
-
-/*
- * footer
- */
-#footer {
-    height: 4rem;
-    position: relative;
-    left: 0;
-    bottom: 0;
-
-    width: 100%;
-
-    background: var(--dark-white);
-    box-shadow: 2px 2px 1rem rgba(0, 0, 0, 0.2);
-    /*padding: 12.5px 0;*/
-    color: #222222;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-#footer .credits {
-    font-size: 13px;
-    padding-top: 5px;
-    color: var(--light-black);
-}
-
-#footer a {
-    color: var(--main-red);
-    text-decoration: none;
-}
-
-#footer a:hover {
-    color: var(--lighter-red);
-    text-decoration: none;
-}
-
-#footer .footer-links a {
-    color: #222222;
-    padding-left: 1rem;
-}
-
-#footer .footer-links a:first-child {
-    padding-left: 0;
-}
-
-#footer .footer-links a:hover {
-    color: var(--main-red);
+.swal2-container {
+    z-index: 10000 !important;
 }

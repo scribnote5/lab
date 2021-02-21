@@ -22,13 +22,13 @@ public class AlumniAssociationController {
 
     // List
     @GetMapping("/list")
-    public String alumniAssociationList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
+    public String alumniAssociationList(Pageable pageable, SearchDto searchDto, Model model) {
         model.addAttribute("alumniAssociationDtoList", alumniAssociationService.findAlumniAssociationList(pageable, searchDto));
 
         return "alumniAssociation/list";
     }
 
-    // Form Update
+    // Form
     @GetMapping("/form{idx}")
     public String alumniAssociationForm(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
         AlumniAssociationDto alumniAssociationDto = alumniAssociationService.findAlumniAssociationByIdx(idx);

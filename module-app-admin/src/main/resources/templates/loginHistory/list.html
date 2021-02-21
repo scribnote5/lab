@@ -28,67 +28,90 @@
                     </div>
                 </div>
 
-                <div class="row justify-content-end mt-3">
-                    <div class="col-auto px-1">
-                        <select class="custom-select custom-select-sm" name="searchType" id="searchType" th:field="*{searchType}">
-                            <option th:value="AUD_MESSAGE">Aud Message</option>
-                            <option th:value="AUD_IP">Aud Ip</option>
-                            <option th:value="AUD_LOCATION">Aud Location</option>
-                            <option th:value="ID">ID</option>
-                            <option th:value="AUD_LOGIN_RESULT_TYPE">Aud Login Result</option>
-                        </select>
-                    </div>
-                    <div class="col-auto px-1">
-                        <input th:disabled="*{#strings.equals(searchType, 'AUD_LOGIN_RESULT_TPYE')}"
-                               th:style="*{#strings.equals(searchType, 'AUD_LOGIN_RESULT_TPYE')} ? 'display:none' : 'display:inline'"
-                               type="text"
-                               name="keyword" id="keywordInputText" class="form-control form-control-sm"
-                               th:value="${searchDto?.keyword}"/>
-                        <select th:disabled="!*{#strings.equals(searchType, 'AUD_LOGIN_RESULT_TPYE')}"
-                                th:style="!*{#strings.equals(searchType, 'AUD_LOGIN_RESULT_TPYE')} ? 'display:none' : 'display:inline'"
-                                name="keyword" id="keywordSelect" class="custom-select custom-select-sm"
-                                th:field="*{keyword}">
-                            <option th:each="audLoginResultType : ${T(kr.ac.univ.loginHistory.domain.enums.AudLoginResultType).values()}"
-                                    th:value="${audLoginResultType}" th:text="${audLoginResultType.getAudLoginResultType()}"></option>
-                        </select>
-                    </div>
-                    <div class="col-auto px-3">
-                        <button id="search" type="button" class="btn-main">Search</button>
+                <div class="page-search">
+                    <div class="row justify-content-end mt-4">
+                        <div class="pt-2 pr-3">
+                            <select class="custom-select custom-select-sm" name="searchType" id="searchType" th:field="*{searchType}">
+                                <option th:value="AUD_MESSAGE">Aud Message</option>
+                                <option th:value="AUD_IP">Aud Ip</option>
+                                <option th:value="AUD_LOCATION">Aud Location</option>
+                                <option th:value="ID">ID</option>
+                                <option th:value="AUD_LOGIN_RESULT_TYPE">Aud Login Result</option>
+                            </select>
+                        </div>
+                        <div class="pt-2 pr-2">
+                            <input th:disabled="*{#strings.equals(searchType, 'AUD_LOGIN_RESULT_TPYE')}"
+                                   th:style="*{#strings.equals(searchType, 'AUD_LOGIN_RESULT_TPYE')} ? 'display:none' : 'display:inline'"
+                                   type="search"
+                                   name="keyword"
+                                   id="keywordInputText"
+                                   class="custom-search-input"
+                                   placeholder="Search"
+                                   th:value="${searchDto?.keyword}"/>
+                            <select th:disabled="!*{#strings.equals(searchType, 'AUD_LOGIN_RESULT_TPYE')}"
+                                    th:style="!*{#strings.equals(searchType, 'AUD_LOGIN_RESULT_TPYE')} ? 'display:none' : 'display:inline'"
+                                    name="keyword"
+                                    id="keywordSelect"
+                                    class="custom-select custom-select-sm"
+                                    th:field="*{keyword}">
+                                <option th:each="audLoginResultType : ${T(kr.ac.univ.loginHistory.domain.enums.AudLoginResultType).values()}"
+                                        th:value="${audLoginResultType}" th:text="${audLoginResultType.getAudLoginResultType()}"></option>
+                            </select>
+                        </div>
+                        <div class="mt-2">
+                            <i id="search" class="fas fa-search search-icon"></i>
+                        </div>
                     </div>
                 </div>
 
-                <div class="mt-5">
-                    <table class="table table-hover">
+                <div class="page-content">
+                    <table class="table table-hover mobile-table-list mt-4">
                         <thead>
-                        <tr>
-                            <th style="width: 5%">No.</th>
-                            <th style="width: 25%">Aud Message</th>
-                            <th style="width: 10%">Aud Ip</th>
-                            <th style="width: 10%">Login Result Type</th>
-                            <th style="width: 10%">ID</th>
-                            <th style="width: 12.5%">Created Date</th>
-                            <th style="width: 12.5%">Modified Date</th>
-                            <th style="width: 7.5%">Status</th>
-                            <th style="width: 7.5%">Views</th>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th style="width: 7.5%" class="text-center">No.</th>
+                            <th style="width: 27.5%" class="text-center">Aud Message</th>
+                            <th style="width: 12.5%" class="text-center">Aud Ip</th>
+                            <th style="width: 10%" class="text-center">Login Result</th>
+                            <th style="width: 15%">ID</th>
+                            <th style="width: 17.5%" class="text-center">Created Date</th>
+                            <th style="width: 7.5%" class="text-center">Status</th>
+                            <th style="width: 7.5%" class="text-center">Views</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="loginHistoryDto : ${loginHistoryDtoList}">
-                            <td th:text="${loginHistoryDto.idx}"></td>
+                            <td th:text="${loginHistoryDto.idx}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td>
-                                <a th:href="'/login-history?idx='+${loginHistoryDto.idx}" class="link"
-                                   th:text="${#strings.length(loginHistoryDto.audMessage)} < 25 ? ${loginHistoryDto.audMessage} : ${#strings.substring(loginHistoryDto.audMessage, 0, 25)} + '...'"></a>
+                                <!-- Mobile No. -->
+                                <span th:text="${loginHistoryDto.idx} + '.'" class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline"></span>
+
+                                <!-- Common -->
+                                <a th:href="'/login-history?idx='+${loginHistoryDto.idx}" class="link" th:text="${loginHistoryDto.audMessage}"></a>
                                 <img th:if="${loginHistoryDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
+
+                                <!-- Mobile -->
+                                <div class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline">
+                                    <div class="d-flex align-center">
+                                        <span th:text="${loginHistoryDto.createdBy}" class="mobile-additional-information"> </span> &nbsp;&nbsp;
+                                        <span th:text="${#temporals.format(loginHistoryDto.createdDate,'yyyy-MM-dd HH:mm')}" class="mobile-additional-information"></span> &nbsp;&nbsp;
+                                        <span th:text="'Views: ' + ${loginHistoryDto.views}" class="mobile-additional-information"></span>
+                                    </div>
+                                    <div class="d-flex align-center">
+                                        <span th:if="${loginHistoryDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active" class="mobile-additional-information"></span>
+                                        <span th:if="${loginHistoryDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive" class="mobile-additional-information"></span>
+                                    </div>
+                                </div>
                             </td>
-                            <td th:text="${loginHistoryDto.audIp}"></td>
-                            <td th:if="${loginHistoryDto.audLoginResultType?.name() == 'SUCCESS'}" th:text="Success"></td>
-                            <td th:if="${loginHistoryDto.audLoginResultType?.name() == 'FAIL'}" th:text="Fail"></td>
-                            <td th:text="${loginHistoryDto.createdBy}">></td>
-                            <td th:text="${#temporals.format(loginHistoryDto.createdDate,'yyyy-MM-dd HH:mm')}"></td>
-                            <td th:text="${#temporals.format(loginHistoryDto.lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
-                            <td th:if="${loginHistoryDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active"></td>
-                            <td th:if="${loginHistoryDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"></td>
-                            <td th:text="${loginHistoryDto.views}">></td>
+
+                            <!-- Desktop -->
+                            <td th:text="${loginHistoryDto.audIp}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:if="${loginHistoryDto.audLoginResultType?.name() == 'SUCCESS'}" th:text="Success" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:if="${loginHistoryDto.audLoginResultType?.name() == 'FAIL'}" th:text="Fail" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:text="${loginHistoryDto.createdBy}" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:text="${#temporals.format(loginHistoryDto.createdDate,'yyyy-MM-dd HH:mm')}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:if="${loginHistoryDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:if="${loginHistoryDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:text="${loginHistoryDto.views}" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
                         </tr>
                         <tr th:if="${loginHistoryDtoList.totalElements == 0}">
                             <td colspan="10" class="no-posts">
@@ -100,34 +123,34 @@
                         </tr>
                         </tbody>
                     </table>
-                </div>
 
-                <div class="row justify-content-end mt-5 mb-3"></div>
+                    <div class="row mt-4 mb-4"></div>
 
-                <!-- Pagination -->
-                <div class="row justify-content-center" aria-label="Page navigation">
-                    <ul class="pagination "
-                        th:with="startNumber=${T(Math).floor(loginHistoryDtoList.number/10)}*10+1, endNumber=(${loginHistoryDtoList.totalPages} > ${startNumber}+9) ? ${startNumber}+9 : (${loginHistoryDtoList.totalPages} == 0 ? 1 : ${loginHistoryDtoList.totalPages})">
-                        <li class="page-item">
-                            <a class="page-link" aria-label="Previous" th:href="@{/login-history/list(page=1,searchType=*{searchType},keyword=*{keyword})}">&laquo;</a>
-                        </li>
-                        <li class="page-item" th:style="${loginHistoryDtoList.first} ? 'display:none'">
-                            <a class="page-link" th:href="@{/login-history/list(page=${loginHistoryDtoList.number},searchType=*{searchType},keyword=*{keyword})}">&lsaquo;</a>
-                        </li>
-                        <li th:each="page :${#numbers.sequence(startNumber, endNumber)}"
-                            th:class="(${page} == ${loginHistoryDtoList.number}+1) ? 'page-item active'">
-                            <a class="page-link" th:href="@{/login-history/list(page=${page},searchType=*{searchType},keyword=*{keyword})}" th:text="${page}"><span class="sr-only"></span></a>
-                        </li>
-                        <li class="page-item" th:style="${loginHistoryDtoList.last} ? 'display:none'">
-                            <a class="page-link"
-                               th:href="@{/login-history/list(page=${loginHistoryDtoList.number}+2,searchType=*{searchType},keyword=*{keyword})}">&rsaquo;</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" aria-label="Next" th:href="@{/login-history/list(page=${loginHistoryDtoList.totalPages},searchType=*{searchType},keyword=*{keyword})}">&raquo;</a>
-                        </li>
-                    </ul>
+                    <!-- Pagination -->
+                    <div class="row justify-content-center mb-4" aria-label="Page navigation">
+                        <ul class="pagination "
+                            th:with="startNumber=${T(Math).floor(loginHistoryDtoList.number/10)}*10+1, endNumber=(${loginHistoryDtoList.totalPages} > ${startNumber}+9) ? ${startNumber}+9 : (${loginHistoryDtoList.totalPages} == 0 ? 1 : ${loginHistoryDtoList.totalPages})">
+                            <li class="page-item">
+                                <a class="page-link" aria-label="Previous" th:href="@{/login-history/list(page=1,searchType=*{searchType},keyword=*{keyword})}">&laquo;</a>
+                            </li>
+                            <li class="page-item" th:style="${loginHistoryDtoList.first} ? 'display:none'">
+                                <a class="page-link" th:href="@{/login-history/list(page=${loginHistoryDtoList.number},searchType=*{searchType},keyword=*{keyword})}">&lsaquo;</a>
+                            </li>
+                            <li th:each="page :${#numbers.sequence(startNumber, endNumber)}"
+                                th:class="(${page} == ${loginHistoryDtoList.number}+1) ? 'page-item active'">
+                                <a class="page-link" th:href="@{/login-history/list(page=${page},searchType=*{searchType},keyword=*{keyword})}" th:text="${page}"><span class="sr-only"></span></a>
+                            </li>
+                            <li class="page-item" th:style="${loginHistoryDtoList.last} ? 'display:none'">
+                                <a class="page-link"
+                                   th:href="@{/login-history/list(page=${loginHistoryDtoList.number}+2,searchType=*{searchType},keyword=*{keyword})}">&rsaquo;</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" aria-label="Next" th:href="@{/login-history/list(page=${loginHistoryDtoList.totalPages},searchType=*{searchType},keyword=*{keyword})}">&raquo;</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /Pagination -->
                 </div>
-                <!-- /Pagination -->
             </form>
         </div>
     </div>
@@ -141,6 +164,13 @@
 
 <script th:inline="javascript">
     sweetalertFire("login-history");
+
+    if (document.getElementsByName("searchType")[0].value == "AUD_LOGIN_RESULT_TYPE") {
+        keywordSelect.style.display = "inline";
+        keywordSelect.disabled = false;
+        keywordInputText.style.display = "none";
+        keywordInputText.disabled = true;
+    }
 
     /* input tag event */
     $("#searchType").change(function () {
@@ -161,7 +191,7 @@
         }
     });
 
-    $('#search').click(function () {
+    $("#search").click(function () {
         document.form.action = "/login-history/list";
         document.form.method = "get";
         document.form.submit();

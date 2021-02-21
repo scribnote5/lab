@@ -65,27 +65,32 @@ public class UserService implements UserDetailsService {
                     break;
             }
         } else if ("module-app-web".equals(moduleName)) {
-            pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1, 12, Sort.Direction.DESC, "idx");
+            // 정렬 기준 설정
+            Sort sort = Sort.by("userStatus").ascending().and(Sort.by("userType").ascending().and(Sort.by("englishName").ascending()));
+            pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1, 12, sort);
+            List<AuthorityType> authorityType = new ArrayList<>();
+            authorityType.add(AuthorityType.MANAGER);
+            authorityType.add(AuthorityType.GENERAL);
 
             switch (searchDto.getSearchType()) {
                 case "ENGLISH_NAME":
-                    userList = userRepository.findAllByUsernameNotAndEnglishNameContainingAndActiveStatusIs(pageable, "root", searchDto.getKeyword(), ActiveStatus.ACTIVE);
+                    userList = userRepository.findAllByAuthorityTypeInAndEnglishNameContainingAndActiveStatusIs(pageable, authorityType, searchDto.getKeyword(), ActiveStatus.ACTIVE);
                     break;
                 case "KOREAN_NAME":
-                    userList = userRepository.findAllByUsernameNotAndKoreanNameContainingAndActiveStatusIs(pageable, "root", searchDto.getKeyword(), ActiveStatus.ACTIVE);
+                    userList = userRepository.findAllByAuthorityTypeInAndKoreanNameContainingAndActiveStatusIs(pageable, authorityType, searchDto.getKeyword(), ActiveStatus.ACTIVE);
                     break;
                 case "Email":
-                    userList = userRepository.findAllByUsernameNotAndEmailContainingAndActiveStatusIs(pageable, "root", searchDto.getKeyword(), ActiveStatus.ACTIVE);
+                    userList = userRepository.findAllByAuthorityTypeInAndEmailContainingAndActiveStatusIs(pageable, authorityType, searchDto.getKeyword(), ActiveStatus.ACTIVE);
                     break;
                 default:
-                    userList = userRepository.findAllByUsernameNotAndActiveStatusIs(pageable, "root", ActiveStatus.ACTIVE);
+                    userList = userRepository.findAllByAuthorityTypeInAndActiveStatusIs(pageable, authorityType, ActiveStatus.ACTIVE);
                     break;
             }
         } else {
             userList = null;
         }
 
-        userDtoList = new PageImpl<UserDto>(UserMapper.INSTANCE.toDto(userList.getContent()), pageable, userList.getTotalElements());
+        userDtoList = new PageImpl<>(UserMapper.INSTANCE.toDto(userList.getContent()), pageable, userList.getTotalElements());
 
         // NewIcon 판별
         for (UserDto userDto : userDtoList) {
@@ -168,7 +173,7 @@ public class UserService implements UserDetailsService {
             }
         } else {
             // Update: isAccess 메소드에 따라 접근 가능 및 불가
-            if (AccessCheck.isAccessInModuleWebUser(userDto.getCreatedBy(), userDto.getUsername())) {
+            if (AccessCheck.isAccessInModuleWebUser(userDto.getCreatedBy(), userDto.getUsername(), (userDto.getAuthorityType()).name())) {
                 userDto.setAccess(true);
             } else {
                 userDto.setAccess(false);

@@ -108,13 +108,13 @@ public class ModuleWebApplication {
             /* publicationRepositroy.deleteAll(); */
 
             /* 논문 생성 */
-            /*IntStream.rangeClosed(1, 50).forEach(index ->
+            /* IntStream.rangeClosed(1, 50).forEach(index ->
                     publicationRepositroy.save(Publication.builder()
                             .title("게시글" + index)
                             .authors("저자" + index)
                             .publishedIn("KSC 2019")
                             .publishedDate(LocalDate.now())
-                            .publicationType(PublicationType.JOURNAL_SCI)
+                            .publicationType(PublicationType.JOURNAL)
                             .publishingArea(PublishingArea.DOMESTIC)
                             .volume("" + index)
                             .number("" + index)
@@ -142,7 +142,22 @@ public class ModuleWebApplication {
                             .authors("저자" + index)
                             .publishedIn("RTAS 2017")
                             .publishedDate(LocalDate.now())
-                            .publicationType(PublicationType.JOURNAL)
+                            .publicationType(PublicationType.JOURNAL_SCIE)
+                            .impactFactor("IF: 0.716")
+                            .publishingArea(PublishingArea.INTERNATIONAL)
+                            .volume("" + index)
+                            .number("" + index)
+                            .activeStatus(ActiveStatus.ACTIVE)
+                            .createdBy("root")
+                            .build()));
+
+            IntStream.rangeClosed(1, 50).forEach(index ->
+                    publicationRepositroy.save(Publication.builder()
+                            .title("게시글" + index)
+                            .authors("저자" + index)
+                            .publishedIn("International Journal of Engineering Research and Technology")
+                            .publishedDate(LocalDate.now())
+                            .publicationType(PublicationType.JOURNAL_SCOPUS)
                             .publishingArea(PublishingArea.INTERNATIONAL)
                             .volume("" + index)
                             .number("" + index)
@@ -162,7 +177,7 @@ public class ModuleWebApplication {
                             .number("" + index)
                             .activeStatus(ActiveStatus.ACTIVE)
                             .createdBy("root")
-                            .build()));*/
+                            .build())); */
         };
     }
 }

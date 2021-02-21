@@ -28,13 +28,13 @@ public class ResearchFieldController {
 
     // List
     @GetMapping("/list")
-    public String researchFieldList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
+    public String researchFieldList(Pageable pageable, SearchDto searchDto, Model model) {
         model.addAttribute("researchFieldDtoList", researchFieldService.findResearchFieldList(pageable, searchDto));
 
         return "researchField/list";
     }
 
-    // Form Update
+    // Form
     @GetMapping("/form{idx}")
     public String researchFieldForm(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
         ResearchFieldDto researchFieldDto = researchFieldService.findResearchFieldByIdx(idx);

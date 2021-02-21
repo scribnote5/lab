@@ -22,13 +22,13 @@ public class CategoryController {
 
     // List
     @GetMapping("/list")
-    public String categoryList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
+    public String categoryList(Pageable pageable, SearchDto searchDto, Model model) {
         model.addAttribute("categoryDtoList", categoryService.findCategoryList(pageable, searchDto));
 
         return "category/list";
     }
 
-    // Form Update
+    // Form
     @GetMapping("/form{idx}")
     public String categoryForm(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
         CategoryDto categoryDto = categoryService.findCategoryByIdx(idx);

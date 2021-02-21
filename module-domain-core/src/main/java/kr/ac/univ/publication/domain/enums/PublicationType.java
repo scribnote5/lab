@@ -4,10 +4,10 @@ public enum PublicationType {
     JOURNAL("Journal"),
     CONFERENCE("Conference"),
 
-    // Journal은 KCI, SCOPUS, SCI로 구분된다.
+    // Journal은 KCI, SCOPUS, SCIE로 구분된다.
     JOURNAL_KCI("Journal - KCI"),
     JOURNAL_SCOPUS("Journal - SCOPUS"),
-    JOURNAL_SCI("Journal - SCI"),
+    JOURNAL_SCIE("Journal - SCIE"),
 
     // Conference는 Poster, Regular, Demo, Workshop으로 구분된다.
     CONFERENCE_POSTER("Conference - Poster"),

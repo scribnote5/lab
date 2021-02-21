@@ -11,7 +11,8 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @ToString
-public class PublicationSearchDto extends SearchDto {
-    /* 검색 정보 */
+public class PublicationSearchDto {
+    private String searchType = "";
+    private String keyword = "";
     private PublicationSearchType publicationSearchType = PublicationSearchType.SHOW_ALL;
 }

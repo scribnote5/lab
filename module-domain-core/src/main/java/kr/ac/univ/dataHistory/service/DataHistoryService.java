@@ -8,6 +8,7 @@ import kr.ac.univ.dataHistory.repository.DataHistoryRepository;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.SearchDto;
 import kr.ac.univ.dataHistory.repository.DataHistoryRepositoryImpl;
+import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.AccessCheck;
 import kr.ac.univ.util.NewIconCheck;
 import org.springframework.data.domain.*;
@@ -20,10 +21,12 @@ import java.util.List;
 public class DataHistoryService {
     private final DataHistoryRepository dataHistoryRepository;
     private final DataHistoryRepositoryImpl dataHistoryRepositoryImpl;
+    private final UserRepository userRepository;
 
-    public DataHistoryService(DataHistoryRepository dataHistoryRepository, DataHistoryRepositoryImpl dataHistoryRepositoryImpl) {
+    public DataHistoryService(DataHistoryRepository dataHistoryRepository, DataHistoryRepositoryImpl dataHistoryRepositoryImpl, UserRepository userRepository) {
         this.dataHistoryRepository = dataHistoryRepository;
         this.dataHistoryRepositoryImpl = dataHistoryRepositoryImpl;
+        this.userRepository = userRepository;
     }
 
     public Page<DataHistoryDto> findDataHistoryList(Pageable pageable, SearchDto searchDto) {
@@ -50,7 +53,7 @@ public class DataHistoryService {
                 break;
         }
 
-        historyDtoList = new PageImpl<DataHistoryDto>(DataHistoryMapper.INSTANCE.toDto(historyList.getContent()), pageable, historyList.getTotalElements());
+        historyDtoList = new PageImpl<>(DataHistoryMapper.INSTANCE.toDto(historyList.getContent()), pageable, historyList.getTotalElements());
 
         // NewIcon 판별
         for (DataHistoryDto dataHistoryDto : historyDtoList) {
@@ -87,8 +90,8 @@ public class DataHistoryService {
         DataHistoryDto dataHistoryDto = DataHistoryMapper.INSTANCE.toDto(dataHistoryRepository.findById(idx).orElse(new DataHistory()));
 
         // 권한 설정
-        // Update: isAccess 메소드에 따라 접근 가능 및 불가
-        if (AccessCheck.isAccessInModuleWeb(dataHistoryDto.getCreatedBy())) {
+        // Update: isAccessInGeneral 메소드에 따라 접근 가능 및 불가
+        if (AccessCheck.isAccessInGeneral(dataHistoryDto.getCreatedBy(), userRepository.findByUsername(dataHistoryDto.getCreatedBy()).getAuthorityType().name())) {
             dataHistoryDto.setAccess(true);
         } else {
             dataHistoryDto.setAccess(false);

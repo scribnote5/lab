@@ -25,13 +25,13 @@ public class IntroductionImageController {
 
     // List
     @GetMapping("/list")
-    public String introductionImageList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
+    public String introductionImageList(Pageable pageable, SearchDto searchDto, Model model) {
         model.addAttribute("introductionImageDtoList", introductionImageService.findIntroductionImageList(pageable, searchDto));
 
         return "introductionImage/list";
     }
 
-    // Form Update
+    // Form
     @GetMapping("/form{idx}")
     public String introductionImageForm(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
         IntroductionImageDto introductionImageDto = introductionImageService.findIntroductionImageByIdx(idx);

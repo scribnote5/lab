@@ -8,6 +8,7 @@ import kr.ac.univ.loginHistory.dto.LoginHistoryDto;
 import kr.ac.univ.loginHistory.dto.mapper.LoginHistoryMapper;
 import kr.ac.univ.loginHistory.repository.LoginHistoryRepository;
 import kr.ac.univ.loginHistory.repository.LoginHistoryRepositoryImpl;
+import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.AccessCheck;
 import kr.ac.univ.util.NewIconCheck;
 import org.springframework.data.domain.*;
@@ -21,10 +22,12 @@ import java.util.List;
 public class LoginHistoryService {
     private final LoginHistoryRepository loginHistoryRepository;
     private final LoginHistoryRepositoryImpl loginHistoryRepositoryImpl;
+    private final UserRepository userRepository;
 
-    public LoginHistoryService(LoginHistoryRepository loginHistoryRepository, LoginHistoryRepositoryImpl loginHistoryRepositoryImpl) {
+    public LoginHistoryService(LoginHistoryRepository loginHistoryRepository, LoginHistoryRepositoryImpl loginHistoryRepositoryImpl, UserRepository userRepository) {
         this.loginHistoryRepository = loginHistoryRepository;
         this.loginHistoryRepositoryImpl = loginHistoryRepositoryImpl;
+        this.userRepository = userRepository;
     }
 
     public Page<LoginHistoryDto> findLoginHistoryList(Pageable pageable, SearchDto searchDto) {
@@ -54,7 +57,7 @@ public class LoginHistoryService {
                 break;
         }
 
-        loginHistoryDtoList = new PageImpl<LoginHistoryDto>(LoginHistoryMapper.INSTANCE.toDto(loginHistoryList.getContent()), pageable, loginHistoryList.getTotalElements());
+        loginHistoryDtoList = new PageImpl<>(LoginHistoryMapper.INSTANCE.toDto(loginHistoryList.getContent()), pageable, loginHistoryList.getTotalElements());
 
         // NewIcon 판별
         for (LoginHistoryDto loginHistoryDto : loginHistoryDtoList) {
@@ -82,13 +85,8 @@ public class LoginHistoryService {
     public LoginHistoryDto findLoginHistoryByIdx(Long idx) {
         LoginHistoryDto loginHistoryDto = LoginHistoryMapper.INSTANCE.toDto(loginHistoryRepository.findById(idx).orElse(new LoginHistory()));
 
-        // 권한 설정
-        // Update: isAccess 메소드에 따라 접근 가능 및 불가
-        if (AccessCheck.isAccessInModuleWeb(loginHistoryDto.getCreatedBy())) {
-            loginHistoryDto.setAccess(true);
-        } else {
-            loginHistoryDto.setAccess(false);
-        }
+        // Update: isAccessInGeneral 메소드에 따라 접근 가능 및 불가
+        loginHistoryDto.setAccess(AccessCheck.isAccessInGeneral(loginHistoryDto.getCreatedBy(), userRepository.findByUsername(loginHistoryDto.getCreatedBy()).getAuthorityType().name()));
 
         loginHistoryRepositoryImpl.updateViewsByIdx(idx);
         loginHistoryDto.setViews(loginHistoryDto.getViews() + 1);

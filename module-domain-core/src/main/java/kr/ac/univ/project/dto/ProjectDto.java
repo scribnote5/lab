@@ -11,6 +11,7 @@ import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -28,12 +29,13 @@ public class ProjectDto extends CommonDto {
     @Editor(max = 16777215, message = "The editor's input size must be less than 16777215 bytes(16MB).")
     private String content;
 
+    @Positive(message = "The research field idx must not be blank.")
     private Long researchFieldIdx;
 
     @Size(max = 255, message = "The research establishment must be less than 255 characters.")
     private String researchEstablishment;
 
-    @NotNull(message = "The project status must be not null")
+    @NotNull(message = "The project status must be not null.")
     private ProjectStatus projectStatus;
 
     private LocalDate startDate;

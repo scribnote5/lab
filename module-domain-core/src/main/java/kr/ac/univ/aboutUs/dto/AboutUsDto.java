@@ -22,24 +22,4 @@ public class AboutUsDto extends CommonDto {
 
     @Editor(max = 16777215, message = "The editor's input size must be less than 16777215 bytes(16MB).")
     private String content;
-
-    private LocalDate labStartDate;
-
-    private int labMaintenanceYears;
-
-    private Long attendingMsUserCount;
-
-    private Long attendingPhdUserCount;
-
-    private Long publicationCount;
-
-    private Long projectCount;
-
-    private String labMaintenanceYearsCountContent;
-
-    private String userCountContent;
-
-    private String publicationCountContent;
-
-    private String projectCountContent;
 }

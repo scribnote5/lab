@@ -23,14 +23,14 @@ const Alert = Swal.mixin({
 function searchFail() {
     Toast.fire({
         icon: 'error',
-        title: 'Search is failed.',
+        title: 'Search failed.',
     })
 }
 
 function registerSuccess() {
     Toast.fire({
         icon: 'success',
-        title: 'Register is succeeded.',
+        title: 'Register succeeded.',
     })
 }
 

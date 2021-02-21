@@ -1,0 +1,417 @@
+/*
+ * Breadcrumbs
+ */
+.breadcrumbs {
+    margin-top: 6.5rem;
+}
+
+.breadcrumbs i {
+    font-size: 1.5rem;
+}
+
+@media (max-width: 992px) {
+    .breadcrumbs {
+        margin-top: 5.5rem;
+    }
+}
+
+/*--------------------------------------------------------------
+# Sections General
+--------------------------------------------------------------*/
+section {
+    padding: 2.5rem 0;
+    overflow: hidden;
+}
+
+@media (max-width: 991px) {
+    section {
+        padding: 2rem 0;
+    }
+}
+
+@media (max-width: 768px) {
+    section {
+        padding: 1.5rem 0;
+    }
+}
+
+/* section-header */
+.section-header {
+    margin-bottom: 2.5rem;
+    text-align: center;
+}
+
+@media (max-width: 991px) {
+    .section-header {
+        margin-bottom: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .section-header {
+        margin-bottom: 1.5rem;
+    }
+}
+
+.section-header h1 {
+    font-weight: var(--strong-font-weight);
+    line-height: 3rem;
+}
+
+.section-header h2 {
+    font-weight: var(--strong-font-weight);
+    line-height: 2.5rem;
+}
+
+.section-header h3 {
+    margin-bottom: 1rem;
+    font-weight: var(--strong-font-weight);
+    line-height: 2.25rem;
+}
+
+.section-header h3::before, .section-header h3::after {
+    content: '';
+    width: 2.5rem;
+    height: .2rem;
+    background: var(--main-red);
+    display: inline-block;
+}
+
+.section-header h3::before {
+    margin: 0 .5rem .5rem 0;
+}
+
+.section-header h3::after {
+    margin: 0 0 .5rem .5rem;
+}
+
+/* section-search */
+.section-search {
+    margin-top: 5rem;
+}
+
+/*
+ * Introduction
+ */
+.introduction {
+    width: 100%;
+    height: 65vh;
+    margin-top: 5rem;
+    background-color: var(--dark-main-grey);
+}
+
+.introduction .introduction-content-wrapper {
+    padding-right: 3rem;
+}
+
+.introduction h1 {
+    margin-bottom: 2rem;
+    font-weight: var(--strong-font-weight);
+    color: var(--darkest-white);
+}
+
+.introduction h5 {
+    text-align: justify;
+    text-justify: inter-word;
+    color: var(--darker-main-white);
+    margin-bottom: 2rem;
+}
+
+.btn-main-about-us {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    user-select: none;
+    border: 2px solid var(--main-red);
+    padding: .75rem 1.25rem;
+    font-size: var(--larger-font-size);
+    font-weight: var(--strong-font-weight);
+    line-height: 1.5rem;
+    border-radius: 3rem;
+    transition: 0.5s;
+    color: var(--white);
+    background-color: var(--main-red);
+}
+
+.btn-main-about-us:hover {
+    text-decoration: none;
+    color: var(--white);
+    background-color: var(--lighter-red);
+}
+
+.introduction .introduction-image-carousel .owl-nav, .introduction .introduction-image-carousel .owl-dots {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.introduction .introduction-image-carousel .owl-dot {
+    display: inline-block;
+    margin: 0 5px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--lighter-grey) !important;
+}
+
+.introduction .introduction-image-carousel .owl-dot.active {
+    background-color: var(--main-red) !important;
+}
+
+.introduction .introduction-image-carousel {
+    width: 490px !important;
+    height: auto !important;
+    max-height: 425px !important;
+}
+
+.introduction .introduction-image-carousel img {
+    width: 465px !important;
+    height: auto !important;
+    max-height: 425px !important;
+    /* erase prev next img duplication */
+    padding: 1px;
+}
+
+@media (min-width: 1024px) {
+    .introduction {
+        background-attachment: fixed;
+    }
+}
+
+@media (max-width: 991px) {
+    .introduction {
+        height: calc(100vh - 4.5rem);
+        margin-top: 4.5rem;
+    }
+
+    .introduction .animated {
+        -webkit-animation: none;
+        animation: none;
+    }
+
+    .introduction .introduction-content-wrapper {
+        padding-right: 0px;
+        margin-top: 2.5rem;
+    }
+
+    .introduction .introduction-image-carousel {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        max-height: 325px !important;
+    }
+
+    .introduction .introduction-image-carousel img {
+        max-height: 300px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .introduction h1 {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .introduction h5 {
+        font-size: 1.25rem;
+        margin-bottom: 1.5rem;
+        text-align: left;
+    }
+
+    .introduction .introduction-content-wrapper {
+        padding-right: 0px;
+        margin-top: 2.5rem;
+    }
+}
+
+@media (max-width: 575px) {
+    .introduction .introduction-image-carousel {
+        width: 325px !important;
+    }
+
+    .introduction .introduction-image-carousel img {
+        width: 300px !important;
+    }
+}
+
+@-webkit-keyframes up-down {
+    0% {
+        transform: translateY(10px);
+    }
+    100% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes up-down {
+    0% {
+        transform: translateY(10px);
+    }
+    100% {
+        transform: translateY(-10px);
+    }
+}
+
+/*
+ * Research Field
+ */
+.research-field .card {
+    margin-bottom: 2rem;
+    border: 0;
+    padding: 120px 15px 15px 15px;
+    position: relative;
+    width: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.research-field .card-body {
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px 20px;
+    box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+    transition: 0.3s;
+    transition: ease-in-out 0.4s;
+    border-radius: 5px;
+
+    min-height: 180px;
+    max-height: 180px;
+    overflow: auto;
+}
+
+.research-field .card-body::-webkit-scrollbar {
+    display: none;
+}
+
+.research-field .card-title {
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.research-field .card-title a {
+    color: var(--main-black);
+}
+
+.research-field .card-content {
+    color: var(--darker-grey);
+}
+
+.research-field .card:hover .card-body {
+    background-color: var(--lightest-grey);
+}
+
+.research-field .card:hover .research-field .card:hover .card-title, .research-field .card:hover .card-title a, .research-field .card:hover .card-text {
+    color: var(--white);
+}
+
+/*
+ * Album
+ */
+.album .album-wrap {
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    border-radius: .25rem;
+    transition: 0.3s;
+    margin: 1rem 0;
+    width: 100%;
+    height: 245px;
+}
+
+.album .album-wrap::before {
+    content: "";
+    background: rgba(34, 34, 34, 0.5);
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 3;
+    opacity: 0;
+    transition: all ease-in-out 0.3s;
+}
+
+.album .album-wrap img {
+    transition: all ease-in-out 0.3s;
+    width: 100%;
+    height: 245px;
+}
+
+.album .album-wrap .album-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 3;
+    opacity: 0;
+    padding: .75rem;
+    transition: all ease-in-out 0.3s;
+}
+
+.album .album-wrap .album-info h3 {
+    color: var(--white);
+    font-weight: var(--strong-font-weight);
+}
+
+.album .album-wrap .album-info .hash-tag {
+    color: var(--darker-white);
+    font-size: var(--large-font-size);
+    font-style: italic;
+}
+
+.album .album-wrap:hover::before {
+    opacity: 1;
+}
+
+.album .album-wrap:hover img {
+    transform: scale(1.2);
+}
+
+.album .album-wrap:hover .album-info {
+    opacity: 1;
+}
+
+/*
+ * Contact
+ */
+.contact .section-content h4 {
+    margin-bottom: .5rem;
+    font-weight: var(--strong-font-weight);
+}
+
+.contact .section-content i {
+    color: var(--main-red);
+    font-size: 1.25rem;
+}
+
+.contact .section-content span {
+    font-size: 1.25rem;
+}
+
+.contact a {
+    font-size: 1.25rem;
+}
+
+@-webkit-keyframes animate-loading {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes animate-loading {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

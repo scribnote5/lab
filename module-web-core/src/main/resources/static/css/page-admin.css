@@ -2,9 +2,7 @@
  * Breadcrumbs
  */
 .breadcrumbs {
-    padding: 1rem;
-    background: var(--darker-white);
-    min-height: 40px;
+
 }
 
 /**
@@ -29,7 +27,6 @@
     height: 1.25rem;
     width: auto;
 }
-
 
 .external-link {
     padding-right: .75rem;
@@ -57,7 +54,7 @@
 .statics-count {
     color: var(--darker-grey);
     text-align: center;
-    font-size: var(--largest-font-size);
+    font-size: 1.5rem;
 }
 
 .disk-name {

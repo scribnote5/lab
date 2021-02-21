@@ -67,7 +67,6 @@ public class SeminarAttachedFileService {
             // 대체 가능
             // File savedFile = new File("./upload/", savedFileName);
             // FileCopyUtils.copy(file.getBytes(), savedFile);
-
             Path path = Paths.get("./upload/" + savedFileName);
             Files.write(path, file.getBytes());
 

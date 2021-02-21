@@ -31,13 +31,13 @@ public class NoticeBoardController {
 
     // List
     @GetMapping("/list")
-    public String noticeBoardList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
+    public String noticeBoardList(Pageable pageable, SearchDto searchDto, Model model) {
         model.addAttribute("noticeBoardDtoList", noticeBoardService.findNoticeBoardList(pageable, searchDto));
 
         return "noticeBoard/list";
     }
 
-    // Form Update
+    // Form
     @GetMapping("/form{idx}")
     public String noticeBoardForm(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
         NoticeBoardDto noticeBoardDto = noticeBoardService.findNoticeBoardByIdx(idx);

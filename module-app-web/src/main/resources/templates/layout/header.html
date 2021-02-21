@@ -4,9 +4,8 @@
 <div th:fragment="header">
     <header id="header" class="fixed-top d-flex align-items-center">
         <div class="container d-flex align-items-center">
-
             <div class="logo mr-auto">
-                <a href="/"><img src="/images/main-logo.png"></a>
+                <a href="/"><img src="/images/small-logo.png"></a>
             </div>
 
             <nav class="nav-menu d-none d-lg-block align-middle">
@@ -16,7 +15,7 @@
                     <li><a href="/publication/list_scroll">Publication</a></li>
                     <li><a href="/seminar/list">Seminar</a></li>
                     <li><a href="/project/list">Project</a></li>
-                    <li class="drop-down"><a href="/notice-board/list">More</a>
+                    <li class="drop-down"><a href="/notice-board/list">More<i class="fas fa-chevron-down"></i></a>
                         <ul>
                             <li><a href="/notice-board/list">Notice Board</a></li>
                             <li><a href="/alumni-association/list">Alumni Association</a></li>
@@ -26,8 +25,8 @@
                             </li>
                         </ul>
                     </li>
-                    <li sec:authorize="!isAuthenticated()" class="login-logout"><a href="javascript:login()">Login</a></li>
-                    <li sec:authorize="isAuthenticated()" class="login-logout"><a href="javascript:logout()">Logout</a></li>
+                    <li sec:authorize="!isAuthenticated()" class="login-logout"><a href="javascript:login()">Log in</a></li>
+                    <li sec:authorize="isAuthenticated()" class="login-logout"><a href="javascript:logout()">Log out</a></li>
                 </ul>
             </nav><!-- .nav-menu -->
         </div>

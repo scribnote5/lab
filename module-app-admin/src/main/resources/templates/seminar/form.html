@@ -30,31 +30,31 @@
                     </div>
                 </div>
 
-                <div class="mt-5">
-                    <table class="table">
+                <div class="page-content">
+                    <table class="table mobile-table-form mt-4">
                         <colgroup>
                             <col width="17.5%"/>
                             <col width="82.5%"/>
                         </colgroup>
+
                         <tr>
                             <th colspan="2" class="sub-item-title">Seminar Information</th>
                         </tr>
                         <tr>
                             <th>Title<span class="required-field">*</span></th>
-                            <td><input type="text" name="title" id="title" class="form-control form-control-sm" th:value="*{title}"/></td>
+                            <td><input type="text" name="title" class="form-control form-control-sm" th:value="*{title}"/></td>
                         </tr>
                         <tr>
                             <th>Presenter</th>
-                            <td><input type="text" name="presenter" id="presenter" class="form-control form-control-sm" th:value="*{presenter}"/>
-                            </td>
+                            <td><input type="text" name="presenter" class="form-control form-control-sm" th:value="*{presenter}"></td>
                         </tr>
                         <tr>
                             <th>Presentation Date</th>
-                            <td><input type="datetime-local" name="presentationDate" id="presentationDate" class="form-control form-control-sm presentation-date" th:value="*{presentationDate}"/></td>
+                            <td><input type="datetime-local" name="presentationDate" class="form-control form-control-sm" th:value="*{presentationDate}"/></td>
                         </tr>
                         <tr>
                             <th>Place</th>
-                            <td><input type="text" name="place" id="place" class="form-control form-control-sm" th:value="*{place}"/></td>
+                            <td><input type="text" name="place" class="form-control form-control-sm" th:value="*{place}"/></td>
                         </tr>
                         <tr>
                             <th>Seminar Type</th>
@@ -69,15 +69,16 @@
                             <th>Category</th>
                             <td>
                                 <select class="custom-select custom-select-sm" name="categoryIdx" th:field="*{categoryIdx}">
-                                    <option th:if="${#strings.isEmpty(categoryDto)} and *{idx}" th:value="-1">This field is inactive or deleted.</option>
+                                    <option th:if="${#strings.isEmpty(categoryDto)} and *{idx}" th:value="-1">This field is not valid.</option>
                                     <option th:each="categoryDto : ${categoryDtoList}"
                                             th:value="${categoryDto.idx}" th:text="${categoryDto.title}"></option>
                                 </select>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2"><textarea name="content" id="summernote" class="summernote"
-                                                      th:text="*{content}"></textarea></td>
+                            <td colspan="2">
+                                <div name="content" id="content" th:utext="*{content}"></div>
+                            </td>
                         </tr>
                         <tr>
                             <th>Attached File</th>
@@ -86,7 +87,7 @@
                                     <input type="file" class="custom-file-input" id="file" name="file" multiple>
                                     <label class="custom-file-label" for="file">Choose file.</label>
                                 </div>
-                                <div id="fileDrop" class="fileDrop">
+                                <div id="fileDrop" class="fileDrop mt-2">
                                     <strong>Drop files here.</strong>
                                 </div>
                             </td>
@@ -94,7 +95,7 @@
                         <tr>
                             <th>Total file size</th>
                             <td>
-                                <div><span id="totalFileSize"> 0 MB</span>, Up to 20 MB</div>
+                                <div><span id="totalFileSize">0MB</span>, Up to 50MB</div>
                             </td>
                         <tr>
                             <th>Upload Attached File</th>
@@ -107,45 +108,45 @@
                             <td>
                                 <div id="uploadedAttachedFileList" th:each="attachedFile : *{attachedFileList}">
                                     <div th:id="imgData + ${attachedFileStat.index}">
-                                        <span th:text="${attachedFile.fileName} + ',&nbsp;' + 'File Size: ' + ${attachedFile.fileSize} + '&nbsp;'"></span>
-                                        <img th:attr="src=@{|/images/cancel-icon.png|}, onclick=|deleteFile('${attachedFileStat.index}','${attachedFile.idx}','${attachedFile.savedFileName}')|" class="cancel-icon"/>
+                                        <span th:text="${attachedFile.fileName} + ',&nbsp;' + 'File Size: ' + ${attachedFile.fileSize}"></span>
+                                        <!-- &nbsp; skip -->
+                                        <i th:attr="onclick=|deleteFile('${attachedFileStat.index}','${attachedFile.idx}','${attachedFile.savedFileName}')|" class="far fa-times-circle"></i>
                                     </div>
                                 </div>
                             </td>
                         </tr>
+
                         <tr>
                             <th colspan="2" class="sub-item-title">Additional Information</th>
                         </tr>
                         <tr>
                             <th>Active Status</th>
                             <td>
-                                <div class="pull-left">
-                                    <select class="custom-select custom-select-sm" name="activeStatus" th:field="*{activeStatus}">
-                                        <option th:value="ACTIVE">Active</option>
-                                        <option th:value="INACTIVE">Inactive</option>
-                                    </select>
-                                </div>
+                                <select class="custom-select custom-select-sm" name="activeStatus" th:field="*{activeStatus}">
+                                    <option th:value="ACTIVE">Active</option>
+                                    <option th:value="INACTIVE">Inactive</option>
+                                </select>
                             </td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created Date</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Last Modified Date</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created By</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{createdBy}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{createdBy}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Last Modified By</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{lastModifiedBy}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{lastModifiedBy}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Views</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{views}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{views}"/></td>
                         </tr>
                         <tr>
                             <td colspan="10"></td>
@@ -153,20 +154,19 @@
                     </table>
                 </div>
 
-                <div class="row justify-content-between mt-5 mb-3">
-                    <div class="col-auto mx-3">
-                        <a href="/seminar/list" class="btn btn-secondary">Move to List</a>
+                <div class="row justify-content-between mt-4 mb-4">
+                    <div class="col-auto">
+                        <a href="/seminar/list" class="btn btn-sm btn-secondary">Move to List</a>
                     </div>
-                    <div class="col-auto mx-3">
-                        <button th:if="!*{idx}" id="insert" type="button" class="btn-main">Register</button>
-                        <button th:if="*{idx}" id="update" type="button" class="btn btn-info">Update</button>
+                    <div class="col-auto ml-2">
+                        <button th:if="!*{idx}" id="insert" type="button" class="btn-main btn-sm">Register</button>
+                        <button th:if="*{idx}" id="update" type="button" class="btn btn-sm btn-info">Update</button>
                     </div>
                 </div>
 
                 <!-- input type="hidden" -->
                 <input type="hidden" name="idx" th:value="*{idx}"/>
-                <input type="hidden" name="createdBy"
-                       th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
+                <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
                 <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
             </form>
         </div>
@@ -180,114 +180,10 @@
 <th:block th:replace="layout/script.html"></th:block>
 
 <!-- javascript -->
+<script th:src="@{/js/ckeditor-editor-init.js}"></script>
+<script th:src="@{/js/file-upload/multiple-file-upload.js}"></script>
+
 <script>
-    var totalFileSize = 0;
-    var insertFileArray = [];
-    var deleteFileArray = [];
-    var imgDataId = 0;
-    var exit = null;
-
-    $(document).ready(function () {
-        <!-- summernote setting -->
-        $("#summernote").summernote({
-            height: 500,	// 에디터 높이
-            minHeight: null,	// 최소 높이
-            maxHeight: null,	// 최대 높이
-            // focus: true,	// 에디터 로딩후 포커스를 맞출지 여부
-            lang: "ko-KR",// 한글 설정
-            placeholder: "The editor's max input size of bytes is 16777215(16 MB)."	//placeholder 설정
-        });
-        $("#summernote").summernote('fontSize', 14);
-
-        <!-- File Drop -->
-        $("#fileDrop").on("dragenter dragover", function (event) {
-            event.preventDefault(); // 기본 이벤트 발생을 막음
-        });
-    });
-
-    /* input tag event */
-    $("#file").change(function () {
-        var files = document.getElementsByName("file")[0].files;
-
-        for (var i = 0; i < files.length; i++) {
-            if (validateFile(files[i])) {
-                insertFileArray.push(files[i]);
-                document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
-
-                $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
-                    + '<span>'
-                    + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size)
-                    + '<img src="/images/cancel-icon.png" class="cancel-icon" onClick="cancelFile(' + imgDataId + ')" />'
-                    + '</span>'
-                    + '</div>');
-
-                imgDataId++;
-            } else {
-                return false;
-            }
-        }
-    });
-
-    /* Drag & drop event */
-    $("#fileDrop").on("drop", function (event) {
-        event.preventDefault(); // 기본 효과를 막음
-        document.getElementById("fileDrop").style.opacity = 1;
-
-        // 드래그된 파일의 정보
-        // event : jQuery의 이벤트
-        // originalEvent : javascript의 이벤트
-        var files = event.originalEvent.dataTransfer.files;
-
-        for (var i = 0; i < files.length; i++) {
-            if (validateFile(files[i])) {
-                insertFileArray.push(files[i]);
-                document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
-
-                $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
-                    + '<span>'
-                    + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size)
-                    + '<img src="/images/cancel-icon.png" class="cancel-icon" onClick="cancelFile(' + imgDataId + ')" />'
-                    + '</span>'
-                    + '</div>');
-
-                imgDataId++;
-            } else {
-                return false;
-            }
-        }
-    });
-
-    $("#fileDrop").on("dragover", function (event) {
-        event.stopPropagation();
-        event.preventDefault();
-
-        document.getElementById("fileDrop").style.opacity = 0.25;
-    });
-
-    $("#fileDrop").on("dragleave", function (event) {
-        event.stopPropagation();
-        event.preventDefault();
-
-        document.getElementById("fileDrop").style.opacity = 1;
-    });
-
-    // 새로 업로드한 파일을 취소하는 경우
-    function cancelFile(fileId) {
-        $('#imgData' + fileId).remove();
-
-        totalFileSize -= insertFileArray[fileId].size;
-        insertFileArray[fileId] = null;
-
-        document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
-    }
-
-    // 기존 업로드한 파일을 삭제하는 경우
-    function deleteFile(fileId, idx, savedFileName) {
-        $('#imgData' + fileId).remove();
-
-        deleteFileArray.push(idx);
-    }
-
     function deleteSeminar(seminarIdx) {
         $.ajax({
             url: moduleAppApiAddress + "/api/seminars/" + seminarIdx,
@@ -301,6 +197,7 @@
             })
             .fail(function (msg) {
                 parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
             });
     }
 </script>
@@ -308,11 +205,15 @@
 <script th:if="!${seminarDto?.idx}">
     $("#insert").click(function () {
         // validation (input tag mame, length or size)
-        if (!(validateByLengthAndBlank("title", 255) && validateByLength("presenter", 255) && validateByLength("place", 255) && validateBySize("content", 16777215))) {
+        if (!(validateByLengthAndBlank("title", 255) && validateByLength("presenter", 255) && validateByLength("place", 255) && validateByEditor(editor.getData(), 16777215))) {
             return false;
         }
 
+        // duplicate submit check
+        if (duplicateSubmitCheck()) return false;
+
         var jsonData = $("#form").serializeObject();
+        jsonData.content = editor.getData();
         var seminarIdx;
 
         $.ajax({
@@ -329,6 +230,7 @@
             })
             .fail(function (msg) {
                 parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
                 exit = true;
             });
 
@@ -360,6 +262,7 @@
             })
             .fail(function (msg) {
                 parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
                 deleteSeminar(seminarIdx);
             });
 
@@ -369,11 +272,15 @@
 <script th:if="${seminarDto?.idx}" th:inline="javascript">
     $("#update").click(function () {
         // validation (input tag mame, length or size)
-        if (!(validateByLengthAndBlank("title", 255) && validateByLength("presenter", 255) && validateByLength("place", 255) && validateBySize("content", 16777215))) {
+        if (!(validateByLengthAndBlank("title", 255) && validateByLength("presenter", 255) && validateByLength("place", 255) && validateByEditor(editor.getData(), 16777215))) {
             return false;
         }
 
+        // duplicate submit check
+        if (duplicateSubmitCheck()) return false;
+
         var jsonData = $("#form").serializeObject();
+        jsonData.content = editor.getData();
         var seminarIdx = document.getElementsByName("idx")[0].value;
 
         $.ajax({
@@ -389,6 +296,7 @@
             })
             .fail(function (msg) {
                 parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
                 exit = true;
             });
 
@@ -416,6 +324,7 @@
                 })
                 .fail(function (msg) {
                     parseErrorMsg(msg);
+                    duplicateSubmitFlag = false;
                     exit = true;
                 });
         }
@@ -425,6 +334,8 @@
         if (insertFileArray.length <= 0) {
             localStorage.setItem("result", "/seminar/update-success");
             location.href = "/seminar?idx=" + seminarIdx;
+
+            return true;
         }
 
         // 파일 업로드
@@ -453,7 +364,7 @@
             })
             .fail(function (msg) {
                 parseErrorMsg(msg);
-                deleteSeminar(seminarIdx);
+                duplicateSubmitFlag = false;
             })
     });
 </script>

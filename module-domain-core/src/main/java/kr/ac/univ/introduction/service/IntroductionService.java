@@ -7,6 +7,7 @@ import kr.ac.univ.introduction.dto.IntroductionDto;
 import kr.ac.univ.introduction.dto.mapper.IntroductionMapper;
 import kr.ac.univ.introduction.repository.IntroductionRepository;
 import kr.ac.univ.introduction.repository.IntroductionRepositoryImpl;
+import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.AccessCheck;
 import kr.ac.univ.util.NewIconCheck;
 import org.springframework.data.domain.*;
@@ -18,10 +19,12 @@ import javax.transaction.Transactional;
 public class IntroductionService {
     private final IntroductionRepository introductionRepository;
     private final IntroductionRepositoryImpl introductionRepositoryImpl;
+    private final UserRepository userRepository;
 
-    public IntroductionService(IntroductionRepository introductionRepository, IntroductionRepositoryImpl introductionRepositoryImpl) {
+    public IntroductionService(IntroductionRepository introductionRepository, IntroductionRepositoryImpl introductionRepositoryImpl, UserRepository userRepository) {
         this.introductionRepository = introductionRepository;
         this.introductionRepositoryImpl = introductionRepositoryImpl;
+        this.userRepository = userRepository;
     }
 
     public Page<IntroductionDto> findIntroductionList(Pageable pageable, SearchDto searchDto) {
@@ -45,7 +48,7 @@ public class IntroductionService {
                 break;
         }
 
-        introductionDtoList = new PageImpl<IntroductionDto>(IntroductionMapper.INSTANCE.toDto(introductionList.getContent()), pageable, introductionList.getTotalElements());
+        introductionDtoList = new PageImpl<>(IntroductionMapper.INSTANCE.toDto(introductionList.getContent()), pageable, introductionList.getTotalElements());
 
         // NewIcon 판별
         for (IntroductionDto introductionDto : introductionDtoList) {
@@ -75,11 +78,9 @@ public class IntroductionService {
         if (idx == 0) {
             introductionDto.setAccess(true);
         }
-        // Update: isAccess 메소드에 따라 접근 가능 및 불가
-        else if (AccessCheck.isAccessInModuleWeb(introductionDto.getCreatedBy())) {
-            introductionDto.setAccess(true);
-        } else {
-            introductionDto.setAccess(false);
+        // Update: isAccessInGeneral 메소드에 따라 접근 가능 및 불가
+        else {
+            introductionDto.setAccess(AccessCheck.isAccessInGeneral(introductionDto.getCreatedBy(), userRepository.findByUsername(introductionDto.getCreatedBy()).getAuthorityType().name()));
         }
 
         introductionRepositoryImpl.updateViewsByIdx(idx);

@@ -7,23 +7,27 @@
     <title th:text="${@environment.getProperty('title')} + ' | Project List'"></title>
 </head>
 <body>
-<div id="wrapper">
-    <div id="page-content-wrapper">
-        <!-- header -->
-        <div th:replace="layout/header::header"></div>
+<div id="page-content-wrapper">
+    <!-- header -->
+    <div th:replace="layout/header::header"></div>
 
-        <div class="container project">
-            <div class="page-header breadcrumbs" data-aos="fade-up" data-aos-delay="100">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h2>Project List</h2>
-                    <ol>
-                        <li>Home</li>
-                        <li>Project List</li>
-                    </ol>
-                </div>
+    <div class="container project">
+        <div class="page-header breadcrumbs" data-aos="fade-up">
+            <div class="d-flex justify-content-between align-items-center" data-aos="fade-up">
+                <h2>Project List</h2>
+                <ol>
+                    <li>Home</li>
+                    <li>Project List</li>
+                </ol>
             </div>
+        </div>
 
-            <div class="mt-5" data-aos="fade-up" data-aos-delay="150">
+        <div id="loading" class="row justify-content-center">
+            <img th:src="@{/images/loading.gif}" alt="Loading…"/>
+        </div>
+
+        <div class="page-content" data-aos="fade-up">
+            <div class="mt-4">
                 <h4>Current Project</h4>
                 <ul th:each="projectDto : ${currentProjectDtoList}">
                     <li>
@@ -36,7 +40,7 @@
                 </ul>
             </div>
 
-            <div class="mt-5 mb-5" data-aos="fade-up" data-aos-delay="150">
+            <div class="mt-5">
                 <h4>Previous Project</h4>
                 <ul th:each="projectDto : ${previousProjectDtoList}">
                     <li>
@@ -57,16 +61,6 @@
 
 <!-- script file -->
 <th:block th:replace="layout/script.html"></th:block>
-
-<script>
-    sweetalertFire("project");
-
-    $("#search").click(function () {
-        document.form.action = "/project/list";
-        document.form.method = "get";
-        document.form.submit();
-    });
-</script>
 
 </body>
 </html>

@@ -23,10 +23,12 @@ public class AlumniAssociationService {
     private String moduleName;
     private final AlumniAssociationRepository alumniAssociationRepository;
     private final AlumniAssociationRepositoryImpl alumniAssociationRepositoryImpl;
+    private final UserRepository userRepository;
 
-    public AlumniAssociationService(AlumniAssociationRepository alumniAssociationRepository, AlumniAssociationRepositoryImpl alumniAssociationRepositoryImpl) {
+    public AlumniAssociationService(AlumniAssociationRepository alumniAssociationRepository, AlumniAssociationRepositoryImpl alumniAssociationRepositoryImpl, UserRepository userRepository) {
         this.alumniAssociationRepository = alumniAssociationRepository;
         this.alumniAssociationRepositoryImpl = alumniAssociationRepositoryImpl;
+        this.userRepository = userRepository;
     }
 
     public Page<AlumniAssociationDto> findAlumniAssociationList(Pageable pageable, SearchDto searchDto) {
@@ -74,7 +76,7 @@ public class AlumniAssociationService {
                 break;
         }
 
-        alumniAssociationDtoList = new PageImpl<AlumniAssociationDto>(AlumniAssociationMapper.INSTANCE.toDto(alumniAssociationList.getContent()), pageable, alumniAssociationList.getTotalElements());
+        alumniAssociationDtoList = new PageImpl<>(AlumniAssociationMapper.INSTANCE.toDto(alumniAssociationList.getContent()), pageable, alumniAssociationList.getTotalElements());
 
         // NewIcon 판별, Main HashTag 설정
         for (AlumniAssociationDto alumniAssociationDto : alumniAssociationDtoList) {
@@ -101,10 +103,9 @@ public class AlumniAssociationService {
             alumniAssociationDto.setAccess(true);
         }
         // Update: isAccess 메소드에 따라 접근 가능 및 불가
-        else if (AccessCheck.isAccessInModuleWeb(alumniAssociationDto.getCreatedBy())) {
-            alumniAssociationDto.setAccess(true);
-        } else {
-            alumniAssociationDto.setAccess(false);
+        // Update: isAccessInGeneral 메소드에 따라 접근 가능 및 불가
+        else {
+            alumniAssociationDto.setAccess(AccessCheck.isAccessInGeneral(alumniAssociationDto.getCreatedBy(), userRepository.findByUsername(alumniAssociationDto.getCreatedBy()).getAuthorityType().name()));
         }
 
         alumniAssociationRepositoryImpl.updateViewsByIdx(idx);

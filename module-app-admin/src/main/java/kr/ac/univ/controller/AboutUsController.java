@@ -22,13 +22,13 @@ public class AboutUsController {
 
     // List
     @GetMapping("/list")
-    public String aboutUsList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
+    public String aboutUsList(Pageable pageable, SearchDto searchDto, Model model) {
         model.addAttribute("aboutUsDtoList", aboutUsService.findAboutUsList(pageable, searchDto));
 
         return "aboutUs/list";
     }
 
-    // Form Update
+    // Form
     @GetMapping("/form{idx}")
     public String aboutUsForm(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
         AboutUsDto aboutUsDto = aboutUsService.findAboutUsByIdx(idx);

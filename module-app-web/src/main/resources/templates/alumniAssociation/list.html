@@ -7,74 +7,90 @@
     <title th:text="${@environment.getProperty('title')} + ' | Alumni Association List'"></title>
 </head>
 <body>
-<div id="wrapper">
-    <div id="page-content-wrapper">
-        <!-- header -->
-        <div th:replace="layout/header::header"></div>
+<div id="page-content-wrapper">
+    <!-- header -->
+    <div th:replace="layout/header::header"></div>
 
-        <div class="container">
-            <form name="form" id="form" th:object="${searchDto}" action="#">
-                <div class="page-header breadcrumbs" data-aos="fade-up" data-aos-delay="100">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h2>Alumni Association List</h2>
-                        <ol>
-                            <li>Home</li>
-                            <li>Alumni Association List</li>
-                        </ol>
-                    </div>
+    <div class="container">
+        <form name="form" id="form" th:object="${searchDto}" action="#">
+            <div class="page-header breadcrumbs" data-aos="fade-up">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2>Alumni Association List</h2>
+                    <ol>
+                        <li>Home</li>
+                        <li>Alumni Association List</li>
+                    </ol>
                 </div>
+            </div>
 
-                <div class="row justify-content-end mt-3" data-aos="fade-up" data-aos-delay="100">
-                    <div class="col-auto px-1">
+            <div id="loading" class="row justify-content-center">
+                <img th:src="@{/images/loading.gif}" alt="Loading…"/>
+            </div>
+
+            <div class="page-search" data-aos="fade-up">
+                <div class="row justify-content-end mt-4">
+                    <div class="pt-2 pr-3">
                         <select class="custom-select custom-select-sm" name="searchType" th:field="*{searchType}">
                             <option th:value="TITLE">Title</option>
                             <option th:value="CONTENT">Content</option>
                             <option th:value="ID">ID</option>
                         </select>
-                        </select>
                     </div>
-                    <div class="col-auto px-1">
-                        <input type="text" name="keyword" class="form-control form-control-sm" th:value="${searchDto?.keyword}"/>
+                    <div class="pt-2 pr-2">
+                        <input type="search" class="custom-search-input" name="keyword" placeholder="Search" th:value="${searchDto?.keyword}">
                     </div>
-                    <div class="col-auto px-3">
-                        <button id="search" type="button" class="btn-main">Search</button>
+                    <div class="pt-2">
+                        <i id="search" class="fas fa-search search-icon"></i>
                     </div>
                 </div>
+            </div>
 
-                <div class="mt-5" data-aos="fade-up" data-aos-delay="150">
-                    <table class="table table-hover">
-                        <thead>
-                        <tr>
-                            <th style="width: 67.5%">Title</th>
-                            <th style="width: 12.5%">Created By</th>
-                            <th style="width: 12.5%">Created Date</th>
-                            <th style="width: 7.5%">Views</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="alumniAssociationDto : ${alumniAssociationDtoList}">
-                            <td>
-                                <a th:href="'/alumni-association?idx='+${alumniAssociationDto.idx}" class="link"
-                                   th:text="${#strings.length(alumniAssociationDto.title)} < 68 ? ${alumniAssociationDto.title} : ${#strings.substring(alumniAssociationDto.title, 0, 68)} + '...'"></a>
-                                <img th:if="${alumniAssociationDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
-                            </td>
-                            <td th:text="${alumniAssociationDto.createdBy}"></td>
-                            <td th:text="${#temporals.format(alumniAssociationDto.createdDate,'yyyy-MM-dd HH:mm')}"></td>
-                            <td th:text="${alumniAssociationDto.views}"></td>
-                        </tr>
-                        <tr th:if="${alumniAssociationDtoList.totalElements == 0}">
-                            <td colspan="10" class="no-posts">
-                                No posts founded.
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <div class="page-content" data-aos="fade-up">
+                <table class="table table-hover mt-4">
+                    <thead>
+                    <tr class="d-none d-sm-table-row">
+                        <th style="width: 67.5%" class="text-center">Title</th>
+                        <th style="width: 12.5%">Created By</th>
+                        <th style="width: 12.5%" class="text-center">Created Date</th>
+                        <th style="width: 7.5%" class="text-center">Views</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="alumniAssociationDto : ${alumniAssociationDtoList}">
+                        <td>
+                            <a th:href="'/alumni-association?idx='+${alumniAssociationDto.idx}" th:text="${alumniAssociationDto.title}" class="link"></a>
+                            <img th:if="${alumniAssociationDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
 
-                <div class="row justify-content-end mt-5 mb-3"></div>
+                            <!-- Mobile -->
+                            <div class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline">
+                                <div class="d-flex align-center">
+                                    <span th:text="${alumniAssociationDto.createdBy}" class="mobile-additional-information"> </span> &nbsp;&nbsp;
+                                    <span th:text="${#temporals.format(alumniAssociationDto.createdDate,'yyyy-MM-dd')}" class="mobile-additional-information"></span> &nbsp;&nbsp;
+                                    <span th:text="'Views: ' + ${alumniAssociationDto.views}" class="mobile-additional-information"></span>
+                                </div>
+                            </div>
+                        </td>
+
+                        <!-- Desktop -->
+                        <td th:text="${alumniAssociationDto.createdBy}" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                        <td th:text="${#temporals.format(alumniAssociationDto.createdDate,'yyyy-MM-dd')}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                        <td th:text="${alumniAssociationDto.views}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                    </tr>
+                    <tr th:if="${alumniAssociationDtoList.totalElements == 0}">
+                        <td colspan="10" class="no-posts">
+                            No posts founded.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="10"></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="row mt-4 mb-4"></div>
 
                 <!-- Pagination -->
-                <div class="row justify-content-center mb-3" aria-label="Page navigation">
+                <div class="row justify-content-center mb-4" aria-label="Page navigation">
                     <ul class="pagination "
                         th:with="startNumber=${T(Math).floor(alumniAssociationDtoList.number/10)}*10+1, endNumber=(${alumniAssociationDtoList.totalPages} > ${startNumber}+9) ? ${startNumber}+9 : (${alumniAssociationDtoList.totalPages} == 0 ? 1 : ${alumniAssociationDtoList.totalPages})">
                         <li class="page-item">
@@ -95,8 +111,8 @@
                     </ul>
                 </div>
                 <!-- /Pagination -->
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 </div>
 

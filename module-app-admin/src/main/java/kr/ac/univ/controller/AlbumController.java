@@ -25,13 +25,13 @@ public class AlbumController {
 
     // List
     @GetMapping("/list")
-    public String albumList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
+    public String albumList(Pageable pageable, SearchDto searchDto, Model model) {
         model.addAttribute("albumDtoList", albumService.findAlbumList(pageable, searchDto));
 
         return "album/list";
     }
 
-    // Form Update
+    // Form
     @GetMapping("/form{idx}")
     public String albumForm(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
         AlbumDto albumDto = albumService.findAlbumByIdx(idx);

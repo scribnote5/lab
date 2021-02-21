@@ -1,10 +1,7 @@
 package kr.ac.univ.seminar.service;
 
-import kr.ac.univ.category.repository.CategoryRepository;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.SearchDto;
-import kr.ac.univ.noticeBoard.dto.NoticeBoardDto;
-import kr.ac.univ.noticeBoard.dto.mapper.NoticeBoardMapper;
 import kr.ac.univ.seminar.domain.Seminar;
 import kr.ac.univ.seminar.dto.SeminarDto;
 import kr.ac.univ.seminar.dto.mapper.SeminarMapper;
@@ -26,13 +23,14 @@ public class SeminarService {
     private String moduleName;
     private final SeminarRepository seminarRepository;
     private final SeminarRepositoryImpl seminarRepositoryImpl;
+    private final UserRepository userRepository;
 
-    public SeminarService(SeminarRepository seminarRepository, SeminarRepositoryImpl seminarRepositoryImpl) {
+    public SeminarService(SeminarRepository seminarRepository, SeminarRepositoryImpl seminarRepositoryImpl, UserRepository userRepository) {
         this.seminarRepository = seminarRepository;
         this.seminarRepositoryImpl = seminarRepositoryImpl;
+        this.userRepository = userRepository;
     }
 
-    @Transactional
     public Page<SeminarDto> findSeminarList(Pageable pageable, SearchDto searchDto) {
         Page<Seminar> seminarList = null;
         Page<SeminarDto> seminarDtoList = null;
@@ -78,7 +76,7 @@ public class SeminarService {
                 break;
         }
 
-        seminarDtoList = new PageImpl<SeminarDto>(SeminarMapper.INSTANCE.toDto(seminarList.getContent()), pageable, seminarList.getTotalElements());
+        seminarDtoList = new PageImpl<>(SeminarMapper.INSTANCE.toDto(seminarList.getContent()), pageable, seminarList.getTotalElements());
 
         // NewIcon 판별
         for (SeminarDto seminarDto : seminarDtoList) {
@@ -103,7 +101,6 @@ public class SeminarService {
         return seminarRepository.save(SeminarMapper.INSTANCE.toEntity(seminarDto)).getIdx();
     }
 
-    @Transactional
     public SeminarDto findSeminarByIdx(Long idx) {
         SeminarDto seminarDto = SeminarMapper.INSTANCE.toDto(seminarRepository.findById(idx).orElse(new Seminar()));
 
@@ -112,11 +109,9 @@ public class SeminarService {
         if (idx == 0) {
             seminarDto.setAccess(true);
         }
-        // Update: isAccess 메소드에 따라 접근 가능 및 불가
-        else if (AccessCheck.isAccessInModuleWeb(seminarDto.getCreatedBy())) {
-            seminarDto.setAccess(true);
-        } else {
-            seminarDto.setAccess(false);
+        // Update: isAccessInGeneral 메소드에 따라 접근 가능 및 불가
+        else {
+            seminarDto.setAccess(AccessCheck.isAccessInGeneral(seminarDto.getCreatedBy(), userRepository.findByUsername(seminarDto.getCreatedBy()).getAuthorityType().name()));
         }
 
         seminarRepositoryImpl.updateViewsByIdx(idx);

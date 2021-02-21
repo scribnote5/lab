@@ -6,6 +6,7 @@ import kr.ac.univ.exception.BusinessException;
 import kr.ac.univ.exception.FileNumberExceededException;
 import kr.ac.univ.exception.FileTypeException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.connector.ClientAbortException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -132,5 +133,17 @@ public class GlobalExceptionHandler {
         final ErrorResponse response = ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR);
 
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+
+    /**
+     * 외부 애플리케이션에 의해서 tomcat 내부에서 발생하는 오류로 애플리케이션 실행에 영향은 없음
+     * 현재 원인이 불분명한 상태
+     */
+    @ExceptionHandler(ClientAbortException.class)
+    protected ResponseEntity<ErrorResponse> handleTestException(Exception e) {
+        log.error("ClientAbortException", e);
+
+        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

@@ -22,7 +22,6 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <h2 th:if="!*{idx}">Learn More Video Register</h2>
                         <h2 th:if="*{idx}">Learn More Video Update</h2>
-
                         <ol>
                             <li>Home</li>
                             <li th:if="!*{idx}">Learn More Register</li>
@@ -31,18 +30,19 @@
                     </div>
                 </div>
 
-                <div class="mt-5">
-                    <table class="table">
+                <div class="page-content">
+                    <table class="table mobile-table-form mt-4">
                         <colgroup>
                             <col width="17.5%"/>
                             <col width="82.5%"/>
                         </colgroup>
+
                         <tr>
                             <th colspan="2" class="sub-item-title">Learn More Information</th>
                         </tr>
                         <tr>
                             <th>Title<span class="required-field">*</span></th>
-                            <td><input type="text" name="title" id="title" class="form-control form-control-sm" th:value="*{title}"/></td>
+                            <td><input type="text" name="title" class="form-control form-control-sm" th:value="*{title}"/></td>
                         </tr>
                         <tr>
                             <th>Attached File(video file)<span class="required-field">*</span></th>
@@ -51,7 +51,7 @@
                                     <input type="file" class="custom-file-input" id="file" name="file">
                                     <label class="custom-file-label" for="file">Choose file.</label>
                                 </div>
-                                <div id="fileDrop" class="fileDrop">
+                                <div id="fileDrop" class="fileDrop mt-2">
                                     <strong>Drop files here.</strong>
                                 </div>
                             </td>
@@ -59,7 +59,7 @@
                         <tr>
                             <th>Total file size</th>
                             <td>
-                                <div><span id="totalFileSize"> 0 MB</span>, Up to 20 MB</div>
+                                <div><span id="totalFileSize">0MB</span>, Up to 50MB</div>
                             </td>
                         <tr>
                             <th>Upload Attached File</th>
@@ -72,45 +72,45 @@
                             <td>
                                 <div id="uploadedAttachedFileList" th:each="attachedFile : *{attachedFileList}">
                                     <div th:id="imgData + ${attachedFileStat.index}">
-                                        <span th:text="${attachedFile.fileName} + ',&nbsp;' + 'File Size: ' + ${attachedFile.fileSize} + '&nbsp;'"></span>
-                                        <img th:attr="src=@{|/images/cancel-icon.png|}, onclick=|deleteFile('${attachedFileStat.index}','${attachedFile.idx}','${attachedFile.savedFileName}')|" class="cancel-icon"/>
+                                        <span th:text="${attachedFile.fileName} + ',&nbsp;' + 'File Size: ' + ${attachedFile.fileSize}"></span>
+                                        <!-- &nbsp; skip -->
+                                        <i th:attr="onclick=|deleteFile('${attachedFileStat.index}','${attachedFile.idx}','${attachedFile.savedFileName}')|" class="far fa-times-circle"></i>
                                     </div>
                                 </div>
                             </td>
                         </tr>
+
                         <tr>
                             <th colspan="2" class="sub-item-title">Additional Information</th>
                         </tr>
                         <tr>
                             <th>Active Status</th>
                             <td>
-                                <div class="pull-left">
-                                    <select class="custom-select custom-select-sm" name="activeStatus" th:field="*{activeStatus}">
-                                        <option th:value="ACTIVE">Active</option>
-                                        <option th:value="INACTIVE">Inactive</option>
-                                    </select>
-                                </div>
+                                <select class="custom-select custom-select-sm" name="activeStatus" th:field="*{activeStatus}">
+                                    <option th:value="ACTIVE">Active</option>
+                                    <option th:value="INACTIVE">Inactive</option>
+                                </select>
                             </td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created Date</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Last Modified Date</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created By</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{createdBy}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{createdBy}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Last Modified By</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{lastModifiedBy}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{lastModifiedBy}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Views</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly="readonly" th:value="*{views}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{views}"/></td>
                         </tr>
                         <tr>
                             <td colspan="10"></td>
@@ -118,13 +118,13 @@
                     </table>
                 </div>
 
-                <div class="row justify-content-between mt-5 mb-3">
-                    <div class="col-auto mx-3">
+                <div class="row justify-content-between mt-4 mb-4">
+                    <div class="col-auto">
                         <a href="/learn-more-video/list" class="btn btn-secondary col-auto">Move to List</a>
                     </div>
-                    <div class="col-auto mx-3">
-                        <button th:if="!*{idx}" id="insert" type="button" class="btn-main">Register</button>
-                        <button th:if="*{idx}" id="update" type="button" class="btn btn-info">Update</button>
+                    <div class="col-auto ml-2">
+                        <button th:if="!*{idx}" id="insert" type="button" class="btn-main btn-sm">Register</button>
+                        <button th:if="*{idx}" id="update" type="button" class="btn btn-sm btn-info">Update</button>
                     </div>
                 </div>
 
@@ -144,117 +144,13 @@
 <th:block th:replace="layout/script.html"></th:block>
 
 <!-- javascript -->
-<script th:inline="javascript">
-    var totalFileSize = 0;
-    var insertFileArray = [];
-    var deleteFileArray = [];
-    var imgDataId = 0;
-    var exit = null;
+<script th:src="@{/js/file-upload/single-video-file-upload.js}"></script>
 
+<script th:inline="javascript">
     // 파일 Number validation
     var insertFileArrayLength = 0;
     var deleteFileArrayLength = 0;
     var uploadedAttachedFileLength = [[${learnMoreVideoDto.attachedFileList}]].length;
-
-    $(document).ready(function () {
-        <!-- File Drop -->
-        $("#fileDrop").on("dragenter dragover", function (event) {
-            event.preventDefault(); // 기본 이벤트 발생을 막음
-        });
-    });
-
-    /* input tag event */
-    $("#file").change(function () {
-        var files = document.getElementsByName("file")[0].files;
-
-        // 업로드하는 파일 개수가 number개가 넘어가는 경우, 파일 업로드 불가
-        if (!validateByFileNumber(files, 1)) {
-            return false;
-        }
-
-        for (var i = 0; i < files.length; i++) {
-            if (validateVideoFile(files[i])) {
-                insertFileArray.push(files[i]);
-                document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
-
-                $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
-                    + '<span>'
-                    + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size)
-                    + '<img src="/images/cancel-icon.png" class="cancel-icon" onClick="cancelFile(' + imgDataId + ')" />'
-                    + '</span>'
-                    + '</div>');
-
-                imgDataId++;
-            } else {
-                return false;
-            }
-        }
-    });
-
-    /* Drag & drop event */
-    $("#fileDrop").on("drop", function (event) {
-        event.preventDefault(); // 기본 효과를 막음
-        document.getElementById("fileDrop").style.opacity = 1;
-
-        // 드래그된 파일의 정보
-        // event : jQuery의 이벤트
-        // originalEvent : javascript의 이벤트
-        var files = event.originalEvent.dataTransfer.files;
-
-        // 업로드하는 파일 개수가 number개가 넘어가는 경우, 파일 업로드 불가
-        if (!validateByFileNumber(files, 1)) {
-            return false;
-        }
-
-        for (var i = 0; i < files.length; i++) {
-            if (validateVideoFile(files[i])) {
-                insertFileArray.push(files[i]);
-                document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
-
-                $("#attachedFileList").append('<div id="imgData' + imgDataId + '">'
-                    + '<span>'
-                    + files[i].name + ",&nbsp; File Size: " + convertFileSize(files[i].size)
-                    + '<img src="/images/cancel-icon.png" class="cancel-icon" onClick="cancelFile(' + imgDataId + ')" />'
-                    + '</span>'
-                    + '</div>');
-
-                imgDataId++;
-            } else {
-                return false;
-            }
-        }
-    });
-
-    $("#fileDrop").on("dragover", function (event) {
-        event.stopPropagation();
-        event.preventDefault();
-
-        document.getElementById("fileDrop").style.opacity = 0.25;
-    });
-
-    $("#fileDrop").on("dragleave", function (event) {
-        event.stopPropagation();
-        event.preventDefault();
-
-        document.getElementById("fileDrop").style.opacity = 1;
-    });
-
-    // 새로 업로드한 파일을 취소하는 경우
-    function cancelFile(fileId) {
-        $('#imgData' + fileId).remove();
-
-        totalFileSize -= insertFileArray[fileId].size;
-        insertFileArray[fileId] = null;
-
-        document.getElementById("totalFileSize").innerHTML = convertFileSize(totalFileSize);
-    }
-
-    // 기존 업로드한 파일을 삭제하는 경우
-    function deleteFile(fileId, idx, savedFileName) {
-        $('#imgData' + fileId).remove();
-
-        deleteFileArray.push(idx);
-    }
 
     function deleteLearnMore(learnMoreIdx) {
         $.ajax({
@@ -275,13 +171,13 @@
 
 <script th:if="!${learnMoreVideoDto?.idx}">
     $("#insert").click(function () {
-        // 배열 요소가 null인 경우를 제외하여 배열 길이를 계산함
-        deleteArrayIndexIsNull();
-
         // validation (input tag mame, length or size)
         if (!(validateByLengthAndBlank("title", 255) && validateByFileExist())) {
             return false;
         }
+
+        // duplicate submit check
+        if (duplicateSubmitCheck()) return false;
 
         var jsonData = $("#form").serializeObject();
         var learnMoreIdx;
@@ -300,6 +196,7 @@
             })
             .fail(function (msg) {
                 parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
                 exit = true;
             });
 
@@ -331,6 +228,7 @@
             })
             .fail(function (msg) {
                 parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
                 deleteLearnMore(learnMoreIdx);
             });
     });
@@ -338,13 +236,13 @@
 
 <script th:if="${learnMoreVideoDto?.idx}" th:inline="javascript">
     $("#update").click(function () {
-        // 배열 요소가 null인 경우를 제외하여 배열 길이를 계산함
-        deleteArrayIndexIsNull();
-
         // validation (input tag mame, length or size)
         if (!(validateByLengthAndBlank("title", 255) && validateByFileExist())) {
             return false;
         }
+
+        // duplicate submit check
+        if (duplicateSubmitCheck()) return false;
 
         var jsonData = $("#form").serializeObject();
         var learnMoreIdx = document.getElementsByName("idx")[0].value;
@@ -362,6 +260,7 @@
             })
             .fail(function (msg) {
                 parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
                 exit = true;
             });
 
@@ -389,6 +288,7 @@
                 })
                 .fail(function (msg) {
                     parseErrorMsg(msg);
+                    duplicateSubmitFlag = false;
                     exit = true;
                 });
         }
@@ -398,6 +298,8 @@
         if (insertFileArray.length <= 0) {
             localStorage.setItem("result", "/learn-more-video/update-success");
             location.href = "/learn-more-video?idx=" + learnMoreIdx;
+
+            return true;
         }
 
         // 파일 업로드
@@ -426,7 +328,7 @@
             })
             .fail(function (msg) {
                 parseErrorMsg(msg);
-                deleteLearnMore(learnMoreIdx);
+                duplicateSubmitFlag = false;
             })
     });
 </script>

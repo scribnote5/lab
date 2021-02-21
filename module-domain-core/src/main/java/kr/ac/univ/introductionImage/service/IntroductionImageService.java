@@ -23,10 +23,12 @@ public class IntroductionImageService {
     private String moduleName;
     private final IntroductionImageRepository introductionImageRepository;
     private final IntroductionImageRepositoryImpl introductionImageRepositoryImpl;
+    private final UserRepository userRepository;
 
-    public IntroductionImageService(IntroductionImageRepository introductionImageRepository, IntroductionImageRepositoryImpl introductionImageRepositoryImpl) {
+    public IntroductionImageService(IntroductionImageRepository introductionImageRepository, IntroductionImageRepositoryImpl introductionImageRepositoryImpl, UserRepository userRepository) {
         this.introductionImageRepository = introductionImageRepository;
         this.introductionImageRepositoryImpl = introductionImageRepositoryImpl;
+        this.userRepository = userRepository;
     }
 
     public Page<IntroductionImageDto> findIntroductionImageList(Pageable pageable, SearchDto searchDto) {
@@ -65,7 +67,7 @@ public class IntroductionImageService {
                 break;
         }
 
-        introductionImageDtoList = new PageImpl<IntroductionImageDto>(IntroductionImageMapper.INSTANCE.toDto(introductionImageList.getContent()), pageable, introductionImageList.getTotalElements());
+        introductionImageDtoList = new PageImpl<>(IntroductionImageMapper.INSTANCE.toDto(introductionImageList.getContent()), pageable, introductionImageList.getTotalElements());
 
         // NewIcon 판별
         for (IntroductionImageDto introductionImageDto : introductionImageDtoList) {
@@ -91,11 +93,9 @@ public class IntroductionImageService {
         if (idx == 0) {
             introductionImageDto.setAccess(true);
         }
-        // Update: isAccess 메소드에 따라 접근 가능 및 불가
-        else if (AccessCheck.isAccessInModuleWeb(introductionImageDto.getCreatedBy())) {
-            introductionImageDto.setAccess(true);
-        } else {
-            introductionImageDto.setAccess(false);
+        // Update: isAccessInGeneral 메소드에 따라 접근 가능 및 불가
+        else {
+            introductionImageDto.setAccess(AccessCheck.isAccessInGeneral(introductionImageDto.getCreatedBy(), userRepository.findByUsername(introductionImageDto.getCreatedBy()).getAuthorityType().name()));
         }
 
         introductionImageRepositoryImpl.updateViewsByIdx(idx);

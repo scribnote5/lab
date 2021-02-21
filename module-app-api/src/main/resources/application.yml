@@ -10,9 +10,9 @@ spring:
   servlet:
     multipart:
       # 한개의 파일의 최대 크기
-      max-file-size: 20MB
+      max-file-size: 50MB
       # form-data 요청에 따른 모든 파일의 최대 크기
-      max-request-size: 20MB
+      max-request-size: 50MB
       enabled: true
 module:
   name: module-app-api
@@ -55,6 +55,8 @@ spring:
         maintainTimeStats: false
 server:
   port: 8081
+module-app-api:
+  address: http://localhost:8081
 ---
 spring:
   profiles: local
@@ -85,6 +87,8 @@ spring:
         maintainTimeStats: false
 server:
   port: 8081
+module-app-api:
+  address: http://localhost:8081
 ---
 spring:
   profiles: dev
@@ -115,3 +119,5 @@ spring:
         maintainTimeStats: false
 server:
   port: 8081
+module-app-api:
+  address: http://203.234.19.85:8081

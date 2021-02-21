@@ -28,13 +28,13 @@ public class ProjectController {
 
     // List
     @GetMapping("/list")
-    public String projectList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
+    public String projectList(Pageable pageable, SearchDto searchDto, Model model) {
         model.addAttribute("projectDtoList", projectService.findProjectList(pageable, searchDto));
 
         return "project/list";
     }
 
-    // Form Update
+    // Form
     @GetMapping("/form{idx}")
     public String projectForm(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
         ProjectDto projectDto = projectService.findProjectByIdx(idx);

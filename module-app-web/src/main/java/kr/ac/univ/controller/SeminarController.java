@@ -6,7 +6,6 @@ import kr.ac.univ.seminar.dto.SeminarDto;
 import kr.ac.univ.seminar.service.SeminarAttachedFileService;
 import kr.ac.univ.seminar.service.SeminarService;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,13 +27,13 @@ public class SeminarController {
 
     // List
     @GetMapping("/list")
-    public String seminarList(@PageableDefault Pageable pageable, SearchDto searchDto, Model model) {
+    public String seminarList(Pageable pageable, SearchDto searchDto, Model model) {
         model.addAttribute("seminarDtoList", seminarService.findSeminarList(pageable, searchDto));
 
         return "seminar/list";
     }
 
-    // Form Update
+    // Form
     @GetMapping("/form{idx}")
     public String seminarForm(@RequestParam(value = "idx", defaultValue = "0") Long idx, Model model) {
         SeminarDto seminarDto = seminarService.findSeminarByIdx(idx);

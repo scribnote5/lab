@@ -27,201 +27,290 @@
                     </div>
                 </div>
 
-                <div class="mt-5">
-                    <table class="table">
+                <div class="page-content">
+                    <table class="table mobile-table-read mt-4">
                         <colgroup>
                             <col width="17.5%"/>
-                            <col width="42.5%"/>
-                            <col width="17.5%"/>
-                            <col width="22.5%"/>
+                            <col width="82.5%"/>
                         </colgroup>
                         <tr>
-                            <th colspan="4" class="sub-item-title">Required Information</th>
+                            <th colspan="2" class="sub-item-title">Required Information</th>
                         </tr>
-                        <tr>
+                        <!-- Desktop -->
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>ID</th>
-                            <td colspan="2"><span id="username" th:text="*{username}"></span></td>
-                            <td></td>
+                            <td id="username" th:text="*{username}"></td>
                         </tr>
-                        <tr>
-                            <th>Photo</th>
-                            <td id="imgData">
-                                Uploaded Photo File:
-                                <span th:if="*{attachedFileList.size()} == 0" th:text="No + ' ' + file."></span>
-                                <span th:if="*{attachedFileList.size()} != 0" th:attr="onclick=|location.href='${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/*{attachedFileList[0].savedFileName}'|"
-                                      th:text="*{attachedFileList[0].fileName} + ',&nbsp;' + 'File size: ' + *{attachedFileList[0].fileSize}"></span>
-                            </td>
-                            <td colspan="2" id="imgPreview">
-                                <img th:if="*{attachedFileList.size()} == 0" class="img-thumbnail user-img-preview float-right" th:attr="src=@{/images/no-preview-available.jpg}"/>
-                                <img th:if="*{attachedFileList.size()} != 0" class="img-thumbnail user-img-preview float-right"
-                                     th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/*{attachedFileList[0].savedFileName}|}"/>
+                        <!-- Mobile -->
+                        <tr class="d-print-none d-sm-table-row d-md-table-row d-lg-none d-xl-none d-table-row">
+                            <td colspan="2">
+                                <h4 th:text="*{username}" class="mobile-title"></h4>
                             </td>
                         </tr>
+
+                        <!-- Common -->
                         <tr>
+                            <th class="d-none d-sm-none d-md-none d-lg-table-cell">Photo</th>
+                            <td colspan="2">
+                                <strong class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline mobile-default">Uploaded Photo File</strong>
+
+                                <div id="attachedFileList" th:each="attachedFile : *{attachedFileList}">
+                                    <span th:attr="onclick=|location.href='${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/${attachedFile.savedFileName}'|"
+                                          th:text="${attachedFile.fileName} + ',&nbsp;' + 'File size: ' + ${attachedFile.fileSize}"></span>
+                                </div>
+
+                                <div class="mt-2">
+                                    <img th:if="*{attachedFileList.size()} == 0" id="imgPreview" class="float-right user-img-preview img-thumbnail" th:attr="src=@{/images/no-preview-available.jpg}"/>
+                                    <a th:if="*{attachedFileList.size()} != 0" th:href="@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-image/*{attachedFileList[0].savedFileName}|}"
+                                       data-gall="userPhoto" class="venobox" th:title="*{username}">
+                                        <img id="imgPreview" class="float-right user-img-preview img-thumbnail"
+                                             th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-image/*{attachedFileList[0].savedFileName}|}"/>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- Desktop -->
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Korean Name</th>
-                            <td colspan="2"><span id="koreanName" th:text="*{koreanName}"></span></td>
-                            <td></td>
+                            <td id="koreanName" th:text="*{koreanName}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>English Name</th>
-                            <td colspan="2"><span id="EnglishName" th:text="*{englishName}"></span></td>
-                            <td></td>
+                            <td id="EnglishName" th:text="*{englishName}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>User Type</th>
-                            <td colspan="2">
-                                <span th:if="*{userType?.name() == 'FACULTY'}" th:text="Faculty"> </span>
-                                <span th:if="*{userType?.name() == 'FULL_TIME_PhD'}" th:text="'Ph.D. Full Time'"> </span>
-                                <span th:if="*{userType?.name() == 'PART_TIME_PhD'}" th:text="'Ph.D. Part Time'"> </span>
-                                <span th:if="*{userType?.name() == 'FULL_TIME_MS'}" th:text="'M.S. Full Time'"> </span>
-                                <span th:if="*{userType?.name() == 'PART_TIME_MS'}" th:text="'M.S. Part Time'"> </span>
-                                <span th:if="*{userType?.name() == 'BS'}" th:text="B.S."> </span>
+                            <td>
+                                <span th:if="*{userType?.name() == 'A_FACULTY'}" th:text="Faculty"> </span>
+                                <span th:if="*{userType?.name() == 'B_FULL_TIME_PHD'}" th:text="'Ph.D. Full Time'"> </span>
+                                <span th:if="*{userType?.name() == 'C_FULL_TIME_MS'}" th:text="'M.S. Full Time'"> </span>
+                                <span th:if="*{userType?.name() == 'D_PART_TIME_PHD'}" th:text="'Ph.D. Part Time'"> </span>
+                                <span th:if="*{userType?.name() == 'E_PART_TIME_MS'}" th:text="'M.S. Part Time'"> </span>
+                                <span th:if="*{userType?.name() == 'F_BS'}" th:text="B.S."> </span>
                             </td>
-                            <td></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>User Status</th>
-                            <td colspan="2">
+                            <td>
                                 <span th:if="*{userStatus?.name() == 'ATTENDING'}" th:text="Attending"> </span>
                                 <span th:if="*{userStatus?.name() == 'GRADUATED'}" th:text="Graduated"> </span>
                             </td>
-                            <td></td>
                         </tr>
-                        <tr>
-                            <th colspan="4" class="sub-item-title">Self Introduction</th>
-                        </tr>
-                        <tr>
-                            <td colspan="4"><span id="introduction" class="content form-control form-control-sm" th:utext="*{introduction}"></span></td>
-                        </tr>
-                        <tr>
-                            <th colspan="4" class="sub-item-title">Personal Information</th>
-                        </tr>
-                        <tr>
-                            <th>Admission Date</th>
-                            <td colspan="2"><span th:text="*{admissionDate}"> </span></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <th>Graduated Date</th>
-                            <td colspan="2"><span th:text="*{graduatedDate}"> </span></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <th>Gender</th>
+
+                        <!-- Mobile -->
+                        <tr class="d-print-none d-sm-table-row d-md-table-row d-lg-none d-xl-none d-table-row">
                             <td colspan="2">
+                                <strong class="mobile-default">Korean Name: </strong><span th:text="*{koreanName}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">English Name: </strong><span th:text="*{englishName}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">User Type: </strong>
+                                <span th:if="*{userType?.name() == 'A_FACULTY'}" th:text="Faculty" class="mobile-default"> </span>
+                                <span th:if="*{userType?.name() == 'B_FULL_TIME_PHD'}" th:text="'Ph.D. Full Time'" class="mobile-default"></span>
+                                <span th:if="*{userType?.name() == 'C_FULL_TIME_MS'}" th:text="'M.S. Full Time'" class="mobile-default"></span>
+                                <span th:if="*{userType?.name() == 'D_PART_TIME_PHD'}" th:text="'Ph.D. Part Time'" class="mobile-default"></span>
+                                <span th:if="*{userType?.name() == 'E_PART_TIME_MS'}" th:text="'M.S. Part Time'" class="mobile-default"></span>
+                                <span th:if="*{userType?.name() == 'F_BS'}" th:text="B.S." class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">User Status: </strong>
+                                <span th:if="*{userStatus?.name() == 'ATTENDING'}" th:text="Attending" class="mobile-default"> </span>
+                                <span th:if="*{userStatus?.name() == 'GRADUATED'}" th:text="Graduated" class="mobile-default"> </span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Self Introduction</th>
+                        </tr>
+                        <!-- Common -->
+                        <tr>
+                            <td colspan="2">
+                                <div class="content" th:utext="*{introduction}"></div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Personal Information</th>
+                        </tr>
+                        <!-- Desktop -->
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Admission Date</th>
+                            <td th:text="*{admissionDate}"></td>
+                        </tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Graduated Date</th>
+                            <td th:text="*{graduatedDate}"></td>
+                        </tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Gender</th>
+                            <td>
                                 <span th:if="*{gender?.name() == 'MALE'}" th:text="Male"> </span>
                                 <span th:if="*{gender?.name() == 'FEMALE'}" th:text="Female"> </span>
                             </td>
-                            <td></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Birth Date</th>
-                            <td colspan="2"><span th:text="*{birthDate}"> </span></td>
-                            <td></td>
+                            <td th:text="*{birthDate}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Workplace</th>
-                            <td colspan="2"><span th:text="*{workplace}"> </span></td>
-                            <td></td>
+                            <td th:text="*{workplace}"></td>
                         </tr>
-                        <tr>
-                            <th colspan="4" class="sub-item-title">Contact Information</th>
+
+                        <!-- Mobile -->
+                        <tr class="d-print-none d-sm-table-row d-md-table-row d-lg-none d-xl-none d-table-row">
+                            <td colspan="2">
+                                <strong class="mobile-default">Admission Date: </strong> <span th:text="*{admissionDate}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Graduated Date: </strong> <span th:text="*{graduatedDate}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Gender: </strong>
+                                <span th:if="*{gender?.name() == 'MALE'}" th:text="Male" class="mobile-default"> </span>
+                                <span th:if="*{gender?.name() == 'FEMALE'}" th:text="Female" class="mobile-default"> </span><br>
+
+                                <strong class="mobile-default">Birth Date: </strong> <span th:text="*{birthDate}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Workplace: </strong> <span th:text="*{workplace}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Workplace: </strong> <span th:text="*{workplace}" class="mobile-default"></span><br>
+                            </td>
                         </tr>
-                        <tr>
+
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th colspan="2" class="sub-item-title">Contact Information</th>
+                        </tr>
+                        <!-- Desktop -->
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Contact</th>
-                            <td colspan="2"><span th:text="*{contact}"> </span></td>
-                            <td></td>
+                            <td th:text="*{contact}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Email</th>
-                            <td colspan="2"><span th:text="*{email}"> </span></td>
-                            <td></td>
+                            <td th:text="*{email}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Private Email</th>
-                            <td colspan="2"><span th:text="*{privateEmail}"> </span></td>
-                            <td></td>
+                            <td th:text="*{privateEmail}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Github</th>
-                            <td colspan="2"><span th:text="*{github}"> </span></td>
-                            <td></td>
+                            <td th:text="*{github}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Linked In</th>
-                            <td colspan="2"><span th:text="*{linkedIn}"> </span></td>
-                            <td></td>
+                            <td th:text="*{linkedIn}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>External Web Page</th>
-                            <td colspan="2"><span th:text="*{externalWebPage}"> </span></td>
-                            <td></td>
+                            <td th:text="*{externalWebPage}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Messenger ID(Skype)</th>
-                            <td colspan="2"><span th:text="*{messengerId}"> </span></td>
-                            <td></td>
+                            <td th:text="*{messengerId}"></td>
                         </tr>
-                        <tr>
-                            <th colspan="4" class="sub-item-title">Additional Information</th>
+
+                        <!-- Mobile -->
+                        <tr class="d-print-none d-sm-table-row d-md-table-row d-lg-none d-xl-none d-table-row">
+                            <td colspan="2">
+                                <strong class="mobile-default">Contact: </strong> <span th:text="*{contact}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Email: </strong> <span th:text="*{email}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Private Email: </strong> <span th:text="*{privateEmail}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Github: </strong> <span th:text="*{github}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Linked In: </strong> <span th:text="*{linkedIn}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">External Web Page: </strong> <span th:text="*{externalWebPage}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Messenger ID(Skype): </strong> <span th:text="*{messengerId}" class="mobile-default"></span><br>
+                            </td>
                         </tr>
+
                         <tr>
+                            <th colspan="2" class="sub-item-title">Additional Information</th>
+                        </tr>
+                        <!-- Desktop -->
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Authority Type</th>
-                            <td colspan="3">
+                            <td>
                                 <span th:if="*{authorityType?.name() == 'ROOT'}" th:text="Root"> </span>
                                 <span th:if="*{authorityType?.name() == 'MANAGER'}" th:text="Manager"> </span>
                                 <span th:if="*{authorityType?.name() == 'GENERAL'}" th:text="General"> </span>
                                 <span th:if="*{authorityType?.name() == 'NON_USER'}" th:text="Non + ' ' + User"> </span>
                             </td>
-                            <td></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Active Status</th>
-                            <td colspan="3">
+                            <td>
                                 <span th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active"> </span>
                                 <span th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"> </span>
                             </td>
-                            <td></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Created Date</th>
-                            <td colspan="3"><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Last Modified Date</th>
-                            <td colspan="3"><span th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Created By</th>
-                            <td colspan="3"><span th:text="*{createdBy}"/></td>
+                            <td th:text="*{createdBy}"></td>
                         </tr>
-                        <tr>
-                            <th>Last Created By</th>
-                            <td colspan="3"><span th:text="*{lastModifiedBy}"/></td>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Last Modified By</th>
+                            <td th:text="*{lastModifiedBy}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Views</th>
-                            <td colspan="3"><span th:text="*{views}"/></td>
+                            <td th:text="*{views}"></td>
+                        </tr>
+
+                        <!-- Mobile -->
+                        <tr class="d-print-none d-sm-table-row d-md-table-row d-lg-none d-xl-none d-table-row">
+                            <td colspan="2">
+                                <strong class="mobile-default">Authority Type: </strong>
+                                <span th:if="*{authorityType?.name() == 'ROOT'}" th:text="Root"> </span>
+                                <span th:if="*{authorityType?.name() == 'MANAGER'}" th:text="Manager"> </span>
+                                <span th:if="*{authorityType?.name() == 'GENERAL'}" th:text="General"> </span>
+                                <span th:if="*{authorityType?.name() == 'NON_USER'}" th:text="Non + ' ' + User"> </span><br>
+
+                                <strong class="mobile-default">Active Status: </strong>
+                                <span th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active"> </span>
+                                <span th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"> </span><br>
+
+                                <strong class="mobile-default">Created Date: </strong><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Last Modified Date: </strong><span th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Created By: </strong><span th:text="*{createdBy}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Last Modified By: </strong><span th:text="*{lastModifiedBy}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Views: </strong> <span th:text="*{views}" class="mobile-default"></span>
+                            </td>
                         </tr>
                         <tr>
                             <td colspan="10"></td>
                         </tr>
                     </table>
-                </div>
 
-                <div class="row justify-content-between mt-5 mb-3">
-                    <div class="col-auto mx-3">
-                        <a href="/user/list" class="btn btn-secondary">Move to List</a>
+                    <div class="row justify-content-between mt-4 mb-4">
+                        <div class="col-auto">
+                            <a href="/user/list" class="btn btn-sm btn-secondary">Move to List</a>
+                        </div>
+                        <div th:if="*{access}" class="col-auto ml-2">
+                            <a th:href="'/user/form?idx='+*{idx}" class="btn btn-sm btn-info mx-1">Update</a>
+                            <button type="button" class="btn btn-sm btn-danger mx-1" id="delete">Delete</button>
+                        </div>
                     </div>
 
-                    <div th:if="*{access}" class="col-auto mx-3">
-                        <a th:href="'/user/form?idx='+*{idx}" class="btn btn-info mx-1">Update</a>
-                        <button type="button" class="btn btn-danger mx-1" id="delete">Delete</button>
-                    </div>
+                    <!-- input type="hidden" -->
+                    <input type="hidden" name="idx" th:value="*{idx}"/>
                 </div>
-
-                <!-- input type="hidden" -->
-                <input type="hidden" name="idx" th:value="*{idx}"/>
             </form>
         </div>
     </div>

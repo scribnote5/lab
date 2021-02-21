@@ -27,101 +27,153 @@
                     </div>
                 </div>
 
-                <div class="mt-5">
-                    <table class="table">
+                <div class="page-content">
+                    <table class="table mobile-table-read mt-4">
                         <colgroup>
                             <col width="17.5%"/>
                             <col width="82.5%"/>
                         </colgroup>
-                        <tr>
+
+                        <!-- Desktop -->
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th colspan="2" class="sub-item-title">Setting Information</th>
                         </tr>
                         <tr>
                             <th>Lab Address</th>
-                            <td><span id="labAddress" th:text="*{labAddress}"></span></td>
+                            <td th:text="*{labAddress}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Email Recipient</th>
-                            <td><span id="emailRecipient" th:text="*{emailRecipient}"></span></td>
+                            <td th:text="*{emailRecipient}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Email Address</th>
-                            <td><span id="emailAddress" th:text="*{emailAddress}"></span></td>
+                            <td th:text="*{emailAddress}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Callee</th>
-                            <td><span id="callee" th:text="*{callee}"></span></td>
+                            <td th:text="*{callee}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Phone Number</th>
-                            <td><span id="phoneNumber" th:text="*{phoneNumber}"></span></td>
+                            <td th:text="*{phoneNumber}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Lab Start Date</th>
-                            <td><span th:text="*{#temporals.format(labStartDate,'yyyy-MM-dd')}"/></td>
+                            <td th:text="*{#temporals.format(labStartDate,'yyyy-MM-dd')}"></td>
                         </tr>
+
+                        <!-- Mobile -->
+                        <tr class="d-print-none d-sm-table-row d-md-table-row d-lg-none d-xl-none d-table-row">
+                            <td colspan="2">
+                                <strong class="mobile-default">Lab Address: </strong><span th:text="*{labAddress}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Email Recipient: </strong><span th:text="*{emailRecipient}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Email Address: </strong><span th:text="*{emailAddress}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Callee: </strong><span th:text="*{callee}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Phone Number: </strong><span th:text="*{phoneNumber}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Lab Start Date: </strong><span th:text="*{labStartDate}" class="mobile-default"></span>
+                            </td>
+                        </tr>
+
                         <tr>
                             <th colspan="2" class="sub-item-title">About Us Content</th>
                         </tr>
-                        <tr>
+                        <!-- Desktop -->
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Maintenance Years Count Content</th>
-                            <td><span id="labMaintenanceYearsCountContent" th:text="*{labMaintenanceYearsCountContent}"/></td>
+                            <td th:text="*{labMaintenanceYearsCountContent}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>User Count Content</th>
-                            <td><span id="userCountContent" th:text="*{userCountContent}"/></td>
+                            <td th:text="*{userCountContent}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Publication Count Content</th>
-                            <td><span id="publicationCountContent" th:text="*{publicationCountContent}"/></td>
+                            <td th:text="*{publicationCountContent}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Project Count Content</th>
-                            <td><span id="projectCountContent" th:text="*{projectCountContent}"/></td>
+                            <td th:text="*{projectCountContent}"></td>
                         </tr>
+
+                        <!-- Mobile -->
+                        <tr class="d-print-none d-sm-table-row d-md-table-row d-lg-none d-xl-none d-table-row">
+                            <td colspan="2">
+                                <strong class="mobile-default">Maintenance Years Count Content: </strong><span th:text="*{labMaintenanceYearsCountContent}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">User Count Content: </strong><span th:text="*{userCountContent}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Publication Count Content: </strong><span th:text="*{publicationCountContent}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Project Count Content: </strong><span th:text="*{projectCountContent}" class="mobile-default"></span>
+                            </td>
+                        </tr>
+
                         <tr>
                             <th colspan="2" class="sub-item-title">Additional Information</th>
                         </tr>
-                        <tr>
+                        <!-- Desktop -->
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Active Status</th>
                             <td>
-                                <div>
-                                    <span th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active"> </span>
-                                    <span th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"> </span>
-                                </div>
+                                <span th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active"> </span>
+                                <span th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"> </span>
+                            </td>
+                        </tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Created Date</th>
+                            <td th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"></td>
+                        </tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Last Modified Date</th>
+                            <td th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
+                        </tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Created By</th>
+                            <td th:text="*{createdBy}"></td>
+                        </tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Last Modified By</th>
+                            <td th:text="*{lastModifiedBy}"></td>
+                        </tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Views</th>
+                            <td th:text="*{views}"></td>
+                        </tr>
+
+                        <!-- Mobile -->
+                        <tr class="d-print-none d-sm-table-row d-md-table-row d-lg-none d-xl-none d-table-row">
+                            <td colspan="2">
+                                <strong class="mobile-default">Active Status: </strong>
+                                <span th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active" class="mobile-default"> </span>
+                                <span th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive" class="mobile-default"> </span><br>
+
+                                <strong class="mobile-default">Created Date: </strong><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Last Modified Date: </strong><span th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Created By: </strong><span th:text="*{createdBy}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Last Modified By: </strong><span th:text="*{lastModifiedBy}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Views: </strong> <span th:text="*{views}" class="mobile-default"></span>
                             </td>
                         </tr>
                         <tr>
-                            <th>Created Date</th>
-                            <td><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
-                        </tr>
-                        <tr>
-                            <th>Last Modified Date</th>
-                            <td><span th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
-                        </tr>
-                        <tr>
-                            <th>Created By</th>
-                            <td><span th:text="*{createdBy}"/></td>
-                        </tr>
-                        <tr>
-                            <th>Last Created By</th>
-                            <td><span th:text="*{lastModifiedBy}"/></td>
-                        </tr>
-                        <tr>
-                            <th>Views</th>
-                            <td><span th:text="*{views}"/></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2"></td>
+                            <td colspan="10"></td>
                         </tr>
                     </table>
                 </div>
 
-                <div class="row justify-content-between mt-5 mb-3">
-                    <div class="col-auto mx-3"></div>
-
-                    <div class="col-auto mx-3">
-                        <a th:href="'/setting/form?idx='+*{idx}" class="btn btn-info mx-1">Update</a>
+                <div class="row justify-content-between mt-4 mb-4">
+                    <div class="col-auto"></div>
+                    <div class="col-auto ml-2">
+                        <a th:href="'/setting/form?idx='+*{idx}" class="btn btn-sm btn-info mx-1">Update</a>
                     </div>
                 </div>
 

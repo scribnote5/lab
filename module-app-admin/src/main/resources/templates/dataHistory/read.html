@@ -28,89 +28,124 @@
                     </div>
                 </div>
 
-                <div class="mt-5">
-                    <table class="table">
+                <div class="page-content">
+                    <table class="table mobile-table-read mt-4">
                         <colgroup>
                             <col width="17.5%"/>
                             <col width="82.5%"/>
                         </colgroup>
+
                         <tr>
-                            <th colspan="2" class="sub-item-title">History Information</th>
+                            <th colspan="2" class="sub-item-title">Data History Information</th>
                         </tr>
-                        <tr>
+                        <!-- Desktop -->
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Aud Class</th>
-                            <td><span id="audClass" th:text="*{audClass}"></span></td>
+                            <td th:text="*{audClass}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Aud Type</th>
                             <td>
-                                <div>
-                                    <span th:if="*{audType?.name() == 'INSERT'}" th:text="Insert"> </span>
-                                    <span th:if="*{audType?.name() == 'UPDATE'}" th:text="Update"> </span>
-                                    <span th:if="*{audType?.name() == 'DELETE'}" th:text="Delete"> </span>
-                                </div>
+                                <span th:if="*{audType?.name() == 'INSERT'}" th:text="Insert"> </span>
+                                <span th:if="*{audType?.name() == 'UPDATE'}" th:text="Update"> </span>
+                                <span th:if="*{audType?.name() == 'DELETE'}" th:text="Delete"> </span>
                             </td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Aud Message</th>
-                            <td><span id="audMessage" th:text="*{audMessage}"></span></td>
+                            <td th:text="*{audMessage}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Aud Sub Message</th>
-                            <td><span id="audSubMessage" th:text="*{audSubMessage}"></span></td>
+                            <td th:text="*{audSubMessage}"></td>
                         </tr>
+
+                        <!-- Mobile -->
+                        <tr class="d-print-none d-sm-table-row d-md-table-row d-lg-none d-xl-none d-table-row">
+                            <td colspan="2">
+                                <strong class="mobile-default">Aud Class: </strong><span th:text="*{audClass}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Aud Type: </strong>
+                                <span th:if="*{audType?.name() == 'INSERT'}" th:text="Insert" class="mobile-default"> </span>
+                                <span th:if="*{audType?.name() == 'UPDATE'}" th:text="Update" class="mobile-default"> </span>
+                                <span th:if="*{audType?.name() == 'DELETE'}" th:text="Delete" class="mobile-default"> </span><br>
+
+                                <strong class="mobile-default">Aud Message: </strong><span th:text="*{audMessage}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Aud Sub Message: </strong><span th:text="*{audSubMessage}" class="mobile-default"></span>
+                            </td>
+                        </tr>
+
                         <tr>
                             <th colspan="2" class="sub-item-title">Additional Information</th>
                         </tr>
-                        <tr>
+                        <!-- Desktop -->
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Active Status</th>
                             <td>
-                                <div>
-                                    <span th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active"> </span>
-                                    <span th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"> </span>
-                                </div>
+                                <span th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active"> </span>
+                                <span th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"> </span>
                             </td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Created Date</th>
-                            <td><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Last Modified Date</th>
-                            <td><span th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Created By</th>
-                            <td><span th:text="*{createdBy}"/></td>
+                            <td th:text="*{createdBy}"></td>
                         </tr>
-                        <tr>
-                            <th>Last Created By</th>
-                            <td><span th:text="*{lastModifiedBy}"/></td>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Last Modified By</th>
+                            <td th:text="*{lastModifiedBy}"></td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Views</th>
-                            <td><span th:text="*{views}"/></td>
+                            <td th:text="*{views}"></td>
+                        </tr>
+
+                        <!-- Mobile -->
+                        <tr class="d-print-none d-sm-table-row d-md-table-row d-lg-none d-xl-none d-table-row">
+                            <td colspan="2">
+                                <strong class="mobile-default">Active Status: </strong>
+                                <span th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active" class="mobile-default"> </span>
+                                <span th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive" class="mobile-default"> </span><br>
+
+                                <strong class="mobile-default">Created Date: </strong><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Last Modified Date: </strong><span th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Created By: </strong><span th:text="*{createdBy}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Last Modified By: </strong><span th:text="*{lastModifiedBy}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Views: </strong> <span th:text="*{views}" class="mobile-default"></span>
+                            </td>
                         </tr>
                         <tr>
                             <td colspan="10"></td>
                         </tr>
                     </table>
-                </div>
 
-                <div class="row justify-content-between mt-5 mb-3">
-                    <div class="col-auto mx-3">
-                        <a href="/data-history/list" class="btn btn-secondary">Move to List</a>
+                    <div class="row justify-content-between mt-4 mb-4">
+                        <div class="col-auto">
+                            <a href="/data-history/list" class="btn btn-sm btn-secondary">Move to List</a>
+                        </div>
+                        <div th:if="*{access}" class="col-auto ml-2">
+                            <button th:if="*{activeStatus?.name() == 'ACTIVE'}" type="button" class="btn btn-sm btn-info mx-1" id="active">Inactive</button>
+                            <button th:if="*{activeStatus?.name() == 'INACTIVE'}" type="button" class="btn btn-sm btn-info mx-1" id="active">Active</button>
+                            <button type="button" class="btn btn-sm btn-danger mx-1" id="delete">Delete</button>
+                        </div>
                     </div>
-                    <div th:if="*{access}" class="col-auto mx-3">
-                        <button th:if="*{activeStatus?.name() == 'ACTIVE'}" type="button" class="btn btn-info mx-1" id="active">Inactive</button>
-                        <button th:if="*{activeStatus?.name() == 'INACTIVE'}" type="button" class="btn btn-info mx-1" id="active">Active</button>
-                        <button type="button" class="btn btn-danger mx-1" id="delete">Delete</button>
-                    </div>
-                </div>
 
-                <!-- input type="hidden" -->
-                <input type="hidden" name="idx" th:value="*{idx}"/>
-                <input type="hidden" name="activeStatus" th:value="*{activeStatus}"/>
+                    <!-- input type="hidden" -->
+                    <input type="hidden" name="idx" th:value="*{idx}"/>
+                    <input type="hidden" name="activeStatus" th:value="*{activeStatus}"/>
+                </div>
             </form>
         </div>
     </div>

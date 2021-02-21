@@ -37,7 +37,7 @@ function convertFileSize(fileSize) {
     var e = Math.floor(Math.log(fileSize) / Math.log(1024));
 
     if (fileSize != 0) {
-        retFormat = (fileSize / Math.pow(1024, e)).toFixed(2) + " " + s[e];
+        retFormat = (fileSize / Math.pow(1024, e)).toFixed(2) + "" + s[e];
     } else {
         retFormat = fileSize + " " + s[0];
     }
@@ -53,3 +53,37 @@ function camelCaseToTitle(str) {
         return " " + arg.toLowerCase();
     });
 }
+
+/* publication publicationType을 적합한 문자열로 변환
+* Conference_regular -> Conference - Regular
+* */
+function convertPublicationType(str) {
+    var splited = str.split("_");
+
+    str = capitalize(splited[0]);
+
+    if(!isEmpty(splited[1])) {
+
+        if(splited[1] === "SCOPUS" || splited[1] === "SCIE") {
+            str += " - " + splited[1].toUpperCase();
+        } else {
+            str += " - " + capitalize(splited[1]);
+        }
+    }
+
+    return str;
+}
+
+/* publication publicationType을 적합한 문자열로 변환
+* Conference_regular -> Conference - Regular
+* */
+function convertImpactFactor(str) {
+    if(!isEmpty(str)) {
+        str = "(" + str + ")";
+    } else {
+        str = "";
+    }
+
+    return str;
+}
+
