@@ -12,9 +12,10 @@
 }
 
 .statics-icon {
-    margin: 0 .25rem .25rem 0;
+    margin-right: .5rem;
+    font-size: 1.25rem;
     height: 1.25rem;
-    width: 1.25rem;
+    line-height: 1.5 !important;
 }
 
 .new-icon {

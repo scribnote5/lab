@@ -12,7 +12,7 @@
     height: 100%;
     background-color: var(--main-black);
     width: 17.5rem;
-    min-height: calc(100vh - 3.75rem);
+    min-height: calc(100vh - 4.5rem);
     margin-left: -17.5rem;
     -webkit-transition: margin .25s ease-out;
     -moz-transition: margin .25s ease-out;
@@ -74,7 +74,7 @@
     display: block;
     width: 100%;
     text-decoration: none;
-    border-bottom: .05rem solid var(--grey);
+    /*border-bottom: .05rem solid var(--grey);*/
     cursor: pointer;
     font-size: var(--large-font-size);
 }

@@ -1,7 +1,5 @@
 package kr.ac.univ.controller;
 
-import kr.ac.univ.common.domain.enums.ActiveStatus;
-import kr.ac.univ.exception.BusinessException;
 import kr.ac.univ.setting.dto.SettingDto;
 import kr.ac.univ.setting.service.SettingService;
 import org.springframework.http.HttpStatus;

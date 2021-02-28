@@ -2,12 +2,15 @@ package kr.ac.univ.util;
 
 public class ByteSizeUtil {
 
-    public static int getByteSize(String str) {
-        int byteSize = 0;
+    public static long getByteSize(String str) {
+        long byteSize = 0;
 
         try {
             byteSize = str.getBytes("UTF-8").length;
-        } catch (Exception e) {
+        } catch(NullPointerException e) {
+            byteSize = 0;
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
 

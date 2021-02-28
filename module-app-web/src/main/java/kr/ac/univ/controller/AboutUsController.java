@@ -75,7 +75,6 @@ public class AboutUsController {
             learnMoreVideoAttachedFileService.findAttachedFileByLearnMoreIdx(learnMoreVideoDto.getIdx(), learnMoreVideoDto);
         }
 
-
         model.addAttribute("labStartDate", settingDto.getLabStartDate());
         model.addAttribute("labMaintenanceYears", settingDto.getLabStartDate().getDayOfYear());
         model.addAttribute("publicationCount", publicationService.countAllByActiveStatusIs());
@@ -85,7 +84,11 @@ public class AboutUsController {
         model.addAttribute("labMaintenanceYearsCountContent", settingDto.getLabMaintenanceYearsCountContent());
         model.addAttribute("userCountContent", settingDto.getLabMaintenanceYearsCountContent());
         model.addAttribute("publicationCountContent", settingDto.getPublicationCountContent());
-        model.addAttribute("projectCountContent", settingDto.getProjectCountContent());
+        model.addAttribute("labAddress", settingDto.getLabAddress());
+        model.addAttribute("emailRecipient", settingDto.getEmailRecipient());
+        model.addAttribute("emailAddress", settingDto.getEmailAddress());
+        model.addAttribute("callee", settingDto.getCallee());
+        model.addAttribute("emailAddress", settingDto.getPhoneNumber());
 
         model.addAttribute("aboutUsDto", aboutUsDto);
         model.addAttribute("learnMoreReadDtoList", learnMoreReadDtoList);

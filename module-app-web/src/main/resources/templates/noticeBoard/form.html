@@ -41,6 +41,21 @@
                         <th colspan="2" class="sub-item-title">Notice Board Information</th>
                     </tr>
                     <tr>
+                        <th>Subject</th>
+                        <td>
+                            <select id="subject" onchange="selectSubject()" class="custom-select custom-select-sm">
+                                <option value="">[No selected]</option>
+                                <option value="[Paper Accepted]">[Paper Accepted]</option>
+                                <option value="[Best Paper Award]">[Best Paper Award]</option>
+                                <option value="[New Member]">[New Member]</option>
+                                <option value="[Marry]">[Marry]</option>
+                                <option value="[Business Trip]">[Business Trip]</option>
+                                <option value="[Alumni]">[Alumni]</option>
+                                <option value="[Event]">[Event]</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
                         <th>Title<span class="required-field">*</span></th>
                         <td><input type="text" name="title" class="form-control form-control-sm" th:value="*{title}"/></td>
                     </tr>
@@ -144,6 +159,11 @@
 <script th:src="@{/js/file-upload/multiple-file-upload.js}"></script>
 
 <script>
+    function selectSubject() {
+        document.getElementById("subject").value;
+        document.getElementsByName("title")[0].value = document.getElementById("subject").value + document.getElementsByName("title")[0].value;
+    }
+
     function deleteNoticeBoard(noticeBoardIdx) {
         $.ajax({
             url: moduleAppApiAddress + "/api/notice-boards/" + noticeBoardIdx,

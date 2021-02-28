@@ -109,9 +109,9 @@
                             <td th:if="${loginHistoryDto.audLoginResultType?.name() == 'FAIL'}" th:text="Fail" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td th:text="${loginHistoryDto.createdBy}" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td th:text="${#temporals.format(loginHistoryDto.createdDate,'yyyy-MM-dd HH:mm')}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
-                            <td th:if="${loginHistoryDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
-                            <td th:if="${loginHistoryDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
-                            <td th:text="${loginHistoryDto.views}" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:if="${loginHistoryDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:if="${loginHistoryDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:text="${loginHistoryDto.views}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                         </tr>
                         <tr th:if="${loginHistoryDtoList.totalElements == 0}">
                             <td colspan="10" class="no-posts">

@@ -108,10 +108,10 @@
                         </tr>
                         <tr>
                             <th>DOI(Higher output priority than uri.)</th>
-                            <td><input type="text" name="doi" class="form-control form-control-sm" th:value="*{doi}"/></td>
+                            <td><input type="text" name="doi" class="form-control form-control-sm" th:value="*{doi}" placeholder="'https://doi.org/' link is automatically appended."/></td>
                         </tr>
                         <tr>
-                            <th>URI</th>
+                            <th>URI(Lower output priority than uri.)</th>
                             <td><input type="text" name="uri" class="form-control form-control-sm" th:value="*{uri}"/></td>
                         </tr>
                         <tr>

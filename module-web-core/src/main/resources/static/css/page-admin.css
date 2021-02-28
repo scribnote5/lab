@@ -9,20 +9,17 @@
  * main
  */
 .container-main {
-    padding-left: 2rem !important;
-    padding-right: 2rem !important;;
-    background-color: var(--dark-white);
+    background-color: var(--darker-white);
 }
 
-.url-icon-area {
+.url-icon-wrapper {
     border-radius: .75rem;
     padding: .4rem;
     border: .025rem solid var(--lighter-grey);
     background-color: var(--white);
-    margin-top: -2.5rem;
 }
 
-.url-icon-area img {
+.url-icon-wrapper img {
     margin: 0 .25rem .125rem .25rem;
     height: 1.25rem;
     width: auto;
@@ -34,21 +31,17 @@
 }
 
 .table-card {
-    border-radius: .75rem !important;
+    border-radius: .5rem !important;
     margin: .5rem;
     padding: 0rem !important;
     background-color: white;
 }
 
 .table-card-header{
-    border-top-left-radius: .75rem !important;
-    border-top-right-radius: .75rem !important;
+    border-top-left-radius: .5rem !important;
+    border-top-right-radius: .5rem !important;
     background-color: var(--lightest-blue) !important;
     border-bottom: none !important;
-}
-
-.static-card-body {
-    padding: 1.25rem .25rem !important;
 }
 
 .statics-count {

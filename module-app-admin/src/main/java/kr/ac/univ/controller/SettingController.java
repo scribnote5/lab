@@ -1,10 +1,6 @@
 package kr.ac.univ.controller;
 
-import kr.ac.univ.common.dto.SearchDto;
-import kr.ac.univ.setting.dto.SettingDto;
 import kr.ac.univ.setting.service.SettingService;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

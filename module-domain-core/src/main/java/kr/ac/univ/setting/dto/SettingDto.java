@@ -1,17 +1,17 @@
 package kr.ac.univ.setting.dto;
 
 import kr.ac.univ.common.dto.CommonDto;
-import kr.ac.univ.common.validation.Editor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter

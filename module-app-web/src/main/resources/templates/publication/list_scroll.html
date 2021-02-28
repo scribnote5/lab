@@ -85,7 +85,7 @@
                     <div id="publications" class="mt-4">
                         <div th:id="publicationData0" th:each="publicationDto : ${publicationDtoList}" class="publication-wrap mt-4">
                             <span class="my-1">
-                                <a th:if="!${#strings.isEmpty(publicationDto.doi)}" th:href="${publicationDto.doi}" th:id="publicationTitle" th:text="${publicationDto.title}" th:class="title" target="_blank"></a>
+                                <a th:if="!${#strings.isEmpty(publicationDto.doi)}" th:href="'https://doi.org/' + ${publicationDto.doi}" th:id="publicationTitle" th:text="${publicationDto.title}" th:class="title" target="_blank"></a>
                                 <a th:if="${#strings.isEmpty(publicationDto.doi) and !#strings.isEmpty(publicationDto.uri)}" th:href="${publicationDto.uri}" th:id="publicationTitle" th:text="${publicationDto.title}" th:class="title"
                                    target="_blank"></a>
                                 <span th:if="${#strings.isEmpty(publicationDto.doi) and #strings.isEmpty(publicationDto.uri)}" th:id="publicationTitle" th:text="${publicationDto.title}" th:class="title"></span><br>
@@ -126,6 +126,8 @@
                             <img th:src="@{/images/loading.gif}" alt="Loading…"/>
                         </div>
                     </div>
+
+                    <div class="row mt-4 mb-4"></div>
                 </div>
             </form>
         </div>
@@ -222,7 +224,7 @@
                             var link = '<span class="my-1">';
 
                             if (!isEmpty(publicationList[i].doi)) {
-                                link += '<a id="publicationTitle"' + publicationId + ' href="' + publicationList[i].doi + '" class="title" target="_blank">' + publicationList[i].title + '</a>'
+                                link += '<a id="publicationTitle"' + publicationId + ' href="' + 'https://doi.org/' + publicationList[i].doi + '" class="title" target="_blank">' + publicationList[i].title + '</a>'
                             } else if (isEmpty(publicationList[i].doi) && !isEmpty(publicationList[i].uri)) {
                                 link += '<a id="publicationTitle"' + publicationId + ' href="' + publicationList[i].uri + '" class="title" target="_blank">' + publicationList[i].title + '</a>'
                             } else {

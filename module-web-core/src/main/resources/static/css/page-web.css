@@ -43,6 +43,7 @@
     height: 400px;
 }
 
+
 .learn-more-read-wrapper {
     width: 75%;
     height: 75%;
@@ -284,7 +285,7 @@
 .project ul li {
     list-style-type: square;
     margin-bottom: .5rem !important;
-    line-height: 1;
+    line-height: 1.5;
 }
 
 .project ul li a {

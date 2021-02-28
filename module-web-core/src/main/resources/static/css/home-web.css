@@ -377,26 +377,6 @@ section {
     opacity: 1;
 }
 
-/*
- * Contact
- */
-.contact .section-content h4 {
-    margin-bottom: .5rem;
-    font-weight: var(--strong-font-weight);
-}
-
-.contact .section-content i {
-    color: var(--main-red);
-    font-size: 1.25rem;
-}
-
-.contact .section-content span {
-    font-size: 1.25rem;
-}
-
-.contact a {
-    font-size: 1.25rem;
-}
 
 @-webkit-keyframes animate-loading {
     0% {

@@ -26,8 +26,6 @@ public class PublicationController {
     // List
     @GetMapping("/list")
     public String publicationList(Pageable pageable, PublicationSearchDto publicationSearchDto, Model model) {
-        System.out.println("publicationSearchDto: " + publicationSearchDto);
-
         model.addAttribute("publicationDtoList", publicationService.findPublicationList(pageable, publicationSearchDto));
 
         return "publication/list";
