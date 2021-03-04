@@ -4,10 +4,11 @@ import javax.mail.*;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.util.List;
 import java.util.Properties;
 
 public class EmailUtil {
-    public static void gmailSend(String sender, String password, String[] receivers, String subject, String contents) {
+    public static void gmailSend(String sender, String password, List<String> receivers, String subject, String contents) {
         // SMTP 서버 정보 설정
         Properties prop = new Properties();
         prop.put("mail.smtp.host", "smtp.gmail.com");
@@ -17,7 +18,7 @@ public class EmailUtil {
         prop.put("mail.smtp.ssl.trust", "smtp.gmail.com");
 
         // 메일 계정 로그인 사용자 정보
-        Session session = Session.getDefaultInstance(prop, new Authenticator() {
+        Session session = Session.getInstance(prop, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(sender, password);
             }
@@ -31,13 +32,12 @@ public class EmailUtil {
             //메일 제목
             message.setSubject(subject);
             // 메일 내용
-            message.setText(contents);
+            message.setContent(contents, "text/html; charset=UTF-8");
 
-
-            InternetAddress[] internetAddress = new InternetAddress[receivers.length];
+            InternetAddress[] internetAddress = new InternetAddress[receivers.size()];
             // 수신 메일 주소
-            for(int i = 0; i < receivers.length; i++ ) {
-                internetAddress[i] = new InternetAddress(receivers[i]);
+            for (int i = 0; i < receivers.size(); i++) {
+                internetAddress[i] = new InternetAddress(receivers.get(i));
             }
             message.addRecipients(Message.RecipientType.TO, internetAddress);
 
@@ -49,6 +49,4 @@ public class EmailUtil {
             e.printStackTrace();
         }
     }
-
-
 }

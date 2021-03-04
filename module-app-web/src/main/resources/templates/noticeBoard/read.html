@@ -12,7 +12,7 @@
     <div th:replace="layout/header::header"></div>
 
     <div class="container">
-        <form name="form" id="form" th:object="${noticeBoardDto}" action="#">
+        <form name="form" id="form" th:object="${guestBookDto}" action="#">
             <div class="page-header breadcrumbs" data-aos="fade-up">
                 <div class="d-flex justify-content-between align-items-center">
                     <h2>Notice Board Detail</h2>
@@ -23,7 +23,7 @@
                 </div>
             </div>
 
-            <div id="loading" class="row justify-content-center">
+            <div id="loading">
                 <img th:src="@{/images/loading.gif}" alt="Loading…"/>
             </div>
 
@@ -66,7 +66,7 @@
                             <div class="content" th:utext="*{content}"></div>
                         </td>
                     </tr>
-                    <tr th:if="!*{#lists.isEmpty(attachedFileList)}">
+                    <tr>
                         <th class="d-none d-sm-none d-md-none d-lg-table-cell">Uploaded Attached File</th>
                         <td colspan="2">
                             <strong class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline mobile-default">Uploaded Attached File</strong>
@@ -97,27 +97,27 @@
                         </td>
                     </tr>
                 </table>
-                <div th:if="!${#lists.isEmpty(noticeBoardCommentDtoList)}" class="mt-3">
+                <div th:if="!${#lists.isEmpty(guestBookCommentDtoList)}" class="mt-3">
                     <table class="table table-hover">
-                        <tr th:each="noticeBoardCommentDto : ${noticeBoardCommentDtoList}">
+                        <tr th:each="guestBookCommentDto : ${guestBookCommentDtoList}">
                             <td>
-                                <span th:text="${noticeBoardCommentDto.createdBy}"></span>&nbsp;&nbsp;
-                                <span th:text="${#temporals.format(noticeBoardCommentDto.createdDate,'yyyy-MM-dd HH:mm')}" class="comment-additional-information"></span>
-                                <img th:class="new-icon" th:if="${noticeBoardCommentDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}"/>
+                                <span th:text="${guestBookCommentDto.createdBy}"></span>&nbsp;&nbsp;
+                                <span th:text="${#temporals.format(guestBookCommentDto.createdDate,'yyyy-MM-dd HH:mm')}" class="comment-additional-information"></span>
+                                <img th:class="new-icon" th:if="${guestBookCommentDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}"/>
 
                                 <div class="mt-2">
                                     <span th:id="commentContent + ${noticeBoardCommentDtoStat.index}"
-                                          th:utext="${noticeBoardCommentDto.content}"
+                                          th:utext="${guestBookCommentDto.content}"
                                           class="comment">
                                     </span>
                                     <textarea th:id="updateCommentContent + ${noticeBoardCommentDtoStat.index}"
-                                              th:text="${noticeBoardCommentDto.content}"
+                                              th:text="${guestBookCommentDto.content}"
                                               class="form-control comment"
                                               style="display: none;"
                                               name="updateContent">
 					                </textarea>
                                 </div>
-                                <div th:if="${noticeBoardCommentDto.access}" class="mt-3">
+                                <div th:if="${guestBookCommentDto.access}" class="mt-3">
                                     <button type="button" class="btn btn-sm btn-outline-info mr-2"
                                             th:id="displayComment + ${noticeBoardCommentDtoStat.index}"
                                             th:onclick="displayComment([[${noticeBoardCommentDtoStat.index}]])">
@@ -125,12 +125,12 @@
                                     </button>
                                     <button type="button" class="btn btn-sm btn-outline-danger"
                                             th:id="deleteComment + ${noticeBoardCommentDtoStat.index}"
-                                            th:onclick="deleteComment([[${noticeBoardCommentDto.idx}]], [[${noticeBoardCommentDtoStat.index}]])">
+                                            th:onclick="deleteComment([[${guestBookCommentDto.idx}]], [[${noticeBoardCommentDtoStat.index}]])">
                                         Delete
                                     </button>
                                     <button type="button" style="display:none;" class="btn btn-sm btn-outline-primary mr-2"
                                             th:id="updateComment + ${noticeBoardCommentDtoStat.index}"
-                                            th:onclick="updateComment([[${noticeBoardCommentDto.idx}]], [[${noticeBoardCommentDto.createdBy}]], [[${noticeBoardCommentDto.activeStatus}]],[[${noticeBoardCommentDtoStat.index}]])">
+                                            th:onclick="updateComment([[${guestBookCommentDto.idx}]], [[${guestBookCommentDto.createdBy}]], [[${guestBookCommentDto.activeStatus}]],[[${noticeBoardCommentDtoStat.index}]])">
                                         Register
                                     </button>
                                     <button type="button" style="display:none;" class="btn btn-sm btn-outline-danger" th:id="cancelComment + ${noticeBoardCommentDtoStat.index}"

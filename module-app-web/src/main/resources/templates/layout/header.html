@@ -5,7 +5,11 @@
     <header id="header" class="fixed-top d-flex align-items-center">
         <div class="container d-flex align-items-center">
             <div class="logo mr-auto">
-                <a href="/"><img src="/images/small-logo.png"></a>
+                <a href="/">
+                    <img class="logo"
+                         th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-logo|}"
+                         th:onerror="'this.src=\'' + @{/images/no-preview-available.jpg} + '\';'"/>
+                </a>
             </div>
 
             <nav class="nav-menu d-none d-lg-block align-middle">
@@ -20,9 +24,8 @@
                             <li><a href="/notice-board/list">Notice Board</a></li>
                             <li><a href="/alumni-association/list">Alumni Association</a></li>
                             <li><a href="/album/list">Album</a></li>
-                            <li sec:authorize="isAuthenticated()">
-                                <a th:href="'/user/form?idx='+${#authentication.principal.idx}">User Information</a>
-                            </li>
+                            <li sec:authorize="isAuthenticated()"><a th:href="'/guest-book/list'">Guest Book</a></li>
+                            <li sec:authorize="isAuthenticated()"><a th:href="'/user/form?idx='+${#authentication.principal.idx}">User Information</a></li>
                         </ul>
                     </li>
                     <li sec:authorize="!isAuthenticated()" class="login-logout"><a href="javascript:login()">Log in</a></li>

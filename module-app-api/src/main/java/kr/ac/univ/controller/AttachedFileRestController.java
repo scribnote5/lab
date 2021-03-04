@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import kr.ac.univ.common.validation.FileValidator;
 import kr.ac.univ.exception.FileTypeException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -16,12 +17,14 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 
 import java.net.URLEncoder;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/attachedFiles")
 public class AttachedFileRestController {
@@ -180,4 +183,34 @@ public class AttachedFileRestController {
                 .contentType(mediaType)
                 .body(resource);
     }
+
+    @GetMapping("/view-logo")
+    public ResponseEntity<?> viewLogoAttachedFile() throws Exception {
+        // 헤더 추가
+        HttpHeaders header = new HttpHeaders();
+        header.add(HttpHeaders.CONTENT_DISPOSITION, "inline;filename=" + "logo.png");
+        header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+        header.add("Pragma", "no-cache");
+        header.add("Expires", "0");
+
+        // MimeType 추가, application/octet-stream은 text/plain 타입을 제외한 기본 값
+        MediaType mediaType = MediaType.parseMediaType("image/jpeg");
+
+        Path path = null;
+        ByteArrayResource resource = null;
+
+        try {
+            // 다운로드 파일 추가
+            path = Paths.get("./upload/logo.png");
+            resource = new ByteArrayResource(Files.readAllBytes(path));
+        } catch (NoSuchFileException e) {
+            log.info("Logo file doesn't exist.");
+        }
+
+        return ResponseEntity.ok()
+                .headers(header)
+                .contentType(mediaType)
+                .body(resource);
+    }
+
 }

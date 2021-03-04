@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- css -->
+    <th:block th:replace="layout/css.html"></th:block>
+
+    <title th:if="!${guestBookDto.idx}" th:text="${@environment.getProperty('title')} + ' | Guest Book Register'"></title>
+    <title th:if="${guestBookDto.idx}" th:text="${@environment.getProperty('title')} + ' | Guest Book Update'"></title>
+</head>
+<body>
+<div class="d-flex" id="wrapper">
+    <!-- sidebar -->
+    <div th:replace="layout/sidebar::sidebar"></div>
+
+    <div id="page-content-wrapper">
+        <!-- header -->
+        <div th:replace="layout/header::header"></div>
+
+        <div class="container-fluid">
+            <form name="form" id="form" th:object="${guestBookDto}" action="#">
+                <div class="page-header breadcrumbs">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 th:if="!*{idx}">Guest Book Register</h2>
+                        <h2 th:if="*{idx}">Guest Book Update</h2>
+                        <ol>
+                            <li>Home</li>
+                            <li th:if="!*{idx}">Guest Book Register</li>
+                            <li th:if="*{idx}">Guest Book Update</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div id="loading">
+                    <img th:src="@{/images/loading.gif}" alt="Loading…"/>
+                </div>
+
+                <div class="page-content">
+                    <table class="table mobile-table-form mt-4">
+                        <colgroup>
+                            <col width="17.5%"/>
+                            <col width="82.5%"/>
+                        </colgroup>
+
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Guest Book Information</th>
+                        </tr>
+                        <tr>
+                            <th>Title<span class="required-field">*</span></th>
+                            <td><input type="text" name="title" class="form-control form-control-sm" th:value="*{title}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Main Page Priority</th>
+                            <td>
+                                <div>
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <input type="radio" id="mainPageNonCheck" name="mainPage" class="custom-control-input" th:checked="*{mainPagePriority == 11 || mainPagePriority == null}">
+                                        <label class="custom-control-label" for="mainPageNonCheck"><strong>Don't set priority.</strong></label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <input type="radio" id="mainPageCheck" name="mainPage" class="custom-control-input" th:checked="*{mainPagePriority >= 1 && mainPagePriority <= 10}">
+                                        <label class="custom-control-label" for="mainPageCheck"><strong>Set announcement and priority.</strong></label>
+                                    </div>
+                                </div>
+                                <select class="custom-select custom-select-sm mt-2" name="mainPagePriority" th:field="*{mainPagePriority}"
+                                        th:style="*{mainPagePriority >= 1 && mainPagePriority <= 10} ? 'display: inline;' : 'display: none'">
+                                    <option th:value="11" th:text="'Don\'t show main page.'" th:style="'display: none;'" selected></option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div name="content" id="content" th:utext="*{content}"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Attached File</th>
+                            <td>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="file" name="file" multiple>
+                                    <label class="custom-file-label" for="file">Choose file.</label>
+                                </div>
+                                <div id="fileDrop" class="fileDrop mt-2">
+                                    <strong>Drop files here.</strong>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Total file size</th>
+                            <td>
+                                <div><span id="totalFileSize">0MB</span>, Up to 50MB</div>
+                            </td>
+                        <tr>
+                            <th>Upload Attached File</th>
+                            <td>
+                                <div id="attachedFileList"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Uploaded Attached File</th>
+                            <td>
+                                <div id="uploadedAttachedFileList" th:each="attachedFile : *{attachedFileList}">
+                                    <div th:id="imgData + ${attachedFileStat.index}">
+                                        <span th:text="${attachedFile.fileName} + ',&nbsp;' + 'File Size: ' + ${attachedFile.fileSize}"></span>
+                                        <!-- &nbsp; skip -->
+                                        <i th:attr="onclick=|deleteFile('${attachedFileStat.index}','${attachedFile.idx}','${attachedFile.savedFileName}')|" class="far fa-times-circle"></i>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Additional Information</th>
+                        </tr>
+                        <tr>
+                            <th>Active Status</th>
+                            <td>
+                                <select class="custom-select custom-select-sm" name="activeStatus" th:field="*{activeStatus}">
+                                    <option th:value="ACTIVE">Active</option>
+                                    <option th:value="INACTIVE">Inactive</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Created Date</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Last Modified Date</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Created By</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{createdBy}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Last Modified By</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{lastModifiedBy}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Views</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{views}"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="10"></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="row justify-content-between mt-4 mb-4">
+                    <div class="col-auto">
+                        <a href="/guest-book/list" class="btn btn-sm btn-secondary">Move to List</a>
+                    </div>
+                    <div class="col-auto ml-2">
+                        <button th:if="!*{idx}" id="insert" type="button" class="btn-main btn-sm">Register</button>
+                        <button th:if="*{idx}" id="update" type="button" class="btn btn-sm btn-info">Update</button>
+                    </div>
+                </div>
+
+                <!-- input type="hidden" -->
+                <input type="hidden" name="idx" th:value="*{idx}"/>
+                <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
+                <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- footer -->
+<div th:replace="layout/footer::footer"></div>
+
+<!-- script file -->
+<th:block th:replace="layout/script.html"></th:block>
+
+<!-- javascript -->
+<script th:src="@{/js/ckeditor-editor-init.js}"></script>
+<script th:src="@{/js/file-upload/multiple-file-upload.js}"></script>
+
+<script th:inline="javascript">
+    <!-- Main Page Priority -->
+    var mainPagePrioritySelect = document.getElementsByName("mainPagePriority")[0];
+    var guestBookDtoList = [[${guestBookDtoList}]];
+    var guestBookDto = [[${guestBookDto}]];
+
+    for (var i = 0; i < 10; i++) {
+        var option = document.createElement("option");
+        option.text = i + 1;
+        option.value = i + 1;
+        mainPagePrioritySelect.options.add(option, i + 1);
+    }
+
+    for (var i = 0; i < guestBookDtoList.length; i++) {
+        var mainPagePriority = guestBookDtoList[i].mainPagePriority;
+
+        // 현재 guestBook의 mainPagePriority인 경우(select)
+        if (mainPagePriority == guestBookDto.mainPagePriority) {
+            mainPagePrioritySelect.options.item(mainPagePriority).selected = true;
+        }
+        // 다른 guestBook의 mainPagePriority인 경우(disable)
+        else {
+            mainPagePrioritySelect.options.item(mainPagePriority).text += " has been set by '" + guestBookDtoList[i].title + "'.(disabled)";
+            mainPagePrioritySelect.options.item(mainPagePriority).className = "disable";
+            mainPagePrioritySelect.options.item(mainPagePriority).disabled = true;
+        }
+    }
+
+    // Main Page Priority 변경
+    $("#mainPageNonCheck").on("change", function () {
+        document.getElementsByName("mainPagePriority")[0].style.display = "none";
+        document.getElementsByName("mainPagePriority")[0].value = 11;
+    });
+
+    $("#mainPageCheck").on("change", function () {
+        var guestBookDto = [[${guestBookDto}]];
+        document.getElementsByName("mainPagePriority")[0].style.display = "inline";
+
+        // register || update 일 때의 mainPagePriority
+        if (!(guestBookDto.mainPagePriority == null || guestBookDto.mainPagePriority == 11)) {
+            document.getElementsByName("mainPagePriority")[0].options.item(guestBookDto.mainPagePriority - 1).selected = true;
+        }
+    });
+
+    function deleteGuestBook(guestBookIdx) {
+        $.ajax({
+            url: moduleAppApiAddress + "/api/guest-books/" + guestBookIdx,
+            type: "delete",
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
+            });
+    }
+</script>
+
+<script th:if="!${guestBookDto?.idx}">
+    $("#insert").click(function () {
+        // validation (input tag mame, length or size)
+        if (!(validateByLengthAndBlank("title", 255) && validateByEditor(editor.getData(), 16777215))) {
+            return false;
+        }
+
+        // duplicate submit check
+        if (duplicateSubmitCheck()) return false;
+
+        var jsonData = $("#form").serializeObject();
+        jsonData.content = editor.getData();
+        var guestBookIdx;
+
+        $.ajax({
+            url: moduleAppApiAddress + "/api/guest-books",
+            type: "post",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                guestBookIdx = msg;
+                exit = false;
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
+                exit = true;
+            });
+
+        if (exit) return false;
+
+        // 파일 업로드
+        var formData = new FormData();
+
+        for (var i = 0; i < insertFileArray.length; i++) {
+            formData.append("files", insertFileArray[i]);
+        }
+
+        formData.append("idx", guestBookIdx);
+        formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
+
+        $.ajax({
+            url: moduleAppApiAddress + "/api/guest-books/attachedFile",
+            type: "post",
+            data: formData,
+            dataType: "text",
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            async: false,
+        })
+            .done(function (msg) {
+                localStorage.setItem("result", "/guest-book/register-success");
+                location.href = "/guest-book?idx=" + guestBookIdx;
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
+                deleteGuestBook(guestBookIdx);
+            });
+    });
+</script>
+
+<script th:if="${guestBookDto?.idx}" th:inline="javascript">
+    $("#update").click(function () {
+        // validation (input tag mame, length or size)
+        if (!(validateByLengthAndBlank("title", 255) && validateByEditor(editor.getData(), 16777215))) {
+            return false;
+        }
+
+        // duplicate submit check
+        if (duplicateSubmitCheck()) return false;
+
+        var jsonData = $("#form").serializeObject();
+        jsonData.content = editor.getData();
+        var guestBookIdx = document.getElementsByName("idx")[0].value;
+
+        $.ajax({
+            url: moduleAppApiAddress + "/api/guest-books/" + guestBookIdx,
+            type: "put",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                exit = false;
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
+                exit = true;
+            });
+
+        if (exit) return false;
+
+        // 만일 파일이 수정되지 않은 경우 '파일 업로드' 및 '파일 삭제'를 수행하지 않음
+        if (insertFileArray.length == 0 && deleteFileArray.length == 0) {
+            localStorage.setItem("result", "/guest-book/update-success");
+            location.href = "/guest-book?idx=" + guestBookIdx;
+
+            return true;
+        }
+
+        // 파일 삭제
+        if (deleteFileArray.length > 0) {
+            $.ajax({
+                url: moduleAppApiAddress + "/api/guest-books/attachedFile",
+                type: "delete",
+                data: JSON.stringify(deleteFileArray),
+                contentType: "application/json",
+                async: false,
+            })
+                .done(function (msg) {
+                    exit = false;
+                })
+                .fail(function (msg) {
+                    parseErrorMsg(msg);
+                    duplicateSubmitFlag = false;
+                    exit = true;
+                });
+        }
+
+        if (exit) return false;
+
+        if (insertFileArray.length <= 0) {
+            localStorage.setItem("result", "/guest-book/update-success");
+            location.href = "/guest-book?idx=" + guestBookIdx;
+
+            return true;
+        }
+
+        // 파일 업로드
+        var formData = new FormData();
+
+        for (var i = 0; i < insertFileArray.length; i++) {
+            formData.append("files", insertFileArray[i]);
+        }
+
+        formData.append("idx", guestBookIdx);
+        formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
+
+        $.ajax({
+            url: moduleAppApiAddress + "/api/guest-books/attachedFile",
+            type: "post",
+            data: formData,
+            dataType: "text",
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            async: false,
+        })
+            .done(function (msg) {
+                localStorage.setItem("result", "/guest-book/update-success");
+                location.href = "/guest-book?idx=" + guestBookIdx;
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
+            })
+
+    });
+</script>
+
+</body>
+</html>

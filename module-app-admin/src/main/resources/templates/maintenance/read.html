@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- css -->
+    <th:block th:replace="layout/css.html"></th:block>
+
+    <title th:text="${@environment.getProperty('title')} + ' | Maintenance Read'"></title>
+</head>
+<body>
+<div class="d-flex" id="wrapper">
+    <!-- sidebar -->
+    <div th:replace="layout/sidebar::sidebar"></div>
+
+    <div id="page-content-wrapper">
+        <!-- header -->
+        <div th:replace="layout/header::header"></div>
+
+        <div class="container-fluid">
+            <form name="form" id="form" th:object="${maintenanceDto}" action="#">
+                <div class="page-header breadcrumbs">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2>Maintenance Read</h2>
+                        <ol>
+                            <li>Home</li>
+                            <li>Maintenance Read</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div id="loading">
+                    <img th:src="@{/images/loading.gif}" alt="Loading…"/>
+                </div>
+
+                <div class="page-content">
+                    <table class="table mobile-table-read mt-4">
+                        <colgroup>
+                            <col width="17.5%"/>
+                            <col width="82.5%"/>
+                        </colgroup>
+
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Maintenance Information</th>
+                        </tr>
+                        <!-- Desktop -->
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Title</th>
+                            <td th:text="*{title}"></td>
+                        </tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Maintenance Status</th>
+                            <td>
+                                <span th:if="*{maintenanceStatus?.name() == 'REQUIREMENT'}" th:text="Requirement"> </span>
+                                <span th:if="*{maintenanceStatus?.name() == 'PROGRESSING'}" th:text="Progressing"> </span>
+                                <span th:if="*{maintenanceStatus?.name() == 'COMPLETED'}" th:text="Completed"> </span>
+                            </td>
+                        </tr>
+
+                        <!-- Mobile -->
+                        <tr class="d-print-none d-sm-table-row d-md-table-row d-lg-none d-xl-none d-table-row">
+                            <td colspan="2">
+                                <h4 th:text="*{title}" class="mobile-title"></h4>
+                            </td>
+                        </tr>
+                        <tr class="d-print-none d-sm-table-row d-md-table-row d-lg-none d-xl-none d-table-row">
+                            <td colspan="2">
+                                <strong class="mobile-default">Main Page Priority: </strong>
+                                <span th:if="*{maintenanceStatus?.name() == 'REQUIREMENT'}" th:text="Requirement" class="mobile-default"> </span>
+                                <span th:if="*{maintenanceStatus?.name() == 'PROGRESSING'}" th:text="Progressing" class="mobile-default"> </span>
+                                <span th:if="*{maintenanceStatus?.name() == 'COMPLETED'}" th:text="Completed" class="mobile-default"> </span>
+                            </td>
+                        </tr>
+
+                        <!-- Common -->
+                        <tr>
+                            <td colspan="2">
+                                <div class="content" th:utext="*{content}"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="d-none d-sm-none d-md-none d-lg-table-cell">Uploaded Attached File</th>
+                            <td colspan="2">
+                                <strong class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline mobile-default">Uploaded Attached File</strong>
+                                <div id="attachedFileList" th:each="attachedFile : *{attachedFileList}">
+                                    <span th:attr="onclick=|location.href='${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/${attachedFile.savedFileName}'|"
+                                          th:text="${attachedFile.fileName} + ',&nbsp;' + 'File size: ' + ${attachedFile.fileSize}"></span>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Additional Information</th>
+                        </tr>
+                        <!-- Desktop -->
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Active Status</th>
+                            <td>
+                                <span th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active"> </span>
+                                <span th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"> </span>
+                            </td>
+                        </tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Created Date</th>
+                            <td th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"></td>
+                        </tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Last Modified Date</th>
+                            <td th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
+                        </tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Created By</th>
+                            <td th:text="*{createdBy}"></td>
+                        </tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Last Modified By</th>
+                            <td th:text="*{lastModifiedBy}"></td>
+                        </tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Views</th>
+                            <td th:text="*{views}"></td>
+                        </tr>
+
+                        <!-- Mobile -->
+                        <tr class="d-print-none d-sm-table-row d-md-table-row d-lg-none d-xl-none d-table-row">
+                            <td colspan="2">
+                                <strong class="mobile-default">Active Status: </strong>
+                                <span th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active" class="mobile-default"> </span>
+                                <span th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive" class="mobile-default"> </span><br>
+
+                                <strong class="mobile-default">Created Date: </strong><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Last Modified Date: </strong><span th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Created By: </strong><span th:text="*{createdBy}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Last Modified By: </strong><span th:text="*{lastModifiedBy}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Views: </strong> <span th:text="*{views}" class="mobile-default"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <table class="table mt-3">
+                    <colgroup>
+                        <col width="17.5%"/>
+                        <col width="82.5%"/>
+                    </colgroup>
+                    <tr>
+                        <th colspan="2" class="sub-item-title">Comments</th>
+                    </tr>
+                    <tr th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}">
+                        <td colspan="2">
+                            <div name="content" id="content"></div>
+                            <div class="text-right mt-1">
+                                <i class="fas fa-exclamation" style="color: var(--main-red)"></i> &nbsp; Email will send to admin or developer that registered in 'Email page'.
+                                <div class="mt-1">
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <input type="radio" name="receiverType" value="NONE" class="custom-control-input" id="none" checked>
+                                        <label class="custom-control-label" for="none">None</label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <input type="radio" name="receiverType" value="ADMIN" class="custom-control-input" id="admin">
+                                        <label class="custom-control-label" for="admin">Admin</label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <input type="radio" name="receiverType" value="DEVELOPER" class="custom-control-input" id="developer">
+                                        <label class="custom-control-label" for="developer">Developer</label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <input type="radio" name="receiverType" value="ALL" class="custom-control-input" id="all">
+                                        <label class="custom-control-label" for="all">All</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-primary mt-1" id="insertComment">Register</button>
+                        </td>
+                    </tr>
+                </table>
+
+                <div th:if="!${#lists.isEmpty(maintenanceCommentDtoList)}" class="mt-3">
+                    <table class="table table-hover">
+                        <tr th:each="maintenanceCommentDto : ${maintenanceCommentDtoList}">
+                            <td>
+                                <span th:text="${maintenanceCommentDto.createdBy}"></span>&nbsp;&nbsp;
+                                <span th:text="${#temporals.format(maintenanceCommentDto.createdDate,'yyyy-MM-dd HH:mm')}" class="comment-additional-information"></span>
+                                <img th:class="new-icon" th:if="${maintenanceCommentDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}"/>
+
+                                <div class="mt-2">
+                                    <span th:id="commentContent + ${maintenanceCommentDtoStat.index}"
+                                          th:utext="${maintenanceCommentDto.content}"
+                                          class="comment">
+                                    </span>
+                                    <div th:id="updateCommentContentWrapper + ${maintenanceCommentDtoStat.index}" style="display: none;">
+                                        <div th:id="updateCommentContent + ${maintenanceCommentDtoStat.index}" name="updateCommentContent" class="comment" th:utext="${maintenanceCommentDto.content}"></div>
+                                    </div>
+                                </div>
+                                <div th:if="${maintenanceCommentDto.access}" class="mt-3">
+                                    <button type="button" class="btn btn-sm btn-outline-info mr-2"
+                                            th:id="displayComment + ${maintenanceCommentDtoStat.index}"
+                                            th:onclick="displayComment([[${maintenanceCommentDtoStat.index}]])">
+                                        Update
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger"
+                                            th:id="deleteComment + ${maintenanceCommentDtoStat.index}"
+                                            th:onclick="deleteComment([[${maintenanceCommentDto.idx}]], [[${maintenanceCommentDtoStat.index}]])">
+                                        Delete
+                                    </button>
+                                    <button type="button" style="display:none;" class="btn btn-sm btn-outline-primary mr-2"
+                                            th:id="updateComment + ${maintenanceCommentDtoStat.index}"
+                                            th:onclick="updateComment([[${maintenanceCommentDto.idx}]], [[${maintenanceCommentDto.createdBy}]], [[${maintenanceCommentDto.activeStatus}]],[[${maintenanceCommentDtoStat.index}]])">
+                                        Register
+                                    </button>
+                                    <button type="button" style="display:none;" class="btn btn-sm btn-outline-danger" th:id="cancelComment + ${maintenanceCommentDtoStat.index}"
+                                            th:onclick="cancelComment([[${maintenanceCommentDtoStat.index}]])">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="row justify-content-between mt-4 mb-4">
+                    <div class="col-auto">
+                        <a href="/maintenance/list" class="btn btn-sm btn-secondary">Move to List</a>
+                    </div>
+                    <div th:if="*{access}" class="col-auto ml-2">
+                        <a th:href="'/maintenance/form?idx='+*{idx}" class="btn btn-sm btn-info mx-1">Update</a>
+                        <button type="button" id="delete" class="btn btn-sm btn-danger mx-1">Delete</button>
+                    </div>
+                </div>
+
+                <!-- input type="hidden" -->
+                <input type="hidden" name="idx" th:value="*{idx}"/>
+                <input type="hidden" name="createdBy" th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}" th:value="${#authentication.principal.username}"/>
+                <input type="hidden" name="lastModifiedBy" th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}" th:value="${#authentication.principal.username}"/>
+                <input type="hidden" name="activeStatus" th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}" th:value="ACTIVE"/>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- footer -->
+<div th:replace="layout/footer::footer"></div>
+
+<!-- script file -->
+<th:block th:replace="layout/script.html"></th:block>
+
+<!-- javascript -->
+<script th:src="@{/js/ckeditor-editor-init.js}"></script>
+<script th:src="@{/js/multiple-ckeditor-editor-init.js}"></script>
+
+<script th:inline="javascript">
+    sweetalertFire("maintenance");
+
+    var updateEditor = new Array();
+
+    $(document).ready(function () {
+        var updateContentList = [[${maintenanceCommentDtoList}]];
+
+        for (var i = 0; i < updateContentList.length; i++) {
+            createEditor(updateEditor, "updateCommentContent" + i, i, updateContentList[i].content);
+        }
+    });
+
+    $("#delete").click(function () {
+        Confirm.fire({
+            icon: "warning",
+            title: "Do you want to delete?",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: moduleAppApiAddress + "/api/maintenances/" + document.getElementsByName("idx")[0].value,
+                    type: "delete",
+                    dataType: "text",
+                    contentType: "application/json",
+                    async: false,
+                })
+                    .done(function (msg) {
+                        localStorage.setItem("result", "/maintenance/delete-success");
+                        window.location = "/maintenance/list";
+                    })
+                    .fail(function (msg) {
+                        parseErrorMsg(msg);
+                    })
+            } else {
+                return false;
+            }
+        })
+    });
+
+    $("#insertComment").click(function () {
+        // validation (input tag mame, length or size)
+        if (!(validateByEditor(editor.getData(), 16777215))) {
+            return false;
+        }
+
+        // duplicate submit check
+        if (duplicateSubmitCheck()) return false;
+
+        $('#loading').show();
+
+        var jsonData =
+            {
+                createdBy: document.getElementsByName("createdBy")[0].value,
+                lastModifiedBy: document.getElementsByName("lastModifiedBy")[0].value,
+                activeStatus: document.getElementsByName("activeStatus")[0].value,
+                maintenanceIdx: document.getElementsByName("idx")[0].value,
+                content: editor.getData(),
+                receiverType: document.querySelector('input[name="receiverType"]:checked').value
+            }
+
+        $.ajax({
+            url: moduleAppApiAddress + "/api/maintenances-comments/",
+            type: "post",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                localStorage.setItem("result", "/maintenance/register-success");
+                location.href = "/maintenance?idx=" + document.getElementsByName("idx")[0].value;
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
+                $('#loading').hide();
+            })
+    });
+
+    function updateComment(idx, createdBy, activeStatus, commentId) {
+        // validation (input tag mame, length or size)
+        if (!(validateByEditor((updateEditor[commentId]).getData(), 16777215))) {
+            return false;
+        }
+
+        // duplicate submit check
+        if (duplicateSubmitCheck()) return false;
+
+        var jsonData =
+            {
+                idx: idx,
+                createdBy: createdBy,
+                lastModifiedBy: document.getElementsByName("lastModifiedBy")[0].value,
+                activeStatus: activeStatus,
+                maintenanceIdx: document.getElementsByName("idx")[0].value,
+                content: updateEditor[commentId].getData()
+            }
+
+        $.ajax({
+            url: moduleAppApiAddress + "/api/maintenances-comments/" + idx,
+            type: "put",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                localStorage.setItem("result", "/maintenance/update-success");
+                location.href = "/maintenance?idx=" + document.getElementsByName("idx")[0].value;
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
+            })
+    }
+
+    function deleteComment(idx, commentId) {
+        Confirm.fire({
+            icon: "warning",
+            title: "Do you want to delete?",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: moduleAppApiAddress + "/api/maintenances-comments/" + idx,
+                    type: "delete",
+                    dataType: "text",
+                    contentType: "application/json",
+                    async: false,
+                })
+                    .done(function (msg) {
+                        localStorage.setItem("result", "/maintenance/delete-success");
+                        location.href = "/maintenance?idx=" + document.getElementsByName("idx")[0].value;
+                    })
+                    .fail(function (msg) {
+                        parseErrorMsg(msg);
+                    })
+            } else {
+                return false;
+            }
+        })
+    }
+
+    function displayComment(index) {
+        document.getElementById("updateCommentContentWrapper" + index).style.display = "inline";
+        document.getElementById("commentContent" + index).style.display = "none";
+
+        document.getElementById("displayComment" + index).style.display = "none";
+        document.getElementById("deleteComment" + index).style.display = "none";
+        document.getElementById("updateComment" + index).style.display = "inline";
+        document.getElementById("cancelComment" + index).style.display = "inline";
+    }
+
+    function cancelComment(index) {
+        document.getElementById("updateCommentContentWrapper" + index).style.display = "none";
+        document.getElementById("commentContent" + index).style.display = "inline";
+
+        document.getElementById("displayComment" + index).style.display = "inline";
+        document.getElementById("deleteComment" + index).style.display = "inline";
+        document.getElementById("updateComment" + index).style.display = "none";
+        document.getElementById("cancelComment" + index).style.display = "none";
+    }
+</script>
+
+</body>
+</html>

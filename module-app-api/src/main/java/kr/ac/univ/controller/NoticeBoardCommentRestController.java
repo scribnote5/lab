@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/notice-boards-comments")
 public class NoticeBoardCommentRestController {
@@ -23,14 +25,14 @@ public class NoticeBoardCommentRestController {
     }
 
     @PostMapping
-    public ResponseEntity<?> postNoticeBoard(@RequestBody NoticeBoardComment noticeBoardComment) {
-        Long idx = noticeBoardCommentService.insertNoticeBoardComment(noticeBoardComment);
+    public ResponseEntity<?> postNoticeBoard(@RequestBody @Valid NoticeBoardCommentDto noticeBoardCommentDto) {
+        Long idx = noticeBoardCommentService.insertNoticeBoardComment(noticeBoardCommentDto);
 
         return new ResponseEntity<>(idx, HttpStatus.CREATED);
     }
 
     @PutMapping("/{idx}")
-    public ResponseEntity<?> putNoticeBoard(@PathVariable("idx") Long idx, @RequestBody NoticeBoardCommentDto noticeBoardCommentDto) {
+    public ResponseEntity<?> putNoticeBoard(@PathVariable("idx") Long idx, @RequestBody @Valid NoticeBoardCommentDto noticeBoardCommentDto) {
         noticeBoardCommentService.updateNoticeBoardComment(idx, noticeBoardCommentDto);
 
         return new ResponseEntity<>("{}", HttpStatus.OK);

@@ -47,6 +47,11 @@
         });
     }
 
+    /* hide loading */
+    window.onload = function () {
+        $('#loading').hide();
+    }
+
     $("#logout").click(function () {
         Confirm.fire({
             icon: "warning",
@@ -68,5 +73,4 @@
         infinigall: true,
         spinner: 'three-bounce'
     });
-
 </script>

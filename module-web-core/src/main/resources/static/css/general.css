@@ -90,18 +90,9 @@ table td {
     background-color: var(--lightest-grey);
 }
 
-#attachedFileList, #uploadedAttachedFileList {
-    word-break: break-all;
-    white-space: normal;
-}
-
 /*
  * CKeditor
  */
-.ck.ck-editor {
-    min-height: 500px;
-}
-
 .ck-editor__editable {
     min-height: 500px;
 }
@@ -195,7 +186,7 @@ table td {
  * File
  */
 #fileDrop {
-    line-height: 10rem;
+    line-height: 12.5rem;
     border: .1rem dashed gray;
     text-align: center;
     color: grey;
@@ -242,10 +233,9 @@ table td {
     resize: none;
 }
 
-[id^="commentContent"].comment {
-    display: block;
-    word-break: break-all;
-    white-space: normal;
+[id^="commentContent"].comment img {
+    max-width: 100%;
+    height: auto;
 }
 
 [id^="updateCommentContent"].comment {
@@ -308,16 +298,15 @@ input[type="search"]:focus::-webkit-search-cancel-button {
 }
 
 #loading {
-    margin-top: 20vh;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
 }
 
 .comment-additional-information {
     color: var(--dark-grey);
-}
-
-#imgData {
-    word-break: break-all;
-    white-space: normal;
 }
 
 
@@ -348,6 +337,10 @@ input[type="search"]:focus::-webkit-search-cancel-button {
     font-size: var(--large-font-size);
     color: var(--darkest-grey);
     line-height: 2rem;
+}
+
+.mobile-table-form tr td {
+    white-space: normal;
 }
 
 /*

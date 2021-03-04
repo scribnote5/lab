@@ -28,6 +28,10 @@
                     </div>
                 </div>
 
+                <div id="loading">
+                    <img th:src="@{/images/loading.gif}" alt="Loading…"/>
+                </div>
+
                 <div class="page-search">
                     <div class="row justify-content-end mt-4">
                         <div class="pt-2 pr-3">
@@ -66,7 +70,7 @@
                                 <span th:text="${emailDto.idx} + '.'" class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline"></span>
 
                                 <!-- Common -->
-                                <a th:href="'/email?idx='+${emailDto.idx}" class="link" th:text="${emailDto.title}"></a>
+                                <a th:href="'/email?idx='+${emailDto.idx}" class="link" th:text="${emailDto.emailAddress}"></a>
                                 <img th:if="${emailDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
 
                                 <!-- Mobile -->

@@ -23,7 +23,7 @@
             </div>
         </div>
 
-        <div id="loading" class="row justify-content-center mt-5">
+        <div id="loading">
             <img th:src="@{/images/loading.gif}" alt="Loading…"/>
         </div>
 
@@ -33,7 +33,6 @@
                     <div th:if="${albumDto.mainHashTagStatus?.name() == 'PRINT' || albumDto.mainHashTagStatus?.name() == 'KEEP_SPACE'}" class="album-main-hash-tag-wrap">
                         <h2 th:if="${albumDto.mainHashTagStatus?.name() == 'PRINT'}" th:text="${albumDto.mainHashTag}" class="album-main-hash-tag"></h2>
                     </div>
-
                     <div class="album-wrap">
                         <a th:href="@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/${albumDto.attachedFileList[0].savedFileName}|}"
                            data-gall="albumGallery" class="venobox" th:title="${albumDto.title}">

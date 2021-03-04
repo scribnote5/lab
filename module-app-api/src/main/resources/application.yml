@@ -16,9 +16,15 @@ spring:
       enabled: true
 module:
   name: module-app-api
+
+title: ESLAB
+
 server:
   tomcat:
     max-swallow-size: -1
+email:
+  sender: eslab533
+  password: eslabeslab533
 ---
 spring:
   profiles: test
@@ -55,8 +61,12 @@ spring:
         maintainTimeStats: false
 server:
   port: 8081
+module-app-web:
+  address: http://localhost:8080
 module-app-api:
   address: http://localhost:8081
+module-app-admin:
+  address: http://localhost:8082
 ---
 spring:
   profiles: local
@@ -87,8 +97,12 @@ spring:
         maintainTimeStats: false
 server:
   port: 8081
+module-app-web:
+  address: http://localhost:8080
 module-app-api:
   address: http://localhost:8081
+module-app-admin:
+  address: http://localhost:8082
 ---
 spring:
   profiles: dev
@@ -119,5 +133,9 @@ spring:
         maintainTimeStats: false
 server:
   port: 8081
+module-app-web:
+  address: http://203.234.19.85:8080
 module-app-api:
   address: http://203.234.19.85:8081
+module-app-admin:
+  address: http://203.234.19.85:8082

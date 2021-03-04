@@ -27,6 +27,10 @@
                     </div>
                 </div>
 
+                <div id="loading">
+                    <img th:src="@{/images/loading.gif}" alt="Loading…"/>
+                </div>
+
                 <div class="page-content">
                     <table class="table mobile-table-read mt-4">
                         <colgroup>
@@ -34,10 +38,30 @@
                             <col width="82.5%"/>
                         </colgroup>
 
-                        <!-- Desktop -->
+
                         <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th colspan="2" class="sub-item-title">Setting Information</th>
                         </tr>
+                        <!-- Common -->
+                        <tr>
+                            <th class="d-none d-sm-none d-md-none d-lg-table-cell">Logo</th>
+                            <td colspan="2">
+                                <strong class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline mobile-default">Uploaded Logo File</strong>
+                                <div>
+                                    <i class="fas fa-exclamation" style="color: var(--main-red)"></i> &nbsp; If logo file doesn't exist, please upload logo file.
+                                </div>
+                                <div class="mt-2">
+                                    <a th:href="@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-logo|}"
+                                       data-gall="logo" class="venobox" th:title="Logo">
+                                        <img id="imgPreview" class="float-right logo-preview img-thumbnail"
+                                             th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-logo|}"
+                                             th:onerror="'this.src=\'' + @{/images/no-preview-available.jpg} + '\';'"/>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- Desktop -->
                         <tr>
                             <th>Lab Address</th>
                             <td th:text="*{labAddress}"></td>
@@ -164,6 +188,7 @@
                                 <strong class="mobile-default">Views: </strong> <span th:text="*{views}" class="mobile-default"></span>
                             </td>
                         </tr>
+
                         <tr>
                             <td colspan="10"></td>
                         </tr>

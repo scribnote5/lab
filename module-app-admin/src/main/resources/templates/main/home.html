@@ -179,13 +179,12 @@
                         <thead>
                         <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th style="width: 7.5%" class="text-center">No.</th>
-                            <th style="width: 27.5%" class="text-center">Aud Message</th>
+                            <th style="width: 35%" class="text-center">Aud Message</th>
                             <th style="width: 12.5%" class="text-center">Aud Class</th>
                             <th style="width: 10%" class="text-center">Aud Type</th>
                             <th style="width: 15%">Created By</th>
                             <th style="width: 17.5%" class="text-center">Created Date</th>
                             <th style="width: 7.5%" class="text-center">Status</th>
-                            <th style="width: 7.5%" class="text-center">Views</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -203,8 +202,7 @@
                                 <div class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline">
                                     <div class="d-flex align-center">
                                         <span th:text="${dataHistoryDto.createdBy}" class="mobile-additional-information"> </span> &nbsp;&nbsp;
-                                        <span th:text="${#temporals.format(dataHistoryDto.createdDate,'yyyy-MM-dd HH:mm')}" class="mobile-additional-information"></span> &nbsp;&nbsp;
-                                        <span th:text="'Views: ' + ${dataHistoryDto.views}" class="mobile-additional-information"></span>
+                                        <span th:text="${#temporals.format(dataHistoryDto.createdDate,'yyyy-MM-dd HH:mm')}" class="mobile-additional-information"></span>
                                     </div>
                                     <div class="d-flex align-center">
                                         <span th:if="${dataHistoryDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active" class="mobile-additional-information"></span>
@@ -213,19 +211,13 @@
                                 </div>
                             </td>
                             <td th:text="${dataHistoryDto.audClass}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
-
                             <td th:if="${dataHistoryDto.audType?.name() == 'INSERT'}" th:text="Insert" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td th:if="${dataHistoryDto.audType?.name() == 'UPDATE'}" th:text="Update" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td th:if="${dataHistoryDto.audType?.name() == 'DELETE'}" th:text="Delete" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
-
                             <td th:text="${dataHistoryDto.createdBy}" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
-
                             <td th:text="${#temporals.format(dataHistoryDto.createdDate,'yyyy-MM-dd HH:mm')}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
-
                             <td th:if="${dataHistoryDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td th:if="${dataHistoryDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
-
-                            <td th:text="${dataHistoryDto.views}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                         </tr>
                         <tr th:if="${#lists.size('dataHistoryDtoList') == 0}">
                             <td colspan="10" class="no-posts">
@@ -248,13 +240,12 @@
                         <thead>
                         <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th style="width: 7.5%" class="text-center">No.</th>
-                            <th style="width: 27.5%" class="text-center">Aud Message</th>
+                            <th style="width: 35%" class="text-center">Aud Message</th>
                             <th style="width: 12.5%" class="text-center">Aud Ip</th>
                             <th style="width: 10%" class="text-center">Login Result</th>
                             <th style="width: 15%">ID</th>
                             <th style="width: 17.5%" class="text-center">Created Date</th>
                             <th style="width: 7.5%" class="text-center">Status</th>
-                            <th style="width: 7.5%" class="text-center">Views</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -272,8 +263,7 @@
                                 <div class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline">
                                     <div class="d-flex align-center">
                                         <span th:text="${loginHistoryDto.createdBy}" class="mobile-additional-information"> </span> &nbsp;&nbsp;
-                                        <span th:text="${#temporals.format(loginHistoryDto.createdDate,'yyyy-MM-dd HH:mm')}" class="mobile-additional-information"></span> &nbsp;&nbsp;
-                                        <span th:text="'Views: ' + ${loginHistoryDto.views}" class="mobile-additional-information"></span>
+                                        <span th:text="${#temporals.format(loginHistoryDto.createdDate,'yyyy-MM-dd HH:mm')}" class="mobile-additional-information"></span>
                                     </div>
                                     <div class="d-flex align-center">
                                         <span th:if="${loginHistoryDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active" class="mobile-additional-information"></span>
@@ -290,7 +280,6 @@
                             <td th:text="${#temporals.format(loginHistoryDto.createdDate,'yyyy-MM-dd HH:mm')}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td th:if="${loginHistoryDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td th:if="${loginHistoryDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
-                            <td th:text="${loginHistoryDto.views}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                         </tr>
                         <tr th:if="${#lists.size('loginHistoryDtoList') == 0}">
                             <td colspan="10" class="no-posts">

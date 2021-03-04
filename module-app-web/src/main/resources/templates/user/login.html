@@ -20,7 +20,9 @@
 
                         <div class="col-sm-12 col-md-10 card-body">
                             <div class="brand-wrapper">
-                                <img src="/images/small-logo.png">
+                                <img class="logo"
+                                     th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-logo|}"
+                                     th:onerror="'this.src=\'' + @{/images/no-preview-available.jpg} + '\';'"/>
                             </div>
                             <p class="login-card-description">Sign into your account</p>
 

@@ -27,6 +27,10 @@
                     </div>
                 </div>
 
+                <div id="loading">
+                    <img th:src="@{/images/loading.gif}" alt="Loading…"/>
+                </div>
+
                 <div class="page-content">
                     <table class="table mobile-table-read mt-4">
                         <colgroup>
@@ -44,8 +48,7 @@
                         </tr>
                         <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Main Page Priority</th>
-                            <td class="main-page-priority" th:text="*{mainPagePriority == 11} ? 'This post not shown on the main page.' : *{mainPagePriority}"/>
-                            </td>
+                            <td th:text="*{mainPagePriority == 11} ? 'This post not shown on the main page.' : *{mainPagePriority}"></td>
                         </tr>
 
                         <!-- Mobile -->
@@ -66,13 +69,13 @@
                                 <div class="content" th:utext="*{content}"></div>
                             </td>
                         </tr>
-                        <tr th:if="!*{#lists.isEmpty(attachedFileList)}">
+                        <tr>
                             <th class="d-none d-sm-none d-md-none d-lg-table-cell">Uploaded Attached File</th>
                             <td colspan="2">
                                 <strong class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline mobile-default">Uploaded Attached File</strong>
                                 <div id="attachedFileList" th:each="attachedFile : *{attachedFileList}">
-                                <span th:attr="onclick=|location.href='${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/${attachedFile.savedFileName}'|"
-                                      th:text="${attachedFile.fileName} + ',&nbsp;' + 'File size: ' + ${attachedFile.fileSize}"></span>
+                                    <span th:attr="onclick=|location.href='${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/${attachedFile.savedFileName}'|"
+                                          th:text="${attachedFile.fileName} + ',&nbsp;' + 'File size: ' + ${attachedFile.fileSize}"></span>
                                 </div>
                             </td>
                         </tr>

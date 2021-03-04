@@ -47,7 +47,7 @@
                     <div class="row justify-content-center">
                         <div th:each="researchFieldDto: ${researchFieldDtoList}" class="col-lg-6 col-md-12 d-flex">
                             <div class="card"
-                                 th:style="!${#lists.isEmpty(researchFieldDto.attachedFileList)} ? 'background-image:url(' + ${@environment.getProperty('module-app-api.address')} + '/api/attachedFiles/download/' + ${researchFieldDto.attachedFileList[0].savedFileName} + ');' : 'background-color: rgb(255, 255, 255)'">
+                                 th:style="!${#lists.isEmpty(researchFieldDto.attachedFileList)} ? 'background-image:url(' + ${@environment.getProperty('module-app-api.address')} + '/api/attachedFiles/view-image/' + ${researchFieldDto.attachedFileList[0].savedFileName} + ');' : 'background-color: rgb(255, 255, 255)'">
                                 <div class="card-body">
                                     <h4 class="card-title" th:text="${researchFieldDto.title}"></h4>
                                     <span class="card-content" th:utext="${#strings.replace(researchFieldDto.content, T(System).getProperty('line.separator'), '&lt;br /&gt;')}"></span>
@@ -76,21 +76,21 @@
                                     <col width="25%"/>
                                 </colgroup>
                                 <tbody>
-                                <tr th:each="noticeBoardDto : ${noticeBoardDtoList}">
+                                <tr th:each="guestBookDto : ${guestBookDtoList}">
                                     <td>
-                                        <img th:if="${noticeBoardDto.mainPagePriority != 11}" th:attr="src=@{|/images/speaker-icon.jpg|}" class="new-icon"/>
-                                        <a th:href="'/notice-board?idx='+${noticeBoardDto.idx}" th:text="${noticeBoardDto.title}" class="link"></a>
-                                        <img th:if="${noticeBoardDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
+                                        <img th:if="${guestBookDto.mainPagePriority != 11}" th:attr="src=@{|/images/speaker-icon.jpg|}" class="new-icon"/>
+                                        <a th:href="'/notice-board?idx='+${guestBookDto.idx}" th:text="${guestBookDto.title}" class="link"></a>
+                                        <img th:if="${guestBookDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
 
                                         <!-- Mobile -->
                                         <div class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline">
                                             <div class="d-flex align-center">
-                                                <span th:text="${noticeBoardDto.createdBy}" class="mobile-additional-information"> </span> &nbsp;&nbsp;
-                                                <span th:text="${#temporals.format(noticeBoardDto.createdDate,'yyyy-MM-dd')}" class="mobile-additional-information"></span> &nbsp;&nbsp;
+                                                <span th:text="${guestBookDto.createdBy}" class="mobile-additional-information"> </span> &nbsp;&nbsp;
+                                                <span th:text="${#temporals.format(guestBookDto.createdDate,'yyyy-MM-dd')}" class="mobile-additional-information"></span> &nbsp;&nbsp;
                                             </div>
                                         </div>
                                     </td>
-                                    <td th:text="${#temporals.format(noticeBoardDto.createdDate,'yyyy-MM-dd')}" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                                    <td th:text="${#temporals.format(guestBookDto.createdDate,'yyyy-MM-dd')}" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
                                 </tr>
                                 </tbody>
                             </table>

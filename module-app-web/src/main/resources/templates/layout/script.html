@@ -33,10 +33,10 @@
         });
     });
 
-    // DOM
-    $(document).ready(function () {
-        $("#loading").hide();
-    });
+    /* hide loading */
+    window.onload = function () {
+        $('#loading').hide();
+    }
 
     !(function ($) {
         "use strict";

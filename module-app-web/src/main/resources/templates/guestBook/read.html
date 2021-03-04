@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- css -->
+    <th:block th:replace="layout/css.html"></th:block>
+
+    <title th:text="${@environment.getProperty('title')} + ' | Guest Book Detail'"></title>
+</head>
+<body>
+<div id="page-content-wrapper">
+    <!-- header -->
+    <div th:replace="layout/header::header"></div>
+
+    <div class="container">
+        <form name="form" id="form" th:object="${guestBookDto}" action="#">
+            <div class="page-header breadcrumbs" data-aos="fade-up">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2>Guest Book Detail</h2>
+                    <ol>
+                        <li>Home</li>
+                        <li>Guest Book Detail</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div id="loading">
+                <img th:src="@{/images/loading.gif}" alt="Loading…"/>
+            </div>
+
+            <div class="page-content" data-aos="fade-up">
+                <table class="table mobile-table-read mt-4">
+                    <colgroup>
+                        <col width="17.5%"/>
+                        <col width="82.5%"/>
+                    </colgroup>
+
+                    <!-- Desktop -->
+                    <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                        <td class="text-right border-0" colspan="10">
+                            <strong class="additional-information">Created By: </strong><span th:text="*{createdBy}" class="additional-information"></span> &nbsp;&nbsp;&nbsp;
+                            <strong class="additional-information">Created Date: </strong><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}" class="additional-information"></span> &nbsp;&nbsp;&nbsp;
+                            <strong class="additional-information">Views: </strong> <span th:text="*{views}" class="additional-information"/></span>
+                        </td>
+                    </tr>
+                    <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                        <th>Title</th>
+                        <td th:text="*{title}"></td>
+                    </tr>
+
+                    <!-- Mobile -->
+                    <tr class="d-print-none d-sm-table-row d-md-table-row d-lg-none d-xl-none d-table-row">
+                        <td colspan="2">
+                            <h4 th:text="*{title}" class="mobile-title"></h4>
+
+                            <div class="text-right">
+                                <span th:text="*{createdBy}"></span>&nbsp;&nbsp;
+                                <span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}" class="mobile-additional-information"></span>&nbsp;&nbsp;
+                                <span th:text="'Views: ' + *{views}" class="mobile-additional-information"/>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Common -->
+                    <tr>
+                        <td colspan="2">
+                            <div class="content" th:utext="*{content}"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="d-none d-sm-none d-md-none d-lg-table-cell">Uploaded Attached File</th>
+                        <td colspan="2">
+                            <strong class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline mobile-default">Uploaded Attached File</strong>
+                            <div id="attachedFileList" th:each="attachedFile : *{attachedFileList}">
+                                <span th:attr="onclick=|location.href='${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/${attachedFile.savedFileName}'|"
+                                      th:text="${attachedFile.fileName} + ',&nbsp;' + 'File size: ' + ${attachedFile.fileSize}"></span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="10"></td>
+                    </tr>
+                </table>
+
+                <!-- Comment -->
+                <table class="table mt-3">
+                    <colgroup>
+                        <col width="17.5%"/>
+                        <col width="82.5%"/>
+                    </colgroup>
+                    <tr>
+                        <th colspan="2" class="sub-item-title">Comments</th>
+                    </tr>
+                    <tr th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}">
+                        <td colspan="2">
+                            <textarea class="form-control comment" name="content" id="comment"></textarea>
+                            <button type="button" class="btn btn-sm btn-primary mt-3" id="insertComment">Register</button>
+                        </td>
+                    </tr>
+                </table>
+                <div th:if="!${#lists.isEmpty(guestBookCommentDtoList)}" class="mt-3">
+                    <table class="table table-hover">
+                        <tr th:each="guestBookCommentDto : ${guestBookCommentDtoList}">
+                            <td>
+                                <span th:text="${guestBookCommentDto.createdBy}"></span>&nbsp;&nbsp;
+                                <span th:text="${#temporals.format(guestBookCommentDto.createdDate,'yyyy-MM-dd HH:mm')}" class="comment-additional-information"></span>
+                                <img th:class="new-icon" th:if="${guestBookCommentDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}"/>
+
+                                <div class="mt-2">
+                                    <span th:id="commentContent + ${guestBookCommentDtoStat.index}"
+                                          th:utext="${guestBookCommentDto.content}"
+                                          class="comment">
+                                    </span>
+                                    <textarea th:id="updateCommentContent + ${guestBookCommentDtoStat.index}"
+                                              th:text="${guestBookCommentDto.content}"
+                                              class="form-control comment"
+                                              style="display: none;"
+                                              name="updateContent">
+					                </textarea>
+                                </div>
+                                <div th:if="${guestBookCommentDto.access}" class="mt-3">
+                                    <button type="button" class="btn btn-sm btn-outline-info mr-2"
+                                            th:id="displayComment + ${guestBookCommentDtoStat.index}"
+                                            th:onclick="displayComment([[${guestBookCommentDtoStat.index}]])">
+                                        Update
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger"
+                                            th:id="deleteComment + ${guestBookCommentDtoStat.index}"
+                                            th:onclick="deleteComment([[${guestBookCommentDto.idx}]], [[${guestBookCommentDtoStat.index}]])">
+                                        Delete
+                                    </button>
+                                    <button type="button" style="display:none;" class="btn btn-sm btn-outline-primary mr-2"
+                                            th:id="updateComment + ${guestBookCommentDtoStat.index}"
+                                            th:onclick="updateComment([[${guestBookCommentDto.idx}]], [[${guestBookCommentDto.createdBy}]], [[${guestBookCommentDto.activeStatus}]],[[${guestBookCommentDtoStat.index}]])">
+                                        Register
+                                    </button>
+                                    <button type="button" style="display:none;" class="btn btn-sm btn-outline-danger" th:id="cancelComment + ${guestBookCommentDtoStat.index}"
+                                            th:onclick="cancelComment([[${guestBookCommentDtoStat.index}]])">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="row justify-content-between mt-4 mb-4">
+                    <div class="col-auto">
+                        <a href="/guest-book/list" class="btn btn-sm btn-secondary">Move to List</a>
+                    </div>
+                    <div th:if="*{access}" class="col-auto ml-2">
+                        <a th:href="'/guest-book/form?idx='+*{idx}" class="btn btn-sm btn-info mx-1">Update</a>
+                        <button type="button" class="btn btn-sm btn-danger mx-1" id="delete">Delete</button>
+                    </div>
+                </div>
+
+                <!-- input type="hidden" -->
+                <input type="hidden" name="idx" th:value="*{idx}"/>
+                <input type="hidden" name="createdBy" th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}" th:value="${#authentication.principal.username}"/>
+                <input type="hidden" name="lastModifiedBy" th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}" th:value="${#authentication.principal.username}"/>
+                <input type="hidden" name="activeStatus" th:if="${!#strings.equals(#authentication.principal, 'anonymousUser')}" th:value="ACTIVE"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- footer -->
+<div th:replace="layout/footer::footer"></div>
+
+<!-- script file -->
+<th:block th:replace="layout/script.html"></th:block>
+
+<script th:inline="javascript">
+    sweetalertFire("guest-book");
+
+    $("#delete").click(function () {
+        Confirm.fire({
+            icon: "warning",
+            title: "Do you want to delete?",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: moduleAppApiAddress + "/api/guest-books/" + document.getElementsByName("idx")[0].value,
+                    type: "delete",
+                    dataType: "text",
+                    contentType: "application/json",
+                    async: false,
+                })
+                    .done(function (msg) {
+                        localStorage.setItem("result", "/guest-book/delete-success");
+                        location.href = "/guest-book/list";
+                    })
+                    .fail(function (msg) {
+                        parseErrorMsg(msg);
+                    })
+            } else {
+                return false;
+            }
+        })
+    });
+
+    $("#insertComment").click(function () {
+        var jsonData =
+            {
+                createdBy: document.getElementsByName("createdBy")[0].value,
+                lastModifiedBy: document.getElementsByName("lastModifiedBy")[0].value,
+                activeStatus: document.getElementsByName("activeStatus")[0].value,
+                guestBookIdx: document.getElementsByName("idx")[0].value,
+                content: document.getElementsByName("content")[0].value.replace(/\n/g, "<br>")
+            }
+
+        // duplicate submit check
+        if (duplicateSubmitCheck()) return false;
+
+        $.ajax({
+            url: moduleAppApiAddress + "/api/guest-books-comments/",
+            type: "post",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                localStorage.setItem("result", "/guest-book/register-success");
+                location.href = "/guest-book?idx=" + document.getElementsByName("idx")[0].value;
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
+            })
+    });
+
+    function updateComment(idx, createdBy, activeStatus, commentId) {
+        var jsonData =
+            {
+                idx: idx,
+                createdBy: createdBy,
+                lastModifiedBy: document.getElementsByName("lastModifiedBy")[0].value,
+                activeStatus: activeStatus,
+                guestBookIdx: document.getElementsByName("idx")[0].value,
+                content: document.getElementsByName("updateContent")[commentId].value.replace(/\n/g, "<br>")
+            }
+
+        // duplicate submit check
+        if (duplicateSubmitCheck()) return false;
+
+        $.ajax({
+            url: moduleAppApiAddress + "/api/guest-books-comments/" + idx,
+            type: "put",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                localStorage.setItem("result", "/guest-book/update-success");
+                location.href = "/guest-book?idx=" + document.getElementsByName("idx")[0].value;
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
+            })
+    }
+
+    function deleteComment(idx, commentId) {
+        Confirm.fire({
+            icon: "warning",
+            title: "Do you want to delete?",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: moduleAppApiAddress + "/api/guest-books-comments/" + idx,
+                    type: "delete",
+                    dataType: "text",
+                    contentType: "application/json",
+                    async: false,
+                })
+                    .done(function (msg) {
+                        localStorage.setItem("result", "/guest-book/delete-success");
+                        location.href = "/guest-book?idx=" + document.getElementsByName("idx")[0].value;
+                    })
+                    .fail(function (msg) {
+                        parseErrorMsg(msg);
+                    })
+            } else {
+                return false;
+            }
+        })
+    }
+
+    function displayComment(index) {
+        document.getElementsByName("updateContent")[index].style.display = "inline";
+        document.getElementById("commentContent" + index).style.display = "none";
+
+        document.getElementById("displayComment" + index).style.display = "none";
+        document.getElementById("deleteComment" + index).style.display = "none";
+        document.getElementById("updateComment" + index).style.display = "inline";
+        document.getElementById("cancelComment" + index).style.display = "inline";
+    }
+
+    function cancelComment(index) {
+        document.getElementsByName("updateContent")[index].style.display = "none";
+        document.getElementById("commentContent" + index).style.display = "inline";
+
+        document.getElementById("displayComment" + index).style.display = "inline";
+        document.getElementById("deleteComment" + index).style.display = "inline";
+        document.getElementById("updateComment" + index).style.display = "none";
+        document.getElementById("cancelComment" + index).style.display = "none";
+    }
+</script>
+
+</body>
+</html>

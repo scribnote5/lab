@@ -23,6 +23,10 @@
                 </div>
             </div>
 
+            <div id="loading">
+                <img th:src="@{/images/loading.gif}" alt="Loading…"/>
+            </div>
+
             <div class="page-content" data-aos="fade-up">
                 <table class="table mobile-table-read mt-4">
                     <colgroup>
@@ -36,7 +40,7 @@
                         <td rowspan="6">
                             <div class="member img-thumbnail float-left">
                                 <div class="member-img">
-                                    <img th:if="*{attachedFileList.size()} == 0"  class="read-member-photo" th:attr="src=@{/images/no-preview-available.jpg}"/>
+                                    <img th:if="*{attachedFileList.size()} == 0" class="read-member-photo" th:attr="src=@{/images/no-preview-available.jpg}"/>
                                     <a th:if="*{attachedFileList.size()} != 0" th:href="@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-image/*{attachedFileList[0].savedFileName}|}"
                                        data-gall="memberPhotoDesktop" class="venobox" th:title="*{username}">
                                         <img class="read-member-photo"

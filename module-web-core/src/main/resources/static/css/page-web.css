@@ -240,21 +240,13 @@
     line-height: 2rem;
 }
 
-/* member form */
-.member-form .notice {
-    font-size: var(--larger-font-size);
-}
-
-.member-form .notice i {
-    color: red;
-}
-
 /*
  * Publication
  */
 .publication .publication-wrap {
     margin: 0 1rem;
     word-break: break-all;
+    white-space: normal;
 }
 
 .publication .publication-wrap .title {

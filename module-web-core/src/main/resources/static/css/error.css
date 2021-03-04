@@ -1,24 +1,19 @@
-.error {
-    margin-top: 6.5rem;
-}
-
-.error-code {
-    color: rgb(226, 76, 75);
-    font-size: 3rem;
+.error .page-content h1 {
+    font-size: 3.5rem;
     font-weight: var(--strong-font-weight);
 }
 
-.error-msg {
-    color: var(--dark-grey);
-    font-size: 1.25rem;
-    font-weight: var(--strong-font-weight);
+.error .page-content h4 {
+    color: var(--light-grey);
+    font-weight: var(--regular-font-weight);
+    animation: type .5s alternate infinite;
 }
 
-.back-to-page {
-    font-size: var(--larger-font-size);
-}
-
-.login-error-msg {
-    font-size: var(--large-font-size);
-    color: var(--light-red);
+@keyframes type {
+    from {
+        box-shadow: inset -3px 0px 0px #888;
+    }
+    to {
+        box-shadow: inset -3px 0px 0px transparent;
+    }
 }

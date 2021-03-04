@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- css -->
+    <th:block th:replace="layout/css.html"></th:block>
+
+    <title th:if="!${maintenanceDto.idx}" th:text="${@environment.getProperty('title')} + ' | Maintenance Register'"></title>
+    <title th:if="${maintenanceDto.idx}" th:text="${@environment.getProperty('title')} + ' | Maintenance Update'"></title>
+</head>
+<body>
+<div class="d-flex" id="wrapper">
+    <!-- sidebar -->
+    <div th:replace="layout/sidebar::sidebar"></div>
+
+    <div id="page-content-wrapper">
+        <!-- header -->
+        <div th:replace="layout/header::header"></div>
+
+        <div class="container-fluid">
+            <form name="form" id="form" th:object="${maintenanceDto}" action="#">
+                <div class="page-header breadcrumbs">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 th:if="!*{idx}">Maintenance Register</h2>
+                        <h2 th:if="*{idx}">Maintenance Update</h2>
+                        <ol>
+                            <li>Home</li>
+                            <li th:if="!*{idx}">Maintenance Register</li>
+                            <li th:if="*{idx}">Maintenance Update</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div id="loading">
+                    <img th:src="@{/images/loading.gif}" alt="Loading…"/>
+                </div>
+
+                <div class="page-content">
+                    <table class="table mobile-table-form mt-4">
+                        <colgroup>
+                            <col width="17.5%"/>
+                            <col width="82.5%"/>
+                        </colgroup>
+
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Maintenance Information</th>
+                        </tr>
+                        <tr>
+                            <th>Title<span class="required-field">*</span></th>
+                            <td><input type="text" name="title" class="form-control form-control-sm" th:value="*{title}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Maintenance Status</th>
+                            <td>
+                                <select class="custom-select custom-select-sm" name="maintenanceStatus" th:field="*{maintenanceStatus}">
+                                    <option th:value="REQUIREMENT">Requirement</option>
+                                    <option th:value="PROGRESSING">Progressing</option>
+                                    <option th:value="COMPLETED">Completed</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div name="content" id="content" th:utext="*{content}"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Attached File</th>
+                            <td>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="file" name="file" multiple>
+                                    <label class="custom-file-label" for="file">Choose file.</label>
+                                </div>
+                                <div id="fileDrop" class="fileDrop mt-2">
+                                    <strong>Drop files here.</strong>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Total file size</th>
+                            <td>
+                                <div><span id="totalFileSize">0MB</span>, Up to 50MB</div>
+                            </td>
+                        <tr>
+                            <th>Upload Attached File</th>
+                            <td>
+                                <div id="attachedFileList"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Uploaded Attached File</th>
+                            <td>
+                                <div id="uploadedAttachedFileList" th:each="attachedFile : *{attachedFileList}">
+                                    <div th:id="imgData + ${attachedFileStat.index}">
+                                        <span th:text="${attachedFile.fileName} + ',&nbsp;' + 'File Size: ' + ${attachedFile.fileSize}"></span>
+                                        <!-- &nbsp; skip -->
+                                        <i th:attr="onclick=|deleteFile('${attachedFileStat.index}','${attachedFile.idx}','${attachedFile.savedFileName}')|" class="far fa-times-circle"></i>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Additional Information</th>
+                        </tr>
+                        <tr>
+                            <th>Active Status</th>
+                            <td>
+                                <select class="custom-select custom-select-sm" name="activeStatus" th:field="*{activeStatus}">
+                                    <option th:value="ACTIVE">Active</option>
+                                    <option th:value="INACTIVE">Inactive</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Created Date</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Last Modified Date</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Created By</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{createdBy}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Last Modified By</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{lastModifiedBy}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Views</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{views}"/></td>
+                        </tr>
+                        <tr th:if="!*{idx}">
+                            <td colspan="2" class="text-right">
+                                <i class="fas fa-exclamation" style="color: var(--main-red)"></i> &nbsp; Email will send to admin or developer that registered in 'Email page'.
+                                <div class="mt-1">
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <input type="radio" name="receiverType" value="NONE" class="custom-control-input" id="none" checked>
+                                        <label class="custom-control-label" for="none">None</label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <input type="radio" name="receiverType" value="ADMIN" class="custom-control-input" id="admin">
+                                        <label class="custom-control-label" for="admin">Admin</label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <input type="radio" name="receiverType" value="DEVELOPER" class="custom-control-input" id="developer">
+                                        <label class="custom-control-label" for="developer">Developer</label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <input type="radio" name="receiverType" value="ALL" class="custom-control-input" id="all">
+                                        <label class="custom-control-label" for="all">All</label>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="10"></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="row justify-content-between mt-4 mb-4">
+                    <div class="col-auto">
+                        <a href="/maintenance/list" class="btn btn-sm btn-secondary">Move to List</a>
+                    </div>
+                    <div class="col-auto ml-2">
+                        <button th:if="!*{idx}" id="insert" type="button" class="btn-main btn-sm">Register</button>
+                        <button th:if="*{idx}" id="update" type="button" class="btn btn-sm btn-info">Update</button>
+                    </div>
+                </div>
+
+                <!-- input type="hidden" -->
+                <input type="hidden" name="idx" th:value="*{idx}"/>
+                <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
+                <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- footer -->
+<div th:replace="layout/footer::footer"></div>
+
+<!-- script file -->
+<th:block th:replace="layout/script.html"></th:block>
+
+<!-- javascript -->
+<script th:src="@{/js/ckeditor-editor-init.js}"></script>
+<script th:src="@{/js/file-upload/multiple-file-upload.js}"></script>
+
+<script th:inline="javascript">
+    function deleteMaintenance(maintenanceIdx) {
+        $.ajax({
+            url: moduleAppApiAddress + "/api/maintenances/" + maintenanceIdx,
+            type: "delete",
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
+            });
+    }
+</script>
+
+<script th:if="!${maintenanceDto?.idx}">
+    $("#insert").click(async function () {
+        // validation (input tag mame, length or size)
+        if (!(validateByLengthAndBlank("title", 255) && validateByEditor(editor.getData(), 16777215))) {
+            return false;
+        }
+
+        // duplicate submit check
+        if (duplicateSubmitCheck()) return false;
+
+        $('#loading').show();
+
+        var jsonData = $("#form").serializeObject();
+        jsonData.content = editor.getData();
+        var maintenanceIdx;
+
+        $.ajax({
+            url: moduleAppApiAddress + "/api/maintenances",
+            type: "post",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                maintenanceIdx = msg;
+                exit = false;
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
+                exit = true;
+                $('#loading').hide();
+            });
+
+        if (exit) return false;
+
+        // 파일 업로드
+        var formData = new FormData();
+
+        for (var i = 0; i < insertFileArray.length; i++) {
+            formData.append("files", insertFileArray[i]);
+        }
+
+        formData.append("idx", maintenanceIdx);
+        formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
+
+        $.ajax({
+            url: moduleAppApiAddress + "/api/maintenances/attachedFile",
+            type: "post",
+            data: formData,
+            dataType: "text",
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            async: false,
+        })
+            .done(function (msg) {
+                localStorage.setItem("result", "/maintenance/register-success");
+                location.href = "/maintenance?idx=" + maintenanceIdx;
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
+                deleteMaintenance(maintenanceIdx);
+                $('#loading').hide();
+            });
+    });
+</script>
+
+<script th:if="${maintenanceDto?.idx}" th:inline="javascript">
+    $("#update").click(function () {
+        // validation (input tag mame, length or size)
+        if (!(validateByLengthAndBlank("title", 255) && validateByEditor(editor.getData(), 16777215))) {
+            return false;
+        }
+
+        // duplicate submit check
+        if (duplicateSubmitCheck()) return false;
+
+        var jsonData = $("#form").serializeObject();
+        jsonData.content = editor.getData();
+        var maintenanceIdx = document.getElementsByName("idx")[0].value;
+
+        $.ajax({
+            url: moduleAppApiAddress + "/api/maintenances/" + maintenanceIdx,
+            type: "put",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                exit = false;
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
+                exit = true;
+            });
+
+        if (exit) return false;
+
+        // 만일 파일이 수정되지 않은 경우 '파일 업로드' 및 '파일 삭제'를 수행하지 않음
+        if (insertFileArray.length == 0 && deleteFileArray.length == 0) {
+            localStorage.setItem("result", "/maintenance/update-success");
+            location.href = "/maintenance?idx=" + maintenanceIdx;
+
+            return true;
+        }
+
+        // 파일 삭제
+        if (deleteFileArray.length > 0) {
+            $.ajax({
+                url: moduleAppApiAddress + "/api/maintenances/attachedFile",
+                type: "delete",
+                data: JSON.stringify(deleteFileArray),
+                contentType: "application/json",
+                async: false,
+            })
+                .done(function (msg) {
+                    exit = false;
+                })
+                .fail(function (msg) {
+                    parseErrorMsg(msg);
+                    duplicateSubmitFlag = false;
+                    exit = true;
+                });
+        }
+
+        if (exit) return false;
+
+        if (insertFileArray.length <= 0) {
+            localStorage.setItem("result", "/maintenance/update-success");
+            location.href = "/maintenance?idx=" + maintenanceIdx;
+
+            return true;
+        }
+
+        // 파일 업로드
+        var formData = new FormData();
+
+        for (var i = 0; i < insertFileArray.length; i++) {
+            formData.append("files", insertFileArray[i]);
+        }
+
+        formData.append("idx", maintenanceIdx);
+        formData.append("createdBy", document.getElementsByName("createdBy")[0].value);
+
+        $.ajax({
+            url: moduleAppApiAddress + "/api/maintenances/attachedFile",
+            type: "post",
+            data: formData,
+            dataType: "text",
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            async: false,
+        })
+            .done(function (msg) {
+                localStorage.setItem("result", "/maintenance/update-success");
+                location.href = "/maintenance?idx=" + maintenanceIdx;
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
+            })
+
+    });
+</script>
+
+</body>
+</html>

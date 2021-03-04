@@ -30,6 +30,10 @@
                     </div>
                 </div>
 
+                <div id="loading">
+                    <img th:src="@{/images/loading.gif}" alt="Loading…"/>
+                </div>
+
                 <div class="page-content">
                     <table class="table mobile-table-form mt-4">
                         <colgroup>
@@ -72,7 +76,7 @@
                                         <label class="custom-control-label" for="mainPageCheck"><strong>Set announcement and priority.</strong></label>
                                     </div>
                                 </div>
-                                <select class="custom-select custom-select-sm main-page-priority mt-2" name="mainPagePriority" th:field="*{mainPagePriority}"
+                                <select class="custom-select custom-select-sm mt-2" name="mainPagePriority" th:field="*{mainPagePriority}"
                                         th:style="*{mainPagePriority >= 1 && mainPagePriority <= 10} ? 'display: inline;' : 'display: none'">
                                     <option th:value="11" th:text="'Don\'t show main page.'" th:style="'display: none;'" selected></option>
                                 </select>

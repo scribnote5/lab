@@ -1,6 +1,7 @@
 package kr.ac.univ.setting.dto;
 
 import kr.ac.univ.common.dto.CommonDto;
+import kr.ac.univ.seminar.domain.SeminarAttachedFile;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -51,4 +52,7 @@ public class SettingDto extends CommonDto {
 
     @Size(max = 255, message = "The project count content must be less than 255 characters.")
     private String projectCountContent;
+
+    /* Attached File */
+    private List<SeminarAttachedFile> attachedFileList = new ArrayList<SeminarAttachedFile>();
 }

@@ -57,11 +57,16 @@
  */
 .general-img-preview {
     width: auto;
-    height: 10rem !important;
+    height: 12.5rem !important;
 }
 
 .user-img-preview {
-    width: 200px;
+    width: 250px;
+    height: auto;
+}
+
+.logo-preview {
+    width: 175px;
     height: auto;
 }
 

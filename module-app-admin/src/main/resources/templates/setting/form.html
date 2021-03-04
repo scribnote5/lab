@@ -30,6 +30,10 @@
                     </div>
                 </div>
 
+                <div id="loading">
+                    <img th:src="@{/images/loading.gif}" alt="Loading…"/>
+                </div>
+
                 <div class="mt-5">
                     <table class="table">
                         <colgroup>
@@ -39,6 +43,31 @@
                         <tr>
                             <th colspan="2" class="sub-item-title">Setting Information</th>
                         </tr>
+                        <tr>
+                            <th>Logo</th>
+                            <td>
+                                <div>
+                                    <i class="fas fa-exclamation" style="color: var(--main-red)"></i> &nbsp; Logo file will save as 'logo.png'.
+                                </div>
+                                <div class="custom-file mt-1">
+                                    <input type="file" class="custom-file-input form-control-sm" id="file" name="file">
+                                    <label class="custom-file-label col-form-label-sm" for="file">Choose file.</label>
+                                </div>
+                                <div class="mt-1">
+                                    <strong>Upload Logo File:</strong>
+                                    <span id="imgData"></span>
+                                </div>
+                                <div class="mt-2">
+                                    <a id="imgPreviewLink" th:href="@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-logo|}"
+                                       data-gall="logo" class="venobox" title="Logo">
+                                        <img id="imgPreview" class="img-thumbnail user-img-preview float-right"
+                                             th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-logo|}"
+                                             th:onerror="'this.src=\'' + @{/images/no-preview-available.jpg} + '\';'"/>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+
                         <tr>
                             <th>Lab Address</th>
                             <td><input type="text" name="labAddress" id="labAddress" class="form-control form-control-sm" th:value="*{labAddress}"/></td>
@@ -82,6 +111,7 @@
                             <th>Project Count Content</th>
                             <td><input type="text" name="projectCountContent" id="projectCountContent" class="form-control form-control-sm" th:value="*{projectCountContent}"/></td>
                         </tr>
+
                         <tr>
                             <th colspan="2" class="sub-item-title">Additional Information</th>
                         </tr>
@@ -123,7 +153,7 @@
                 <div class="row justify-content-between mt-4 mb-4">
                     <div class="col-auto"></div>
                     <div class="col-auto ml-2">
-                        <button th:if="*{idx}" id="update" type="button" class="btn btn-info">Update</button>
+                        <button th:if="*{idx}" id="update" type="button" class="btn btn-sm btn-info">Update</button>
                     </div>
                 </div>
 
@@ -143,10 +173,15 @@
 <th:block th:replace="layout/script.html"></th:block>
 
 <!-- javascript -->
+<script th:src="@{/js/file-upload/single-img-file-upload-input.js}"></script>
+
 <script th:if="${settingDto?.idx}" th:inline="javascript">
     $("#update").click(function () {
         var jsonData = $("#form").serializeObject();
         var settingIdx = document.getElementsByName("idx")[0].value;
+
+        // duplicate submit check
+        if (duplicateSubmitCheck()) return false;
 
         $.ajax({
             url: moduleAppApiAddress + "/api/settings/" + settingIdx,
@@ -157,11 +192,43 @@
             async: false,
         })
             .done(function (msg) {
-                localStorage.setItem("result", "/setting/update-success");
-                location.href = "/setting?idx=" + settingIdx;
+                // 만일 첨부 파일이 수정되지 않은 경우 '파일 업로드' 및 '파일 삭제'를 수행하지 않음
+                if (typeof document.getElementsByName("file")[0].files[0] == "undefined") {
+                    localStorage.setItem("result", "/setting/update-success");
+                    location.href = "/setting?idx=" + settingIdx;
+                    exit = true;
+                } else {
+                    exit = false;
+                }
             })
             .fail(function (msg) {
                 parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
+                exit = true;
+            });
+
+        if (exit) return true;
+
+        // 파일 업로드
+        var formData = new FormData();
+
+        formData.append("files", document.getElementsByName("file")[0].files[0]);
+        $.ajax({
+            url: moduleAppApiAddress + "/api/settings/attachedFile",
+            type: "post",
+            data: formData,
+            dataType: "text",
+            enctype: "multipart/form-data",
+            processData: false,
+            contentType: false,
+        })
+            .done(function (msg) {
+                localStorage.setItem("result", "/setting/update-success");
+                location.href = "/setting?idx=1";
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
             });
     });
 </script>

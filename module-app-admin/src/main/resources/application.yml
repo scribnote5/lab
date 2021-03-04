@@ -13,12 +13,17 @@ spring:
         default-page-size: 15
 module:
   name: module-app-admin
+
 title: ESLAB
+
 server:
   servlet:
     session:
       cookie:
         name: module-app-admin
+email:
+  sender: eslab533
+  password: eslabeslab533
 ---
 spring:
   profiles: test
@@ -57,8 +62,12 @@ spring:
         maintainTimeStats: false
 server:
   port: 8082
+module-app-web:
+  address: http://localhost:8080
 module-app-api:
   address: http://localhost:8081
+module-app-admin:
+  address: http://localhost:8082
 ---
 spring:
   profiles: local
@@ -91,8 +100,12 @@ spring:
         maintainTimeStats: false
 server:
   port: 8082
+module-app-web:
+  address: http://localhost:8080
 module-app-api:
   address: http://localhost:8081
+module-app-admin:
+  address: http://localhost:8082
 ---
 spring:
   profiles: dev
@@ -125,5 +138,9 @@ spring:
         maintainTimeStats: false
 server:
   port: 8082
+module-app-web:
+  address: http://203.234.19.85:8080
 module-app-api:
   address: http://203.234.19.85:8081
+module-app-admin:
+  address: http://203.234.19.85:8082

@@ -23,7 +23,7 @@
                 </div>
             </div>
 
-            <div id="loading" class="row justify-content-center">
+            <div id="loading">
                 <img th:src="@{/images/loading.gif}" alt="Loading…"/>
             </div>
 
@@ -104,7 +104,7 @@
                             <div class="content" th:utext="*{content}"></div>
                         </td>
                     </tr>
-                    <tr th:if="!*{#lists.isEmpty(attachedFileList)}">
+                    <tr>
                         <th class="d-none d-sm-none d-md-none d-lg-table-cell">Uploaded Attached File</th>
                         <td colspan="2">
                             <strong class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline mobile-default">Uploaded Attached File</strong>

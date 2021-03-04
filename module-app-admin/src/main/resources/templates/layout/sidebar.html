@@ -3,11 +3,13 @@
 <!-- sidebar -->
 <div th:fragment="sidebar">
     <div id="sidebar-wrapper">
-        <div class="sidebar-heading bg-light border-right">
-            <a href="/main/home">
-                <img src="/images/main-logo.png" class="logo">
-            </a>
-        </div>
+        <a href="/main/home">
+            <div class="sidebar-heading bg-light border-right ">
+                <img class="logo"
+                     th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-logo|}"
+                     th:onerror="'this.src=\'' + @{/images/no-preview-available.jpg} + '\';'"/>
+            </div>
+        </a>
 
         <div class="sidebar-list">
             <span class="dropdown-btn">

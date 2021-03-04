@@ -26,7 +26,7 @@
                 </div>
             </div>
 
-            <div id="loading" class="row justify-content-center">
+            <div id="loading">
                 <img th:src="@{/images/loading.gif}" alt="Loading…"/>
             </div>
 
@@ -74,7 +74,7 @@
                                 <strong>Uploaded Photo File:</strong>
                                 <span th:if="*{attachedFileList.size()} == 0" id="imgData" th:text="No + ' ' + file."></span>
                                 <span th:if="*{attachedFileList.size()} != 0" id="imgData"
-                                      th:attr="onclick=|location.href='${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/*{attachedFileList[0].savedFileName}'|"
+                                      th:attr="onclick=|location.href='${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-image/*{attachedFileList[0].savedFileName}'|"
                                       th:text="*{attachedFileList[0].fileName} + ',&nbsp;' + 'File size: ' + *{attachedFileList[0].fileSize}"></span>
                             </div>
                             <div class="mt-2">
@@ -222,7 +222,7 @@
                     </tr>
                     <tr th:if="!*{idx}">
                         <td colspan="2" class="text-right">
-                            <span class="notice"><i class="fas fa-exclamation"></i> &nbsp; You can use the account if the manager approves it.</span>
+                            <span><i class="fas fa-exclamation" style="color: var(--main-red)"></i> &nbsp; You can use the account if the manager approves it.</span>
                         </td>
                     </tr>
                     <tr>

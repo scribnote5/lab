@@ -68,5 +68,4 @@ public class ProjectRestController {
 
         return new ResponseEntity<>("{}", HttpStatus.OK);
     }
-
 }

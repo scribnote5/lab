@@ -1,12 +1,13 @@
 package kr.ac.univ.noticeBoard.service;
 
-import kr.ac.univ.util.AccessCheck;
+import kr.ac.univ.maintenance.dto.mapper.MaintenanceMapper;
 import kr.ac.univ.noticeBoard.domain.NoticeBoardComment;
 import kr.ac.univ.noticeBoard.dto.NoticeBoardCommentDto;
 import kr.ac.univ.noticeBoard.dto.mapper.NoticeBoardCommentMapper;
 import kr.ac.univ.noticeBoard.repository.NoticeBoardCommentRepository;
 import kr.ac.univ.noticeBoard.repository.NoticeBoardCommentRepositoryImpl;
 import kr.ac.univ.user.repository.UserRepository;
+import kr.ac.univ.util.AccessCheck;
 import kr.ac.univ.util.NewIconCheck;
 import org.springframework.stereotype.Service;
 
@@ -26,13 +27,9 @@ public class NoticeBoardCommentService {
     }
 
     public List<NoticeBoardCommentDto> findAllByNoticeBoardIdxOrderByCreatedDateDesc(Long noticeBoardIdx) {
-        List<NoticeBoardComment> noticeBoardCommentList = null;
         List<NoticeBoardCommentDto> noticeBoardCommentDtoList = null;
 
-        noticeBoardCommentList = noticeBoardCommentRepository.findAllByNoticeBoardIdxOrderByCreatedDateDesc(noticeBoardIdx);
-
-        // NoticeBoard -> NoticeBoardDto
-        noticeBoardCommentDtoList = NoticeBoardCommentMapper.INSTANCE.toDto(noticeBoardCommentList);
+        noticeBoardCommentDtoList = NoticeBoardCommentMapper.INSTANCE.toDto(noticeBoardCommentRepository.findAllByNoticeBoardIdxOrderByCreatedDateDesc(noticeBoardIdx));
 
         for (NoticeBoardCommentDto noticeBoardCommentDto : noticeBoardCommentDtoList) {
             // NewIcon 판별
@@ -46,9 +43,8 @@ public class NoticeBoardCommentService {
         return noticeBoardCommentDtoList;
     }
 
-    public Long insertNoticeBoardComment(NoticeBoardComment noticeBoardComment) {
-
-        return noticeBoardCommentRepository.save(noticeBoardComment).getIdx();
+    public Long insertNoticeBoardComment(NoticeBoardCommentDto noticeBoardCommentDto) {
+        return noticeBoardCommentRepository.save(NoticeBoardCommentMapper.INSTANCE.toEntity(noticeBoardCommentDto)).getIdx();
     }
 
     @Transactional

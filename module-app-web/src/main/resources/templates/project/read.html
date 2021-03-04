@@ -23,7 +23,11 @@
                 </div>
             </div>
 
-            <div data-aos="fade-up">
+            <div id="loading">
+                <img th:src="@{/images/loading.gif}" alt="Loading…"/>
+            </div>
+
+            <div class="page-content" data-aos="fade-up">
                 <table class="table mobile-table-read mt-4">
                     <colgroup>
                         <col width="17.5%"/>
@@ -107,7 +111,7 @@
                         </td>
                     </tr>
 
-                    <tr th:if="!*{#lists.isEmpty(attachedFileList)}">
+                    <tr>
                         <th class="d-none d-sm-none d-md-none d-lg-table-cell">Uploaded Attached File</th>
                         <td colspan="2">
                             <strong class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline mobile-default">Uploaded Attached File</strong>

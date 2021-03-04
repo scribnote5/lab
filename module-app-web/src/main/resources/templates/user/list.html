@@ -23,7 +23,7 @@
                 </div>
             </div>
 
-            <div id="loading" class="row justify-content-center">
+            <div id="loading">
                 <img th:src="@{/images/loading.gif}" alt="Loading…"/>
             </div>
 
@@ -53,7 +53,7 @@
                                 <a th:href="'/user?idx='+${userDto.idx}">
                                     <img th:if="${userDto.attachedFileList.size()} == 0" th:attr="src=@{/images/avatar.png}" class="member-photo"/>
                                     <img th:if="${userDto.attachedFileList.size()} != 0"
-                                         th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/${userDto.attachedFileList[0].savedFileName}|}"
+                                         th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-image/${userDto.attachedFileList[0].savedFileName}|}"
                                          class="member-photo"/>
                                 </a>
                                 <div class="social">

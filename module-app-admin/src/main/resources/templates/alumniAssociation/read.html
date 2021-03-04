@@ -28,8 +28,12 @@
                     </div>
                 </div>
 
-                <div class="mt-5">
-                    <table class="table">
+                <div id="loading">
+                    <img th:src="@{/images/loading.gif}" alt="Loading…"/>
+                </div>
+
+                <div class="page-content">
+                    <table class="table mobile-table-read mt-4">
                         <colgroup>
                             <col width="17.5%"/>
                             <col width="82.5%"/>
@@ -44,7 +48,7 @@
                         </tr>
                         <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Main Page Priority</th>
-                            <td class="main-page-priority" th:text="*{mainPagePriority == 11} ? 'This post not shown on the main page.' : *{mainPagePriority}"></td>
+                            <td th:text="*{mainPagePriority == 11} ? 'This post not shown on the main page.' : *{mainPagePriority}"></td>
                         </tr>
 
                         <!-- Mobile -->

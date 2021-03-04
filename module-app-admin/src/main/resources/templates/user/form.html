@@ -30,6 +30,10 @@
                     </div>
                 </div>
 
+                <div id="loading">
+                    <img th:src="@{/images/loading.gif}" alt="Loading…"/>
+                </div>
+
                 <table class="table mobile-table-form">
                     <div class="mt-4 mb-2 text-right">
                         <span class="required-field">*</span>: Required field.<br>
@@ -548,6 +552,10 @@
             return false;
         }
 
+        // duplicate submit check
+        if (duplicateSubmitCheck()) return false;
+
+
         // 회원 수정
         var jsonData = $("#form").serializeObject();
         var userIdx = +document.getElementsByName("idx")[0].value;
@@ -572,6 +580,7 @@
             })
             .fail(function (msg) {
                 parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
                 exit = true;
             })
 
@@ -589,6 +598,7 @@
             })
             .fail(function (msg) {
                 parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
                 exit = true;
             });
 
@@ -616,7 +626,7 @@
             })
             .fail(function (msg) {
                 parseErrorMsg(msg);
-                deleteUser(userIdx);
+                duplicateSubmitFlag = false;
             });
     });
 </script>
