@@ -16,7 +16,7 @@
         <section class="introduction d-flex align-items-center">
             <div class="container">
                 <div class="row">
-                    <div class="introduction-content-wrapper col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center" data-aos="fade-right">
+                    <div class="introduction-content-wrapper col-lg-7 order-2 order-lg-1 d-flex flex-column justify-content-center" data-aos="fade-right">
                         <h1 th:text="${#strings.isEmpty(introductionDto)} ? 'No title.' : ${introductionDto.title}"></h1>
                         <h5 th:utext="${#strings.isEmpty(introductionDto)} ? 'No content.' : ${#strings.replace(introductionDto.content, T(System).getProperty('line.separator'), '&lt;br /&gt;')}"></h5>
                         <div>
@@ -24,7 +24,7 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-left">
+                    <div class="col-lg-5 order-1 order-lg-2" data-aos="fade-left">
                         <div class="owl-carousel introduction-image-carousel">
                             <div th:each="introductionImageDto: ${introductionImageDtoList}">
                                 <img th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-image/${introductionImageDto.attachedFileList[0].savedFileName}|}">
@@ -45,7 +45,7 @@
 
                 <div class="section-content" data-aos="fade-up">
                     <div class="row justify-content-center">
-                        <div th:each="researchFieldDto: ${researchFieldDtoList}" class="col-lg-6 col-md-12 d-flex">
+                        <div th:each="researchFieldDto: ${researchFieldDtoList}" class="col-lg-4 col-md-6 col-msm-12 d-flex">
                             <div class="card"
                                  th:style="!${#lists.isEmpty(researchFieldDto.attachedFileList)} ? 'background-image:url(' + ${@environment.getProperty('module-app-api.address')} + '/api/attachedFiles/view-image/' + ${researchFieldDto.attachedFileList[0].savedFileName} + ');' : 'background-color: rgb(255, 255, 255)'">
                                 <div class="card-body">

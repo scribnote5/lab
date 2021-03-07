@@ -38,8 +38,7 @@
                             <col width="82.5%"/>
                         </colgroup>
 
-
-                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                        <tr>
                             <th colspan="2" class="sub-item-title">Setting Information</th>
                         </tr>
                         <!-- Common -->
@@ -62,7 +61,7 @@
                         </tr>
 
                         <!-- Desktop -->
-                        <tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Lab Address</th>
                             <td th:text="*{labAddress}"></td>
                         </tr>
@@ -100,7 +99,7 @@
 
                                 <strong class="mobile-default">Phone Number: </strong><span th:text="*{phoneNumber}" class="mobile-default"></span><br>
 
-                                <strong class="mobile-default">Lab Start Date: </strong><span th:text="*{labStartDate}" class="mobile-default"></span>
+                                <strong class="mobile-default">Lab Start Date: </strong><span th:text="*{#temporals.format(labStartDate,'yyyy-MM-dd')}" class="mobile-default"></span>
                             </td>
                         </tr>
 

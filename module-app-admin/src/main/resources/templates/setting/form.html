@@ -34,12 +34,13 @@
                     <img th:src="@{/images/loading.gif}" alt="Loading…"/>
                 </div>
 
-                <div class="mt-5">
-                    <table class="table">
+                <div class="page-content">
+                    <table class="table mobile-table-form mt-4">
                         <colgroup>
                             <col width="17.5%"/>
                             <col width="82.5%"/>
                         </colgroup>
+
                         <tr>
                             <th colspan="2" class="sub-item-title">Setting Information</th>
                         </tr>
@@ -67,49 +68,48 @@
                                 </div>
                             </td>
                         </tr>
-
                         <tr>
                             <th>Lab Address</th>
-                            <td><input type="text" name="labAddress" id="labAddress" class="form-control form-control-sm" th:value="*{labAddress}"/></td>
+                            <td><input type="text" name="labAddress" class="form-control form-control-sm" th:value="*{labAddress}"/></td>
                         </tr>
                         <tr>
                             <th>Email Recipient</th>
-                            <td><input type="text" name="emailRecipient" id="emailRecipient" class="form-control form-control-sm" th:value="*{emailRecipient}"/></td>
+                            <td><input type="text" name="emailRecipient" class="form-control form-control-sm" th:value="*{emailRecipient}"/></td>
                         </tr>
                         <tr>
                             <th>Email Address</th>
-                            <td><input type="text" name="emailAddress" id="emailAddress" class="form-control form-control-sm" th:value="*{emailAddress}"/></td>
+                            <td><input type="text" name="emailAddress" class="form-control form-control-sm" th:value="*{emailAddress}"/></td>
                         </tr>
                         <tr>
                             <th>Callee</th>
-                            <td><input type="text" name="callee" id="callee" class="form-control form-control-sm" th:value="*{callee}"/></td>
+                            <td><input type="text" name="callee" class="form-control form-control-sm" th:value="*{callee}"/></td>
                         </tr>
                         <tr>
                             <th>Phone Number</th>
-                            <td><input type="text" name="phoneNumber" id="phoneNumber" class="form-control form-control-sm" th:value="*{phoneNumber}"/></td>
+                            <td><input type="text" name="phoneNumber" class="form-control form-control-sm" th:value="*{phoneNumber}"/></td>
                         </tr>
                         <tr>
                             <th>Lab Start Date</th>
-                            <td><input type="date" name="labStartDate" id="labStartDate" class="form-control form-control-sm" th:value="*{labStartDate}"/></td>
+                            <td><input type="date" name="labStartDate" class="form-control form-control-sm" th:value="*{labStartDate}"/></td>
                         </tr>
                         <tr>
                             <th colspan="2" class="sub-item-title">About Us Content</th>
                         </tr>
                         <tr>
                             <th>Maintenance Years Count Content</th>
-                            <td><input type="text" name="labMaintenanceYearsCountContent" id="labMaintenanceYearsCountContent" class="form-control form-control-sm" th:value="*{labMaintenanceYearsCountContent}"/></td>
+                            <td><input type="text" name="labMaintenanceYearsCountContent" class="form-control form-control-sm" th:value="*{labMaintenanceYearsCountContent}"/></td>
                         </tr>
                         <tr>
                             <th>User Count Content</th>
-                            <td><input type="text" name="userCountContent" id="userCountContent" class="form-control form-control-sm" th:value="*{userCountContent}"/></td>
+                            <td><input type="text" name="userCountContent" class="form-control form-control-sm" th:value="*{userCountContent}"/></td>
                         </tr>
                         <tr>
                             <th>Publication Count Content</th>
-                            <td><input type="text" name="publicationCountContent" id="publicationCountContent" class="form-control form-control-sm" th:value="*{publicationCountContent}"/></td>
+                            <td><input type="text" name="publicationCountContent" class="form-control form-control-sm" th:value="*{publicationCountContent}"/></td>
                         </tr>
                         <tr>
                             <th>Project Count Content</th>
-                            <td><input type="text" name="projectCountContent" id="projectCountContent" class="form-control form-control-sm" th:value="*{projectCountContent}"/></td>
+                            <td><input type="text" name="projectCountContent" class="form-control form-control-sm" th:value="*{projectCountContent}"/></td>
                         </tr>
 
                         <tr>
@@ -148,19 +148,19 @@
                             <td colspan="2"></td>
                         </tr>
                     </table>
-                </div>
 
-                <div class="row justify-content-between mt-4 mb-4">
-                    <div class="col-auto"></div>
-                    <div class="col-auto ml-2">
-                        <button th:if="*{idx}" id="update" type="button" class="btn btn-sm btn-info">Update</button>
+                    <div class="row justify-content-between mt-4 mb-4">
+                        <div class="col-auto"></div>
+                        <div class="col-auto ml-2">
+                            <button th:if="*{idx}" id="update" type="button" class="btn btn-sm btn-info">Update</button>
+                        </div>
                     </div>
-                </div>
 
-                <!-- input type="hidden" -->
-                <input type="hidden" name="idx" th:value="*{idx}"/>
-                <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
-                <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
+                    <!-- input type="hidden" -->
+                    <input type="hidden" name="idx" th:value="*{idx}"/>
+                    <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
+                    <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
+                </div>
             </form>
         </div>
     </div>

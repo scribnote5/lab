@@ -121,22 +121,22 @@
                             <td colspan="10"></td>
                         </tr>
                     </table>
-                </div>
 
-                <div class="row justify-content-between mt-4 mb-4">
-                    <div class="col-auto">
-                        <a href="/learn-more-read/list" class="btn btn-sm btn-secondary col-auto">Move to List</a>
+                    <div class="row justify-content-between mt-4 mb-4">
+                        <div class="col-auto">
+                            <a href="/learn-more-read/list" class="btn btn-sm btn-secondary col-auto">Move to List</a>
+                        </div>
+                        <div class="col-auto ml-2">
+                            <button th:if="!*{idx}" id="insert" type="button" class="btn-main btn-sm">Register</button>
+                            <button th:if="*{idx}" id="update" type="button" class="btn btn-sm btn-info">Update</button>
+                        </div>
                     </div>
-                    <div class="col-auto ml-2">
-                        <button th:if="!*{idx}" id="insert" type="button" class="btn-main btn-sm">Register</button>
-                        <button th:if="*{idx}" id="update" type="button" class="btn btn-sm btn-info">Update</button>
-                    </div>
-                </div>
 
-                <!-- input type="hidden" -->
-                <input type="hidden" name="idx" th:value="*{idx}"/>
-                <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
-                <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
+                    <!-- input type="hidden" -->
+                    <input type="hidden" name="idx" th:value="*{idx}"/>
+                    <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
+                    <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
+                </div>
             </form>
         </div>
     </div>

@@ -4,8 +4,8 @@
     <!-- css -->
     <th:block th:replace="layout/css.html"></th:block>
 
-    <title th:if="!${guestBookDto.idx}" th:text="${@environment.getProperty('title')} + ' | Notice Board Register'"></title>
-    <title th:if="${guestBookDto.idx}" th:text="${@environment.getProperty('title')} + ' | Notice Board Update'"></title>
+    <title th:if="!${noticeBoardDto.idx}" th:text="${@environment.getProperty('title')} + ' | Notice Board Register'"></title>
+    <title th:if="${noticeBoardDto.idx}" th:text="${@environment.getProperty('title')} + ' | Notice Board Update'"></title>
 </head>
 <body>
 <div id="page-content-wrapper">
@@ -13,7 +13,7 @@
     <div th:replace="layout/header::header"></div>
 
     <div class="container">
-        <form name="form" id="form" th:object="${guestBookDto}" action="#">
+        <form name="form" id="form" th:object="${noticeBoardDto}" action="#">
             <div class="page-header breadcrumbs">
                 <div class="d-flex justify-content-between align-items-center" data-aos="fade-up">
                     <h2 th:if="!*{idx}">Notice Board Register</h2>
@@ -182,7 +182,7 @@
     }
 </script>
 
-<script th:if="!${guestBookDto?.idx}">
+<script th:if="!${noticeBoardDto?.idx}">
     $("#insert").click(function () {
         // validation (input tag mame, length or size)
         if (!(validateByLength("title", 255) && validateByEditor(editor.getData(), 16777215))) {
@@ -248,7 +248,7 @@
     });
 </script>
 
-<script th:if="${guestBookDto?.idx}" th:inline="javascript">
+<script th:if="${noticeBoardDto?.idx}" th:inline="javascript">
     $("#update").click(function () {
         // validation (input tag mame, length or size)
         if (!(validateByLength("title", 255) && validateByEditor(editor.getData(), 16777215))) {

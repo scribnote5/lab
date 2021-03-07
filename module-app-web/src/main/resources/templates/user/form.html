@@ -439,7 +439,7 @@
 
         // 회원 업로드
         var jsonData = $("#form").serializeObject();
-        jsonData.content = editor.getData();
+        jsonData.introduction = editor.getData();
         jsonData.createdBy = jsonData.username;
         jsonData.lastModifiedBy = jsonData.username;
         var userIdx = 0;
@@ -527,8 +527,8 @@
 
         // 회원 수정
         var jsonData = $("#form").serializeObject();
-        jsonData.content = editor.getData();
-        var userIdx = +document.getElementsByName("idx")[0].value;
+        jsonData.introduction = editor.getData();
+        var userIdx = document.getElementsByName("idx")[0].value;
 
         $.ajax({
             url: moduleAppApiAddress + "/api/users/" + userIdx,

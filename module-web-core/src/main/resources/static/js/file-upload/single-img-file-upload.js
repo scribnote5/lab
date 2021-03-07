@@ -51,6 +51,7 @@ function deleteFile(fileId, idx, savedFileName) {
 /* input tag event */
 $("#file").change(function () {
     var files = document.getElementsByName("file")[0].files;
+    document.getElementsByName("file")[0].files.value = null;
 
     // 업로드하는 파일 개수가 number개가 넘어가는 경우, 파일 업로드 불가
     if (!validateByFileNumber(files, 1)) {

@@ -45,6 +45,7 @@ function deleteFile(fileId, idx, savedFileName) {
 /* input tag event */
 $("#file").change(function () {
     var files = document.getElementsByName("file")[0].files;
+    document.getElementsByName("file")[0].files.value = null;
 
     for (var i = 0; i < files.length; i++) {
         if (validateFile(files[i])) {

@@ -59,7 +59,6 @@
                                     <option th:value="ACTIVE">Active</option>
                                     <option th:value="INACTIVE">Inactive</option>
                                 </select>
-
                             </td>
                         </tr>
                         <tr th:if="*{idx}">
@@ -96,12 +95,12 @@
                         <button th:if="!*{idx}" id="insert" type="button" class="btn-main btn-sm">Register</button>
                         <button th:if="*{idx}" id="update" type="button" class="btn btn-sm btn-info">Update</button>
                     </div>
-                </div>
 
-                <!-- input type="hidden" -->
-                <input type="hidden" name="idx" th:value="*{idx}"/>
-                <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
-                <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
+                    <!-- input type="hidden" -->
+                    <input type="hidden" name="idx" th:value="*{idx}"/>
+                    <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
+                    <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
+                </div>
             </form>
         </div>
     </div>

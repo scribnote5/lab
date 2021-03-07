@@ -98,6 +98,10 @@
     color:var(--light-grey);
 }
 
+.login-error-msg {
+    color: var(--main-red);
+}
+
 .login-card .login-btn {
     padding: 1rem 1.5rem;
     background-color: var(--main-black);
@@ -132,7 +136,6 @@
     font-size: 1.1rem;
     color: var(--darker-grey);
     margin-top: .25rem;
-   
 }
 
 .login-card-footer-nav a {

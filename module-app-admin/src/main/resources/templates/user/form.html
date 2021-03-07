@@ -34,248 +34,250 @@
                     <img th:src="@{/images/loading.gif}" alt="Loading…"/>
                 </div>
 
-                <table class="table mobile-table-form">
+                <div class="page-content">
                     <div class="mt-4 mb-2 text-right">
                         <span class="required-field">*</span>: Required field.<br>
                         <span class="user-page-show-field">*</span>: User page show field.
                     </div>
 
-                    <colgroup>
-                        <col width="17.5%"/>
-                        <col width="82.5%"/>
-                    </colgroup>
+                    <table class="table mobile-table-form">
+                        <colgroup>
+                            <col width="17.5%"/>
+                            <col width="82.5%"/>
+                        </colgroup>
 
-                    <tr>
-                        <th colspan="2" class="sub-item-title">Required Information</th>
-                    </tr>
-                    <tr>
-                        <th>ID<span class="required-field">*</span></th>
-                        <td>
-                            <input th:readonly="*{idx}" type="text" name="username" id="username" class="form-control form-control-sm mb-1" th:value="*{username}"/>
-                            <span id="usernameCheckResult" class="mt-2"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Password<span class="required-field">*</span></th>
-                        <td><input type="password" name="password" class="form-control form-control-sm" onchange="validatePassword()"/></td>
-                    </tr>
-                    <tr>
-                        <th>Password Check<span class="required-field">*</span></th>
-                        <td>
-                            <input type="password" name="checkPassword" onchange="validatePassword()" class="form-control form-control-sm mb-1"/>
-                            <span id="passwordCheckResult"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Photo<span class="user-page-show-field">*</span></th>
-                        <td>
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input form-control-sm" id="file" name="file">
-                                <label class="custom-file-label col-form-label-sm" for="file">Choose file.</label>
-                            </div>
-                            <div class="mt-1">
-                                <strong>Uploaded Photo File:</strong>
-                                <span th:if="*{attachedFileList.size()} == 0" id="imgData" th:text="No + ' ' + file."></span>
-                                <span th:if="*{attachedFileList.size()} != 0" id="imgData"
-                                      th:attr="onclick=|location.href='${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/*{attachedFileList[0].savedFileName}'|"
-                                      th:text="*{attachedFileList[0].fileName} + ',&nbsp;' + 'File size: ' + *{attachedFileList[0].fileSize}"></span>
-                            </div>
-                            <div class="mt-2">
-                                <img th:if="*{attachedFileList.size()} == 0" id="imgPreview" class="img-thumbnail user-img-preview float-right" th:attr="src=@{/images/no-preview-available.jpg}"/>
-                                <a th:if="*{attachedFileList.size()} != 0" id="imgPreviewLink" th:href="@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-image/*{attachedFileList[0].savedFileName}|}"
-                                   data-gall="userPhoto" class="venobox" th:title="*{englishName}">
-                                    <img id="imgPreview" class="img-thumbnail user-img-preview float-right"
-                                         th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-image/*{attachedFileList[0].savedFileName}|}"/>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Korean Name<span class="required-field">*</span><span class="user-page-show-field">*</span></th>
-                        <td><input type="text" name="koreanName" class="form-control form-control-sm" th:value="*{koreanName}"/></td>
-                    </tr>
-                    <tr>
-                        <th>English Name<span class="required-field">*</span><span class="user-page-show-field">*</span></th>
-                        <td><input type="text" name="englishName" class="form-control form-control-sm" th:value="*{englishName}"/></td>
-                    </tr>
-                    <tr>
-                        <th>User Type<span class="required-field">*</span><span class="user-page-show-field">*</span></th>
-                        <td>
-                            <select name="userType" th:field="*{userType}" class="form-control form-control-sm">
-                                <option th:value="A_FACULTY">Faculty</option>
-                                <option th:value="B_FULL_TIME_PHD">Ph.D. Full Time</option>
-                                <option th:value="C_FULL_TIME_MS">M.S. Full Time</option>
-                                <option th:value="D_PART_TIME_PHD">Ph.D. Part Time</option>
-                                <option th:value="E_PART_TIME_MS">M.S. Part Time</option>
-                                <option th:value="F_BS">B.S.</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>User Status<span class="required-field">*</span><span class="user-page-show-field">*</span></th>
-                        <td>
-                            <select name="userStatus" th:field="*{userStatus}" class="form-control form-control-sm">
-                                <option th:value="ATTENDING">Attending</option>
-                                <option th:value="GRADUATED">Graduated</option>
-                            </select>
-                        </td>
-                    </tr>
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Required Information</th>
+                        </tr>
+                        <tr>
+                            <th>ID<span class="required-field">*</span></th>
+                            <td>
+                                <input th:readonly="*{idx}" type="text" name="username" id="username" class="form-control form-control-sm mb-1" th:value="*{username}"/>
+                                <span id="usernameCheckResult" class="mt-2"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Password<span class="required-field">*</span></th>
+                            <td><input type="password" name="password" class="form-control form-control-sm" onchange="validatePassword()"/></td>
+                        </tr>
+                        <tr>
+                            <th>Password Check<span class="required-field">*</span></th>
+                            <td>
+                                <input type="password" name="checkPassword" onchange="validatePassword()" class="form-control form-control-sm mb-1"/>
+                                <span id="passwordCheckResult"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Photo<span class="user-page-show-field">*</span></th>
+                            <td>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input form-control-sm" id="file" name="file">
+                                    <label class="custom-file-label col-form-label-sm" for="file">Choose file.</label>
+                                </div>
+                                <div class="mt-1">
+                                    <strong>Uploaded Photo File:</strong>
+                                    <span th:if="*{attachedFileList.size()} == 0" id="imgData" th:text="No + ' ' + file."></span>
+                                    <span th:if="*{attachedFileList.size()} != 0" id="imgData"
+                                          th:attr="onclick=|location.href='${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/*{attachedFileList[0].savedFileName}'|"
+                                          th:text="*{attachedFileList[0].fileName} + ',&nbsp;' + 'File size: ' + *{attachedFileList[0].fileSize}"></span>
+                                </div>
+                                <div class="mt-2">
+                                    <img th:if="*{attachedFileList.size()} == 0" id="imgPreview" class="img-thumbnail user-img-preview float-right" th:attr="src=@{/images/no-preview-available.jpg}"/>
+                                    <a th:if="*{attachedFileList.size()} != 0" id="imgPreviewLink" th:href="@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-image/*{attachedFileList[0].savedFileName}|}"
+                                       data-gall="userPhoto" class="venobox" th:title="*{englishName}">
+                                        <img id="imgPreview" class="img-thumbnail user-img-preview float-right"
+                                             th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-image/*{attachedFileList[0].savedFileName}|}"/>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Korean Name<span class="required-field">*</span><span class="user-page-show-field">*</span></th>
+                            <td><input type="text" name="koreanName" class="form-control form-control-sm" th:value="*{koreanName}"/></td>
+                        </tr>
+                        <tr>
+                            <th>English Name<span class="required-field">*</span><span class="user-page-show-field">*</span></th>
+                            <td><input type="text" name="englishName" class="form-control form-control-sm" th:value="*{englishName}"/></td>
+                        </tr>
+                        <tr>
+                            <th>User Type<span class="required-field">*</span><span class="user-page-show-field">*</span></th>
+                            <td>
+                                <select name="userType" th:field="*{userType}" class="form-control form-control-sm">
+                                    <option th:value="A_FACULTY">Faculty</option>
+                                    <option th:value="B_FULL_TIME_PHD">Ph.D. Full Time</option>
+                                    <option th:value="C_FULL_TIME_MS">M.S. Full Time</option>
+                                    <option th:value="D_PART_TIME_PHD">Ph.D. Part Time</option>
+                                    <option th:value="E_PART_TIME_MS">M.S. Part Time</option>
+                                    <option th:value="F_BS">B.S.</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>User Status<span class="required-field">*</span><span class="user-page-show-field">*</span></th>
+                            <td>
+                                <select name="userStatus" th:field="*{userStatus}" class="form-control form-control-sm">
+                                    <option th:value="ATTENDING">Attending</option>
+                                    <option th:value="GRADUATED">Graduated</option>
+                                </select>
+                            </td>
+                        </tr>
 
-                    <tr>
-                        <th colspan="2" class="sub-item-title">Self Introduction<span class="user-page-show-field">*</span></th>
-                    </tr>
-                    <td colspan="2">
-                        <div name="introduction" id="content" th:utext="*{introduction}"></div>
-                    </td>
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Self Introduction<span class="user-page-show-field">*</span></th>
+                        </tr>
+                        <td colspan="2">
+                            <div name="introduction" id="content" th:utext="*{introduction}"></div>
+                        </td>
 
-                    <tr>
-                        <th colspan="2" class="sub-item-title">Personal Information</th>
-                    </tr>
-                    <tr>
-                        <th>Admission Date</th>
-                        <td><input type="date" name="admissionDate" class="form-control form-control-sm" th:value="*{admissionDate}"/></td>
-                    </tr>
-                    <tr>
-                        <th>Graduated Date<span class="user-page-show-field">*</span></th>
-                        <td><input type="date" name="graduatedDate" class="form-control form-control-sm" th:value="*{graduatedDate}"/></td>
-                    </tr>
-                    <tr>
-                        <th>Gender</th>
-                        <td>
-                            <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" class="custom-control-input" name="gender" id="male" th:value="MALE" th:checked="*{gender?.name() == 'MALE' ||  gender?.name() == null}">
-                                <label class="custom-control-label" th:for="male"><strong> Male </strong></label>
-                            </div>
-                            <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" class="custom-control-input" name="gender" id="female" th:value="FEMALE" th:checked="*{gender?.name() == 'FEMALE'}">
-                                <label class="custom-control-label" th:for="female"><strong> Female </strong></label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Birth Date</th>
-                        <td><input type="date" name="birthDate" class="form-control form-control-sm" th:value="*{birthDate}"/></td>
-                    </tr>
-                    <tr>
-                        <th>Workplace<span class="user-page-show-field">*</span></th>
-                        <td><input type="text" name="workplace" class="form-control form-control-sm" th:value="*{workplace}"/></td>
-                    </tr>
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Personal Information</th>
+                        </tr>
+                        <tr>
+                            <th>Admission Date</th>
+                            <td><input type="date" name="admissionDate" class="form-control form-control-sm" th:value="*{admissionDate}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Graduated Date<span class="user-page-show-field">*</span></th>
+                            <td><input type="date" name="graduatedDate" class="form-control form-control-sm" th:value="*{graduatedDate}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Gender</th>
+                            <td>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input" name="gender" id="male" th:value="MALE" th:checked="*{gender?.name() == 'MALE' ||  gender?.name() == null}">
+                                    <label class="custom-control-label" th:for="male"><strong> Male </strong></label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input" name="gender" id="female" th:value="FEMALE" th:checked="*{gender?.name() == 'FEMALE'}">
+                                    <label class="custom-control-label" th:for="female"><strong> Female </strong></label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Birth Date</th>
+                            <td><input type="date" name="birthDate" class="form-control form-control-sm" th:value="*{birthDate}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Workplace<span class="user-page-show-field">*</span></th>
+                            <td><input type="text" name="workplace" class="form-control form-control-sm" th:value="*{workplace}"/></td>
+                        </tr>
 
-                    <tr>
-                        <th colspan="2" class="sub-item-title">Contact Information</th>
-                    </tr>
-                    <tr>
-                        <th>Contact</th>
-                        <td>
-                            <input type="tel" name="contact" id="contact" class="form-control form-control-sm mb-1" th:value="*{contact}" placeholder="000-0000-0000"/>
-                            <span id="contactCheckResult"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Messenger ID(Skype)<span class="user-page-show-field">*</span></th>
-                        <td><input type="text" name="messengerId" class="form-control form-control-sm" th:value="*{messengerId}"/></td>
-                    </tr>
-                    <tr>
-                        <th>Email<span class="user-page-show-field">*</span></th>
-                        <td>
-                            <input type="text" name="email" id="email" class="form-control form-control-sm mb-1" th:value="*{email}"/>
-                            <span id="emailCheckResult"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Private Email</th>
-                        <td>
-                            <input type="text" name="privateEmail" id="privateEmail" class="form-control form-control-sm mb-1" th:value="*{privateEmail}"/>
-                            <span id="privateEmailCheckResult"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Github<span class="user-page-show-field">*</span></th>
-                        <td><input type="text" name="github" class="form-control form-control-sm" th:value="*{github}"></td>
-                    </tr>
-                    <tr>
-                        <th>Linked In<span class="user-page-show-field">*</span></th>
-                        <td><input type="text" name="linkedIn" class="form-control form-control-sm" th:value="*{linkedIn}"/></td>
-                    </tr>
-                    <tr>
-                        <th>External Web Page<span class="user-page-show-field">*</span></th>
-                        <td><input type="text" name="externalWebPage" class="form-control form-control-sm" th:value="*{externalWebPage}"/></td>
-                    </tr>
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Contact Information</th>
+                        </tr>
+                        <tr>
+                            <th>Contact</th>
+                            <td>
+                                <input type="tel" name="contact" id="contact" class="form-control form-control-sm mb-1" th:value="*{contact}" placeholder="000-0000-0000"/>
+                                <span id="contactCheckResult"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Messenger ID(Skype)<span class="user-page-show-field">*</span></th>
+                            <td><input type="text" name="messengerId" class="form-control form-control-sm" th:value="*{messengerId}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Email<span class="user-page-show-field">*</span></th>
+                            <td>
+                                <input type="text" name="email" id="email" class="form-control form-control-sm mb-1" th:value="*{email}"/>
+                                <span id="emailCheckResult"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Private Email</th>
+                            <td>
+                                <input type="text" name="privateEmail" id="privateEmail" class="form-control form-control-sm mb-1" th:value="*{privateEmail}"/>
+                                <span id="privateEmailCheckResult"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Github<span class="user-page-show-field">*</span></th>
+                            <td><input type="text" name="github" class="form-control form-control-sm" th:value="*{github}"></td>
+                        </tr>
+                        <tr>
+                            <th>Linked In<span class="user-page-show-field">*</span></th>
+                            <td><input type="text" name="linkedIn" class="form-control form-control-sm" th:value="*{linkedIn}"/></td>
+                        </tr>
+                        <tr>
+                            <th>External Web Page<span class="user-page-show-field">*</span></th>
+                            <td><input type="text" name="externalWebPage" class="form-control form-control-sm" th:value="*{externalWebPage}"/></td>
+                        </tr>
 
-                    <tr>
-                        <th colspan="2" class="sub-item-title">Additional Information</th>
-                    </tr>
-                    <tr>
-                        <th>Authority Type</th>
-                        <td>
-                            <select th:if="!*{idx}" name="authorityType" th:field="*{authorityType}" class="form-control form-control-sm">
-                                <option th:if="*{#strings.equals(#authentication.principal.authorityType, 'ROOT')}" th:value="MANAGER">Manager</option>
-                                <option th:if="!*{#strings.equals(authorityType, 'ROOT')}" th:value="GENERAL">General</option>
-                                <option th:if="!*{#strings.equals(authorityType, 'ROOT')}" th:value="NON_USER">Non User</option>
-                            </select>
-                            <select th:if="*{!#strings.isEmpty(idx) && (#strings.equals(authorityType, 'ROOT') || #strings.equals(authorityType, 'MANAGER'))}" name="authorityType" th:field="*{authorityType}"
-                                    class="form-control form-control-sm">
-                                <option th:if="*{#strings.equals(authorityType, 'ROOT')}" th:value="ROOT">Root</option>
-                                <option th:if="*{#strings.equals(authorityType, 'MANAGER')}" th:value="MANAGER">Manager</option>
-                                <option th:if="*{#strings.equals(#authentication.principal.authorityType, 'ROOT') && !#strings.equals(authorityType, 'ROOT')}" th:value="GENERAL">General</option>
-                                <option th:if="*{#strings.equals(#authentication.principal.authorityType, 'ROOT') && !#strings.equals(authorityType, 'ROOT')}" th:value="NON_USER">Non User</option>
-                            </select>
-                            <select th:if="*{!#strings.isEmpty(idx) && !#strings.equals(authorityType, 'ROOT') && !#strings.equals(authorityType, 'MANAGER')}" name="authorityType" th:field="*{authorityType}"
-                                    class="form-control form-control-sm">
-                                <option th:if="*{#strings.equals(#authentication.principal.authorityType, 'ROOT')}" th:value="MANAGER">Manager</option>
-                                <option th:value="GENERAL">General</option>
-                                <option th:value="NON_USER">Non User</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Active Status</th>
-                        <td>
-                            <select class="custom-select custom-select-sm" name="activeStatus" th:field="*{activeStatus}">
-                                <option th:value="ACTIVE">Active</option>
-                                <option th:if="!*{#strings.equals(authorityType, 'ROOT')}" th:value="INACTIVE">Inactive</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr th:if="*{idx}">
-                        <th>Created Date</th>
-                        <td><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
-                    </tr>
-                    <tr th:if="*{idx}">
-                        <th>Last Modified Date</th>
-                        <td><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
-                    </tr>
-                    <tr th:if="*{idx}">
-                        <th>Created By</th>
-                        <td><input type="text" class="form-control form-control-sm" readonly th:value="*{createdBy}"/></td>
-                    </tr>
-                    <tr th:if="*{idx}">
-                        <th>Last Modified By</th>
-                        <td><input type="text" class="form-control form-control-sm" readonly th:value="*{lastModifiedBy}"/></td>
-                    </tr>
-                    <tr th:if="*{idx}">
-                        <th>Views</th>
-                        <td><input type="text" class="form-control form-control-sm" readonly th:value="*{views}"/></td>
-                    </tr>
-                    <tr>
-                        <td colspan="10"></td>
-                    </tr>
-                </table>
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Additional Information</th>
+                        </tr>
+                        <tr>
+                            <th>Authority Type</th>
+                            <td>
+                                <select th:if="!*{idx}" name="authorityType" th:field="*{authorityType}" class="form-control form-control-sm">
+                                    <option th:if="*{#strings.equals(#authentication.principal.authorityType, 'ROOT')}" th:value="MANAGER">Manager</option>
+                                    <option th:if="!*{#strings.equals(authorityType, 'ROOT')}" th:value="GENERAL">General</option>
+                                    <option th:if="!*{#strings.equals(authorityType, 'ROOT')}" th:value="NON_USER">Non User</option>
+                                </select>
+                                <select th:if="*{!#strings.isEmpty(idx) && (#strings.equals(authorityType, 'ROOT') || #strings.equals(authorityType, 'MANAGER'))}" name="authorityType" th:field="*{authorityType}"
+                                        class="form-control form-control-sm">
+                                    <option th:if="*{#strings.equals(authorityType, 'ROOT')}" th:value="ROOT">Root</option>
+                                    <option th:if="*{#strings.equals(authorityType, 'MANAGER')}" th:value="MANAGER">Manager</option>
+                                    <option th:if="*{#strings.equals(#authentication.principal.authorityType, 'ROOT') && !#strings.equals(authorityType, 'ROOT')}" th:value="GENERAL">General</option>
+                                    <option th:if="*{#strings.equals(#authentication.principal.authorityType, 'ROOT') && !#strings.equals(authorityType, 'ROOT')}" th:value="NON_USER">Non User</option>
+                                </select>
+                                <select th:if="*{!#strings.isEmpty(idx) && !#strings.equals(authorityType, 'ROOT') && !#strings.equals(authorityType, 'MANAGER')}" name="authorityType" th:field="*{authorityType}"
+                                        class="form-control form-control-sm">
+                                    <option th:if="*{#strings.equals(#authentication.principal.authorityType, 'ROOT')}" th:value="MANAGER">Manager</option>
+                                    <option th:value="GENERAL">General</option>
+                                    <option th:value="NON_USER">Non User</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Active Status</th>
+                            <td>
+                                <select class="custom-select custom-select-sm" name="activeStatus" th:field="*{activeStatus}">
+                                    <option th:value="ACTIVE">Active</option>
+                                    <option th:if="!*{#strings.equals(authorityType, 'ROOT')}" th:value="INACTIVE">Inactive</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Created Date</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Last Modified Date</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Created By</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{createdBy}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Last Modified By</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{lastModifiedBy}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Views</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{views}"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="10"></td>
+                        </tr>
+                    </table>
 
-                <div class="row justify-content-between mt-4 mb-4">
-                    <div class="col-auto">
-                        <a href="/user/list" class="btn btn-sm btn-secondary btn-sm col-auto">Move to List</a>
+                    <div class="row justify-content-between mt-4 mb-4">
+                        <div class="col-auto">
+                            <a href="/user/list" class="btn btn-sm btn-secondary btn-sm col-auto">Move to List</a>
+                        </div>
+                        <div class="col-auto ml-2">
+                            <button th:if="!*{idx}" id="insert" type="button" class="btn btn-sm btn-primary cold-auto">Register</button>
+                            <button th:if="*{idx}" id="update" type="button" class="btn btn-sm btn-primary col-auto">Update</button>
+                        </div>
                     </div>
-                    <div class="col-auto ml-2">
-                        <button th:if="!*{idx}" id="insert" type="button" class="btn btn-sm btn-primary cold-auto">Register</button>
-                        <button th:if="*{idx}" id="update" type="button" class="btn btn-sm btn-primary col-auto">Update</button>
-                    </div>
+
+                    <!-- input type="hidden" -->
+                    <input type="hidden" name="idx" th:value="*{idx}"/>
+                    <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
+                    <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
                 </div>
-
-                <!-- input type="hidden" -->
-                <input type="hidden" name="idx" th:value="*{idx}"/>
-                <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
-                <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
             </form>
         </div>
     </div>
@@ -469,7 +471,7 @@
 
         // 회원 업로드
         var jsonData = $("#form").serializeObject();
-        jsonData.content = editor.getData();
+        jsonData.introduction = editor.getData();
         jsonData.createdBy = jsonData.username;
         jsonData.lastModifiedBy = jsonData.username;
         var userIdx = 0;
@@ -558,7 +560,8 @@
 
         // 회원 수정
         var jsonData = $("#form").serializeObject();
-        var userIdx = +document.getElementsByName("idx")[0].value;
+        jsonData.introduction = editor.getData();
+        var userIdx = document.getElementsByName("idx")[0].value;
 
         $.ajax({
             url: moduleAppApiAddress + "/api/users/" + userIdx,

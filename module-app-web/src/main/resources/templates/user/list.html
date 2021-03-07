@@ -52,8 +52,7 @@
                             <div class="member-img">
                                 <a th:href="'/user?idx='+${userDto.idx}">
                                     <img th:if="${userDto.attachedFileList.size()} == 0" th:attr="src=@{/images/avatar.png}" class="member-photo"/>
-                                    <img th:if="${userDto.attachedFileList.size()} != 0"
-                                         th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-image/${userDto.attachedFileList[0].savedFileName}|}"
+                                    <img th:if="${userDto.attachedFileList.size()} != 0" th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-image/${userDto.attachedFileList[0].savedFileName}|}"
                                          class="member-photo"/>
                                 </a>
                                 <div class="social">
@@ -77,7 +76,7 @@
                                 </div>
                                 <div th:if="${userDto.userStatus?.name() == 'GRADUATED'}">
                                     <h6 class="text-right" th:if="${userDto.userType?.name() == 'A_FACULTY'}" th:text="Faculty"></h6>
-                                    <h6 class="text-right" th:if="${userDto.userType?.name() == 'B_FULL_TIME_PHD'}" th:text="'Alumni' + '(Ph.D. Full Time, ' + ${#temporals.format(userDto.graduatedDate,'yy.-MM')} + ')'"></h6>
+                                    <h6 class="text-right" th:if="${userDto.userType?.name() == 'B_FULL_TIME_PHD'}" th:text="'Alumni' + '(Ph.D. Full Time, ' + ${#temporals.format(userDto.graduatedDate,'yy-MM')} + ')'"></h6>
                                     <h6 class="text-right" th:if="${userDto.userType?.name() == 'C_FULL_TIME_MS'}" th:text="'Alumni' + '(M.S. Full Time, ' + ${#temporals.format(userDto.graduatedDate,'yy-MM')} + ')'"></h6>
                                     <h6 class="text-right" th:if="${userDto.userType?.name() == 'D_PART_TIME_PHD'}" th:text="'Alumni' + '(Ph.D. Part Time, ' + ${#temporals.format(userDto.graduatedDate,'yy-MM')} + ')'"></h6>
                                     <h6 class="text-right" th:if="${userDto.userType?.name() == 'E_PART_TIME_MS'}" th:text="'Alumni' + '(M.S. Part Time, ' + ${#temporals.format(userDto.graduatedDate,'yy-MM')} + ')'"></h6>

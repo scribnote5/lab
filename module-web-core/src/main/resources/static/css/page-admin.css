@@ -1,60 +1,14 @@
 /*
- * Breadcrumbs
+ * Hash Tag
  */
-.breadcrumbs {
-
+.hash-tag {
+    background-color: var(--darkest-white);
+    color: var(--darkest-grey);
+    border-radius: .5rem;
+    display: inline-block;
+    padding: .25rem;
 }
 
-/**
- * main
- */
-.container-main {
-    background-color: var(--darker-white);
-}
-
-.url-icon-wrapper {
-    border-radius: .75rem;
-    padding: .4rem;
-    border: .025rem solid var(--lighter-grey);
-    background-color: var(--white);
-}
-
-.url-icon-wrapper img {
-    margin: 0 .25rem .125rem .25rem;
-    height: 1.25rem;
-    width: auto;
-}
-
-.external-link {
-    padding-right: .75rem;
-    border-right: .05rem solid var(--lighter-grey);
-}
-
-.table-card {
-    border-radius: .5rem !important;
-    margin: .5rem;
-    padding: 0rem !important;
-    background-color: white;
-}
-
-.table-card-header{
-    border-top-left-radius: .5rem !important;
-    border-top-right-radius: .5rem !important;
-    background-color: var(--lightest-blue) !important;
-    border-bottom: none !important;
-}
-
-.statics-count {
-    color: var(--darker-grey);
-    text-align: center;
-    font-size: 1.5rem;
-}
-
-.disk-name {
-    text-align: center;
-    font-weight: var(--strong-font-weight);
-}
-
-.disk-space{
-    color: var(--darker-grey);
+.hash-tag-space {
+    padding: .25rem .5rem;
 }
