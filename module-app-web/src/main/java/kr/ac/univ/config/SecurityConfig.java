@@ -34,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private GeoLocationService geoLocationService;
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
         // static 디렉터리의 하위 파일 목록은 인증 무시 ( = 항상통과 )
         web.ignoring().antMatchers("/css/**", "/js/**", "/images/**", "/summernote/**", "/font/**", "/icons/**", "/pdfjs/**");
         // logout 페이지는 인증 무시(authenticationEntryPoint 비인증 사용자 enrty point에서 제외)
@@ -47,8 +47,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 페이지 권한 설정
                 .antMatchers("/**/form").hasAnyAuthority("root, manager, general")
                 .antMatchers("/h2-console/**").permitAll() // h2-console 접근 허용
-                .antMatchers("/**").permitAll()
                 .antMatchers("/user/register").permitAll()
+                .antMatchers("/**").permitAll()
                 .and()
                 .csrf().ignoringAntMatchers("/console/**") // h2-console csrf 제외
                 .and()
@@ -61,8 +61,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/user/login")   // login 페이지 URL
                 .loginProcessingUrl("/user/login/process")  // login 수행 URL
                 // 사용자 정의 handler
-                .successHandler(CustomAuthenticationSuccessHandler())
-                .failureHandler(CustomAuthenticationFailureHandler())
+                .successHandler(CustomAuthenticationSuccessHandlerBean())
+                .failureHandler(CustomAuthenticationFailureHandlerBean())
 //                .defaultSuccessUrl("/user/index")   // login 성공 URL
                 .permitAll()
                 .and()
@@ -100,7 +100,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * @return
      */
     @Bean
-    public AuthenticationSuccessHandler CustomAuthenticationSuccessHandler() {
+    public AuthenticationSuccessHandler CustomAuthenticationSuccessHandlerBean() {
         return new CustomAuthenticationSuccessHandler(loginHistoryRepository, geoLocationService);
     }
 
@@ -110,7 +110,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * @return
      */
     @Bean
-    public AuthenticationFailureHandler CustomAuthenticationFailureHandler() {
+    public AuthenticationFailureHandler CustomAuthenticationFailureHandlerBean() {
         return new CustomAuthenticationFailureHandler(loginHistoryRepository, geoLocationService);
     }
 

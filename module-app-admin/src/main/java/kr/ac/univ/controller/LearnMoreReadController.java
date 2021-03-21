@@ -6,7 +6,6 @@ import kr.ac.univ.learnMoreRead.dto.LearnMoreReadDto;
 import kr.ac.univ.learnMoreRead.service.LearnMoreReadAttachedFileService;
 import kr.ac.univ.learnMoreRead.service.LearnMoreReadService;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -42,7 +42,7 @@ public class AboutUsRestController {
     }
 
     @DeleteMapping("/{idx}")
-    public ResponseEntity<?> deleteAboutUs(@PathVariable("idx") Long idx) throws Exception {
+    public ResponseEntity<?> deleteAboutUs(@PathVariable("idx") Long idx) {
         aboutUsService.deleteAboutUsByIdx(idx);
 
         return new ResponseEntity<>("{}", HttpStatus.OK);

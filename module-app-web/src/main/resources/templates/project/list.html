@@ -27,12 +27,12 @@
         </div>
 
         <div class="page-content" data-aos="fade-up">
-            <div class="mt-4">
+            <div class="mt-5">
                 <h4>Current Project</h4>
                 <ul th:each="projectDto : ${currentProjectDtoList}">
                     <li>
-                        <a th:href="'/project?idx='+${projectDto.idx}" th:text="${projectDto.title}" class="link"></a>
-                        <span th:text="'(' + ${#temporals.format(projectDto.startDate,'yyyy-MM')}  + ' ~ ' + ', '"></span>
+                        <a th:href="'/project?idx='+${projectDto.idx}" th:text="${projectDto.title}" class="link"></a><br>
+                        <span th:text="'(' + ${#temporals.format(projectDto.startDate,'yyyy-MM')}  + ' ~ ' + ${#temporals.format(projectDto.endDate,'yyyy-MM')} + ', '"></span>
                         <span class="text-muted" th:text="${projectDto.researchEstablishment} + ')'"></span>
 
                         <img th:if="${projectDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
@@ -44,7 +44,7 @@
                 <h4>Previous Project</h4>
                 <ul th:each="projectDto : ${previousProjectDtoList}">
                     <li>
-                        <a th:href="'/project?idx='+${projectDto.idx}" th:text="${projectDto.title}" class="link"></a>
+                        <a th:href="'/project?idx='+${projectDto.idx}" th:text="${projectDto.title}" class="link"></a><br>
                         <span th:text="'(' + ${#temporals.format(projectDto.startDate,'yyyy-MM')}  + ' ~ ' + ${#temporals.format(projectDto.endDate,'yyyy-MM')} + ', '"></span>
                         <span class="text-muted" th:text="${projectDto.researchEstablishment} + ')'"></span>
 
@@ -54,7 +54,8 @@
             </div>
         </div>
 
-        <div class="row mt-4 mb-4">
+        <div class="row justify-content-end mt-4 mb-4">
+        </div>
     </div>
 </div>
 

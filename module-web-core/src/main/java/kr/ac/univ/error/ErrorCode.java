@@ -12,11 +12,13 @@ public enum ErrorCode {
     METHOD_NOT_ALLOWED(405, "C003", " The Method is not allowed."),
     HANDLE_ACCESS_DENIED(403, "C004", "Access is Denied."),
     INTERNAL_SERVER_ERROR(500, "C005", "Internal Server Error."),
+    CLIENT_ABORT_EXCEPTION(500, "C005", "Client Abort Exception."),
 
     // File
-    FILE_SIZE_ERROR(500, "F001", "The upload file size must be less than 50MB."),
-    FILE_TYPE_ERROR(500, "F002", "The upload file type is supposed to dangerous and malicious."),
-    FILE_NUMBER_EXCEEDED(500, "F003", "The upload file number is exceeded."),
+    IO_EXCEPTION(500, "F001", "The file does not exist and maybe is deleted by admin."),
+    FILE_SIZE_ERROR(500, "F002", "The upload file size must be less than 50MB."),
+    FILE_TYPE_ERROR(500, "F003", "The upload file type is supposed to dangerous and malicious."),
+    FILE_NUMBER_EXCEEDED(500, "F004", "The upload file number is exceeded."),
 
     // User
     INVALID_USERNAME(500, "U001", "The ID is duplicated or ID must be more than 6 characters and less than 16 characters."),

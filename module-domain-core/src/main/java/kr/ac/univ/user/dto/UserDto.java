@@ -1,11 +1,6 @@
 package kr.ac.univ.user.dto;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
 import kr.ac.univ.common.dto.CommonDto;
-import kr.ac.univ.common.validation.Contact;
 import kr.ac.univ.common.validation.Editor;
 import kr.ac.univ.common.validation.Password;
 import kr.ac.univ.user.domain.UserAttachedFile;
@@ -13,9 +8,17 @@ import kr.ac.univ.user.domain.enums.AuthorityType;
 import kr.ac.univ.user.domain.enums.GenderType;
 import kr.ac.univ.user.domain.enums.UserStatus;
 import kr.ac.univ.user.domain.enums.UserType;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -84,5 +87,5 @@ public class UserDto extends CommonDto {
     private AuthorityType authorityType;
 
     /* Attached File */
-    private List<UserAttachedFile> attachedFileList = new ArrayList<UserAttachedFile>();
+    private List<UserAttachedFile> attachedFileList = new ArrayList<>();
 }

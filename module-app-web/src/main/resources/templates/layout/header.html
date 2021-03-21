@@ -6,8 +6,7 @@
         <div class="container d-flex align-items-center">
             <div class="logo mr-auto">
                 <a href="/">
-                    <img class="logo"
-                         th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-logo|}"
+                    <img class="logo" th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-logo|}"
                          th:onerror="'this.src=\'' + @{/images/no-preview-available.jpg} + '\';'"/>
                 </a>
             </div>
@@ -22,6 +21,7 @@
                     <li class="drop-down"><a href="/notice-board/list">More<i class="fas fa-chevron-down"></i></a>
                         <ul>
                             <li><a href="/notice-board/list">Notice Board</a></li>
+                            <li><a href="/event/list">Event</a></li>
                             <li><a href="/alumni-association/list">Alumni Association</a></li>
                             <li><a href="/album/list">Album</a></li>
                             <li sec:authorize="isAuthenticated()"><a th:href="'/guest-book/list'">Guest Book</a></li>

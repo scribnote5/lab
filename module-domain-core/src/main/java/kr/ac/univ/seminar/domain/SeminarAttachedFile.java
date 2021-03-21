@@ -1,13 +1,11 @@
 package kr.ac.univ.seminar.domain;
 
-
 import kr.ac.univ.common.domain.AttachedFileAudit;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 

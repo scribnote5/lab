@@ -29,8 +29,6 @@ public class MaintenanceRestController {
 
     @PostMapping
     public ResponseEntity<?> postMaintenance(@RequestBody @Valid MaintenanceDto maintenanceDto) {
-        System.out.println(maintenanceDto);
-
         Long idx = maintenanceService.insertMaintenance(maintenanceDto);
 
         return new ResponseEntity<>(idx, HttpStatus.CREATED);

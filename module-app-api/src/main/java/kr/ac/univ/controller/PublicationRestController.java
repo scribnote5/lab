@@ -3,7 +3,6 @@ package kr.ac.univ.controller;
 
 import kr.ac.univ.common.validation.FileValidator;
 import kr.ac.univ.exception.FileTypeException;
-import kr.ac.univ.publication.domain.Publication;
 import kr.ac.univ.publication.dto.PublicationDto;
 import kr.ac.univ.publication.dto.PublicationSearchDto;
 import kr.ac.univ.publication.service.PublicationAttachedFileService;
@@ -29,8 +28,8 @@ public class PublicationRestController {
     }
 
     @PostMapping
-    public ResponseEntity<?> postPublication(@RequestBody @Valid Publication publication) {
-        Long idx = publicationService.insertPublication(publication);
+    public ResponseEntity<?> postPublication(@RequestBody @Valid PublicationDto publicationDto) {
+        Long idx = publicationService.insertPublication(publicationDto);
 
         return new ResponseEntity<>(idx, HttpStatus.CREATED);
     }

@@ -17,7 +17,7 @@ public class SettingAttachedFileService {
      * @throws Exception
      */
     public void uploadAttachedFile(MultipartFile[] files) throws Exception {
-        SeminarAttachedFile uploadFile = new SeminarAttachedFile();
+        SeminarAttachedFile uploadFile;
 
         for (MultipartFile file : files) {
             String savedFileName = "logo.png";

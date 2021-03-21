@@ -6,6 +6,20 @@
 }
 
 /*
+ * Header
+ */
+#header {
+    height: 3.75rem;
+}
+
+#userInformation {
+    -webkit-transition: margin 1s ease-out;
+    -moz-transition: margin 1s ease-out;
+    -o-transition: margin 1s ease-out;
+    transition: margin 1s ease-out;
+}
+
+/*
  * Sidebar
  */
 #sidebar-wrapper {

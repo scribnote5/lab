@@ -68,7 +68,7 @@ public class MaintenanceCommentService {
         String mailContent = "<span style=\"font-size: 18px; color: black;\">The new maintenance comment is registered.</span><br><br>"
                 + "<b>Created By: <b>" + maintenanceCommentDto.getCreatedBy() + "<br>"
                 + "You can check <a href=\"" + moduleAppAdminAddress + "/maintenance?idx=" + maintenanceCommentDto.getMaintenanceIdx() + "\">" + moduleAppAdminAddress + "/maintenance?idx=" + maintenanceCommentDto.getMaintenanceIdx() +
-                "<a><br>"
+                "<a><br><br>"
                 + "Thank you.";
 
         switch (maintenanceCommentDto.getReceiverType()) {

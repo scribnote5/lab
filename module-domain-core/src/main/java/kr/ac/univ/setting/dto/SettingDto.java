@@ -54,5 +54,5 @@ public class SettingDto extends CommonDto {
     private String projectCountContent;
 
     /* Attached File */
-    private List<SeminarAttachedFile> attachedFileList = new ArrayList<SeminarAttachedFile>();
+    private List<SeminarAttachedFile> attachedFileList = new ArrayList<>();
 }

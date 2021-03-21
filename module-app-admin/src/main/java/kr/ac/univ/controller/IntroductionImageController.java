@@ -1,11 +1,10 @@
 package kr.ac.univ.controller;
 
+import kr.ac.univ.common.dto.SearchDto;
 import kr.ac.univ.introductionImage.dto.IntroductionImageDto;
 import kr.ac.univ.introductionImage.service.IntroductionImageAttachedFileService;
 import kr.ac.univ.introductionImage.service.IntroductionImageService;
-import kr.ac.univ.common.dto.SearchDto;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

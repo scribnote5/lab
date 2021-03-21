@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
+import java.io.IOException;
+
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
@@ -80,9 +82,20 @@ public class GlobalExceptionHandler {
      * multipart에서 설정한 file size보다 큰 파일이 업로드 되는 경우 발생
      */
     @ExceptionHandler(MaxUploadSizeExceededException.class)
-    protected ResponseEntity<?> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException e) {
+    protected ResponseEntity<ErrorResponse> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException e) {
         log.error("handleMaxUploadSizeExceededException", e);
         final ErrorResponse response = ErrorResponse.of(ErrorCode.FILE_SIZE_ERROR);
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * file이 존재하지 않는 경우 발생
+     */
+    @ExceptionHandler(IOException.class)
+    protected ResponseEntity<ErrorResponse> handleIOException(Exception e) {
+        log.error("handleFileTypeException", e);
+        final ErrorResponse response = ErrorResponse.of(ErrorCode.FILE_TYPE_ERROR, e.getMessage());
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
@@ -91,7 +104,7 @@ public class GlobalExceptionHandler {
      * file type이 위험하고 악의적인 것으로 판별되는 경우 발생
      */
     @ExceptionHandler(FileTypeException.class)
-    protected ResponseEntity<?> handleFileTypeException(Exception e) {
+    protected ResponseEntity<ErrorResponse> handleFileTypeException(Exception e) {
         log.error("handleFileTypeException", e);
         final ErrorResponse response = ErrorResponse.of(ErrorCode.FILE_TYPE_ERROR, e.getMessage());
 
@@ -102,7 +115,7 @@ public class GlobalExceptionHandler {
      * file type이 위험하고 악의적인 것으로 판별되는 경우 발생
      */
     @ExceptionHandler(FileNumberExceededException.class)
-    protected ResponseEntity<?> handleFileNumberExceededException(Exception e) {
+    protected ResponseEntity<ErrorResponse> handleFileNumberExceededException(Exception e) {
         log.error("handleNumberExceedeException", e);
         final ErrorResponse response = ErrorResponse.of(ErrorCode.FILE_NUMBER_EXCEEDED, e.getMessage());
 
@@ -143,7 +156,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ClientAbortException.class)
     protected ResponseEntity<ErrorResponse> handleTestException(Exception e) {
         log.error("ClientAbortException", e);
+        final ErrorResponse response = ErrorResponse.of(ErrorCode.CLIENT_ABORT_EXCEPTION);
 
-        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

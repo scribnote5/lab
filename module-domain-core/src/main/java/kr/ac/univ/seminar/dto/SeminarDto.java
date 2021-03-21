@@ -42,5 +42,5 @@ public class SeminarDto extends CommonDto {
     private String content;
 
     /* Attached File */
-    private List<SeminarAttachedFile> attachedFileList = new ArrayList<SeminarAttachedFile>();
+    private List<SeminarAttachedFile> attachedFileList = new ArrayList<>();
 }

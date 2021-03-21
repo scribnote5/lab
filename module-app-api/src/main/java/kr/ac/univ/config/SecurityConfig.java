@@ -1,11 +1,14 @@
 package kr.ac.univ.config;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
@@ -16,25 +19,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${module-app-admin.address}")
     private String moduleAppAdminAddress;
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.addAllowedOrigin(moduleAppWebAddress);
         configuration.addAllowedOrigin(moduleAppAdminAddress);
-//        configuration.addAllowedOrigin(CorsConfiguration.ALL);
+        configuration.addAllowedOrigin(moduleAppWebAddress);
         configuration.addAllowedMethod(CorsConfiguration.ALL);
         configuration.addAllowedHeader(CorsConfiguration.ALL);
+        configuration.setAllowCredentials(true);
+        configuration.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
 
+        return source;
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
         // iframe 동일 도메인 접근 허용
-        //http.headers().frameOptions().disable();
+        // http.headers().frameOptions().disable();
 
         http.authorizeRequests()
                 .anyRequest().permitAll()
-                .and().cors().configurationSource(source)
+                .and().cors()
                 .and().csrf().disable();
     }
 }

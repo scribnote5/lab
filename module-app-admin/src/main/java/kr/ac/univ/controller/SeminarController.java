@@ -6,7 +6,6 @@ import kr.ac.univ.seminar.dto.SeminarDto;
 import kr.ac.univ.seminar.service.SeminarAttachedFileService;
 import kr.ac.univ.seminar.service.SeminarService;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

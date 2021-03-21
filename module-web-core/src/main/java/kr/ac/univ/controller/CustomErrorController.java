@@ -10,19 +10,17 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class CustomErrorController implements ErrorController {
-    private String VIEW_PATH = "/error/";
-
     @RequestMapping(value = "/error")
     public String handleError(HttpServletRequest request) {
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
         if (status != null) {
             int statusCode = Integer.valueOf(status.toString());
             if (statusCode == HttpStatus.NOT_FOUND.value()) {
-                return VIEW_PATH + "404";
+                return "/error/404";
             } else if (statusCode == HttpStatus.FORBIDDEN.value()) {
-                return VIEW_PATH + "500";
+                return "/error/500";
             } else {
-                return VIEW_PATH + "500";
+                return "/error/500";
             }
         }
         return "error";

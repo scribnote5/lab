@@ -1,9 +1,5 @@
 package kr.ac.univ.publication.dto;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
 import kr.ac.univ.common.dto.CommonDto;
 import kr.ac.univ.publication.domain.PublicationAttachedFile;
 import kr.ac.univ.publication.domain.enums.PublicationType;
@@ -16,6 +12,9 @@ import lombok.ToString;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter

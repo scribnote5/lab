@@ -3,8 +3,6 @@ package kr.ac.univ.user.service;
 
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.SearchDto;
-import kr.ac.univ.loginHistory.repository.LoginHistoryRepository;
-import kr.ac.univ.loginHistory.service.GeoLocationService;
 import kr.ac.univ.user.domain.User;
 import kr.ac.univ.user.domain.enums.AuthorityType;
 import kr.ac.univ.user.domain.enums.UserStatus;
@@ -27,7 +25,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 

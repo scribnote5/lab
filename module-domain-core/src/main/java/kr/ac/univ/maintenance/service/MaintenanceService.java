@@ -86,7 +86,7 @@ public class MaintenanceService {
                 + "<b>Title : <b>" + maintenanceDto.getTitle() + "<br>"
                 + "<b>Created By: <b>" + maintenanceDto.getCreatedBy() + "<br>"
                 + "<b>Maintenance Status: <b>" + maintenanceDto.getMaintenanceStatus() + "<br>"
-                + "You can check <a href=\"" + moduleAppAdminAddress + "/maintenance?idx=" + idx + "\">" + moduleAppAdminAddress + "/maintenance?idx=" + idx + "<a><br>"
+                + "You can check <a href=\"" + moduleAppAdminAddress + "/maintenance?idx=" + idx + "\">" + moduleAppAdminAddress + "/maintenance?idx=" + idx + "<a><br><br>"
                 + "Thank you.";
 
         switch (maintenanceDto.getReceiverType()) {

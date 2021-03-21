@@ -7,7 +7,6 @@ import kr.ac.univ.dataHistory.repository.DataHistoryRepository;
 import kr.ac.univ.researchField.domain.ResearchField;
 import kr.ac.univ.util.AudMessageUtil;
 
-import javax.persistence.PostLoad;
 import javax.persistence.PostPersist;
 import javax.persistence.PostRemove;
 import javax.persistence.PostUpdate;
@@ -21,11 +20,6 @@ public class ResearchFieldListener {
 
     public ResearchFieldListener(DataHistoryRepository dataHistoryRepository) {
         this.dataHistoryRepository = dataHistoryRepository;
-    }
-
-    @PostLoad
-    public void postLoad(ResearchField researchField) {
-
     }
 
     @PostPersist

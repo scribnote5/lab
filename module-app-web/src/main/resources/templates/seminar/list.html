@@ -66,7 +66,7 @@
                             <div class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline">
                                 <div class="d-flex align-center">
                                     <span th:text="${seminarDto.createdBy}" class="mobile-additional-information"> </span> &nbsp;&nbsp;
-                                    <span th:text="${#temporals.format(seminarDto.createdDate,'yyyy-MM-dd')}" class="mobile-additional-information"></span> &nbsp;&nbsp;
+                                    <span th:text="${#temporals.format(seminarDto.createdDate,'yyyy.MM.dd.')}" class="mobile-additional-information"></span> &nbsp;&nbsp;
                                     <span th:text="'Views: ' + ${seminarDto.views}" class="mobile-additional-information"></span>
                                 </div>
                             </div>
@@ -74,7 +74,7 @@
 
                         <!-- Desktop -->
                         <td th:text="${seminarDto.createdBy}" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
-                        <td th:text="${#temporals.format(seminarDto.createdDate,'yyyy-MM-dd')}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                        <td th:text="${#temporals.format(seminarDto.createdDate,'yyyy.MM.dd.')}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                         <td th:text="${seminarDto.views}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                     </tr>
                     <tr th:if="${seminarDtoList.totalElements == 0}">

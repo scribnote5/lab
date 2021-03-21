@@ -38,8 +38,10 @@ public class ProjectDto extends CommonDto {
     @NotNull(message = "The project status must be not null.")
     private ProjectStatus projectStatus;
 
+    @NotNull(message = "The start date must be not null.")
     private LocalDate startDate;
 
+    @NotNull(message = "The end date must be not null.")
     private LocalDate endDate;
 
     /* Attached File */

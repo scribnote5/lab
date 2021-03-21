@@ -38,7 +38,7 @@
                     <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                         <td class="text-right border-0" colspan="10">
                             <strong class="additional-information">Created By: </strong><span th:text="*{createdBy}" class="additional-information"></span> &nbsp;&nbsp;&nbsp;
-                            <strong class="additional-information">Created Date: </strong><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}" class="additional-information"></span> &nbsp;&nbsp;&nbsp;
+                            <strong class="additional-information">Created Date: </strong><span th:text="*{#temporals.format(createdDate,'yyyy.MM.dd. HH:mm')}" class="additional-information"></span> &nbsp;&nbsp;&nbsp;
                             <strong class="additional-information">Views: </strong> <span th:text="*{views}" class="additional-information"/></span>
                         </td>
                     </tr>
@@ -54,7 +54,7 @@
 
                             <div class="text-right">
                                 <span th:text="*{createdBy}"></span>&nbsp;&nbsp;
-                                <span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}" class="mobile-additional-information"></span>&nbsp;&nbsp;
+                                <span th:text="*{#temporals.format(createdDate,'yyyy.MM.dd. HH:mm')}" class="mobile-additional-information"></span>&nbsp;&nbsp;
                                 <span th:text="'Views: ' + *{views}" class="mobile-additional-information"/>
                             </div>
                         </td>
@@ -102,7 +102,7 @@
                         <tr th:each="guestBookCommentDto : ${guestBookCommentDtoList}">
                             <td>
                                 <span th:text="${guestBookCommentDto.createdBy}"></span>&nbsp;&nbsp;
-                                <span th:text="${#temporals.format(guestBookCommentDto.createdDate,'yyyy-MM-dd HH:mm')}" class="comment-additional-information"></span>
+                                <span th:text="${#temporals.format(guestBookCommentDto.createdDate,'yyyy.MM.dd. HH:mm')}" class="comment-additional-information"></span>
                                 <img th:class="new-icon" th:if="${guestBookCommentDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}"/>
 
                                 <div class="mt-2">

@@ -86,6 +86,17 @@ public class NoticeBoardService {
         return noticeBoardDtoList;
     }
 
+    public List<NoticeBoardDto> findTop4ByOrderByIdxDesc() {
+        List<NoticeBoardDto> noticeBoardDtoList = NoticeBoardMapper.INSTANCE.toDto(noticeBoardRepository.findTop4ByMainPagePriorityGreaterThanEqualOrderByIdxDesc(11L));
+
+        // NewIcon 판별
+        for (NoticeBoardDto noticeBoardDto : noticeBoardDtoList) {
+            noticeBoardDto.setNewIcon(NewIconCheck.isNew(noticeBoardDto.getCreatedDate()));
+        }
+
+        return noticeBoardDtoList;
+    }
+
     public List<NoticeBoardDto> findTop10ByOrderByIdxDesc() {
         List<NoticeBoardDto> noticeBoardDtoList = NoticeBoardMapper.INSTANCE.toDto(noticeBoardRepository.findTop10ByOrderByMainPagePriorityAscIdxDesc());
 

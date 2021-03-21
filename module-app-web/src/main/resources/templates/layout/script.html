@@ -2,18 +2,15 @@
 <script th:src="@{/js/jquery.serialize-object.min.js}"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://kit.fontawesome.com/6b69fd4398.js" crossorigin="anonymous"></script>
+<script th:src="@{'https://kit.fontawesome.com/' + ${@environment.getProperty('font-awesome.address')} }" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery.easing@1.4.1/jquery.easing.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/waypoints@4.0.1/lib/jquery.waypoints.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery.counterup@2.1.0/jquery.counterup.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/owl.carousel@2.3.4/dist/owl.carousel.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/venobox@1.9.2/venobox/venobox.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/venobox@1.9.3/venobox/venobox.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.min.js"></script>
-
-<script th:src="@{/pdfjs/build/pdf.js}"></script>
-<script th:src="@{/js/ckeditor.js}"></script>
 
 <script th:src="@{/js/util.js}"></script>
 <script th:src="@{/js/validation.js}"></script>
@@ -24,15 +21,6 @@
 </script>
 
 <script th:inline="javascript">
-    var token = $("meta[name='_csrf']").attr("content");
-    var header = $("meta[name='_csrf_header']").attr("content");
-
-    $(function () {
-        $(document).ajaxSend(function (e, xhr, options) {
-            xhr.setRequestHeader(header, token);
-        });
-    });
-
     /* hide loading */
     window.onload = function () {
         $('#loading').hide();

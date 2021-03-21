@@ -6,7 +6,6 @@ import kr.ac.univ.learnMoreVideo.dto.LearnMoreVideoDto;
 import kr.ac.univ.learnMoreVideo.service.LearnMoreVideoAttachedFileService;
 import kr.ac.univ.learnMoreVideo.service.LearnMoreVideoService;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

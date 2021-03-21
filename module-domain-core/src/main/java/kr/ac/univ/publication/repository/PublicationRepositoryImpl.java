@@ -1,11 +1,7 @@
 package kr.ac.univ.publication.repository;
 
-import java.util.List;
-
-import javax.transaction.Transactional;
-
 import com.querydsl.core.types.dsl.BooleanExpression;
-import kr.ac.univ.publication.domain.QPublication;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.publication.domain.Publication;
 import kr.ac.univ.publication.domain.QPublication;
@@ -16,9 +12,10 @@ import kr.ac.univ.publication.dto.enums.PublicationSearchType;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
-import static kr.ac.univ.publication.domain.QPublication.publication;
+import javax.transaction.Transactional;
+import java.util.List;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
+import static kr.ac.univ.publication.domain.QPublication.publication;
 
 @Repository
 @Transactional

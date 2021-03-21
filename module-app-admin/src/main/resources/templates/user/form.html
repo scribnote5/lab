@@ -240,11 +240,11 @@
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created Date</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(createdDate,'yyyy.MM.dd. HH:mm')}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Last Modified Date</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(lastModifiedDate,'yyyy.MM.dd. HH:mm')}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created By</th>
@@ -290,6 +290,7 @@
 <th:block th:replace="layout/script.html"></th:block>
 
 <!-- javascript -->
+<script th:src="@{/js/ckeditor.js}"></script>
 <script th:src="@{/js/ckeditor-editor-init.js}"></script>
 <script th:src="@{/js/file-upload/single-img-file-upload-input.js}"></script>
 

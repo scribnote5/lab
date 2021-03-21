@@ -41,7 +41,7 @@
                             <span class="count-number" data-toggle="counter-up" th:text="${labMaintenanceYears}"></span>
                             <span class="count-title">&nbsp;Years</span><br>
 
-                            <span class="count-info" th:text="'Since ' + ${#temporals.format(labStartDate,'yyyy-MM-dd')}"></span> <br>
+                            <span class="count-info" th:text="'Since ' + ${#temporals.format(labStartDate,'yyyy.MM.dd.')}"></span> <br>
                             <span class="count-content" th:text="${labMaintenanceYearsCountContent}"></span>
                         </div>
                     </div>
@@ -87,9 +87,7 @@
                 <div class="count-box">
                     <i class="far fa-address-card"></i>
                     <span class="count-title">Contact</span><br>
-
-                    <i class="fas fa-envelope contact-icon" style="font-size: 1.25rem"></i> <span class="count-content" th:text="${emailRecipient}"></span> <a th:href="'mailto:' + ${emailAddress}" th:text="${emailAddress}"
-                                                                                                                                                               class="link"></a> <br>
+                    <i class="fas fa-envelope contact-icon" style="font-size: 1.25rem"></i> <span class="count-content" th:text="${emailRecipient}"></span> <a th:href="'mailto:' + ${emailAddress}" th:text="${emailAddress}" class="link"></a> <br>
                     <i class="fas fa-phone-alt contact-icon" style="font-size: 1.25rem"></i> <span class="count-content" th:text="${callee}"> </span><a th:href="'tel:' + ${phoneNumber}" th:text="${phoneNumber}" class="link"></a>
                 </div>
             </div>
@@ -129,6 +127,9 @@
 
 <!-- script file -->
 <th:block th:replace="layout/script.html"></th:block>
+
+<!-- javascript -->
+<script th:src="@{/pdfjs/build/pdf.js}"></script>
 
 <script th:inline="javascript">
     var learnMoreReadDtoList = [[${learnMoreReadDtoList}]];

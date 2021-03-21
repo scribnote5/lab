@@ -4,7 +4,6 @@ import kr.ac.univ.common.dto.SearchDto;
 import kr.ac.univ.loginHistory.dto.LoginHistoryDto;
 import kr.ac.univ.loginHistory.service.LoginHistoryService;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -13,19 +13,15 @@ import kr.ac.univ.project.service.ProjectService;
 import kr.ac.univ.publication.service.PublicationService;
 import kr.ac.univ.setting.dto.SettingDto;
 import kr.ac.univ.setting.service.SettingService;
-import kr.ac.univ.user.domain.enums.UserStatus;
 import kr.ac.univ.user.domain.enums.UserType;
 import kr.ac.univ.user.service.UserService;
-import kr.ac.univ.util.EmptyUtil;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -76,7 +72,7 @@ public class AboutUsController {
         }
 
         model.addAttribute("labStartDate", settingDto.getLabStartDate());
-        model.addAttribute("labMaintenanceYears", settingDto.getLabStartDate().getDayOfYear());
+        model.addAttribute("labMaintenanceYears", LocalDate.now().getYear() - settingDto.getLabStartDate().getYear());
         model.addAttribute("publicationCount", publicationService.countAllByActiveStatusIs());
         model.addAttribute("projectCount", projectService.countAllByActiveStatusIsAndProjectStatus());
         model.addAttribute("attendingPhdUserCount", userService.countAllByActiveStatusIsAndUserStatusIsAndUserTypeIs(UserType.B_FULL_TIME_PHD));
@@ -88,7 +84,7 @@ public class AboutUsController {
         model.addAttribute("emailRecipient", settingDto.getEmailRecipient());
         model.addAttribute("emailAddress", settingDto.getEmailAddress());
         model.addAttribute("callee", settingDto.getCallee());
-        model.addAttribute("emailAddress", settingDto.getPhoneNumber());
+        model.addAttribute("phoneNumber", settingDto.getPhoneNumber());
 
         model.addAttribute("aboutUsDto", aboutUsDto);
         model.addAttribute("learnMoreReadDtoList", learnMoreReadDtoList);

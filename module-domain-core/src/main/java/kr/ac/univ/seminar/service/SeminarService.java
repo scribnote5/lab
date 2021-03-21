@@ -86,8 +86,8 @@ public class SeminarService {
         return seminarDtoList;
     }
 
-    public List<SeminarDto> findTop10ByOrderByIdxDesc() {
-        List<SeminarDto> seminarDtoList = SeminarMapper.INSTANCE.toDto(seminarRepository.findTop10ByOrderByIdxDesc());
+    public List<SeminarDto> findTop4ByOrderByIdxDesc() {
+        List<SeminarDto> seminarDtoList = SeminarMapper.INSTANCE.toDto(seminarRepository.findTop4ByOrderByIdxDesc());
 
         // NewIcon 판별
         for (SeminarDto seminarDto : seminarDtoList) {

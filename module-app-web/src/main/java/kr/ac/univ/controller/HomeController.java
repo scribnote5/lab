@@ -3,14 +3,11 @@ package kr.ac.univ.controller;
 import kr.ac.univ.album.dto.AlbumDto;
 import kr.ac.univ.album.service.AlbumAttachedFileService;
 import kr.ac.univ.album.service.AlbumService;
-import kr.ac.univ.introduction.dto.IntroductionDto;
+import kr.ac.univ.event.service.EventService;
 import kr.ac.univ.introduction.service.IntroductionService;
 import kr.ac.univ.introductionImage.dto.IntroductionImageDto;
 import kr.ac.univ.introductionImage.service.IntroductionImageAttachedFileService;
 import kr.ac.univ.introductionImage.service.IntroductionImageService;
-import kr.ac.univ.learnMoreRead.dto.LearnMoreReadDto;
-import kr.ac.univ.learnMoreRead.service.LearnMoreReadAttachedFileService;
-import kr.ac.univ.learnMoreRead.service.LearnMoreReadService;
 import kr.ac.univ.noticeBoard.service.NoticeBoardService;
 import kr.ac.univ.researchField.dto.ResearchFieldDto;
 import kr.ac.univ.researchField.service.ResearchFieldAttachedFileService;
@@ -36,6 +33,7 @@ public class HomeController {
     private final ResearchFieldAttachedFileService researchFieldAttachedFileService;
     private final NoticeBoardService noticeBoardService;
     private final SeminarService seminarService;
+    private final EventService eventService;
     private final SettingService settingService;
 
     public HomeController(AlbumService albumService, AlbumAttachedFileService albumAttachedFileService,
@@ -44,6 +42,7 @@ public class HomeController {
                           ResearchFieldService researchFieldService, ResearchFieldAttachedFileService researchFieldAttachedFileService,
                           NoticeBoardService noticeBoardService,
                           SeminarService seminarService,
+                          EventService eventService,
                           SettingService settingService) {
         this.albumService = albumService;
         this.albumAttachedFileService = albumAttachedFileService;
@@ -54,6 +53,7 @@ public class HomeController {
         this.researchFieldService = researchFieldService;
         this.noticeBoardService = noticeBoardService;
         this.seminarService = seminarService;
+        this.eventService = eventService;
         this.settingService = settingService;
     }
 
@@ -79,8 +79,9 @@ public class HomeController {
         model.addAttribute("introductionImageDtoList", introductionImageDtoList);
         model.addAttribute("researchFieldDtoList", researchFieldDtoList);
         model.addAttribute("albumDtoList", albumDtoList);
-        model.addAttribute("noticeBoardDtoList", noticeBoardService.findTop10ByOrderByIdxDesc());
-        model.addAttribute("seminarDtoList", seminarService.findTop10ByOrderByIdxDesc());
+        model.addAttribute("noticeBoardDtoList", noticeBoardService.findTop4ByOrderByIdxDesc());
+        model.addAttribute("seminarDtoList", seminarService.findTop4ByOrderByIdxDesc());
+        model.addAttribute("eventDtoList", eventService.findTop4ByOrderByCurrentDate());
         model.addAttribute("settingDto", settingService.findSettingByIdx(1L));
 
         return "main/home";

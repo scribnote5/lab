@@ -29,7 +29,7 @@
                     <span class="external-link">External Link</span>
                     <img src="/images/favicon.ico" title="Link user page."/>
                     <img src="/images/google-analytics.svg" title="Link google analytics."/>
-                    <img src="/images/github.svg" title="Link github."/>
+                    <a href="https://github.com/scribnote5/lab" target="_blank"><img src="/images/github.svg" title="Link github."/></a>
                 </div>
             </div>
 
@@ -111,7 +111,7 @@
                         <div class="card-header table-card-header">
                             <h5>Alarm List</h5>
                             <div class="text-right" style="margin-top: -2rem;">
-                                <a href="/data-history/list" class="more ml-3"> more...</a>
+                                <a href="/data-history/list" class="link ml-3"> more...</a>
                             </div>
                         </div>
 
@@ -134,7 +134,7 @@
                         <div class="card-header table-card-header">
                             <h5>Notice Board List</h5>
                             <div class="text-right" style="margin-top: -2rem;">
-                                <a href="/notice-board/list" class="more"> more...</a>
+                                <a href="/notice-board/list" class="link"> more...</a>
                             </div>
                         </div>
 
@@ -154,11 +154,11 @@
                                     <div class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline">
                                         <div class="d-flex align-center">
                                             <span th:text="${noticeBoardDto.createdBy}" class="mobile-additional-information"> </span> &nbsp;&nbsp;
-                                            <span th:text="${#temporals.format(noticeBoardDto.createdDate,'yyyy-MM-dd')}" class="mobile-additional-information"></span> &nbsp;&nbsp;
+                                            <span th:text="${#temporals.format(noticeBoardDto.createdDate,'yyyy.MM.dd.')}" class="mobile-additional-information"></span> &nbsp;&nbsp;
                                         </div>
                                     </div>
                                 </td>
-                                <td th:text="${#temporals.format(noticeBoardDto.createdDate,'yyyy-MM-dd')}" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                                <td th:text="${#temporals.format(noticeBoardDto.createdDate,'yyyy.MM.dd.')}" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             </tr>
                             </tbody>
                         </table>
@@ -171,7 +171,7 @@
                     <div class="card-header table-card-header">
                         <h5>Data History List</h5>
                         <div class="text-right" style="margin-top: -2rem;">
-                            <a href="/data-history/list" class="more"> more...</a>
+                            <a href="/data-history/list" class="link"> more...</a>
                         </div>
                     </div>
 
@@ -202,7 +202,7 @@
                                 <div class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline">
                                     <div class="d-flex align-center">
                                         <span th:text="${dataHistoryDto.createdBy}" class="mobile-additional-information"> </span> &nbsp;&nbsp;
-                                        <span th:text="${#temporals.format(dataHistoryDto.createdDate,'yyyy-MM-dd HH:mm')}" class="mobile-additional-information"></span>
+                                        <span th:text="${#temporals.format(dataHistoryDto.createdDate,'yyyy.MM.dd. HH:mm')}" class="mobile-additional-information"></span>
                                     </div>
                                     <div class="d-flex align-center">
                                         <span th:if="${dataHistoryDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active" class="mobile-additional-information"></span>
@@ -215,7 +215,7 @@
                             <td th:if="${dataHistoryDto.audType?.name() == 'UPDATE'}" th:text="Update" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td th:if="${dataHistoryDto.audType?.name() == 'DELETE'}" th:text="Delete" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td th:text="${dataHistoryDto.createdBy}" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
-                            <td th:text="${#temporals.format(dataHistoryDto.createdDate,'yyyy-MM-dd HH:mm')}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:text="${#temporals.format(dataHistoryDto.createdDate,'yyyy.MM.dd. HH:mm')}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td th:if="${dataHistoryDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td th:if="${dataHistoryDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                         </tr>
@@ -232,7 +232,7 @@
                     <div class="card-header table-card-header">
                         <h5>Login History List</h5>
                         <div class="text-right" style="margin-top: -2rem;">
-                            <a href="/login-history/list" class="more"> more...</a>
+                            <a href="/login-history/list" class="link"> more...</a>
                         </div>
                     </div>
 
@@ -263,7 +263,7 @@
                                 <div class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline">
                                     <div class="d-flex align-center">
                                         <span th:text="${loginHistoryDto.createdBy}" class="mobile-additional-information"> </span> &nbsp;&nbsp;
-                                        <span th:text="${#temporals.format(loginHistoryDto.createdDate,'yyyy-MM-dd HH:mm')}" class="mobile-additional-information"></span>
+                                        <span th:text="${#temporals.format(loginHistoryDto.createdDate,'yyyy.MM.dd. HH:mm')}" class="mobile-additional-information"></span>
                                     </div>
                                     <div class="d-flex align-center">
                                         <span th:if="${loginHistoryDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active" class="mobile-additional-information"></span>
@@ -277,7 +277,7 @@
                             <td th:if="${loginHistoryDto.audLoginResultType?.name() == 'SUCCESS'}" th:text="Success" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td th:if="${loginHistoryDto.audLoginResultType?.name() == 'FAIL'}" th:text="Fail" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td th:text="${loginHistoryDto.createdBy}" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
-                            <td th:text="${#temporals.format(loginHistoryDto.createdDate,'yyyy-MM-dd HH:mm')}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:text="${#temporals.format(loginHistoryDto.createdDate,'yyyy.MM.dd. HH:mm')}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td th:if="${loginHistoryDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td th:if="${loginHistoryDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                         </tr>

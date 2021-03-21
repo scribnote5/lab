@@ -58,10 +58,10 @@ public class UserAttachedFileService {
      * @param files
      */
     public void uploadAttachedFile(Long userIdx, String createdBy, MultipartFile[] files) throws Exception {
-        UserAttachedFile uploadFile = new UserAttachedFile();
+        UserAttachedFile uploadFile;
 
         for (MultipartFile file : files) {
-            String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+            String uuid = UUID.randomUUID().toString().replace("-", "");
             String savedFileName = uuid + "_" + file.getOriginalFilename();
 
             Path path = Paths.get("./upload/" + savedFileName);

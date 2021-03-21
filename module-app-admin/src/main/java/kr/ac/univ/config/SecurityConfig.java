@@ -7,6 +7,7 @@ import kr.ac.univ.loginHistory.repository.LoginHistoryRepository;
 import kr.ac.univ.loginHistory.service.GeoLocationService;
 import kr.ac.univ.user.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,14 +28,19 @@ import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
-@AllArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private UserService userService;
     private LoginHistoryRepository loginHistoryRepository;
     private GeoLocationService geoLocationService;
 
+    public SecurityConfig(UserService userService, LoginHistoryRepository loginHistoryRepository, GeoLocationService geoLocationService) {
+        this.userService = userService;
+        this.loginHistoryRepository = loginHistoryRepository;
+        this.geoLocationService = geoLocationService;
+    }
+
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web)  {
         // static 디렉터리의 하위 파일 목록은 인증 무시 ( = 항상통과 )
         web.ignoring().antMatchers("/css/**", "/js/**", "/images/**", "/summernote/**", "/font/**", "/icons/**");
         // logout 페이지는 인증 무시(authenticationEntryPoint 비인증 사용자 enrty point에서 제외)
@@ -46,8 +52,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 // 페이지 권한 설정
-                .antMatchers("/**").hasAnyAuthority("root, manager")
                 .antMatchers("/h2-console/**").permitAll() // h2-console 접근 허용
+                .antMatchers("/**").hasAnyAuthority("root, manager")
                 .and()
                 .csrf().ignoringAntMatchers("/console/**") // h2-console csrf 제외
                 .and()
@@ -60,8 +66,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/user/login")   // login 페이지 URL
                 .loginProcessingUrl("/user/login/process")  // login 수행 URL
                 // 사용자 정의 handler
-                .successHandler(CustomAuthenticationSuccessHandler())
-                .failureHandler(CustomAuthenticationFailureHandler())
+                .successHandler(customAuthenticationSuccessHandlerBean())
+                .failureHandler(customAuthenticationFailureHandlerBean())
 //                .defaultSuccessUrl("/main/home")   // login 성공 URL
                 .permitAll()
                 .and()
@@ -99,7 +105,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * @return
      */
     @Bean
-    public AuthenticationSuccessHandler CustomAuthenticationSuccessHandler() {
+    public AuthenticationSuccessHandler customAuthenticationSuccessHandlerBean() {
         return new CustomAuthenticationSuccessHandler(loginHistoryRepository, geoLocationService);
     }
 
@@ -109,7 +115,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * @return
      */
     @Bean
-    public AuthenticationFailureHandler CustomAuthenticationFailureHandler() {
+    public AuthenticationFailureHandler customAuthenticationFailureHandlerBean() {
         return new CustomAuthenticationFailureHandler(loginHistoryRepository, geoLocationService);
     }
 

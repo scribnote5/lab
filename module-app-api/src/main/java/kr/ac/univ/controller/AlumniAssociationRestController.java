@@ -2,9 +2,6 @@ package kr.ac.univ.controller;
 
 import kr.ac.univ.alumniAssociation.dto.AlumniAssociationDto;
 import kr.ac.univ.alumniAssociation.service.AlumniAssociationService;
-import kr.ac.univ.error.ErrorCode;
-import kr.ac.univ.exception.BusinessException;
-import kr.ac.univ.util.EmptyUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +32,7 @@ public class AlumniAssociationRestController {
     }
 
     @DeleteMapping("/{idx}")
-    public ResponseEntity<?> deleteAlumniAssociation(@PathVariable("idx") Long idx) throws Exception {
+    public ResponseEntity<?> deleteAlumniAssociation(@PathVariable("idx") Long idx) {
         alumniAssociationService.deleteAlumniAssociationByIdx(idx);
 
         return new ResponseEntity<>("{}", HttpStatus.OK);

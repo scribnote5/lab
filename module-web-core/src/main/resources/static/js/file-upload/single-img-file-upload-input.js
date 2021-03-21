@@ -14,20 +14,18 @@ $("#file").on("change", function () {
         totalFileSize = 0;
 
         document.getElementById("imgData").innerHTML = this.files[0].name + ", File size: " + convertFileSize(this.files[0].size);
-        readURL(this);
+        readURL(this.files[0]);
     } else {
         return false;
     }
 });
 
 function readURL(input) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
+    var reader = new FileReader();
 
-        reader.onload = function (e) {
-            $('#imgPreview').attr('src', e.target.result);
-        }
-
-        reader.readAsDataURL(input.files[0]);
+    reader.onload = function (e) {
+        $('#imgPreview').attr('src', e.target.result);
     }
+
+    reader.readAsDataURL(input);
 }

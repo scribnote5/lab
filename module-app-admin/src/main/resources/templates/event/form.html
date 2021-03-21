@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- css -->
+    <th:block th:replace="layout/css.html"></th:block>
+
+    <title th:if="!${eventDto.idx}" th:text="${@environment.getProperty('title')} + ' | Event Register'"></title>
+    <title th:if="${eventDto.idx}" th:text="${@environment.getProperty('title')} + ' | Event Update'"></title>
+</head>
+<body>
+<div class="d-flex" id="wrapper">
+    <!-- sidebar -->
+    <div th:replace="layout/sidebar::sidebar"></div>
+
+    <div id="page-content-wrapper">
+        <!-- header -->
+        <div th:replace="layout/header::header"></div>
+
+        <div class="container-fluid">
+            <form name="form" id="form" th:object="${eventDto}" action="#">
+                <div class="page-header breadcrumbs">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 th:if="!*{idx}">Event Register</h2>
+                        <h2 th:if="*{idx}">Event Update</h2>
+                        <ol>
+                            <li>Home</li>
+                            <li th:if="!*{idx}">Event Register</li>
+                            <li th:if="*{idx}">Event Update</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div id="loading">
+                    <img th:src="@{/images/loading.gif}" alt="Loading…"/>
+                </div>
+
+                <div class="page-content">
+                    <table class="table mobile-table-form mt-4">
+                        <colgroup>
+                            <col width="17.5%"/>
+                            <col width="82.5%"/>
+                        </colgroup>
+
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Event Information</th>
+                        </tr>
+                        <tr>
+                            <th>Title<span class="required-field">*</span></th>
+                            <td><input type="text" name="title" class="form-control form-control-sm" th:value="*{title}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Place</th>
+                            <td><input type="text" name="place" class="form-control form-control-sm" th:value="*{place}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Start Date<span class="required-field">*</span></th>
+                            <td><input type="date" name="startDate" class="form-control form-control-sm" th:value="*{startDate}"/></td>
+                        </tr>
+                        <tr>
+                            <th>End Date<span class="required-field">*</span></th>
+                            <td><input type="date" name="endDate" class="form-control form-control-sm" th:value="*{endDate}"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div name="content" id="content" th:utext="*{content}"></div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Additional Information</th>
+                        </tr>
+                        <tr>
+                            <th>Active Status</th>
+                            <td>
+                                <select class="custom-select custom-select-sm" name="activeStatus" th:field="*{activeStatus}">
+                                    <option th:value="ACTIVE">Active</option>
+                                    <option th:value="INACTIVE">Inactive</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Created Date</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(createdDate,'yyyy.MM.dd. HH:mm')}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Last Modified Date</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(lastModifiedDate,'yyyy.MM.dd. HH:mm')}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Created By</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{createdBy}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Last Modified By</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{lastModifiedBy}"/></td>
+                        </tr>
+                        <tr th:if="*{idx}">
+                            <th>Views</th>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{views}"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="10"></td>
+                        </tr>
+                    </table>
+
+                    <div class="row justify-content-between mt-4 mb-4">
+                        <div class="col-auto">
+                            <a href="/event/list" class="btn btn-sm btn-secondary">Move to List</a>
+                        </div>
+                        <div class="col-auto ml-2">
+                            <button th:if="!*{idx}" id="insert" type="button" class="btn-main btn-sm">Register</button>
+                            <button th:if="*{idx}" id="update" type="button" class="btn btn-sm btn-info">Update</button>
+                        </div>
+                    </div>
+
+                    <!-- input type="hidden" -->
+                    <input type="hidden" name="idx" th:value="*{idx}"/>
+                    <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
+                    <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- footer -->
+<div th:replace="layout/footer::footer"></div>
+
+<!-- script file -->
+<th:block th:replace="layout/script.html"></th:block>
+
+<!-- javascript -->
+<script th:src="@{/js/ckeditor.js}"></script>
+<script th:src="@{/js/ckeditor-editor-init.js}"></script>
+
+<script>
+    function deleteEvent(eventIdx) {
+        $.ajax({
+            url: moduleAppApiAddress + "/api/events/" + eventIdx,
+            type: "delete",
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+            });
+    }
+</script>
+
+<script th:if="!${eventDto?.idx}">
+    $("#insert").click(function () {
+        // validation (input tag mame, length or size)
+        if (!(validateByLengthAndBlank("title", 255) && validateByBlank("startDate") && validateByBlank("endDate") && validateByEditor(editor.getData(), 16777215))) {
+            return false;
+        }
+
+        // duplicate submit check
+        if (duplicateSubmitCheck()) return false;
+
+        var jsonData = $("#form").serializeObject();
+        jsonData.content = editor.getData();
+
+        $.ajax({
+            url: moduleAppApiAddress + "/api/events",
+            type: "post",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                localStorage.setItem("result", "/event/register-success");
+                location.href = "/event?idx=" + msg;
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
+            });
+    });
+</script>
+
+<script th:if="${eventDto?.idx}" th:inline="javascript">
+    $("#update").click(function () {
+        // validation (input tag mame, length or size)
+        if (!(validateByLengthAndBlank("title", 255) && validateByBlank("startDate") && validateByBlank("endDate") && validateByEditor(editor.getData(), 16777215))) {
+            return false;
+        }
+
+        // duplicate submit check
+        if (duplicateSubmitCheck()) return false;
+
+        var jsonData = $("#form").serializeObject();
+        jsonData.content = editor.getData();
+        var eventIdx = document.getElementsByName("idx")[0].value;
+
+        $.ajax({
+            url: moduleAppApiAddress + "/api/events/" + eventIdx,
+            type: "put",
+            data: JSON.stringify(jsonData),
+            dataType: "text",
+            contentType: "application/json",
+            async: false,
+        })
+            .done(function (msg) {
+                localStorage.setItem("result", "/event/update-success");
+                location.href = "/event?idx=" + eventIdx;
+            })
+            .fail(function (msg) {
+                parseErrorMsg(msg);
+                duplicateSubmitFlag = false;
+            });
+    });
+</script>
+
+</body>
+</html>

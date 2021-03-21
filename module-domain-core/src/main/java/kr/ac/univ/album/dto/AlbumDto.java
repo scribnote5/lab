@@ -40,5 +40,5 @@ public class AlbumDto extends CommonDto {
     private MainHashTagStatus mainHashTagStatus;
 
     /* Attached File */
-    private List<AlbumAttachedFile> attachedFileList = new ArrayList<AlbumAttachedFile>();
+    private List<AlbumAttachedFile> attachedFileList = new ArrayList<>();
 }

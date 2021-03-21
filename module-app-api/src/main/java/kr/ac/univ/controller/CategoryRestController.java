@@ -32,7 +32,7 @@ public class CategoryRestController {
     }
 
     @DeleteMapping("/{idx}")
-    public ResponseEntity<?> deleteCategory(@PathVariable("idx") Long idx) throws Exception {
+    public ResponseEntity<?> deleteCategory(@PathVariable("idx") Long idx) {
         categoryService.deleteCategoryByIdx(idx);
 
         return new ResponseEntity<>("{}", HttpStatus.OK);

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- css -->
+    <th:block th:replace="layout/css.html"></th:block>
+
+    <title th:text="${@environment.getProperty('title')} + ' | Event List'"></title>
+</head>
+<body>
+<div id="page-content-wrapper">
+    <!-- header -->
+    <div th:replace="layout/header::header"></div>
+
+    <div class="container event-page">
+        <form name="form" id="form" th:object="${searchDto}" action="#">
+            <div class="page-header breadcrumbs">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2>Event List</h2>
+                    <ol>
+                        <li>Home</li>
+                        <li>Event List</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div id="loading">
+                <img th:src="@{/images/loading.gif}" alt="Loading…"/>
+            </div>
+
+            <div class="page-search" data-aos="fade-up">
+                <div class="row justify-content-end mt-4">
+                    <div class="pt-2 pr-3">
+                        <select class="custom-select custom-select-sm" name="searchType" th:field="*{searchType}">
+                            <option th:value="TITLE">Title</option>
+                            <option th:value="CONTENT">Content</option>
+                            <option th:value="ID">ID</option>
+                        </select>
+                    </div>
+                    <div class="pt-2 pr-2">
+                        <input type="search" class="custom-search-input" name="keyword" placeholder="Search" th:value="${searchDto?.keyword}">
+                    </div>
+                    <div class="pt-2">
+                        <i id="search" class="fas fa-search search-icon"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page-content" data-aos="fade-up">
+                <div class="mt-4">
+                    <div th:each="eventDto : ${eventDtoList}">
+                        <div class="row mt-4">
+                            <div class="col-md-2 col-3 text-right">
+                                <h1><span th:text="${#temporals.format(eventDto.startDate,'dd')}" class="badge badge-main"></span></h1>
+                                <h2 th:text="${#temporals.format(eventDto.startDate, 'MMMM', new java.util.Locale('en', 'EN'))}"></h2>
+                            </div>
+
+                            <div class="col-md-10 col-9 event-content">
+                                <a th:href="'/event?idx='+${eventDto.idx}" class="link">
+                                    <h4 style="font-weight: bold" th:text="${eventDto.title}"></h4>
+                                </a>
+                                <div>
+                                    <i class="far fa-calendar-alt"></i>&nbsp; <span th:text="${#temporals.format(eventDto.startDate,'yyyy.MM.dd.')}"></span>
+                                    <span th:if="!${#strings.isEmpty(eventDto.endDate)}" th:text="'~' + ${#temporals.format(eventDto.endDate,'yyyy.MM.dd.')}"></span>
+                                </div>
+                                <div>
+                                    <i class="fas fa-map-marked-alt"></i>&nbsp; <span th:text="${eventDto.place}"></span>
+                                </div>
+                                <div>
+                                    <span th:text="'Created By:' + ${eventDto.createdBy}"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div th:if="${eventDtoList.totalElements == 0}">
+                        <div class="div-no-posts">
+                            No posts founded.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row justify-content-end mt-4 mb-4">
+                    <div class="col-auto">
+                        <a href="/event/form" sec:authorize="isAuthenticated()" class="btn-main btn-sm">Register</a>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="row justify-content-center mb-4" aria-label="Page navigation">
+                    <ul class="pagination "
+                        th:with="startNumber=${T(Math).floor(eventDtoList.number/10)}*10+1, endNumber=(${eventDtoList.totalPages} > ${startNumber}+9) ? ${startNumber}+9 : (${eventDtoList.totalPages} == 0 ? 1 : ${eventDtoList.totalPages})">
+                        <li class="page-item">
+                            <a class="page-link" aria-label="Previous" th:href="@{/event/list(page=1,searchType=*{searchType},keyword=*{keyword})}">&laquo;</a>
+                        </li>
+                        <li class="page-item" th:style="${eventDtoList.first} ? 'display:none'">
+                            <a class="page-link" th:href="@{/event/list(page=${eventDtoList.number},searchType=*{searchType},keyword=*{keyword})}">&lsaquo;</a>
+                        </li>
+
+                        <li th:each="page :${#numbers.sequence(startNumber, endNumber)}" th:class="(${page} == ${eventDtoList.number}+1) ? 'page-item active'">
+                            <a class="page-link" th:href="@{/event/list(page=${page},searchType=*{searchType},keyword=*{keyword})}" th:text="${page}"><span class="sr-only"></span></a>
+                        </li>
+
+                        <li class="page-item" th:style="${eventDtoList.last} ? 'display:none'">
+                            <a class="page-link" th:href="@{/event/list(page=${eventDtoList.number}+2,searchType=*{searchType},keyword=*{keyword})}">&rsaquo;</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" aria-label="Next" th:href="@{/event/list(page=${eventDtoList.totalPages},searchType=*{searchType},keyword=*{keyword})}">&raquo;</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /Pagination -->
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- footer -->
+<div th:replace="layout/footer::footer"></div>
+
+<!-- script file -->
+<th:block th:replace="layout/script.html"></th:block>
+
+<script>
+    sweetalertFire("event");
+
+    $("#search").click(function () {
+        document.form.action = "/event/list";
+        document.form.method = "get";
+        document.form.submit();
+    });
+</script>
+
+</body>
+</html>

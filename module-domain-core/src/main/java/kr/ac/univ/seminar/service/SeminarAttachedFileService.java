@@ -58,10 +58,10 @@ public class SeminarAttachedFileService {
      * @param files
      */
     public void uploadAttachedFile(Long seminarIdx, String createdBy, MultipartFile[] files) throws Exception {
-        SeminarAttachedFile uploadFile = new SeminarAttachedFile();
+        SeminarAttachedFile uploadFile;
 
         for (MultipartFile file : files) {
-            String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+            String uuid = UUID.randomUUID().toString().replace("-", "");
             String savedFileName = uuid + "_" + file.getOriginalFilename();
 
             // 대체 가능

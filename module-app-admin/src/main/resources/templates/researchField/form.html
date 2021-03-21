@@ -70,9 +70,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2">
-                                <div name="content" id="content" th:utext="*{content}"></div>
-                            </td>
+                            <td colspan="2"><textarea name="content" th:text="*{content}" class="form-control content"></textarea></td>
                         </tr>
                         <tr>
                             <th>Attached File(img file)<span class="required-field">*</span></th>
@@ -134,11 +132,11 @@
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created Date</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(createdDate,'yyyy.MM.dd. HH:mm')}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Last Modified Date</th>
-                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                            <td><input type="text" class="form-control form-control-sm" readonly th:value="*{#temporals.format(lastModifiedDate,'yyyy.MM.dd. HH:mm')}"/></td>
                         </tr>
                         <tr th:if="*{idx}">
                             <th>Created By</th>
@@ -184,7 +182,6 @@
 <th:block th:replace="layout/script.html"></th:block>
 
 <!-- javascript -->
-<script th:src="@{/js/ckeditor-editor-init.js}"></script>
 <script th:src="@{/js/file-upload/single-img-file-upload.js}"></script>
 
 <script th:inline="javascript">
@@ -215,7 +212,7 @@
 <script th:if="!${researchFieldDto?.idx}">
     $("#insert").click(function () {
         // validation (input tag mame, length or size)
-        if (!(validateByLengthAndBlank("title", 255) && validateBySelect("categoryIdx") && validateByEditor(editor.getData(), 16777215) && validateByFileExist())) {
+        if (!(validateByLengthAndBlank("title", 255) && validateBySelect("categoryIdx") && validateBySize("content", 16777215) && validateByFileExist())) {
             return false;
         }
 
@@ -223,7 +220,6 @@
         if (duplicateSubmitCheck()) return false;
 
         var jsonData = $("#form").serializeObject();
-        jsonData.content = editor.getData();
         var researchFieldIdx = document.getElementsByName("idx")[0].value;
 
         $.ajax({
@@ -282,7 +278,7 @@
 <script th:if="${researchFieldDto?.idx}" th:inline="javascript">
     $("#update").click(function () {
         // validation (input tag mame, length or size)
-        if (!(validateByLengthAndBlank("title", 255) && validateBySelect("categoryIdx") && validateByEditor(editor.getData(), 16777215) && validateByFileExist())) {
+        if (!(validateByLengthAndBlank("title", 255) && validateBySelect("categoryIdx") && validateBySize("content", 16777215) && validateByFileExist())) {
             return false;
         }
 
@@ -290,7 +286,6 @@
         if (duplicateSubmitCheck()) return false;
 
         var jsonData = $("#form").serializeObject();
-        jsonData.content = editor.getData();
         var researchFieldIdx = document.getElementsByName("idx")[0].value;
 
         $.ajax({

@@ -1,8 +1,8 @@
 package kr.ac.univ.researchField.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import kr.ac.univ.researchField.domain.ResearchField;
 import kr.ac.univ.researchField.domain.QResearchField;
+import kr.ac.univ.researchField.domain.ResearchField;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 

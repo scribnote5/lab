@@ -75,7 +75,7 @@
                                 <div class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline">
                                     <div class="d-flex align-center">
                                         <span th:text="${researchFieldDto.createdBy}" class="mobile-additional-information"> </span> &nbsp;&nbsp;
-                                        <span th:text="${#temporals.format(researchFieldDto.createdDate,'yyyy-MM-dd HH:mm')}" class="mobile-additional-information"></span> &nbsp;&nbsp;
+                                        <span th:text="${#temporals.format(researchFieldDto.createdDate,'yyyy.MM.dd. HH:mm')}" class="mobile-additional-information"></span> &nbsp;&nbsp;
                                         <span th:text="'Views: ' + ${researchFieldDto.views}" class="mobile-additional-information"></span>
                                     </div>
                                     <div class="d-flex align-center">
@@ -87,7 +87,7 @@
 
                             <!-- Desktop -->
                             <td th:text="${researchFieldDto.createdBy}" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
-                            <td th:text="${#temporals.format(researchFieldDto.createdDate,'yyyy-MM-dd HH:mm')}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:text="${#temporals.format(researchFieldDto.createdDate,'yyyy.MM.dd. HH:mm')}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td th:if="${researchFieldDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td th:if="${researchFieldDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td th:text="${researchFieldDto.views}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>

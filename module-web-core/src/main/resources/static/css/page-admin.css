@@ -6,6 +6,7 @@
     color: var(--darkest-grey);
     border-radius: .5rem;
     display: inline-block;
+    margin-top: .35rem;
     padding: .25rem;
 }
 

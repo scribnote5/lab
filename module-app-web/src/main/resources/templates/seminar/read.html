@@ -38,7 +38,7 @@
                     <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                         <td class="text-right border-0" colspan="10">
                             <strong class="additional-information">Created By: </strong><span th:text="*{createdBy}" class="additional-information"></span> &nbsp;&nbsp;&nbsp;
-                            <strong class="additional-information">Created Date: </strong><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}" class="additional-information"></span> &nbsp;&nbsp;&nbsp;
+                            <strong class="additional-information">Created Date: </strong><span th:text="*{#temporals.format(createdDate,'yyyy.MM.dd. HH:mm')}" class="additional-information"></span> &nbsp;&nbsp;&nbsp;
                             <strong class="additional-information">Views: </strong> <span th:text="*{views}" class="additional-information"/></span>
                         </td>
                     </tr>
@@ -52,7 +52,7 @@
                     </tr>
                     <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                         <th>Presentation Date</th>
-                        <td th:text="*{#temporals.format(presentationDate,'yyyy-MM-dd HH:mm')}"></td>
+                        <td th:text="*{#temporals.format(presentationDate,'yyyy.MM.dd. HH:mm')}"></td>
                     </tr>
                     <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                         <th>Place</th>
@@ -77,7 +77,7 @@
 
                             <div class="text-right">
                                 <span th:text="*{createdBy}"></span>&nbsp;&nbsp;
-                                <span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}" class="mobile-additional-information"></span>&nbsp;&nbsp;
+                                <span th:text="*{#temporals.format(createdDate,'yyyy.MM.dd. HH:mm')}" class="mobile-additional-information"></span>&nbsp;&nbsp;
                                 <span th:text="'Views: ' + *{views}" class="mobile-additional-information"/>
                             </div>
                         </td>
@@ -88,7 +88,7 @@
 
                             <strong class="mobile-default">Place: </strong><span th:text="*{place}" class="mobile-default"></span><br>
 
-                            <strong class="mobile-default">Presentation Date: </strong><span th:text="*{#temporals.format(presentationDate,'yyyy-MM-dd HH:mm')}" class="mobile-default"></span><br>
+                            <strong class="mobile-default">Presentation Date: </strong><span th:text="*{#temporals.format(presentationDate,'yyyy.MM.dd. HH:mm')}" class="mobile-default"></span><br>
 
                             <strong class="mobile-default">Seminar Type: </strong><span th:text="*{seminarType.seminarType}" class="mobile-default"></span><br>
 

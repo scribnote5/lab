@@ -1,8 +1,5 @@
 package kr.ac.univ.publication.service;
 
-
-import java.util.List;
-
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.publication.domain.Publication;
 import kr.ac.univ.publication.domain.enums.PublicationType;
@@ -17,15 +14,11 @@ import kr.ac.univ.util.AccessCheck;
 import kr.ac.univ.util.EmptyUtil;
 import kr.ac.univ.util.NewIconCheck;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-
+import java.util.List;
 
 @Service
 public class PublicationService {
@@ -73,8 +66,8 @@ public class PublicationService {
                 parsedString += str[i];
             }
 
-            parsedString = parsedString.toUpperCase().replaceAll("-", "_");
-            PublicationType publicationType = PublicationType.valueOf(parsedString.toUpperCase().replaceAll(" ", ""));
+            parsedString = parsedString.toUpperCase().replace("-", "_");
+            PublicationType publicationType = PublicationType.valueOf(parsedString.toUpperCase().replace(" ", ""));
 
             switch (publicationSearchDto.getSearchType()) {
                 case "TITLE":
@@ -118,8 +111,8 @@ public class PublicationService {
         return publicationRepository.countAllByActiveStatusIs(ActiveStatus.ACTIVE);
     }
 
-    public Long insertPublication(Publication publication) {
-        return publicationRepository.save(publication).getIdx();
+    public Long insertPublication(PublicationDto publicationDto) {
+        return publicationRepository.save(PublicationMapper.INSTANCE.toEntity(publicationDto)).getIdx();
     }
 
     public PublicationDto findPublicationByIdx(Long idx) {

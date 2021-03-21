@@ -1,7 +1,5 @@
 package kr.ac.univ.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import kr.ac.univ.common.validation.FileValidator;
 import kr.ac.univ.exception.FileTypeException;
 import lombok.extern.slf4j.Slf4j;
@@ -13,15 +11,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 @Slf4j
@@ -42,7 +37,7 @@ public class AttachedFileRestController {
         }
 
         for (MultipartFile file : files) {
-            String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+            String uuid = UUID.randomUUID().toString().replace("-", "");
             String savedFileName = uuid + "_" + file.getOriginalFilename();
 
             // 대체 가능

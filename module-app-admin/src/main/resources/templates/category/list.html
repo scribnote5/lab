@@ -75,7 +75,7 @@
                                 <div class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline">
                                     <div class="d-flex align-center">
                                         <span th:text="${categoryDto.createdBy}" class="mobile-additional-information"> </span> &nbsp;&nbsp;
-                                        <span th:text="${#temporals.format(categoryDto.createdDate,'yyyy-MM-dd HH:mm')}" class="mobile-additional-information"></span> &nbsp;&nbsp;
+                                        <span th:text="${#temporals.format(categoryDto.createdDate,'yyyy.MM.dd. HH:mm')}" class="mobile-additional-information"></span> &nbsp;&nbsp;
                                         <span th:text="'Views: ' + ${categoryDto.views}" class="mobile-additional-information"></span>
                                     </div>
                                     <div class="d-flex align-center">
@@ -87,7 +87,7 @@
 
                             <!-- Desktop -->
                             <td th:text="${categoryDto.createdBy}" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
-                            <td th:text="${#temporals.format(categoryDto.createdDate,'yyyy-MM-dd HH:mm')}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:text="${#temporals.format(categoryDto.createdDate,'yyyy.MM.dd. HH:mm')}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td th:if="${categoryDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td th:if="${categoryDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td th:text="${categoryDto.views}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>

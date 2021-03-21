@@ -1,6 +1,5 @@
 package kr.ac.univ.publication.dto;
 
-import kr.ac.univ.common.dto.SearchDto;
 import kr.ac.univ.publication.dto.enums.PublicationSearchType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

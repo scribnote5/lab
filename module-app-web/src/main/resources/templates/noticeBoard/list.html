@@ -59,6 +59,7 @@
                     <tr th:each="noticeBoardDto : ${noticeBoardDtoList}">
                         <td>
                             <!-- Common -->
+                            <img th:if="${noticeBoardDto.mainPagePriority != 11}" th:attr="src=@{|/images/speaker-icon.jpg|}" class="new-icon"/>
                             <a th:href="'/notice-board?idx='+${noticeBoardDto.idx}" th:text="${noticeBoardDto.title}" class="link"></a>
                             <img th:if="${noticeBoardDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
 
@@ -66,7 +67,7 @@
                             <div class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline">
                                 <div class="d-flex align-center">
                                     <span th:text="${noticeBoardDto.createdBy}" class="mobile-additional-information"> </span> &nbsp;&nbsp;
-                                    <span th:text="${#temporals.format(noticeBoardDto.createdDate,'yyyy-MM-dd')}" class="mobile-additional-information"></span> &nbsp;&nbsp;
+                                    <span th:text="${#temporals.format(noticeBoardDto.createdDate,'yyyy.MM.dd.')}" class="mobile-additional-information"></span> &nbsp;&nbsp;
                                     <span th:text="'Views: ' + ${noticeBoardDto.views}" class="mobile-additional-information"></span>
                                 </div>
                             </div>
@@ -74,7 +75,7 @@
 
                         <!-- Desktop -->
                         <td th:text="${noticeBoardDto.createdBy}" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
-                        <td th:text="${#temporals.format(noticeBoardDto.createdDate,'yyyy-MM-dd')}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                        <td th:text="${#temporals.format(noticeBoardDto.createdDate,'yyyy.MM.dd.')}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                         <td th:text="${noticeBoardDto.views}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                     </tr>
                     <tr th:if="${noticeBoardDtoList.totalElements == 0}">

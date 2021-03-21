@@ -2,7 +2,6 @@ package kr.ac.univ.researchField.domain;
 
 import kr.ac.univ.common.domain.CommonAudit;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
-import kr.ac.univ.project.domain.enums.ProjectStatus;
 import kr.ac.univ.researchField.domain.enums.ResearchFieldStatus;
 import kr.ac.univ.researchField.listener.ResearchFieldListener;
 import lombok.Builder;

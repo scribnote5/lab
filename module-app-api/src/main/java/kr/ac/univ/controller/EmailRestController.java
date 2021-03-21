@@ -32,7 +32,7 @@ public class EmailRestController {
     }
 
     @DeleteMapping("/{idx}")
-    public ResponseEntity<?> deleteEmail(@PathVariable("idx") Long idx) throws Exception {
+    public ResponseEntity<?> deleteEmail(@PathVariable("idx") Long idx) {
         emailService.deleteEmailByIdx(idx);
 
         return new ResponseEntity<>("{}", HttpStatus.OK);

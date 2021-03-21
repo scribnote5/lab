@@ -38,6 +38,19 @@ table td {
     font-size: var(--larger-font-size);
 }
 
+.div-no-posts {
+    border-top: 1px solid #dee2e6;
+    border-bottom: 1px solid #dee2e6;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    height: 7.5rem !important;
+    text-align: center;
+    color: var(--dark-grey);
+    font-size: var(--larger-font-size);
+}
+
+
 .btn-main {
     display: inline-block;
     text-align: center;
@@ -60,6 +73,11 @@ table td {
 
 .btn-main i {
     color: var(--white);
+}
+
+.badge-main {
+    color: #fff;
+    background-color: var(--main-red);
 }
 
 .link {
@@ -108,6 +126,22 @@ table td {
 
 .image-style-align-right {
     float: right;
+}
+
+.text-tiny {
+    font-size: .7em;
+}
+
+.text-small {
+    font-size: .85em;
+}
+
+.text-big {
+    font-size: 1.4em;
+}
+
+.text-huge {
+    font-size: 1.8em;
 }
 
 /*
@@ -180,6 +214,11 @@ table td {
  */
 .vbox-title {
     font-size: 22px !important;
+}
+
+.vbox-num {
+    font-size: 16px !important;
+    color: white;
 }
 
 /*

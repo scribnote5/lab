@@ -69,7 +69,7 @@
     font-weight: var(--strong-font-weight);
     padding: 10px 0 10px 18px;
     transition: 0.3s;
-    font-size: var(--large-font-size);
+    font-size: var(--larger-font-size);
 }
 
 .nav-menu a:hover, .nav-menu .active > a, .nav-menu li:hover > a {

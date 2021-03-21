@@ -2,12 +2,10 @@
 <script th:src="@{/js/jquery.serialize-object.min.js}"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://kit.fontawesome.com/6b69fd4398.js" crossorigin="anonymous"></script>
+<script th:src="@{'https://kit.fontawesome.com/' + ${@environment.getProperty('font-awesome.address')} }" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/venobox@1.9.2/venobox/venobox.min.js"></script>
-
-<script th:src="@{/js/ckeditor.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/venobox@1.9.3/venobox/venobox.min.js"></script>
 
 <script th:src="@{/js/util.js}"></script>
 <script th:src="@{/js/validation.js}"></script>
@@ -18,17 +16,17 @@
 </script>
 
 <script th:inline="javascript">
-    var token = $("meta[name='_csrf']").attr("content");
-    var header = $("meta[name='_csrf_header']").attr("content");
-    $(function () {
-        $(document).ajaxSend(function (e, xhr, options) {
-            xhr.setRequestHeader(header, token);
-        });
-    });
-
     $("#menu-toggle").click(function (e) {
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
+
+        if ($("#wrapper").hasClass("toggled") === true) {
+            if (window.innerWidth <= 563) {
+                $("#userInformation").hide();
+            }
+        } else {
+            $("#userInformation").fadeIn(1000);
+        }
     });
 
     /* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */
@@ -67,7 +65,7 @@
 
     $('.venobox').venobox({
         framewidth: 'auto',
-        frameheight: '625px',
+        frameheight: 'auto',
         border: '2px',
         numeratio: true,
         infinigall: true,

@@ -15,7 +15,6 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
-
 @Service
 public class ResearchFieldAttachedFileService {
     private final ResearchFieldAttachedFileRepository researchFieldAttachedFileRepository;
@@ -61,7 +60,7 @@ public class ResearchFieldAttachedFileService {
         ResearchFieldAttachedFile uploadFile = new ResearchFieldAttachedFile();
 
         for (MultipartFile file : files) {
-            String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+            String uuid = UUID.randomUUID().toString().replace("-", "");
             String savedFileName = uuid + "_" + file.getOriginalFilename();
 
             // 대체 가능

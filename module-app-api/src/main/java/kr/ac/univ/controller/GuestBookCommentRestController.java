@@ -1,6 +1,5 @@
 package kr.ac.univ.controller;
 
-import kr.ac.univ.guestBook.domain.GuestBookComment;
 import kr.ac.univ.guestBook.dto.GuestBookCommentDto;
 import kr.ac.univ.guestBook.service.GuestBookCommentService;
 import org.springframework.http.HttpStatus;

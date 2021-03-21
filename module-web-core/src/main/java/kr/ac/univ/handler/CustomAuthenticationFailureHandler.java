@@ -70,5 +70,4 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
 
         request.getRequestDispatcher("/user/login/fail").forward(request, response);
     }
-
 }

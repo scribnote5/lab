@@ -16,5 +16,4 @@ public class AudMessageUtil {
     public static String getLoginSuccessAudMessage(String messageTarget) {
         return "'" + messageTarget + "' has logged in.";
     }
-
 }

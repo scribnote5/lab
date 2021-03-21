@@ -2,7 +2,6 @@ package kr.ac.univ.researchField.dto;
 
 import kr.ac.univ.common.dto.CommonDto;
 import kr.ac.univ.common.validation.Editor;
-import kr.ac.univ.project.domain.ProjectAttachedFile;
 import kr.ac.univ.researchField.domain.ResearchFieldAttachedFile;
 import kr.ac.univ.researchField.domain.enums.ResearchFieldStatus;
 import lombok.Getter;

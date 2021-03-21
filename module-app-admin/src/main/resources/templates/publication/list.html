@@ -85,7 +85,7 @@
                                     <div class="d-flex align-center">
                                         <span th:text="${publicationDto.authors}" class="mobile-additional-information"> </span> &nbsp;&nbsp;
                                         <span th:text="${publicationDto.publishedIn}" class="mobile-additional-information"> </span> &nbsp;&nbsp;
-                                        <span th:text="${#temporals.format(publicationDto.publishedDate,'yyyy-MM-dd')}" class="mobile-additional-information"></span> &nbsp;&nbsp;
+                                        <span th:text="${#temporals.format(publicationDto.publishedDate,'yyyy.MM.dd.')}" class="mobile-additional-information"></span> &nbsp;&nbsp;
                                     </div>
                                     <div class="d-flex align-center">
                                         <span th:if="${publicationDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active" class="mobile-additional-information"></span>
@@ -97,7 +97,7 @@
                             <!-- Desktop -->
                             <td th:text="${publicationDto.authors}" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td th:text="${publicationDto.publishedIn}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
-                            <td th:text="${#temporals.format(publicationDto.publishedDate,'yyyy-MM-dd')}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:text="${#temporals.format(publicationDto.publishedDate,'yyyy.MM.dd.')}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td th:if="${publicationDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td th:if="${publicationDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                         </tr>

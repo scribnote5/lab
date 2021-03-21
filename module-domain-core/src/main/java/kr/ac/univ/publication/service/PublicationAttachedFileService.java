@@ -57,10 +57,10 @@ public class PublicationAttachedFileService {
      * @param files
      */
     public void uploadAttachedFile(Long publicationIdx, String createdBy, MultipartFile[] files) throws Exception {
-        PublicationAttachedFile uploadFile = new PublicationAttachedFile();
+        PublicationAttachedFile uploadFile;
 
         for (MultipartFile file : files) {
-            String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+            String uuid = UUID.randomUUID().toString().replace("-", "");
             String savedFileName = uuid + "_" + file.getOriginalFilename();
 
             // 대체 가능하다

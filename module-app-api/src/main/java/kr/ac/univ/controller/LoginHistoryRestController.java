@@ -23,11 +23,9 @@ public class LoginHistoryRestController {
     }
 
     @DeleteMapping("/{idx}")
-    public ResponseEntity<?> deleteLoginHistory(@PathVariable("idx") Long idx) throws Exception {
+    public ResponseEntity<?> deleteLoginHistory(@PathVariable("idx") Long idx) {
         loginHistoryService.deleteLoginHistoryByIdx(idx);
 
         return new ResponseEntity<>("{}", HttpStatus.OK);
     }
-
-
 }

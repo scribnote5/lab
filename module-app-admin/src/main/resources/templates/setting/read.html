@@ -83,7 +83,7 @@
                         </tr>
                         <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Lab Start Date</th>
-                            <td th:text="*{#temporals.format(labStartDate,'yyyy-MM-dd')}"></td>
+                            <td th:text="*{#temporals.format(labStartDate,'yyyy.MM.dd.')}"></td>
                         </tr>
 
                         <!-- Mobile -->
@@ -99,7 +99,7 @@
 
                                 <strong class="mobile-default">Phone Number: </strong><span th:text="*{phoneNumber}" class="mobile-default"></span><br>
 
-                                <strong class="mobile-default">Lab Start Date: </strong><span th:text="*{#temporals.format(labStartDate,'yyyy-MM-dd')}" class="mobile-default"></span>
+                                <strong class="mobile-default">Lab Start Date: </strong><span th:text="*{#temporals.format(labStartDate,'yyyy.MM.dd.')}" class="mobile-default"></span>
                             </td>
                         </tr>
 
@@ -150,11 +150,11 @@
                         </tr>
                         <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Created Date</th>
-                            <td th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}"></td>
+                            <td th:text="*{#temporals.format(createdDate,'yyyy.MM.dd. HH:mm')}"></td>
                         </tr>
                         <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Last Modified Date</th>
-                            <td th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}"></td>
+                            <td th:text="*{#temporals.format(lastModifiedDate,'yyyy.MM.dd. HH:mm')}"></td>
                         </tr>
                         <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Created By</th>
@@ -176,9 +176,9 @@
                                 <span th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active" class="mobile-default"> </span>
                                 <span th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive" class="mobile-default"> </span><br>
 
-                                <strong class="mobile-default">Created Date: </strong><span th:text="*{#temporals.format(createdDate,'yyyy-MM-dd HH:mm')}" class="mobile-default"></span><br>
+                                <strong class="mobile-default">Created Date: </strong><span th:text="*{#temporals.format(createdDate,'yyyy.MM.dd. HH:mm')}" class="mobile-default"></span><br>
 
-                                <strong class="mobile-default">Last Modified Date: </strong><span th:text="*{#temporals.format(lastModifiedDate,'yyyy-MM-dd HH:mm')}" class="mobile-default"></span><br>
+                                <strong class="mobile-default">Last Modified Date: </strong><span th:text="*{#temporals.format(lastModifiedDate,'yyyy.MM.dd. HH:mm')}" class="mobile-default"></span><br>
 
                                 <strong class="mobile-default">Created By: </strong><span th:text="*{createdBy}" class="mobile-default"></span><br>
 

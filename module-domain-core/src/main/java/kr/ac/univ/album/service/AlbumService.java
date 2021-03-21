@@ -92,19 +92,26 @@ public class AlbumService {
         String mainHashTag = "";
         boolean secondAlbumByMainHashTag = false;
 
-        for (AlbumDto albumDto : albumDtoList) {
+        for (int i = 0; i < albumDtoList.size(); i++) {
             // 사용자 album 페이지에서 mainHashTag 출력 여부를 결정
-            if (!mainHashTag.equals(albumDto.getMainHashTag())) {
-                albumDto.setMainHashTagStatus(MainHashTagStatus.PRINT);
-                mainHashTag = albumDto.getMainHashTag();
+            if (!mainHashTag.equals(albumDtoList.get(i).getMainHashTag())) {
+                if ((i != 1) && (i % 2 != 0)) {
+                    albumDtoList.get(i - 1).setMainHashTagStatus(MainHashTagStatus.KEEP_SPACE);
+                }
+                albumDtoList.get(i).setMainHashTagStatus(MainHashTagStatus.PRINT);
+                mainHashTag = albumDtoList.get(i).getMainHashTag();
                 secondAlbumByMainHashTag = true;
             }
             // mainHashTag를 출력한 다음의(두 번째) album은 mainHashTag를 출력하지 않고 공간만 유지
             else if (secondAlbumByMainHashTag) {
-                albumDto.setMainHashTagStatus(MainHashTagStatus.KEEP_SPACE);
+                if (i % 2 == 0) {
+                    albumDtoList.get(i).setMainHashTagStatus(MainHashTagStatus.SKIP_SPACE);
+                } else {
+                    albumDtoList.get(i).setMainHashTagStatus(MainHashTagStatus.KEEP_SPACE);
+                }
                 secondAlbumByMainHashTag = false;
             } else {
-                albumDto.setMainHashTagStatus(MainHashTagStatus.NON_PRINT);
+                albumDtoList.get(i).setMainHashTagStatus(MainHashTagStatus.NON_PRINT);
             }
         }
 

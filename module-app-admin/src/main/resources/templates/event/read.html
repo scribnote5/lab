@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- css -->
+    <th:block th:replace="layout/css.html"></th:block>
+
+    <title th:text="${@environment.getProperty('title')} + ' | Event Read'"></title>
+</head>
+<body>
+<div class="d-flex" id="wrapper">
+    <!-- sidebar -->
+    <div th:replace="layout/sidebar::sidebar"></div>
+
+    <div id="page-content-wrapper">
+        <!-- header -->
+        <div th:replace="layout/header::header"></div>
+
+        <div class="container-fluid">
+            <form name="form" id="form" th:object="${eventDto}" action="#">
+                <div class="page-header breadcrumbs">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2>Event Read</h2>
+                        <ol>
+                            <li>Home</li>
+                            <li>Event Read</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div id="loading">
+                    <img th:src="@{/images/loading.gif}" alt="Loading…"/>
+                </div>
+
+                <div class="page-content">
+                    <table class="table mobile-table-read mt-4">
+                        <colgroup>
+                            <col width="17.5%"/>
+                            <col width="82.5%"/>
+                        </colgroup>
+
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Event Information</th>
+                        </tr>
+                        <!-- Desktop -->
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Title</th>
+                            <td th:text="*{title}"></td>
+                        </tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Place</th>
+                            <td th:text="*{place}"></td>
+                        </tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Start Date</th>
+                            <td th:text="*{#temporals.format(startDate,'yyyy.MM.dd.')}"></td>
+                        </tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>End Date</th>
+                            <td th:text="*{#temporals.format(endDate,'yyyy.MM.dd.')}"></td>
+                        </tr>
+
+                        <!-- Mobile -->
+                        <tr class="d-print-none d-sm-table-row d-md-table-row d-lg-none d-xl-none d-table-row">
+                            <td colspan="2">
+                                <h4 th:text="*{title}" class="mobile-title"></h4>
+                            </td>
+                        </tr>
+                        <tr class="d-print-none d-sm-table-row d-md-table-row d-lg-none d-xl-none d-table-row">
+                            <td colspan="2">
+                                <strong class="mobile-default">Place: </strong><span th:text="*{place}" class="mobile-default"> </span><br>
+
+                                <strong class="mobile-default">Start Date: </strong><span th:text="*{#temporals.format(startDate,'yyyy.MM.dd.')}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">end Date: </strong><span th:text="*{#temporals.format(endDate,'yyyy.MM.dd.')}" class="mobile-default"></span>
+                            </td>
+                        </tr>
+
+                        <!-- Common -->
+                        <tr>
+                            <td colspan="2">
+                                <div class="content" th:utext="*{content}"></div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th colspan="2" class="sub-item-title">Additional Information</th>
+                        </tr>
+                        <!-- Desktop -->
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Active Status</th>
+                            <td>
+                                <span th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active"> </span>
+                                <span th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive"> </span>
+                            </td>
+                        </tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Created Date</th>
+                            <td th:text="*{#temporals.format(createdDate,'yyyy.MM.dd. HH:mm')}"></td>
+                        </tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Last Modified Date</th>
+                            <td th:text="*{#temporals.format(lastModifiedDate,'yyyy.MM.dd. HH:mm')}"></td>
+                        </tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Created By</th>
+                            <td th:text="*{createdBy}"></td>
+                        </tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Last Modified By</th>
+                            <td th:text="*{lastModifiedBy}"></td>
+                        </tr>
+                        <tr class="d-none d-sm-none d-md-none d-lg-table-row">
+                            <th>Views</th>
+                            <td th:text="*{views}"></td>
+                        </tr>
+
+                        <!-- Mobile -->
+                        <tr class="d-print-none d-sm-table-row d-md-table-row d-lg-none d-xl-none d-table-row">
+                            <td colspan="2">
+                                <strong class="mobile-default">Active Status: </strong>
+                                <span th:if="*{activeStatus?.name() == 'ACTIVE'}" th:text="Active" class="mobile-default"> </span>
+                                <span th:if="*{activeStatus?.name() == 'INACTIVE'}" th:text="Inactive" class="mobile-default"> </span><br>
+
+                                <strong class="mobile-default">Created Date: </strong><span th:text="*{#temporals.format(createdDate,'yyyy.MM.dd. HH:mm')}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Last Modified Date: </strong><span th:text="*{#temporals.format(lastModifiedDate,'yyyy.MM.dd. HH:mm')}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Created By: </strong><span th:text="*{createdBy}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Last Modified By: </strong><span th:text="*{lastModifiedBy}" class="mobile-default"></span><br>
+
+                                <strong class="mobile-default">Views: </strong> <span th:text="*{views}" class="mobile-default"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="10"></td>
+                        </tr>
+                    </table>
+
+                    <div class="row justify-content-between mt-4 mb-4">
+                        <div class="col-auto">
+                            <a href="/event/list" class="btn btn-sm btn-secondary">Move to List</a>
+                        </div>
+
+                        <div th:if="*{access}" class="col-auto ml-2">
+                            <a th:href="'/event/form?idx='+*{idx}" class="btn btn-sm btn-info mx-1">Update</a>
+                            <button type="button" class="btn btn-sm btn-danger mx-1" id="delete">Delete</button>
+                        </div>
+                    </div>
+
+                    <!-- input type="hidden" -->
+                    <input type="hidden" name="idx" th:value="*{idx}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- footer -->
+<div th:replace="layout/footer::footer"></div>
+
+<!-- script file -->
+<th:block th:replace="layout/script.html"></th:block>
+
+<script th:inline="javascript">
+    sweetalertFire("event");
+
+    $("#delete").click(function () {
+        Confirm.fire({
+            icon: "warning",
+            title: "Do you want to delete?",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: moduleAppApiAddress + "/api/events/" + document.getElementsByName("idx")[0].value,
+                    type: "delete",
+                    dataType: "text",
+                    contentType: "application/json",
+                    async: false,
+                })
+                    .done(function (msg) {
+                        localStorage.setItem("result", "/event/delete-success");
+                        location.href = "/event/list";
+                    })
+                    .fail(function (msg) {
+                        parseErrorMsg(msg);
+                    })
+            } else {
+                return false;
+            }
+        })
+    });
+</script>
+
+</body>
+</html>

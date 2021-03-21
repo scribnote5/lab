@@ -76,7 +76,7 @@
                                 <div class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline">
                                     <div class="d-flex align-center">
                                         <span th:text="${maintenanceDto.createdBy}" class="mobile-additional-information"> </span> &nbsp;&nbsp;
-                                        <span th:text="${#temporals.format(maintenanceDto.createdDate,'yyyy-MM-dd HH:mm')}" class="mobile-additional-information"></span> &nbsp;&nbsp;
+                                        <span th:text="${#temporals.format(maintenanceDto.createdDate,'yyyy.MM.dd. HH:mm')}" class="mobile-additional-information"></span> &nbsp;&nbsp;
                                         <span th:text="'Views: ' + ${maintenanceDto.views}" class="mobile-additional-information"></span>
                                     </div>
                                     <div class="d-flex align-center">
@@ -88,7 +88,7 @@
 
                             <!-- Desktop -->
                             <td th:text="${maintenanceDto.createdBy}" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
-                            <td th:text="${#temporals.format(maintenanceDto.createdDate,'yyyy-MM-dd HH:mm')}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
+                            <td th:text="${#temporals.format(maintenanceDto.createdDate,'yyyy.MM.dd. HH:mm')}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td th:if="${maintenanceDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td th:if="${maintenanceDto.activeStatus?.name() == 'INACTIVE'}" th:text="Inactive" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td th:text="${maintenanceDto.views}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>

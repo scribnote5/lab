@@ -1,18 +1,10 @@
 package kr.ac.univ.handler;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.loginHistory.domain.LoginHistory;
 import kr.ac.univ.loginHistory.domain.enums.AudLoginResultType;
 import kr.ac.univ.loginHistory.repository.LoginHistoryRepository;
 import kr.ac.univ.loginHistory.service.GeoLocationService;
-import kr.ac.univ.user.domain.enums.AuthorityType;
 import kr.ac.univ.user.dto.UserPrincipal;
 import kr.ac.univ.util.AudMessageUtil;
 import kr.ac.univ.util.IpUtil;
@@ -21,6 +13,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.time.LocalDateTime;
 
 public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
     @Value("${module.name}")
