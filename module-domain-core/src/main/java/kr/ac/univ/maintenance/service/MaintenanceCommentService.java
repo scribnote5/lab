@@ -8,6 +8,7 @@ import kr.ac.univ.maintenance.dto.MaintenanceCommentDto;
 import kr.ac.univ.maintenance.dto.mapper.MaintenanceCommentMapper;
 import kr.ac.univ.maintenance.repository.MaintenanceCommentRepository;
 import kr.ac.univ.maintenance.repository.MaintenanceCommentRepositoryImpl;
+import kr.ac.univ.user.domain.User;
 import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.AccessCheck;
 import kr.ac.univ.util.EmailUtil;
@@ -54,7 +55,10 @@ public class MaintenanceCommentService {
 
             // 권한 설정
             // Update: isAccessInGeneral 메소드에 따라 접근 가능 및 불가
-            maintenanceCommentDto.setAccess(AccessCheck.isAccessInGeneral(maintenanceCommentDto.getCreatedBy(), userRepository.findByUsername(maintenanceCommentDto.getCreatedBy()).getAuthorityType().name()));
+            // 탈퇴 회원은 권한을 general로 설정 후 권한을 검사함
+            User user = userRepository.findByUsername(maintenanceCommentDto.getCreatedBy());
+
+            maintenanceCommentDto.setAccess(AccessCheck.isAccessInGeneral(maintenanceCommentDto.getCreatedBy(), EmptyUtil.isEmpty(user) ? "general" : user.getAuthorityType().getAuthorityType()));
         }
 
         return maintenanceCommentDtoList;

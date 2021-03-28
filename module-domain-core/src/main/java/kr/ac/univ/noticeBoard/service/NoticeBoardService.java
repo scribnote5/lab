@@ -4,11 +4,13 @@ import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.SearchDto;
 import kr.ac.univ.noticeBoard.dto.NoticeBoardDto;
 import kr.ac.univ.noticeBoard.dto.mapper.NoticeBoardMapper;
+import kr.ac.univ.user.domain.User;
 import kr.ac.univ.util.AccessCheck;
 import kr.ac.univ.noticeBoard.domain.NoticeBoard;
 import kr.ac.univ.noticeBoard.repository.NoticeBoardRepository;
 import kr.ac.univ.noticeBoard.repository.NoticeBoardRepositoryImpl;
 import kr.ac.univ.user.repository.UserRepository;
+import kr.ac.univ.util.EmptyUtil;
 import kr.ac.univ.util.NewIconCheck;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.*;
@@ -125,8 +127,11 @@ public class NoticeBoardService {
             noticeBoardDto.setAccess(true);
         }
         // Update: isAccessInGeneral 메소드에 따라 접근 가능 및 불가
+        // 탈퇴 회원은 권한을 general로 설정 후 권한을 검사함
         else {
-            noticeBoardDto.setAccess(AccessCheck.isAccessInGeneral(noticeBoardDto.getCreatedBy(), userRepository.findByUsername(noticeBoardDto.getCreatedBy()).getAuthorityType().name()));
+            User user = userRepository.findByUsername(noticeBoardDto.getCreatedBy());
+
+            noticeBoardDto.setAccess(AccessCheck.isAccessInGeneral(noticeBoardDto.getCreatedBy(),  EmptyUtil.isEmpty(user) ? "general" : user.getAuthorityType().getAuthorityType()));
         }
 
         noticeBoardRepositoryImpl.updateViewsByIdx(idx);

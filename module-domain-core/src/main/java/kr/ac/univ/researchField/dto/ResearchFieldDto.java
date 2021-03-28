@@ -25,9 +25,6 @@ public class ResearchFieldDto extends CommonDto {
     @Size(max = 255, message = "The title must be less than 255 characters.")
     private String title;
 
-    @Positive(message = "The category idx must not be blank.")
-    private Long categoryIdx;
-
     @NotNull(message = "The research field status must be not null.")
     private ResearchFieldStatus researchFieldStatus;
 

@@ -7,8 +7,10 @@ import kr.ac.univ.introduction.dto.IntroductionDto;
 import kr.ac.univ.introduction.dto.mapper.IntroductionMapper;
 import kr.ac.univ.introduction.repository.IntroductionRepository;
 import kr.ac.univ.introduction.repository.IntroductionRepositoryImpl;
+import kr.ac.univ.user.domain.User;
 import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.AccessCheck;
+import kr.ac.univ.util.EmptyUtil;
 import kr.ac.univ.util.NewIconCheck;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -79,8 +81,11 @@ public class IntroductionService {
             introductionDto.setAccess(true);
         }
         // Update: isAccessInGeneral 메소드에 따라 접근 가능 및 불가
+        // 탈퇴 회원은 권한을 general로 설정 후 권한을 검사함
         else {
-            introductionDto.setAccess(AccessCheck.isAccessInGeneral(introductionDto.getCreatedBy(), userRepository.findByUsername(introductionDto.getCreatedBy()).getAuthorityType().name()));
+            User user = userRepository.findByUsername(introductionDto.getCreatedBy());
+
+            introductionDto.setAccess(AccessCheck.isAccessInGeneral(introductionDto.getCreatedBy(), EmptyUtil.isEmpty(user) ? "general" : user.getAuthorityType().getAuthorityType()));
         }
 
         introductionRepositoryImpl.updateViewsByIdx(idx);

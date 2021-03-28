@@ -47,13 +47,6 @@
                             <td th:text="*{title}"></span></td>
                         </tr>
                         <tr>
-                            <th>Category</th>
-                            <td>
-                                <span th:if="!${#strings.isEmpty(categoryDto)}" th:text="${categoryDto.title}"></span>
-                                <span th:if="${#strings.isEmpty(categoryDto)}" th:text="'This field is not valid.'"></span>
-                            </td>
-                        </tr>
-                        <tr>
                             <th>Research Field Status</th>
                             <td>
                                 <span th:if="*{researchFieldStatus?.name() == 'CURRENT'}" th:text="Current"> </span>
@@ -69,10 +62,6 @@
                         </tr>
                         <tr class="d-print-none d-sm-table-row d-md-table-row d-lg-none d-xl-none d-table-row">
                             <td colspan="2">
-                                <strong class="mobile-default">Category: </strong>
-                                <span th:if="!${#strings.isEmpty(categoryDto)}" th:text="${categoryDto.title}"></span>
-                                <span th:if="${#strings.isEmpty(categoryDto)}" th:text="'This field is not valid.'"></span><br>
-
                                 <strong class="mobile-default">Research Field Status: </strong>
                                 <span th:if="*{researchFieldStatus?.name() == 'CURRENT'}" th:text="Current"> </span>
                                 <span th:if="*{researchFieldStatus?.name() == 'PREVIOUS'}" th:text="Previous"> </span>

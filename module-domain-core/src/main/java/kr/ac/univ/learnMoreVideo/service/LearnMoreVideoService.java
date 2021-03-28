@@ -7,8 +7,10 @@ import kr.ac.univ.learnMoreVideo.dto.LearnMoreVideoDto;
 import kr.ac.univ.learnMoreVideo.dto.mapper.LearnMoreVideoMapper;
 import kr.ac.univ.learnMoreVideo.repository.LearnMoreVideoRepository;
 import kr.ac.univ.learnMoreVideo.repository.LearnMoreVideoRepositoryImpl;
+import kr.ac.univ.user.domain.User;
 import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.AccessCheck;
+import kr.ac.univ.util.EmptyUtil;
 import kr.ac.univ.util.NewIconCheck;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -77,8 +79,11 @@ public class LearnMoreVideoService {
             learnMoreVideoDto.setAccess(true);
         }
         // Update: isAccessInGeneral 메소드에 따라 접근 가능 및 불가
+        // 탈퇴 회원은 권한을 general로 설정 후 권한을 검사함
         else {
-            learnMoreVideoDto.setAccess(AccessCheck.isAccessInGeneral(learnMoreVideoDto.getCreatedBy(), userRepository.findByUsername(learnMoreVideoDto.getCreatedBy()).getAuthorityType().name()));
+            User user = userRepository.findByUsername(learnMoreVideoDto.getCreatedBy());
+
+            learnMoreVideoDto.setAccess(AccessCheck.isAccessInGeneral(learnMoreVideoDto.getCreatedBy(), EmptyUtil.isEmpty(user) ? "general" : user.getAuthorityType().getAuthorityType()));
         }
 
         learnMoreVideoRepositoryImpl.updateViewsByIdx(idx);

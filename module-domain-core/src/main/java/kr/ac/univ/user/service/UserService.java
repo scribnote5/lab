@@ -54,7 +54,7 @@ public class UserService implements UserDetailsService {
                 case "KOREAN_NAME":
                     userList = userRepository.findAllByKoreanNameContaining(pageable, searchDto.getKeyword());
                     break;
-                case "Email":
+                case "EMAIL":
                     userList = userRepository.findAllByEmailContaining(pageable, searchDto.getKeyword());
                     break;
                 default:
@@ -76,7 +76,7 @@ public class UserService implements UserDetailsService {
                 case "KOREAN_NAME":
                     userList = userRepository.findAllByAuthorityTypeInAndKoreanNameContainingAndActiveStatusIs(pageable, authorityType, searchDto.getKeyword(), ActiveStatus.ACTIVE);
                     break;
-                case "Email":
+                case "EMAIL":
                     userList = userRepository.findAllByAuthorityTypeInAndEmailContainingAndActiveStatusIs(pageable, authorityType, searchDto.getKeyword(), ActiveStatus.ACTIVE);
                     break;
                 default:
@@ -154,26 +154,20 @@ public class UserService implements UserDetailsService {
     }
 
     public UserDto findUserByIdx(Long idx) {
+        // 권한 설정
+        // Register: 로그인한 사용자 Register 접근 가능
+        // Update: isAccess 메소드에 따라 접근 가능 및 불가
         UserDto userDto = UserMapper.INSTANCE.toDto(userRepository.findById(idx).orElse(new User()));
 
-        if ("module-app-admin".equals(moduleName)) {
-            // 권한 설정
-            // Register: 로그인한 사용자 Register 접근 가능
+        if ("module-app-web".equals(moduleName)) {
+            userDto.setAccess(AccessCheck.isAccessInModuleWebUser(userDto.getCreatedBy(), userDto.getUsername(), EmptyUtil.isEmpty(userDto) ? "general" : userDto.getAuthorityType().getAuthorityType()));
+        } else {
             if (idx == 0) {
                 userDto.setAccess(true);
-            }
-            // Update: isAccess 메소드에 따라 접근 가능 및 불가
-            else if (AccessCheck.isAccessInModuleAdminUser(userDto.getCreatedBy(), userDto.getUsername(), (userDto.getAuthorityType()).name())) {
-                userDto.setAccess(true);
-            } else {
+            } else if (EmptyUtil.isEmpty(userDto)) {
                 userDto.setAccess(false);
-            }
-        } else {
-            // Update: isAccess 메소드에 따라 접근 가능 및 불가
-            if (AccessCheck.isAccessInModuleWebUser(userDto.getCreatedBy(), userDto.getUsername(), (userDto.getAuthorityType()).name())) {
-                userDto.setAccess(true);
             } else {
-                userDto.setAccess(false);
+                userDto.setAccess(AccessCheck.isAccessInGeneral(userDto.getCreatedBy(), userDto.getAuthorityType().getAuthorityType()));
             }
         }
 

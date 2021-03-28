@@ -8,8 +8,10 @@ import kr.ac.univ.project.dto.ProjectDto;
 import kr.ac.univ.project.dto.mapper.ProjectMapper;
 import kr.ac.univ.project.repository.ProjectRepository;
 import kr.ac.univ.project.repository.ProjectRepositoryImpl;
+import kr.ac.univ.user.domain.User;
 import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.AccessCheck;
+import kr.ac.univ.util.EmptyUtil;
 import kr.ac.univ.util.NewIconCheck;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.*;
@@ -91,8 +93,11 @@ public class ProjectService {
             projectDto.setAccess(true);
         }
         // Update: isAccessInGeneral 메소드에 따라 접근 가능 및 불가
+        // 탈퇴 회원은 권한을 general로 설정 후 권한을 검사함
         else {
-            projectDto.setAccess(AccessCheck.isAccessInGeneral(projectDto.getCreatedBy(), userRepository.findByUsername(projectDto.getCreatedBy()).getAuthorityType().name()));
+            User user = userRepository.findByUsername(projectDto.getCreatedBy());
+
+            projectDto.setAccess(AccessCheck.isAccessInGeneral(projectDto.getCreatedBy(), EmptyUtil.isEmpty(user) ? "general" : user.getAuthorityType().getAuthorityType()));
         }
 
         projectRepositoryImpl.updateViewsByIdx(idx);

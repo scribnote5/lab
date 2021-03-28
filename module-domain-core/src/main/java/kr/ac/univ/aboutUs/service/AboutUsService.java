@@ -7,8 +7,10 @@ import kr.ac.univ.aboutUs.repository.AboutUsRepository;
 import kr.ac.univ.aboutUs.repository.AboutUsRepositoryImpl;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.SearchDto;
+import kr.ac.univ.user.domain.User;
 import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.AccessCheck;
+import kr.ac.univ.util.EmptyUtil;
 import kr.ac.univ.util.NewIconCheck;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.*;
@@ -82,8 +84,11 @@ public class AboutUsService {
             aboutUsDto.setAccess(true);
         }
         // Update: isAccessInGeneral 메소드에 따라 접근 가능 및 불가
+        // 탈퇴 회원은 권한을 general로 설정 후 권한을 검사함
         else {
-            aboutUsDto.setAccess(AccessCheck.isAccessInGeneral(aboutUsDto.getCreatedBy(), userRepository.findByUsername(aboutUsDto.getCreatedBy()).getAuthorityType().name()));
+            User user = userRepository.findByUsername(aboutUsDto.getCreatedBy());
+
+            aboutUsDto.setAccess(AccessCheck.isAccessInGeneral(aboutUsDto.getCreatedBy(), EmptyUtil.isEmpty(user) ? "general" : user.getAuthorityType().getAuthorityType()));
         }
 
         aboutUsRepositoryImpl.updateViewsByIdx(idx);

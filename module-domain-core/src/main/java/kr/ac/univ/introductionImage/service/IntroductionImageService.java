@@ -7,8 +7,10 @@ import kr.ac.univ.introductionImage.dto.IntroductionImageDto;
 import kr.ac.univ.introductionImage.dto.mapper.IntroductionImageMapper;
 import kr.ac.univ.introductionImage.repository.IntroductionImageRepository;
 import kr.ac.univ.introductionImage.repository.IntroductionImageRepositoryImpl;
+import kr.ac.univ.user.domain.User;
 import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.AccessCheck;
+import kr.ac.univ.util.EmptyUtil;
 import kr.ac.univ.util.NewIconCheck;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.*;
@@ -94,8 +96,11 @@ public class IntroductionImageService {
             introductionImageDto.setAccess(true);
         }
         // Update: isAccessInGeneral 메소드에 따라 접근 가능 및 불가
+        // 탈퇴 회원은 권한을 general로 설정 후 권한을 검사함
         else {
-            introductionImageDto.setAccess(AccessCheck.isAccessInGeneral(introductionImageDto.getCreatedBy(), userRepository.findByUsername(introductionImageDto.getCreatedBy()).getAuthorityType().name()));
+            User user = userRepository.findByUsername(introductionImageDto.getCreatedBy());
+
+            introductionImageDto.setAccess(AccessCheck.isAccessInGeneral(introductionImageDto.getCreatedBy(), EmptyUtil.isEmpty(user) ? "general" : user.getAuthorityType().getAuthorityType()));
         }
 
         introductionImageRepositoryImpl.updateViewsByIdx(idx);

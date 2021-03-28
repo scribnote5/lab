@@ -94,8 +94,8 @@
                             <span th:text="${publicationDto.authors}" th:id="publicationAuthors" class="authors my-1"></span><br>
 
                             <span th:if="!${#strings.isEmpty(publicationDto.publishedIn)}" th:text="${publicationDto.publishedIn}"></span>
-                            <span th:if="!${#strings.isEmpty(publicationDto.publishedDate)}" th:text="', ' + ${#temporals.format(publicationDto.publishedDate, 'MMMM', new java.util.Locale('en', 'EN'))}"></span>
-                            <span th:if="!${#strings.isEmpty(publicationDto.publishedDate)}" th:text="', ' + ${#temporals.format(publicationDto.publishedDate,'yyyy')}"></span>
+                            <span th:if="!${#strings.isEmpty(publicationDto.publishedDate)}" th:text="', ' + ${#temporals.format(publicationDto.publishedDate, 'MMM', new java.util.Locale('en', 'EN'))}"></span>
+                            <span th:if="!${#strings.isEmpty(publicationDto.publishedDate)}" th:text="', ' + ${#temporals.format(publicationDto.publishedDate, 'yyyy')}"></span>
                             <span th:if="!${#strings.isEmpty(publicationDto.volume)}" th:text="', Vol. ' + ${publicationDto.volume} "></span>
                             <span th:if="!${#strings.isEmpty(publicationDto.number)}" th:text="', No. ' + ${publicationDto.number}"></span>
                             <span th:if="!${#strings.isEmpty(publicationDto.pages)}" th:text="', pp. ' + ${publicationDto.pages}"></span>

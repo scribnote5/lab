@@ -6,8 +6,10 @@ import kr.ac.univ.noticeBoard.dto.NoticeBoardCommentDto;
 import kr.ac.univ.noticeBoard.dto.mapper.NoticeBoardCommentMapper;
 import kr.ac.univ.noticeBoard.repository.NoticeBoardCommentRepository;
 import kr.ac.univ.noticeBoard.repository.NoticeBoardCommentRepositoryImpl;
+import kr.ac.univ.user.domain.User;
 import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.AccessCheck;
+import kr.ac.univ.util.EmptyUtil;
 import kr.ac.univ.util.NewIconCheck;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +39,10 @@ public class NoticeBoardCommentService {
 
             // 권한 설정
             // Update: isAccessInGeneral 메소드에 따라 접근 가능 및 불가
-            noticeBoardCommentDto.setAccess(AccessCheck.isAccessInGeneral(noticeBoardCommentDto.getCreatedBy(), userRepository.findByUsername(noticeBoardCommentDto.getCreatedBy()).getAuthorityType().name()));
+            // 탈퇴 회원은 권한을 general로 설정 후 권한을 검사함
+            User user = userRepository.findByUsername(noticeBoardCommentDto.getCreatedBy());
+
+            noticeBoardCommentDto.setAccess(AccessCheck.isAccessInGeneral(noticeBoardCommentDto.getCreatedBy(), EmptyUtil.isEmpty(user) ? "general" : user.getAuthorityType().getAuthorityType()));
         }
 
         return noticeBoardCommentDtoList;

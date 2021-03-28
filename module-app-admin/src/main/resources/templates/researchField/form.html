@@ -49,18 +49,6 @@
                             <td><input type="text" name="title" class="form-control form-control-sm" th:value="*{title}"/></td>
                         </tr>
                         <tr>
-                            <th>Category</th>
-                            <td>
-                                <select class="custom-select custom-select-sm" name="categoryIdx" th:field="*{categoryIdx}">
-                                    <option th:if="${#lists.isEmpty(categoryDtoList)}" th:value="-1">The category is empty, so please register it first.</option>
-                                    <option th:if="${#strings.isEmpty(categoryDto)} and *{idx}" th:value="-1">This field is not valid.</option>
-                                    <option th:each="categoryDto : ${categoryDtoList}"
-                                            th:value="${categoryDto.idx}"
-                                            th:text="${categoryDto.title}"></option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
                             <th>Research Field Status</th>
                             <td>
                                 <select class="custom-select custom-select-sm" name="researchFieldStatus" id="researchFieldStatus" th:field="*{researchFieldStatus}">
@@ -212,7 +200,7 @@
 <script th:if="!${researchFieldDto?.idx}">
     $("#insert").click(function () {
         // validation (input tag mame, length or size)
-        if (!(validateByLengthAndBlank("title", 255) && validateBySelect("categoryIdx") && validateBySize("content", 16777215) && validateByFileExist())) {
+        if (!(validateByLengthAndBlank("title", 255) && validateBySize("content", 16777215) && validateByFileExist())) {
             return false;
         }
 
@@ -278,7 +266,7 @@
 <script th:if="${researchFieldDto?.idx}" th:inline="javascript">
     $("#update").click(function () {
         // validation (input tag mame, length or size)
-        if (!(validateByLengthAndBlank("title", 255) && validateBySelect("categoryIdx") && validateBySize("content", 16777215) && validateByFileExist())) {
+        if (!(validateByLengthAndBlank("title", 255) && validateBySize("content", 16777215) && validateByFileExist())) {
             return false;
         }
 

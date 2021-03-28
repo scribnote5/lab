@@ -10,6 +10,7 @@ import kr.ac.univ.maintenance.dto.MaintenanceDto;
 import kr.ac.univ.maintenance.dto.mapper.MaintenanceMapper;
 import kr.ac.univ.maintenance.repository.MaintenanceRepository;
 import kr.ac.univ.maintenance.repository.MaintenanceRepositoryImpl;
+import kr.ac.univ.user.domain.User;
 import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.AccessCheck;
 import kr.ac.univ.util.EmailUtil;
@@ -120,8 +121,11 @@ public class MaintenanceService {
             maintenanceDto.setAccess(true);
         }
         // Update: isAccessInGeneral 메소드에 따라 접근 가능 및 불가
+        // 탈퇴 회원은 권한을 general로 설정 후 권한을 검사함
         else {
-            maintenanceDto.setAccess(AccessCheck.isAccessInGeneral(maintenanceDto.getCreatedBy(), userRepository.findByUsername(maintenanceDto.getCreatedBy()).getAuthorityType().name()));
+            User user = userRepository.findByUsername(maintenanceDto.getCreatedBy());
+
+            maintenanceDto.setAccess(AccessCheck.isAccessInGeneral(maintenanceDto.getCreatedBy(),  EmptyUtil.isEmpty(user) ? "general" : user.getAuthorityType().getAuthorityType()));
         }
 
         maintenanceRepositoryImpl.updateViewsByIdx(idx);

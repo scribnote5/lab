@@ -7,8 +7,10 @@ import kr.ac.univ.alumniAssociation.repository.AlumniAssociationRepository;
 import kr.ac.univ.alumniAssociation.repository.AlumniAssociationRepositoryImpl;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.SearchDto;
+import kr.ac.univ.user.domain.User;
 import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.AccessCheck;
+import kr.ac.univ.util.EmptyUtil;
 import kr.ac.univ.util.NewIconCheck;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.*;
@@ -103,9 +105,11 @@ public class AlumniAssociationService {
             alumniAssociationDto.setAccess(true);
         }
         // Update: isAccess 메소드에 따라 접근 가능 및 불가
-        // Update: isAccessInGeneral 메소드에 따라 접근 가능 및 불가
+        // 탈퇴 회원은 권한을 general로 설정 후 권한을 검사함
         else {
-            alumniAssociationDto.setAccess(AccessCheck.isAccessInGeneral(alumniAssociationDto.getCreatedBy(), userRepository.findByUsername(alumniAssociationDto.getCreatedBy()).getAuthorityType().name()));
+            User user = userRepository.findByUsername(alumniAssociationDto.getCreatedBy());
+
+            alumniAssociationDto.setAccess(AccessCheck.isAccessInGeneral(alumniAssociationDto.getCreatedBy(), EmptyUtil.isEmpty(user) ? "general" : user.getAuthorityType().getAuthorityType()));
         }
 
         alumniAssociationRepositoryImpl.updateViewsByIdx(idx);

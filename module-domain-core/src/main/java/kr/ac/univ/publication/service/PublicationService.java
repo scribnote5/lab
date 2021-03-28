@@ -9,6 +9,7 @@ import kr.ac.univ.publication.dto.PublicationSearchDto;
 import kr.ac.univ.publication.dto.mapper.PublicationMapper;
 import kr.ac.univ.publication.repository.PublicationRepository;
 import kr.ac.univ.publication.repository.PublicationRepositoryImpl;
+import kr.ac.univ.user.domain.User;
 import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.AccessCheck;
 import kr.ac.univ.util.EmptyUtil;
@@ -124,8 +125,12 @@ public class PublicationService {
             publicationDto.setAccess(true);
         }
         // Update: isAccessInGeneral 메소드에 따라 접근 가능 및 불가
+        // 탈퇴 회원은 권한을 general로 설정 후 권한을 검사함
         else {
-            publicationDto.setAccess(AccessCheck.isAccessInGeneral(publicationDto.getCreatedBy(), userRepository.findByUsername(publicationDto.getCreatedBy()).getAuthorityType().name()));
+            User user = userRepository.findByUsername(publicationDto.getCreatedBy());
+
+            publicationDto.setAccess(AccessCheck.isAccessInGeneral(publicationDto.getCreatedBy(), EmptyUtil.isEmpty(user) ? "general" : user.getAuthorityType().getAuthorityType()));
+
         }
 
         publicationRepositoryImpl.updateViewsByIdx(idx);

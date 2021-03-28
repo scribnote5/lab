@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class AccessCheck {
     /**
      * [일반적인 상황에서 사용자 권한에 따른 접근 가능 여부]
-     *
+     * <p>
      * 비인증 사용자인 경우 접근 불가
      * root: 모든 권한에 대한 접근 허용
      * manager: 생성자가 root인 경우 접근 허용, 로그인한 사용자의 username과 생성자가 같은 경우 접근 허용
@@ -22,9 +22,7 @@ public class AccessCheck {
 
         // 비인증 사용자, 인증이 안된 경우, authentication 객체가 null인 경우
         // -> 접근 불가
-        if ("anonymousUser".equals(authentication.getPrincipal()) || !authentication.isAuthenticated() || EmptyUtil.isEmpty(authentication)) {
-            result = false;
-        } else {
+        if (!"anonymousUser".equals(authentication.getPrincipal()) || !authentication.isAuthenticated() || EmptyUtil.isEmpty(authentication)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String authenticationUsername = userDetails.getUsername();
 
@@ -44,7 +42,7 @@ public class AccessCheck {
                         // username authority: MANAGER
                         // 로그인한 사용자의 username과 username: 다름
                         // -> 접근 불가
-                        else if("MANAGER".equals(authorityType) && !authenticationUsername.equals(createdBy)) {
+                        else if ("manager".equals(authorityType) && !authenticationUsername.equals(createdBy)) {
                             result = false;
                         }
                         // 나머지 조건
@@ -74,7 +72,7 @@ public class AccessCheck {
 
     /**
      * [module-app-admin user에서 사용자 권한에 따른 접근 가능 여부]
-     *
+     * <p>
      * 비인증 사용자인 경우 접근 불가
      * root: 모든 권한에 대한 접근 허용
      * manager: 생성자가 root인 경우 접근 허용, 로그인한 사용자의 username과 생성자가 같은 경우 접근 허용
@@ -88,9 +86,7 @@ public class AccessCheck {
 
         // 비인증 사용자, 인증이 안된 경우, authentication 객체가 null인 경우
         // -> 접근 불가
-        if ("anonymousUser".equals(authentication.getPrincipal()) || !authentication.isAuthenticated() || EmptyUtil.isEmpty(authentication)) {
-            result = false;
-        } else {
+        if (!"anonymousUser".equals(authentication.getPrincipal()) || !authentication.isAuthenticated() || EmptyUtil.isEmpty(authentication)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String authenticationUsername = userDetails.getUsername();
 
@@ -106,7 +102,7 @@ public class AccessCheck {
                         // username authority: MANAGER
                         // 로그인한 사용자의 username과 username: 같음
                         // -> 접근 가능
-                        if ("root".equals(createdBy) && "MANAGER".equals(authorityType) && username.equals(authenticationUsername)) {
+                        if ("root".equals(createdBy) && "manager".equals(authorityType) && username.equals(authenticationUsername)) {
                             result = true;
                         }
                         // 로그인한 사용자의 username과 createdBy: 같음
@@ -132,7 +128,7 @@ public class AccessCheck {
 
     /**
      * [module-app-web user에서 사용자 권한에 따른 접근 가능 여부]
-     *
+     * <p>
      * 비인증 사용자인 경우 접근 불가
      * 생성자가 root인 경우 접근 허용
      * 생성자 권한이 MANAGER인 경우 접근 허용

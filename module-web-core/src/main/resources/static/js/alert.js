@@ -63,4 +63,3 @@ function sweetalertFire(index) {
     }
     localStorage.removeItem("result");
 }
-

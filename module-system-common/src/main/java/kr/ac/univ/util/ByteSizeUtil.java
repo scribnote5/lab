@@ -7,10 +7,9 @@ public class ByteSizeUtil {
 
         try {
             byteSize = str.getBytes("UTF-8").length;
-        } catch(NullPointerException e) {
+        } catch (NullPointerException e) {
             byteSize = 0;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

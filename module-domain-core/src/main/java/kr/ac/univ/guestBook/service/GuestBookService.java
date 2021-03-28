@@ -7,8 +7,10 @@ import kr.ac.univ.guestBook.dto.GuestBookDto;
 import kr.ac.univ.guestBook.dto.mapper.GuestBookMapper;
 import kr.ac.univ.guestBook.repository.GuestBookRepository;
 import kr.ac.univ.guestBook.repository.GuestBookRepositoryImpl;
+import kr.ac.univ.user.domain.User;
 import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.AccessCheck;
+import kr.ac.univ.util.EmptyUtil;
 import kr.ac.univ.util.NewIconCheck;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.*;
@@ -114,8 +116,11 @@ public class GuestBookService {
             guestBookDto.setAccess(true);
         }
         // Update: isAccessInGeneral 메소드에 따라 접근 가능 및 불가
+        // 탈퇴 회원은 권한을 general로 설정 후 권한을 검사함
         else {
-            guestBookDto.setAccess(AccessCheck.isAccessInGeneral(guestBookDto.getCreatedBy(), userRepository.findByUsername(guestBookDto.getCreatedBy()).getAuthorityType().name()));
+            User user = userRepository.findByUsername(guestBookDto.getCreatedBy());
+
+            guestBookDto.setAccess(AccessCheck.isAccessInGeneral(guestBookDto.getCreatedBy(), EmptyUtil.isEmpty(user) ? "general" : user.getAuthorityType().getAuthorityType()));
         }
 
         guestBookRepositoryImpl.updateViewsByIdx(idx);

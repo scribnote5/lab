@@ -6,8 +6,10 @@ import kr.ac.univ.guestBook.dto.mapper.GuestBookCommentMapper;
 import kr.ac.univ.guestBook.repository.GuestBookCommentRepository;
 import kr.ac.univ.guestBook.repository.GuestBookCommentRepositoryImpl;
 import kr.ac.univ.maintenance.dto.mapper.MaintenanceCommentMapper;
+import kr.ac.univ.user.domain.User;
 import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.AccessCheck;
+import kr.ac.univ.util.EmptyUtil;
 import kr.ac.univ.util.NewIconCheck;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +39,10 @@ public class GuestBookCommentService {
 
             // 권한 설정
             // Update: isAccessInGeneral 메소드에 따라 접근 가능 및 불가
-            guestBookCommentDto.setAccess(AccessCheck.isAccessInGeneral(guestBookCommentDto.getCreatedBy(), userRepository.findByUsername(guestBookCommentDto.getCreatedBy()).getAuthorityType().name()));
+            // 탈퇴 회원은 권한을 general로 설정 후 권한을 검사함
+            User user = userRepository.findByUsername(guestBookCommentDto.getCreatedBy());
+
+            guestBookCommentDto.setAccess(AccessCheck.isAccessInGeneral(guestBookCommentDto.getCreatedBy(), EmptyUtil.isEmpty(user) ? "general" : user.getAuthorityType().getAuthorityType()));
         }
 
         return guestBookCommentDtoList;

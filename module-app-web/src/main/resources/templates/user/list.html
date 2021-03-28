@@ -33,7 +33,7 @@
                         <select class="custom-select custom-select-sm" name="searchType" th:field="*{searchType}">
                             <option th:value="ENGLISH_NAME">English Name</option>
                             <option th:value="KOREAN_NAME">Korean Name</option>
-                            <option th:value="Email">Email</option>
+                            <option th:value="EMAIL">Email</option>
                         </select>
                     </div>
                     <div class="pt-2 pr-2">
@@ -73,14 +73,22 @@
                                     <h6 class="text-right" th:if="${userDto.userType?.name() == 'D_PART_TIME_PHD'}" th:text="'Ph.D. Part Time'"></h6>
                                     <h6 class="text-right" th:if="${userDto.userType?.name() == 'E_PART_TIME_MS'}" th:text="'M.S. Part Time'"></h6>
                                     <h6 class="text-right" th:if="${userDto.userType?.name() == 'F_BS'}" th:text="'B.S.'"></h6>
+
+                                    <h6 class="text-right" th:if="${userDto.userType?.name() == 'D_PART_TIME_PHD'}" th:text="${userDto.workplace}"></h6>
+                                    <h6 class="text-right" th:if="${userDto.userType?.name() == 'E_PART_TIME_MS'}" th:text="${userDto.workplace}"></h6>
                                 </div>
                                 <div th:if="${userDto.userStatus?.name() == 'GRADUATED'}">
                                     <h6 class="text-right" th:if="${userDto.userType?.name() == 'A_FACULTY'}" th:text="Faculty"></h6>
-                                    <h6 class="text-right" th:if="${userDto.userType?.name() == 'B_FULL_TIME_PHD'}" th:text="'Alumni' + '(Ph.D. Full Time, ' + ${#temporals.format(userDto.graduatedDate,'yy-MM')} + ')'"></h6>
-                                    <h6 class="text-right" th:if="${userDto.userType?.name() == 'C_FULL_TIME_MS'}" th:text="'Alumni' + '(M.S. Full Time, ' + ${#temporals.format(userDto.graduatedDate,'yy-MM')} + ')'"></h6>
-                                    <h6 class="text-right" th:if="${userDto.userType?.name() == 'D_PART_TIME_PHD'}" th:text="'Alumni' + '(Ph.D. Part Time, ' + ${#temporals.format(userDto.graduatedDate,'yy-MM')} + ')'"></h6>
-                                    <h6 class="text-right" th:if="${userDto.userType?.name() == 'E_PART_TIME_MS'}" th:text="'Alumni' + '(M.S. Part Time, ' + ${#temporals.format(userDto.graduatedDate,'yy-MM')} + ')'"></h6>
+                                    <h6 class="text-right" th:if="${userDto.userType?.name() == 'B_FULL_TIME_PHD'}" th:text="'Alumni' + '(Ph.D. Full Time, '
+                                        + ${#temporals.format(userDto.graduatedDate, 'MMM', new java.util.Locale('en', 'EN'))} +'\'' + ${#temporals.format(userDto.graduatedDate,'yy')} + ')'"></h6>
+                                    <h6 class="text-right" th:if="${userDto.userType?.name() == 'C_FULL_TIME_MS'}" th:text="'Alumni' + '(M.S. Full Time, '
+                                        + ${#temporals.format(userDto.graduatedDate, 'MMM', new java.util.Locale('en', 'EN'))} +'\'' + ${#temporals.format(userDto.graduatedDate,'yy')} + ')'"></h6>
+                                    <h6 class="text-right" th:if="${userDto.userType?.name() == 'D_PART_TIME_PHD'}" th:text="'Alumni' + '(Ph.D. Part Time, '
+                                        + ${#temporals.format(userDto.graduatedDate, 'MMM', new java.util.Locale('en', 'EN'))} +'\'' + ${#temporals.format(userDto.graduatedDate,'yy')} + ')'"></h6>
+                                    <h6 class="text-right" th:if="${userDto.userType?.name() == 'E_PART_TIME_MS'}" th:text="'Alumni' + '(M.S. Part Time, '
+                                        + ${#temporals.format(userDto.graduatedDate, 'MMM', new java.util.Locale('en', 'EN'))} +'\'' + ${#temporals.format(userDto.graduatedDate,'yy')} + ')'"></h6>
                                     <h6 class="text-right" th:if="${userDto.userType?.name() == 'F_BS'}" th:text="'B.S.'"></h6>
+
                                     <h6 class="text-right" th:text="${userDto.workplace}"></h6>
                                 </div>
                             </div>

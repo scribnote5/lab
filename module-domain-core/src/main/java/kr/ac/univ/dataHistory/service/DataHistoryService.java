@@ -8,8 +8,10 @@ import kr.ac.univ.dataHistory.repository.DataHistoryRepository;
 import kr.ac.univ.common.domain.enums.ActiveStatus;
 import kr.ac.univ.common.dto.SearchDto;
 import kr.ac.univ.dataHistory.repository.DataHistoryRepositoryImpl;
+import kr.ac.univ.user.domain.User;
 import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.AccessCheck;
+import kr.ac.univ.util.EmptyUtil;
 import kr.ac.univ.util.NewIconCheck;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -82,20 +84,15 @@ public class DataHistoryService {
         return dataHistoryRepository.countAllByCreatedDateBetween(LocalDateTime.now().minusDays(days), LocalDateTime.now());
     }
 
-    public Long insertDataHistory(DataHistoryDto dataHistoryDto) {
-        return dataHistoryRepository.save(DataHistoryMapper.INSTANCE.toEntity(dataHistoryDto)).getIdx();
-    }
-
     public DataHistoryDto findHistoryByIdx(Long idx) {
         DataHistoryDto dataHistoryDto = DataHistoryMapper.INSTANCE.toDto(dataHistoryRepository.findById(idx).orElse(new DataHistory()));
 
         // 권한 설정
         // Update: isAccessInGeneral 메소드에 따라 접근 가능 및 불가
-        if (AccessCheck.isAccessInGeneral(dataHistoryDto.getCreatedBy(), userRepository.findByUsername(dataHistoryDto.getCreatedBy()).getAuthorityType().name())) {
-            dataHistoryDto.setAccess(true);
-        } else {
-            dataHistoryDto.setAccess(false);
-        }
+        // 탈퇴 회원은 권한을 general로 설정 후 권한을 검사함
+        User user = userRepository.findByUsername(dataHistoryDto.getCreatedBy());
+
+        dataHistoryDto.setAccess(AccessCheck.isAccessInGeneral(dataHistoryDto.getCreatedBy(), EmptyUtil.isEmpty(user) ? "general" : user.getAuthorityType().getAuthorityType()));
 
         dataHistoryRepositoryImpl.updateViewsByIdx(idx);
         dataHistoryDto.setViews(dataHistoryDto.getViews() + 1);

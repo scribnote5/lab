@@ -17,12 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ResearchFieldController {
     private final ResearchFieldService researchFieldService;
     private final ResearchFieldAttachedFileService researchFieldAttachedFileService;
-    private final CategoryService categoryService;
 
     public ResearchFieldController(ResearchFieldService researchFieldService, ResearchFieldAttachedFileService researchFieldAttachedFileService, CategoryService categoryService) {
         this.researchFieldService = researchFieldService;
         this.researchFieldAttachedFileService = researchFieldAttachedFileService;
-        this.categoryService = categoryService;
     }
 
     // List
@@ -44,8 +42,6 @@ public class ResearchFieldController {
             researchFieldDto = researchFieldAttachedFileService.findAttachedFileByResearchFieldIdx(idx, researchFieldDto);
 
             model.addAttribute("researchFieldDto", researchFieldDto);
-            model.addAttribute("categoryDto", categoryService.findCategoryByIdxInActive(researchFieldDto.getCategoryIdx()));
-            model.addAttribute("categoryDtoList", categoryService.findCategoryListByActiveStatusIs());
 
             returnPage = "researchField/form";
         } else {
@@ -64,7 +60,6 @@ public class ResearchFieldController {
         researchFieldDto = researchFieldAttachedFileService.findAttachedFileByResearchFieldIdx(idx, researchFieldDto);
 
         model.addAttribute("researchFieldDto", researchFieldDto);
-        model.addAttribute("categoryDto", categoryService.findCategoryByIdxInActive(researchFieldDto.getCategoryIdx()));
 
         return "researchField/read";
     }

@@ -122,6 +122,8 @@ project("module-app-api") {
         compile project(":module-system-common")
         compile project(":module-domain-core")
         compile project(":module-web-core")
+
+        implementation "org.apache.commons:commons-text:1.9"
     }
 }
 
