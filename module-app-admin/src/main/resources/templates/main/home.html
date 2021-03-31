@@ -27,8 +27,8 @@
                 <div class="p-2 align-self-baseline url-icon-wrapper mt-lg-n5 mt-md-n0 ">
                     <img src="/images/external-link.svg"/>
                     <span class="external-link">External Link</span>
-                    <img src="/images/favicon.ico" title="Link user page."/>
-                    <img src="/images/google-analytics.svg" title="Link google analytics."/>
+                    <a th:href="${@environment.getProperty('module-app-web.address')}" target="_blank"><img src="/images/favicon.ico" title="Link user page."/></a>
+                    <a href="https://analytics.google.com" target="_blank"><img src="/images/google-analytics.svg" title="Link google analytics."/></a>
                     <a href="https://github.com/scribnote5/lab" target="_blank"><img src="/images/github.svg" title="Link github."/></a>
                 </div>
             </div>

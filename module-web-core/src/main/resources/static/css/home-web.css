@@ -105,6 +105,10 @@ section {
     padding-right: 3rem;
 }
 
+.introduction .introduction-image-wrapper {
+    margin-top: -20px !important;
+}
+
 .introduction h1 {
     margin-bottom: 2rem;
     font-weight: var(--strong-font-weight);
@@ -161,25 +165,25 @@ section {
 .introduction .introduction-image-carousel {
     width: 450px !important;
     height: auto !important;
-    max-height: 300px !important;
+    max-height: 310px !important;
 }
 
 .introduction .introduction-image-carousel img {
     width: 450px !important;
     height: auto !important;
-    max-height: 300px !important;
+    max-height: 310px !important;
     /* erase prev next img duplication */
     padding: 1px;
 }
 
 
-@media (max-width: 1140px) {
+@media (max-width: 1199px) {
     .introduction .introduction-image-carousel {
-        width: 375px !important;
+        width: 400px !important;
     }
 
     .introduction .introduction-image-carousel img {
-        width: 375px !important;
+        width: 400px !important;
     }
 }
 
@@ -286,7 +290,7 @@ section {
     padding-right: 0 !important;
 }
 
-.event .event-content i, span {
+.event .event-content i, .event .event-content span {
     font-size: var(--large-font-size);
 }
 

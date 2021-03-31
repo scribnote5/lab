@@ -316,10 +316,6 @@
 /*
  * Event
  */
-.event-page .event-content i, span {
-    font-size: var(--small-font-size);
-}
-
 .event-page .event-content i {
     color: var(--main-red);
 }

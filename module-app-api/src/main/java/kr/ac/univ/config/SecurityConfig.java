@@ -18,31 +18,32 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${module-app-admin.address}")
     private String moduleAppAdminAddress;
 
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        // iframe 동일 도메인 접근 허용
+        // http.headers().frameOptions().disable();
+
+        http.httpBasic().disable()
+                .cors().configurationSource(corsConfigurationSource())
+                .and().csrf().disable()
+
+                .authorizeRequests()
+                .anyRequest().permitAll();
+    }
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.addAllowedOrigin(moduleAppAdminAddress);
         configuration.addAllowedOrigin(moduleAppWebAddress);
-        configuration.addAllowedMethod(CorsConfiguration.ALL);
-        configuration.addAllowedHeader(CorsConfiguration.ALL);
+        // configuration.addAllowedOrigin("*");
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(true);
-        configuration.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
-
         return source;
-    }
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        // iframe 동일 도메인 접근 허용
-        // http.headers().frameOptions().disable();
-
-        http.authorizeRequests()
-                .anyRequest().permitAll()
-                .and().cors()
-                .and().csrf().disable();
     }
 }

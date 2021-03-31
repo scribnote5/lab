@@ -26,7 +26,7 @@
                             <li><a href="/album/list">Album</a></li>
                             <li sec:authorize="isAuthenticated()"><a th:href="'/guest-book/list'">Guest Book</a></li>
                             <li sec:authorize="isAuthenticated()"><a th:href="'/user/form?idx='+${#authentication.principal.idx}">User Information</a></li>
-                            <li sec:authorize="isAuthenticated()"><a th:href="${@environment.getProperty('module-app-admin.address')} + '/user/login'">Admin page</a></li>
+                            <li sec:authorize="hasAuthority('root') || hasAuthority('manager')"><a th:href="${@environment.getProperty('module-app-admin.address')} + '/user/login'">Admin page</a></li>
                         </ul>
                     </li>
                     <li sec:authorize="!isAuthenticated()" class="login-logout"><a href="javascript:login()">Log in</a></li>

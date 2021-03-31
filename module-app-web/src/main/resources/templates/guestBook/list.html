@@ -59,6 +59,7 @@
                     <tr th:each="guestBookDto : ${guestBookDtoList}">
                         <td>
                             <!-- Common -->
+                            <img th:if="${guestBookDto.mainPagePriority != 11}" th:attr="src=@{|/images/speaker-icon.jpg|}" class="new-icon"/>
                             <a th:href="'/guest-book?idx='+${guestBookDto.idx}" th:text="${guestBookDto.title}" class="link"></a>
                             <img th:if="${guestBookDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
 

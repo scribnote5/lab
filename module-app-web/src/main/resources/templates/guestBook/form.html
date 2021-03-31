@@ -124,6 +124,7 @@
                 </div>
 
                 <!-- input type="hidden" -->
+                <input type="hidden" name="mainPagePriority" th:value="11"/>
                 <input type="hidden" name="idx" th:value="*{idx}"/>
                 <input type="hidden" name="createdBy" th:value="*{#strings.isEmpty(createdBy)} ? ${#authentication.principal.username} : *{createdBy}"/>
                 <input type="hidden" name="lastModifiedBy" th:value="${#authentication.principal.username}"/>

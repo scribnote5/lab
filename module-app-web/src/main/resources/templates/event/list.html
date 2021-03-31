@@ -51,7 +51,7 @@
                         <div class="row mt-4">
                             <div class="col-md-2 col-3 text-right">
                                 <h1><span th:text="${#temporals.format(eventDto.startDate,'dd')}" class="badge badge-main"></span></h1>
-                                <h2 th:text="${#temporals.format(eventDto.startDate, 'MMMM', new java.util.Locale('en', 'EN'))}"></h2>
+                                <h2 th:text="${#temporals.format(eventDto.startDate, 'MMM', new java.util.Locale('en', 'EN'))}"></h2>
                             </div>
 
                             <div class="col-md-10 col-9 event-content">

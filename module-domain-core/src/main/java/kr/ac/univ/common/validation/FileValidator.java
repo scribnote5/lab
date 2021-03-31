@@ -26,13 +26,13 @@ public class FileValidator {
             String extension = FileUtil.getExtension(file.getOriginalFilename());
 
             if (FileType.invalidMimeTypeSet.contains(mimeType)) {
-                log.info(mimeType + ", " + extension);
+                log.info("Check mimeType: " + extension);
                 result = "The file " + file.getOriginalFilename() + " [mime type: " + mimeType + "] doesn't support to upload because it supposed to dangerous and malicious.";
                 break;
             }
 
             if (FileType.invalidExtensionSet.contains(extension)) {
-                log.info(mimeType + ", " + extension);
+                log.info("Check mimeType: " + extension);
                 result = "The file " + file.getOriginalFilename() + " [extension: " + extension + "] doesn't support to upload because it supposed to dangerous and malicious.";
                 break;
             }
@@ -49,10 +49,11 @@ public class FileValidator {
             String mimeType = tika.detect(file.getBytes());
             String extension = FileUtil.getExtension(file.getOriginalFilename());
 
-            log.info(mimeType + ", " + extension);
+            log.info("Check mimeType: " + extension);
 
             if (!FileType.validImageTypeSet.contains(mimeType)) {
-                result = "The file " + file.getOriginalFilename() + "[mimet ype: " + mimeType + "] doesn't support to upload because it supposed to not image type.";
+                result = "The file " + file.getOriginalFilename() + "[mime type: " + mimeType + "] doesn't support to upload because it supposed to not image type.";
+                log.error("MimeType error: " + extension);
                 break;
             }
         }

@@ -88,8 +88,8 @@ public class NoticeBoardService {
         return noticeBoardDtoList;
     }
 
-    public List<NoticeBoardDto> findTop4ByOrderByIdxDesc() {
-        List<NoticeBoardDto> noticeBoardDtoList = NoticeBoardMapper.INSTANCE.toDto(noticeBoardRepository.findTop4ByMainPagePriorityGreaterThanEqualOrderByIdxDesc(11L));
+    public List<NoticeBoardDto> findTop6ByOrderByIdxDesc() {
+        List<NoticeBoardDto> noticeBoardDtoList = NoticeBoardMapper.INSTANCE.toDto(noticeBoardRepository.findTop6ByMainPagePriorityGreaterThanEqualOrderByIdxDesc(11L));
 
         // NewIcon 판별
         for (NoticeBoardDto noticeBoardDto : noticeBoardDtoList) {
@@ -131,7 +131,7 @@ public class NoticeBoardService {
         else {
             User user = userRepository.findByUsername(noticeBoardDto.getCreatedBy());
 
-            noticeBoardDto.setAccess(AccessCheck.isAccessInGeneral(noticeBoardDto.getCreatedBy(),  EmptyUtil.isEmpty(user) ? "general" : user.getAuthorityType().getAuthorityType()));
+            noticeBoardDto.setAccess(AccessCheck.isAccessInGeneral(noticeBoardDto.getCreatedBy(), EmptyUtil.isEmpty(user) ? "general" : user.getAuthorityType().getAuthorityType()));
         }
 
         noticeBoardRepositoryImpl.updateViewsByIdx(idx);

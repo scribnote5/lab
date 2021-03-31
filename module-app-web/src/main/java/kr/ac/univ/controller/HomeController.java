@@ -79,8 +79,8 @@ public class HomeController {
         model.addAttribute("introductionImageDtoList", introductionImageDtoList);
         model.addAttribute("researchFieldDtoList", researchFieldDtoList);
         model.addAttribute("albumDtoList", albumDtoList);
-        model.addAttribute("noticeBoardDtoList", noticeBoardService.findTop4ByOrderByIdxDesc());
-        model.addAttribute("seminarDtoList", seminarService.findTop4ByOrderByIdxDesc());
+        model.addAttribute("noticeBoardDtoList", noticeBoardService.findTop6ByOrderByIdxDesc());
+        model.addAttribute("seminarDtoList", seminarService.findTop6ByOrderByIdxDesc());
         model.addAttribute("eventDtoList", eventService.findTop4ByOrderByCurrentDate());
         model.addAttribute("settingDto", settingService.findSettingByIdx(1L));
 

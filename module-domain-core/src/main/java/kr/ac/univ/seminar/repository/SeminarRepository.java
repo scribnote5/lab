@@ -25,5 +25,5 @@ public interface SeminarRepository extends JpaRepository<Seminar, Long> {
 
     Page<Seminar> findAllByCreatedByContainingAndActiveStatusIs(Pageable pageable, String username, ActiveStatus activeStatus);
 
-    List<Seminar> findTop4ByOrderByIdxDesc();
+    List<Seminar> findTop6ByOrderByIdxDesc();
 }

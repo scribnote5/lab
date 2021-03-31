@@ -269,7 +269,7 @@ function validateByFileNumber(files, number) {
  */
 function validateImageFile(file) {
     // file validation - 필수 확장자
-    var includeArray = [".jpg", ".jpeg", ".png", ".tif", ".tiff", ".svg"];
+    var includeArray = [".webp", ".jpg", ".jpeg", ".png", ".tif", ".tiff", ".svg"];
     // 파일 이름
     var fileName = file.name;
     // 파일 확장자명(대문자를 소문자로 변경)

@@ -112,7 +112,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * file type이 위험하고 악의적인 것으로 판별되는 경우 발생
+     * file 갯수가 초과되는 경우 발
      */
     @ExceptionHandler(FileNumberExceededException.class)
     protected ResponseEntity<ErrorResponse> handleFileNumberExceededException(Exception e) {

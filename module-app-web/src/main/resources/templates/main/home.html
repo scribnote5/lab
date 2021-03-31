@@ -24,7 +24,7 @@
                         </div>
                     </div>
 
-                    <div class="introduction-image-wrapper ol-lg-5 order-1 order-lg-2" data-aos="fade-left" style="margin-top: -15px;">
+                    <div class="introduction-image-wrapper col-lg-5 order-1 order-lg-2" data-aos="fade-left">
                         <div class="owl-carousel introduction-image-carousel">
                             <div th:each="introductionImageDto: ${introductionImageDtoList}">
                                 <img class="owl-lazy" th:attr="data-src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-image/${introductionImageDto.attachedFileList[0].savedFileName}|}">
@@ -35,42 +35,6 @@
             </div>
         </section>
         <!-- End Intro -->
-
-        <!-- ======= Event Section ======= -->
-        <section class="event">
-            <div class="container">
-                <div class="section-header" data-aos="fade-up">
-                    <h3>Upcoming Event</h3>
-                </div>
-
-                <div class="section-content" data-aos="fade-up">
-                    <div class="row justify-content-center">
-                        <div th:each="eventDto: ${eventDtoList}" class="col-lg-3 col-md-4 col-sm-6 col-12 d-flex">
-                            <div class="row justify-content-center mt-lg-0 mt-md-4 mt-sm-4 mt-4">
-                                <div class="col-md-4 col-sm-3 col-3 text-right">
-                                    <h2><span th:text="${#temporals.format(eventDto.startDate,'dd')}" class="badge badge-main"></span></h2>
-                                    <h4 th:text="${#temporals.format(eventDto.startDate, 'MMM', new java.util.Locale('en', 'EN'))}"></h4>
-                                </div>
-
-                                <div class="col-md-8 col-sm-9 col-9 event-content">
-                                    <a th:href="'/event?idx='+${eventDto.idx}" class="link">
-                                        <h5 th:text="${eventDto.title}"></h5>
-                                    </a>
-                                    <div>
-                                        <i class="far fa-calendar-alt"></i>&nbsp;
-                                        <span th:text="${#temporals.format(eventDto.startDate,'yy.MM.dd.')}"></span><span th:if="!${#strings.isEmpty(eventDto.endDate)}" th:text="'~' + ${#temporals.format(eventDto.endDate,'yy.MM.dd.')}"></span>
-                                    </div>
-                                    <div>
-                                        <i class="fas fa-map-marked-alt"></i>&nbsp; <span th:text="${eventDto.place}"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- End Event Section -->
 
         <!-- ======= Board Section ======= -->
         <section class="board">
@@ -143,6 +107,42 @@
                 </div>
             </div>
         </section><!-- End Board Section -->
+
+        <!-- ======= Event Section ======= -->
+        <section class="event">
+            <div class="container">
+                <div class="section-header" data-aos="fade-up">
+                    <h3>Upcoming Event</h3>
+                </div>
+
+                <div class="section-content" data-aos="fade-up">
+                    <div class="row justify-content-center">
+                        <div th:each="eventDto: ${eventDtoList}" class="col-lg-3 col-md-4 col-sm-6 col-12 d-flex">
+                            <div class="row justify-content-center mt-lg-0 mt-md-4 mt-sm-4 mt-4">
+                                <div class="col-md-4 col-sm-3 col-3 text-right">
+                                    <h2><span th:text="${#temporals.format(eventDto.startDate,'dd')}" class="badge badge-main"></span></h2>
+                                    <h4 th:text="${#temporals.format(eventDto.startDate, 'MMM', new java.util.Locale('en', 'EN'))}"></h4>
+                                </div>
+
+                                <div class="col-md-8 col-sm-9 col-9 event-content">
+                                    <a th:href="'/event?idx='+${eventDto.idx}" class="link">
+                                        <h5 th:text="${eventDto.title}"></h5>
+                                    </a>
+                                    <div>
+                                        <i class="far fa-calendar-alt"></i>&nbsp;
+                                        <span th:text="${#temporals.format(eventDto.startDate,'yy.MM.dd.')}"></span><span th:if="!${#strings.isEmpty(eventDto.endDate)}" th:text="'~' + ${#temporals.format(eventDto.endDate,'yy.MM.dd.')}"></span>
+                                    </div>
+                                    <div>
+                                        <i class="fas fa-map-marked-alt"></i>&nbsp; <span th:text="${eventDto.place}"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- End Event Section -->
 
         <!-- ======= Research Field Section ======= -->
         <section class="research-field">

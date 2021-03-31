@@ -167,7 +167,7 @@ public class UserService implements UserDetailsService {
             } else if (EmptyUtil.isEmpty(userDto)) {
                 userDto.setAccess(false);
             } else {
-                userDto.setAccess(AccessCheck.isAccessInGeneral(userDto.getCreatedBy(), userDto.getAuthorityType().getAuthorityType()));
+                userDto.setAccess(AccessCheck.isAccessInModuleAdminUser(userDto.getCreatedBy(), userDto.getUsername(), userDto.getAuthorityType().getAuthorityType()));
             }
         }
 

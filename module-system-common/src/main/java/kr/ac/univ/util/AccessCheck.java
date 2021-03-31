@@ -98,19 +98,25 @@ public class AccessCheck {
                         result = true;
                         break;
                     case "manager":
-                        // createdBy: root
-                        // username authority: MANAGER
-                        // 로그인한 사용자의 username과 username: 같음
-                        // -> 접근 가능
-                        if ("root".equals(createdBy) && "manager".equals(authorityType) && username.equals(authenticationUsername)) {
-                            result = true;
-                        }
+                        // 로그인한 사용자의 권한: manager
                         // 로그인한 사용자의 username과 createdBy: 같음
                         // -> 접근 가능
-                        else if (authenticationUsername.equals(createdBy)) {
+                        if (authenticationUsername.equals(createdBy)) {
                             result = true;
                         }
-                        // 로그인한 사용자의 username과 createdBy: 다름
+                        // 로그인한 사용자의 권한: manager
+                        // username의 권한 general || non_user
+                        // -> 접근 가능
+                        else if (("general".equals(authorityType) || "non_user".equals(authorityType))) {
+                            result = true;
+                        }
+                        // 로그인한 사용자의 권한: manager
+                        // 로그인한 사용자의 username과 username: 같음
+                        // -> 접근 가능
+                        else if(authenticationUsername.equals(username)) {
+                            result = true;
+                        }
+                        // 이외
                         // -> 접근 불가
                         else {
                             result = false;

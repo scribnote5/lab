@@ -92,16 +92,23 @@ public class AlbumService {
     public List<AlbumDto> findAllByActiveStatusIsOrderByMainHashTagDescIdxDesc() {
         List<AlbumDto> albumDtoList = AlbumMapper.INSTANCE.toDto(albumRepository.findAllByActiveStatusIsOrderByMainHashTagDescIdxDesc(ActiveStatus.ACTIVE));
         String mainHashTag = "";
+        String previousMainHashTag = "";
         boolean secondAlbumByMainHashTag = false;
 
         for (int i = 0; i < albumDtoList.size(); i++) {
             // 사용자 album 페이지에서 mainHashTag 출력 여부를 결정
             if (!mainHashTag.equals(albumDtoList.get(i).getMainHashTag())) {
-                if ((i != 1) && (i % 2 != 0)) {
+                mainHashTag = albumDtoList.get(i).getMainHashTag();
+
+                if (i == 0 || !mainHashTag.equals(previousMainHashTag)) {
+                    albumDtoList.get(i).setMainHashTagStatus(MainHashTagStatus.PRINT);
+                }
+
+                if (i % 2 == 1 && !mainHashTag.equals(previousMainHashTag) && MainHashTagStatus.SKIP_SPACE.equals(albumDtoList.get(i - 1).getMainHashTagStatus())) {
                     albumDtoList.get(i - 1).setMainHashTagStatus(MainHashTagStatus.KEEP_SPACE);
                 }
-                albumDtoList.get(i).setMainHashTagStatus(MainHashTagStatus.PRINT);
-                mainHashTag = albumDtoList.get(i).getMainHashTag();
+
+                previousMainHashTag = mainHashTag;
                 secondAlbumByMainHashTag = true;
             }
             // mainHashTag를 출력한 다음의(두 번째) album은 mainHashTag를 출력하지 않고 공간만 유지
@@ -113,7 +120,7 @@ public class AlbumService {
                 }
                 secondAlbumByMainHashTag = false;
             } else {
-                albumDtoList.get(i).setMainHashTagStatus(MainHashTagStatus.NON_PRINT);
+                albumDtoList.get(i).setMainHashTagStatus(MainHashTagStatus.SKIP_SPACE);
             }
         }
 

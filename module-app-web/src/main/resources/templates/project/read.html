@@ -81,7 +81,7 @@
                             <h4 th:text="*{title}" class="mobile-title"></h4>
 
                             <div class="text-right">
-                                <span th:text="*{createdBy}"></span>&nbsp;&nbsp;
+                                <span th:text="*{createdBy}" class="mobile-additional-information"></span>&nbsp;&nbsp;
                                 <span th:text="*{#temporals.format(createdDate,'yyyy.MM.dd. HH:mm')}" class="mobile-additional-information"></span>&nbsp;&nbsp;
                                 <span th:text="'Views: ' + *{views}" class="mobile-additional-information"/>
                             </div>
