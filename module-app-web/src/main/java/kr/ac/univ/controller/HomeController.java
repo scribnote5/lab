@@ -80,7 +80,7 @@ public class HomeController {
         model.addAttribute("researchFieldDtoList", researchFieldDtoList);
         model.addAttribute("albumDtoList", albumDtoList);
         model.addAttribute("noticeBoardDtoList", noticeBoardService.findTop6ByOrderByIdxDesc());
-        model.addAttribute("seminarDtoList", seminarService.findTop6ByOrderByIdxDesc());
+        model.addAttribute("seminarDtoList", seminarService.findTop6ByOrderByPresentationDateDesc());
         model.addAttribute("eventDtoList", eventService.findTop4ByOrderByCurrentDate());
         model.addAttribute("settingDto", settingService.findSettingByIdx(1L));
 

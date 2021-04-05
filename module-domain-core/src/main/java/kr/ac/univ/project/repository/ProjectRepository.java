@@ -12,13 +12,15 @@ import java.util.List;
 
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Long> {
-    Page<Project> findAllByTitleContaining(Pageable pageable, String title);
+    Page<Project> findAllByOrderByStartDateDesc(Pageable pageable);
 
-    Page<Project> findAllByContentContaining(Pageable pageable, String content);
+    Page<Project> findAllByTitleContainingOrderByStartDateDesc(Pageable pageable, String title);
 
-    Page<Project> findAllByCreatedByContaining(Pageable pageable, String username);
+    Page<Project> findAllByContentContainingOrderByStartDateDesc(Pageable pageable, String content);
+
+    Page<Project> findAllByCreatedByContainingOrderByStartDateDesc(Pageable pageable, String username);
 
     List<Project> findAllByProjectStatusIsAndActiveStatusIsOrderByStartDateDesc(ProjectStatus projectStatus, ActiveStatus activeStatus);
 
-    Long countAllByActiveStatusIsAndProjectStatus(ActiveStatus activeStatus, ProjectStatus projectStatus);
+    Long countAllByActiveStatusIsAndProjectStatusOrderByStartDateDesc(ActiveStatus activeStatus, ProjectStatus projectStatus);
 }

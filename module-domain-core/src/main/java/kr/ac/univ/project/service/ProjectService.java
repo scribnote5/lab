@@ -42,16 +42,16 @@ public class ProjectService {
 
         switch (searchDto.getSearchType()) {
             case "TITLE":
-                projectList = projectRepository.findAllByTitleContaining(pageable, searchDto.getKeyword());
+                projectList = projectRepository.findAllByTitleContainingOrderByStartDateDesc(pageable, searchDto.getKeyword());
                 break;
             case "CONTENT":
-                projectList = projectRepository.findAllByContentContaining(pageable, searchDto.getKeyword());
+                projectList = projectRepository.findAllByContentContainingOrderByStartDateDesc(pageable, searchDto.getKeyword());
                 break;
             case "ID":
-                projectList = projectRepository.findAllByCreatedByContaining(pageable, searchDto.getKeyword());
+                projectList = projectRepository.findAllByCreatedByContainingOrderByStartDateDesc(pageable, searchDto.getKeyword());
                 break;
             default:
-                projectList = projectRepository.findAll(pageable);
+                projectList = projectRepository.findAllByOrderByStartDateDesc(pageable);
                 break;
         }
 
@@ -77,7 +77,7 @@ public class ProjectService {
     }
 
     public Long countAllByActiveStatusIsAndProjectStatus() {
-        return projectRepository.countAllByActiveStatusIsAndProjectStatus(ActiveStatus.ACTIVE, ProjectStatus.CURRENT);
+        return projectRepository.countAllByActiveStatusIsAndProjectStatusOrderByStartDateDesc(ActiveStatus.ACTIVE, ProjectStatus.CURRENT);
     }
 
     public Long insertProject(ProjectDto projectDto) {

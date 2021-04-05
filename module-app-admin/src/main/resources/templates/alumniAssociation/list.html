@@ -56,10 +56,10 @@
                         <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th style="width: 7.5%" class="text-center">No.</th>
                             <th style="width: 45%" class="text-center">Title</th>
-                            <th style="width: 20%">Authors</th>
-                            <th style="width: 15%" class="text-center">Published In</th>
-                            <th style="width: 15%" class="text-center">Published Date</th>
+                            <th style="width: 20%">Created By</th>
+                            <th style="width: 15%" class="text-center">Created Date</th>
                             <th style="width: 7.5%" class="text-center">Status</th>
+                            <th style="width: 15%" class="text-center">Views</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -70,6 +70,7 @@
                                 <span th:text="${alumniAssociationDto.idx} + '.'" class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline"></span>
 
                                 <!-- Common -->
+                                <img th:if="${alumniAssociationDto.mainPagePriority != 11}" th:attr="src=@{|/images/speaker-icon.jpg|}" class="new-icon"/>
                                 <a th:href="'/alumni-association?idx='+${alumniAssociationDto.idx}" class="link" th:text="${alumniAssociationDto.title}"></a>
                                 <img th:if="${alumniAssociationDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
 

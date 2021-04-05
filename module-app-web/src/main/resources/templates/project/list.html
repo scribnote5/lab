@@ -32,7 +32,7 @@
                 <ul th:each="projectDto : ${currentProjectDtoList}">
                     <li>
                         <a th:href="'/project?idx='+${projectDto.idx}" th:text="${projectDto.title}" class="link"></a><br>
-                        <span th:text="'(' + ${#temporals.format(projectDto.startDate,'yyyy-MM')}  + ' ~ ' + ${#temporals.format(projectDto.endDate,'yyyy-MM')} + ', '"></span>
+                        <span th:text="'(' + ${#temporals.format(projectDto.startDate,'yyyy.MM.')}  + ' ~ ' + ${#temporals.format(projectDto.endDate,'yyyy.MM.')} + ', '"></span>
                         <span class="text-muted" th:text="${projectDto.researchEstablishment} + ')'"></span>
 
                         <img th:if="${projectDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>

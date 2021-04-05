@@ -18,6 +18,10 @@ label {
     white-space: normal;
 }
 
+table {
+    width: 100% !important;
+}
+
 table th {
     font-weight: var(--strong-font-weight);
 }

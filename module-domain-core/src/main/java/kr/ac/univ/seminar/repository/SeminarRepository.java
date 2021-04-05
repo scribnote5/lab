@@ -11,19 +11,21 @@ import java.util.List;
 
 @Repository
 public interface SeminarRepository extends JpaRepository<Seminar, Long> {
-    Page<Seminar> findAllByTitleContaining(Pageable pageable, String title);
+    Page<Seminar> findAllByOrderByPresentationDateDesc(Pageable pageable);
 
-    Page<Seminar> findAllByContentContaining(Pageable pageable, String presenter);
+    Page<Seminar> findAllByTitleContainingOrderByPresentationDateDesc(Pageable pageable, String title);
 
-    Page<Seminar> findAllByCreatedByContaining(Pageable pageable, String username);
+    Page<Seminar> findAllByContentContainingOrderByPresentationDateDesc(Pageable pageable, String presenter);
 
-    Page<Seminar> findAllByActiveStatusIs(Pageable pageable, ActiveStatus activeStatus);
+    Page<Seminar> findAllByCreatedByContainingOrderByPresentationDateDesc(Pageable pageable, String username);
 
-    Page<Seminar> findAllByTitleContainingAndActiveStatusIs(Pageable pageable, String title, ActiveStatus activeStatus);
+    Page<Seminar> findAllByActiveStatusIsOrderByPresentationDateDesc(Pageable pageable, ActiveStatus activeStatus);
 
-    Page<Seminar> findAllByContentContainingAndActiveStatusIs(Pageable pageable, String presenter, ActiveStatus activeStatus);
+    Page<Seminar> findAllByTitleContainingAndActiveStatusIsOrderByPresentationDateDesc(Pageable pageable, String title, ActiveStatus activeStatus);
 
-    Page<Seminar> findAllByCreatedByContainingAndActiveStatusIs(Pageable pageable, String username, ActiveStatus activeStatus);
+    Page<Seminar> findAllByContentContainingAndActiveStatusIsOrderByPresentationDateDesc(Pageable pageable, String presenter, ActiveStatus activeStatus);
 
-    List<Seminar> findTop6ByOrderByIdxDesc();
+    Page<Seminar> findAllByCreatedByContainingAndActiveStatusIsOrderByPresentationDateDesc(Pageable pageable, String username, ActiveStatus activeStatus);
+
+    List<Seminar> findTop6ByOrderByPresentationDateDesc();
 }

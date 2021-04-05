@@ -42,36 +42,36 @@ public class SeminarService {
         switch (searchDto.getSearchType()) {
             case "TITLE":
                 if ("module-app-admin".equals(moduleName)) {
-                    seminarList = seminarRepository.findAllByTitleContaining(pageable, searchDto.getKeyword());
+                    seminarList = seminarRepository.findAllByTitleContainingOrderByPresentationDateDesc(pageable, searchDto.getKeyword());
                 } else if ("module-app-web".equals(moduleName)) {
-                    seminarList = seminarRepository.findAllByTitleContainingAndActiveStatusIs(pageable, searchDto.getKeyword(), ActiveStatus.ACTIVE);
+                    seminarList = seminarRepository.findAllByTitleContainingAndActiveStatusIsOrderByPresentationDateDesc(pageable, searchDto.getKeyword(), ActiveStatus.ACTIVE);
                 } else {
                     seminarList = null;
                 }
                 break;
             case "CONTENT":
                 if ("module-app-admin".equals(moduleName)) {
-                    seminarList = seminarRepository.findAllByContentContaining(pageable, searchDto.getKeyword());
+                    seminarList = seminarRepository.findAllByContentContainingOrderByPresentationDateDesc(pageable, searchDto.getKeyword());
                 } else if ("module-app-web".equals(moduleName)) {
-                    seminarList = seminarRepository.findAllByContentContainingAndActiveStatusIs(pageable, searchDto.getKeyword(), ActiveStatus.ACTIVE);
+                    seminarList = seminarRepository.findAllByContentContainingAndActiveStatusIsOrderByPresentationDateDesc(pageable, searchDto.getKeyword(), ActiveStatus.ACTIVE);
                 } else {
                     seminarList = null;
                 }
                 break;
             case "ID":
                 if ("module-app-admin".equals(moduleName)) {
-                    seminarList = seminarRepository.findAllByCreatedByContaining(pageable, searchDto.getKeyword());
+                    seminarList = seminarRepository.findAllByCreatedByContainingOrderByPresentationDateDesc(pageable, searchDto.getKeyword());
                 } else if ("module-app-web".equals(moduleName)) {
-                    seminarList = seminarRepository.findAllByCreatedByContainingAndActiveStatusIs(pageable, searchDto.getKeyword(), ActiveStatus.ACTIVE);
+                    seminarList = seminarRepository.findAllByCreatedByContainingAndActiveStatusIsOrderByPresentationDateDesc(pageable, searchDto.getKeyword(), ActiveStatus.ACTIVE);
                 } else {
                     seminarList = null;
                 }
                 break;
             default:
                 if ("module-app-admin".equals(moduleName)) {
-                    seminarList = seminarRepository.findAll(pageable);
+                    seminarList = seminarRepository.findAllByOrderByPresentationDateDesc(pageable);
                 } else if ("module-app-web".equals(moduleName)) {
-                    seminarList = seminarRepository.findAllByActiveStatusIs(pageable, ActiveStatus.ACTIVE);
+                    seminarList = seminarRepository.findAllByActiveStatusIsOrderByPresentationDateDesc(pageable, ActiveStatus.ACTIVE);
                 } else {
                     seminarList = null;
                 }
@@ -88,8 +88,8 @@ public class SeminarService {
         return seminarDtoList;
     }
 
-    public List<SeminarDto> findTop6ByOrderByIdxDesc() {
-        List<SeminarDto> seminarDtoList = SeminarMapper.INSTANCE.toDto(seminarRepository.findTop6ByOrderByIdxDesc());
+    public List<SeminarDto> findTop6ByOrderByPresentationDateDesc() {
+        List<SeminarDto> seminarDtoList = SeminarMapper.INSTANCE.toDto(seminarRepository.findTop6ByOrderByPresentationDateDesc());
 
         // NewIcon 판별
         for (SeminarDto seminarDto : seminarDtoList) {

@@ -74,7 +74,7 @@
                                 <strong>Uploaded Photo File:</strong>
                                 <span th:if="*{attachedFileList.size()} == 0" id="imgData" th:text="No + ' ' + file."></span>
                                 <span th:if="*{attachedFileList.size()} != 0" id="imgData"
-                                      th:attr="onclick=|location.href='${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-image/*{attachedFileList[0].savedFileName}'|"
+                                      th:attr="onclick=|location.href=encodeURI('${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-image/*{attachedFileList[0].savedFileName}')|"
                                       th:text="*{attachedFileList[0].fileName} + ',&nbsp;' + 'File size: ' + *{attachedFileList[0].fileSize}"></span>
                             </div>
                             <div class="mt-2">

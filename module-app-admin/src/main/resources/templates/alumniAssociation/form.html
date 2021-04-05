@@ -248,6 +248,7 @@
         if (duplicateSubmitCheck()) return false;
 
         var jsonData = $("#form").serializeObject();
+        jsonData.content = editor.getData();
         var alumniAssociationIdx = document.getElementsByName("idx")[0].value;
 
         $.ajax({

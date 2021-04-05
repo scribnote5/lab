@@ -69,6 +69,11 @@ $(document).ready(function () {
                         name: 'imageResize:50',
                         label: '50%',
                         value: '50'
+                    },
+                    {
+                        name: 'imageResize:25',
+                        label: '25%',
+                        value: '25'
                     }
                 ],
 

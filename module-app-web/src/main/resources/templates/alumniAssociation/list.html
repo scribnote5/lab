@@ -58,6 +58,8 @@
                     <tbody>
                     <tr th:each="alumniAssociationDto : ${alumniAssociationDtoList}">
                         <td>
+                            <!-- Common -->
+                            <img th:if="${alumniAssociationDto.mainPagePriority != 11}" th:attr="src=@{|/images/speaker-icon.jpg|}" class="new-icon"/>
                             <a th:href="'/alumni-association?idx='+${alumniAssociationDto.idx}" th:text="${alumniAssociationDto.title}" class="link"></a>
                             <img th:if="${alumniAssociationDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
 

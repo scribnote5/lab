@@ -45,36 +45,35 @@
                 </div>
             </div>
 
-            <div class="page-content" data-aos="fade-up">
-                <div class="mt-4">
-                    <div th:each="eventDto : ${eventDtoList}">
-                        <div class="row mt-4">
-                            <div class="col-md-2 col-3 text-right">
-                                <h1><span th:text="${#temporals.format(eventDto.startDate,'dd')}" class="badge badge-main"></span></h1>
-                                <h2 th:text="${#temporals.format(eventDto.startDate, 'MMM', new java.util.Locale('en', 'EN'))}"></h2>
-                            </div>
+            <div class="page-content mt-4 mb-4" data-aos="fade-up">
+                <div th:each="eventDto : ${eventDtoList}">
+                    <div class="row mt-5 mb-4">
+                        <div class="col-md-2 col-3 text-right">
+                            <h1><span th:text="${#temporals.format(eventDto.startDate,'dd')}" class="badge badge-main"></span></h1>
+                            <h2 th:text="${#temporals.format(eventDto.startDate, 'MMM', new java.util.Locale('en', 'EN'))}"></h2>
+                        </div>
 
-                            <div class="col-md-10 col-9 event-content">
-                                <a th:href="'/event?idx='+${eventDto.idx}" class="link">
-                                    <h4 style="font-weight: bold" th:text="${eventDto.title}"></h4>
-                                </a>
-                                <div>
-                                    <i class="far fa-calendar-alt"></i>&nbsp; <span th:text="${#temporals.format(eventDto.startDate,'yyyy.MM.dd.')}"></span>
-                                    <span th:if="!${#strings.isEmpty(eventDto.endDate)}" th:text="'~' + ${#temporals.format(eventDto.endDate,'yyyy.MM.dd.')}"></span>
-                                </div>
-                                <div>
-                                    <i class="fas fa-map-marked-alt"></i>&nbsp; <span th:text="${eventDto.place}"></span>
-                                </div>
-                                <div>
-                                    <span th:text="'Created By:' + ${eventDto.createdBy}"></span>
-                                </div>
+                        <div class="col-md-10 col-9 event-content">
+                            <a th:href="'/event?idx='+${eventDto.idx}" class="link">
+                                <h4 style="font-weight: bold" th:text="${eventDto.title}"></h4>
+                            </a>
+                            <div>
+                                <i class="far fa-calendar-alt"></i>&nbsp; <span th:text="${#temporals.format(eventDto.startDate,'yyyy.MM.dd.')}"></span>
+                                <span th:if="!${#strings.isEmpty(eventDto.endDate)}" th:text="'~' + ${#temporals.format(eventDto.endDate,'yyyy.MM.dd.')}"></span>
+                            </div>
+                            <div>
+                                <i class="fas fa-map-marked-alt"></i>&nbsp; <span th:text="${eventDto.place}"></span>
+                            </div>
+                            <div>
+                                <span th:text="'Created By:' + ${eventDto.createdBy}"></span>
                             </div>
                         </div>
                     </div>
-                    <div th:if="${eventDtoList.totalElements == 0}">
-                        <div class="div-no-posts">
-                            No posts founded.
-                        </div>
+                </div>
+
+                <div th:if="${eventDtoList.totalElements == 0}">
+                    <div class="div-no-posts">
+                        No posts founded.
                     </div>
                 </div>
 

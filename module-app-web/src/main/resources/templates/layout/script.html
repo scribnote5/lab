@@ -20,6 +20,16 @@
     var moduleAppApiAddress = "[[${@environment.getProperty('module-app-api.address')}]]";
 </script>
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-N1M5Y6WH54"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-N1M5Y6WH54');
+</script>
+
 <script th:inline="javascript">
     /* hide loading */
     window.onload = function () {

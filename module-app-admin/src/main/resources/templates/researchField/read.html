@@ -79,7 +79,7 @@
                             <td colspan="2">
                                 <strong class="d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-inline mobile-default">Uploaded Attached File</strong>
                                 <div id="attachedFileList" th:each="attachedFile : *{attachedFileList}">
-                                    <span th:attr="onclick=|location.href='${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/${attachedFile.savedFileName}'|"
+                                    <span th:attr="onclick=|location.href=encodeURI('${@environment.getProperty('module-app-api.address')}/api/attachedFiles/download/${attachedFile.savedFileName}')|"
                                           th:text="${attachedFile.fileName} + ',&nbsp;' + 'File size: ' + ${attachedFile.fileSize}"></span>
                                 </div>
                                 <div class="mt-2">
