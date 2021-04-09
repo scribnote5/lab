@@ -18,6 +18,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByUsername(String username);
 
+    User findByEnglishName(String englishName);
+
     User findByUsernameAndAuthorityTypeIn(String username, AuthorityType[] authorityType);
 
     Long countAllBy();

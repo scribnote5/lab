@@ -415,6 +415,11 @@
     font-weight: var(--strong-font-weight);
 }
 
+.album-page .album-wrap .album-info .photo-taken-date {
+    color: var(--dark-white);
+    font-size: var(--large-font-size);
+}
+
 .album-page .album-wrap .album-info .hash-tag {
     color: var(--darker-white);
     font-size: var(--larger-font-size);

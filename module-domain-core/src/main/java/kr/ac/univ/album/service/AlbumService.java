@@ -90,7 +90,7 @@ public class AlbumService {
     }
 
     public List<AlbumDto> findAllByActiveStatusIsOrderByMainHashTagDescIdxDesc() {
-        List<AlbumDto> albumDtoList = AlbumMapper.INSTANCE.toDto(albumRepository.findAllByActiveStatusIsOrderByMainHashTagDescIdxDesc(ActiveStatus.ACTIVE));
+        List<AlbumDto> albumDtoList = AlbumMapper.INSTANCE.toDto(albumRepository.findAllByActiveStatusIsOrderByMainHashTagDescPhotoTakenDateDescIdxDesc(ActiveStatus.ACTIVE));
         String mainHashTag = "";
         String previousMainHashTag = "";
         boolean secondAlbumByMainHashTag = false;

@@ -19,6 +19,8 @@ public interface SeminarRepository extends JpaRepository<Seminar, Long> {
 
     Page<Seminar> findAllByCreatedByContainingOrderByPresentationDateDesc(Pageable pageable, String username);
 
+    Page<Seminar> findAllByPresenterContainingOrderByPresentationDateDesc(Pageable pageable, String presenter);
+
     Page<Seminar> findAllByActiveStatusIsOrderByPresentationDateDesc(Pageable pageable, ActiveStatus activeStatus);
 
     Page<Seminar> findAllByTitleContainingAndActiveStatusIsOrderByPresentationDateDesc(Pageable pageable, String title, ActiveStatus activeStatus);
@@ -26,6 +28,8 @@ public interface SeminarRepository extends JpaRepository<Seminar, Long> {
     Page<Seminar> findAllByContentContainingAndActiveStatusIsOrderByPresentationDateDesc(Pageable pageable, String presenter, ActiveStatus activeStatus);
 
     Page<Seminar> findAllByCreatedByContainingAndActiveStatusIsOrderByPresentationDateDesc(Pageable pageable, String username, ActiveStatus activeStatus);
+
+    Page<Seminar> findAllByPresenterContainingAndActiveStatusIsOrderByPresentationDateDesc(Pageable pageable, String presenter, ActiveStatus activeStatus);
 
     List<Seminar> findTop6ByOrderByPresentationDateDesc();
 }

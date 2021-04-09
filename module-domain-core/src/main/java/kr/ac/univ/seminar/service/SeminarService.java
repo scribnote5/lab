@@ -8,6 +8,8 @@ import kr.ac.univ.seminar.dto.mapper.SeminarMapper;
 import kr.ac.univ.seminar.repository.SeminarRepository;
 import kr.ac.univ.seminar.repository.SeminarRepositoryImpl;
 import kr.ac.univ.user.domain.User;
+import kr.ac.univ.user.dto.UserDto;
+import kr.ac.univ.user.dto.mapper.UserMapper;
 import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.AccessCheck;
 import kr.ac.univ.util.EmptyUtil;
@@ -67,6 +69,24 @@ public class SeminarService {
                     seminarList = null;
                 }
                 break;
+            case "PRESENTER":
+                if ("module-app-admin".equals(moduleName)) {
+                    seminarList = seminarRepository.findAllByPresenterContainingOrderByPresentationDateDesc(pageable, searchDto.getKeyword());
+                } else if ("module-app-web".equals(moduleName)) {
+                    seminarList = seminarRepository.findAllByPresenterContainingAndActiveStatusIsOrderByPresentationDateDesc(pageable, searchDto.getKeyword(), ActiveStatus.ACTIVE);
+                } else {
+                    seminarList = null;
+                }
+                break;
+            case "ENGLISH_NAME":
+                if ("module-app-admin".equals(moduleName)) {
+                    seminarList = seminarRepositoryImpl.findSeminarByUserEnglishName(pageable, searchDto.getKeyword(), moduleName);
+                } else if ("module-app-web".equals(moduleName)) {
+                    seminarList = seminarRepositoryImpl.findSeminarByUserEnglishName(pageable, searchDto.getKeyword(), moduleName);
+                } else {
+                    seminarList = null;
+                }
+                break;
             default:
                 if ("module-app-admin".equals(moduleName)) {
                     seminarList = seminarRepository.findAllByOrderByPresentationDateDesc(pageable);
@@ -84,6 +104,7 @@ public class SeminarService {
         for (SeminarDto seminarDto : seminarDtoList) {
             seminarDto.setNewIcon(NewIconCheck.isNew(seminarDto.getCreatedDate()));
         }
+
 
         return seminarDtoList;
     }

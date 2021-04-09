@@ -111,8 +111,8 @@
     font-weight: var(--strong-font-weight);
     line-height: 1.25rem;
     color: var(--dark-white);
-    margin-top: 2.5rem;
-    margin-bottom: 2.5rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
 }
 
 .login-card .login-btn:hover {

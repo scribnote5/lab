@@ -40,6 +40,7 @@
 
                             <div class="album-info">
                                 <h2 th:text="${albumDto.title}"></h2>
+                                <span th:text="${!#strings.isEmpty(albumDto.photoTakenDate)} ? 'Photo taken date: ' + ${#temporals.format(albumDto.photoTakenDate,'yyyy.MM.dd.')} : ''" class="photo-taken-date"></span>
                                 <span th:each="hashTag : ${#strings.arraySplit(albumDto.hashTags,'#')}" th:text="'#' + ${hashTag}" class="hash-tag"></span>
                             </div>
                         </a>
