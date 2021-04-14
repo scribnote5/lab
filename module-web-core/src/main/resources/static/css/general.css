@@ -54,7 +54,6 @@ table td {
     font-size: var(--larger-font-size);
 }
 
-
 .btn-main {
     display: inline-block;
     text-align: center;
@@ -110,42 +109,6 @@ table td {
 
 .disable {
     background-color: var(--lightest-grey);
-}
-
-/*
- * CKeditor
- */
-.ck-editor__editable {
-    min-height: 500px;
-}
-
-.image-style-align-left {
-    float: left;
-}
-
-.image-style-align-center {
-    margin-left: auto;
-    margin-right: auto
-}
-
-.image-style-align-right {
-    float: right;
-}
-
-.text-tiny {
-    font-size: .7em;
-}
-
-.text-small {
-    font-size: .85em;
-}
-
-.text-big {
-    font-size: 1.4em;
-}
-
-.text-huge {
-    font-size: 1.8em;
 }
 
 /*
@@ -234,6 +197,10 @@ table td {
     text-align: center;
     color: grey;
     border-radius: 1rem;
+}
+
+#attachedFileList {
+    cursor: pointer;
 }
 
 /*
