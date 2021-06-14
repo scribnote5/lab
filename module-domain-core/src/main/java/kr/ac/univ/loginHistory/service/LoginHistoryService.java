@@ -8,8 +8,10 @@ import kr.ac.univ.loginHistory.dto.LoginHistoryDto;
 import kr.ac.univ.loginHistory.dto.mapper.LoginHistoryMapper;
 import kr.ac.univ.loginHistory.repository.LoginHistoryRepository;
 import kr.ac.univ.loginHistory.repository.LoginHistoryRepositoryImpl;
+import kr.ac.univ.user.domain.User;
 import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.util.AccessCheck;
+import kr.ac.univ.util.EmptyUtil;
 import kr.ac.univ.util.NewIconCheck;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -84,9 +86,10 @@ public class LoginHistoryService {
 
     public LoginHistoryDto findLoginHistoryByIdx(Long idx) {
         LoginHistoryDto loginHistoryDto = LoginHistoryMapper.INSTANCE.toDto(loginHistoryRepository.findById(idx).orElse(new LoginHistory()));
+        User user = userRepository.findByUsername(loginHistoryDto.getCreatedBy());
 
         // Update: isAccessInGeneral 메소드에 따라 접근 가능 및 불가
-        loginHistoryDto.setAccess(AccessCheck.isAccessInGeneral(loginHistoryDto.getCreatedBy(), userRepository.findByUsername(loginHistoryDto.getCreatedBy()).getAuthorityType().name()));
+        loginHistoryDto.setAccess(AccessCheck.isAccessInGeneral(loginHistoryDto.getCreatedBy(), EmptyUtil.isEmpty(user) ?  "root" : user.getAuthorityType().name()));
 
         loginHistoryRepositoryImpl.updateViewsByIdx(idx);
         loginHistoryDto.setViews(loginHistoryDto.getViews() + 1);

@@ -9,9 +9,11 @@ public class AccessCheck {
     /**
      * [일반적인 상황에서 사용자 권한에 따른 접근 가능 여부]
      * <p>
-     * 비인증 사용자인 경우 접근 불가
-     * root: 모든 권한에 대한 접근 허용
-     * manager: 생성자가 root인 경우 접근 허용, 로그인한 사용자의 username과 생성자가 같은 경우 접근 허용
+     * root: 모든 권한에 대한 접근 허용, admin 페이지 접근 가능
+     * manager: 작성자 권한이 root인 경우 접근 불가, 작성자 권한이 manager인 경우 로그인한 사용자의 username과 작성자가 같은 경우 접근 허용, 작성자 권한이 general인 경우 접근 허용, admin 페이지 접근 가능
+     * general: 작성자 권한이 root, manager인 경우 접근 불가, 작성자 권한이 general인 경우 로그인한 사용자의 username과 작성자가 같은 경우 접근 허용
+     * non_user: 로그인 불가
+     * anonymous: 로그인 불가
      *
      * @param createdBy
      * @return
@@ -75,7 +77,7 @@ public class AccessCheck {
      * <p>
      * 비인증 사용자인 경우 접근 불가
      * root: 모든 권한에 대한 접근 허용
-     * manager: 생성자가 root인 경우 접근 허용, 로그인한 사용자의 username과 생성자가 같은 경우 접근 허용
+     * manager: 작성자가 root인 경우 접근 허용, 로그인한 사용자의 username과 작성자가 같은 경우 접근 허용
      *
      * @param createdBy
      * @return
@@ -113,7 +115,7 @@ public class AccessCheck {
                         // 로그인한 사용자의 권한: manager
                         // 로그인한 사용자의 username과 username: 같음
                         // -> 접근 가능
-                        else if(authenticationUsername.equals(username)) {
+                        else if (authenticationUsername.equals(username)) {
                             result = true;
                         }
                         // 이외
@@ -136,9 +138,9 @@ public class AccessCheck {
      * [module-app-web user에서 사용자 권한에 따른 접근 가능 여부]
      * <p>
      * 비인증 사용자인 경우 접근 불가
-     * 생성자가 root인 경우 접근 허용
-     * 생성자 권한이 MANAGER인 경우 접근 허용
-     * 생성자와 사용자 아이디가 같은 경우 접근 허용
+     * 작성자가 root인 경우 접근 허용
+     * 작성자 권한이 MANAGER인 경우 접근 허용
+     * 작성자와 사용자 아이디가 같은 경우 접근 허용
      *
      * @param createdBy
      * @return

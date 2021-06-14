@@ -81,7 +81,7 @@
 
                     <!-- Mobile -->
                     <tr class="d-print-none d-sm-table-row d-md-table-row d-lg-none d-xl-none d-table-row">
-                        <td colspan="2">
+                        <td colspan="3">
                             <div class="d-flex justify-content-center">
                                 <img th:if="*{attachedFileList.size()} == 0" class="read-member-photo" th:attr="src=@{/images/no-preview-available.jpg}"/>
                                 <a th:if="*{attachedFileList.size()} != 0" th:href="@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-image/*{attachedFileList[0].savedFileName}|}"
@@ -93,7 +93,7 @@
                         </td>
                     </tr>
                     <tr class="d-print-none d-sm-table-row d-md-table-row d-lg-none d-xl-none d-table-row">
-                        <td colspan="2">
+                        <td colspan="3">
                             <strong class="mobile-default">Korean Name: </strong><span th:text="*{koreanName}" class="mobile-default"></span><br>
 
                             <strong class="mobile-default">English Name: </strong><span th:text="*{englishName}" class="mobile-default"></span><br>
