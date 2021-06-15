@@ -52,7 +52,7 @@
                                     <col width="25%"/>
                                 </colgroup>
                                 <tbody>
-                                <tr th:each="noticeBoardDto : ${noticeBoardDtoList}">
+                                <tr th:each="noticeBoardDto : ${noticeBoardDtoList}" class="border-top">
                                     <td>
                                         <img th:if="${noticeBoardDto.mainPagePriority != 11}" th:attr="src=@{|/images/speaker-icon.jpg|}" class="new-icon"/>
                                         <a th:href="'/notice-board?idx='+${noticeBoardDto.idx}" th:text="${noticeBoardDto.title}" class="link"></a>
@@ -85,7 +85,7 @@
                                     <col width="25%"/>
                                 </colgroup>
                                 <tbody>
-                                <tr th:each="seminarDto : ${seminarDtoList}">
+                                <tr th:each="seminarDto : ${seminarDtoList}" class="border-top">
                                     <td>
                                         <a th:href="'/seminar?idx='+${seminarDto.idx}" th:text="${seminarDto.title}" class="link"></a>
                                         <img th:if="${seminarDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
