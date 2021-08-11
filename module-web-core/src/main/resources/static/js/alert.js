@@ -61,5 +61,6 @@ function sweetalertFire(index) {
             deleteSuccess();
             break;
     }
+
     localStorage.removeItem("result");
 }

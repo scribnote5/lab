@@ -1,26 +1,14 @@
 package kr.ac.univ;
 
-import kr.ac.univ.common.domain.enums.ActiveStatus;
-import kr.ac.univ.noticeBoard.domain.NoticeBoard;
 import kr.ac.univ.noticeBoard.repository.NoticeBoardRepository;
-import kr.ac.univ.publication.domain.Publication;
-import kr.ac.univ.publication.domain.enums.PublicationType;
-import kr.ac.univ.publication.domain.enums.PublishingArea;
 import kr.ac.univ.publication.repository.PublicationRepository;
-import kr.ac.univ.user.domain.User;
-import kr.ac.univ.user.domain.enums.AuthorityType;
-import kr.ac.univ.user.domain.enums.UserType;
+import kr.ac.univ.user.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.RestController;
-
-import kr.ac.univ.user.repository.UserRepository;
-
-import java.time.LocalDate;
-import java.util.stream.IntStream;
 
 @RestController
 @SpringBootApplication
@@ -58,7 +46,6 @@ public class ModuleWebApplication {
                     .activeStatus(ActiveStatus.ACTIVE)
                     .createdBy("root")
                     .build());
-
             userRepository.save(User.builder()
                     .username("manager")
                     .password(passwordEncoder.encode("123123123"))
@@ -67,7 +54,6 @@ public class ModuleWebApplication {
                     .activeStatus(ActiveStatus.ACTIVE)
                     .createdBy("manager")
                     .build());
-
             userRepository.save(User.builder()
                     .username("manager2")
                     .password(passwordEncoder.encode("123123123"))
@@ -76,7 +62,6 @@ public class ModuleWebApplication {
                     .activeStatus(ActiveStatus.ACTIVE)
                     .createdBy("manager2")
                     .build());
-
             userRepository.save(User.builder()
                     .username("general")
                     .password(passwordEncoder.encode("123123123"))
@@ -85,7 +70,6 @@ public class ModuleWebApplication {
                     .activeStatus(ActiveStatus.ACTIVE)
                     .createdBy("general")
                     .build());
-
             userRepository.save(User.builder()
                     .username("general2")
                     .password(passwordEncoder.encode("123123123"))
@@ -94,7 +78,6 @@ public class ModuleWebApplication {
                     .activeStatus(ActiveStatus.ACTIVE)
                     .createdBy("general2")
                     .build());
-
             userRepository.save(User.builder()
                     .username("non_user")
                     .password(passwordEncoder.encode("123123123"))
@@ -121,7 +104,6 @@ public class ModuleWebApplication {
                             .activeStatus(ActiveStatus.ACTIVE)
                             .createdBy("root")
                             .build()));
-
             IntStream.rangeClosed(1, 50).forEach(index ->
                     publicationRepositroy.save(Publication.builder()
                             .title("게시글" + index)
@@ -135,7 +117,6 @@ public class ModuleWebApplication {
                             .activeStatus(ActiveStatus.ACTIVE)
                             .createdBy("root")
                             .build()));
-
             IntStream.rangeClosed(1, 50).forEach(index ->
                     publicationRepositroy.save(Publication.builder()
                             .title("게시글" + index)
@@ -150,7 +131,6 @@ public class ModuleWebApplication {
                             .activeStatus(ActiveStatus.ACTIVE)
                             .createdBy("root")
                             .build()));
-
             IntStream.rangeClosed(1, 50).forEach(index ->
                     publicationRepositroy.save(Publication.builder()
                             .title("게시글" + index)
@@ -164,7 +144,6 @@ public class ModuleWebApplication {
                             .activeStatus(ActiveStatus.ACTIVE)
                             .createdBy("root")
                             .build()));
-
             IntStream.rangeClosed(1, 50).forEach(index ->
                     publicationRepositroy.save(Publication.builder()
                             .title("게시글" + index)

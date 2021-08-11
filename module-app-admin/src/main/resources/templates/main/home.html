@@ -139,13 +139,9 @@
                         </div>
 
                         <table class="table table-hover mobile-table-list mb-0">
-                            <colgroup>
-                                <col width="75%"/>
-                                <col width="25%"/>
-                            </colgroup>
                             <tbody>
                             <tr th:each="noticeBoardDto : ${noticeBoardDtoList}">
-                                <td>
+                                <td style="width: 75%">
                                     <img th:if="${noticeBoardDto.mainPagePriority != 11}" th:attr="src=@{|/images/speaker-icon.jpg|}" class="new-icon"/>
                                     <a th:href="'/notice-board?idx='+${noticeBoardDto.idx}" th:text="${noticeBoardDto.title}" class="link"></a>
                                     <img th:if="${noticeBoardDto.newIcon}" th:attr="src=@{|/images/new-icon.png|}" class="new-icon"/>
