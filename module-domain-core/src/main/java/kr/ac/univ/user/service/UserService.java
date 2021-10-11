@@ -2,13 +2,13 @@ package kr.ac.univ.user.service;
 
 
 import kr.ac.univ.common.domain.enums.ActiveStatus;
-import kr.ac.univ.common.dto.SearchDto;
 import kr.ac.univ.user.domain.User;
 import kr.ac.univ.user.domain.enums.AuthorityType;
 import kr.ac.univ.user.domain.enums.UserStatus;
 import kr.ac.univ.user.domain.enums.UserType;
 import kr.ac.univ.user.dto.UserDto;
 import kr.ac.univ.user.dto.UserPrincipal;
+import kr.ac.univ.user.dto.UserSearchDto;
 import kr.ac.univ.user.dto.mapper.UserMapper;
 import kr.ac.univ.user.repository.UserRepository;
 import kr.ac.univ.user.repository.UserRepositoryImpl;
@@ -30,32 +30,32 @@ import java.util.regex.Pattern;
 
 @Service
 public class UserService implements UserDetailsService {
-    @Value("${module.name}")
-    private String moduleName;
     private final UserRepository userRepository;
     private final UserRepositoryImpl userRepositoryImpl;
+    @Value("${module.name}")
+    private String moduleName;
 
     public UserService(UserRepository userRepository, UserRepositoryImpl userRepositoryImpl) {
         this.userRepository = userRepository;
         this.userRepositoryImpl = userRepositoryImpl;
     }
 
-    public Page<UserDto> findUserList(Pageable pageable, SearchDto searchDto) {
+    public Page<UserDto> findUserList(Pageable pageable, UserSearchDto userSearchDto) {
         Page<User> userList = null;
         Page<UserDto> userDtoList = null;
 
         if ("module-app-admin".equals(moduleName)) {
             pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1, pageable.getPageSize(), Sort.Direction.DESC, "idx");
 
-            switch (searchDto.getSearchType()) {
+            switch (userSearchDto.getSearchType()) {
                 case "USER_ID":
-                    userList = userRepository.findAllByUsernameContaining(pageable, searchDto.getKeyword());
+                    userList = userRepository.findAllByUsernameContaining(pageable, userSearchDto.getKeyword());
                     break;
                 case "KOREAN_NAME":
-                    userList = userRepository.findAllByKoreanNameContaining(pageable, searchDto.getKeyword());
+                    userList = userRepository.findAllByKoreanNameContaining(pageable, userSearchDto.getKeyword());
                     break;
                 case "EMAIL":
-                    userList = userRepository.findAllByEmailContaining(pageable, searchDto.getKeyword());
+                    userList = userRepository.findAllByEmailContaining(pageable, userSearchDto.getKeyword());
                     break;
                 default:
                     userList = userRepository.findAll(pageable);
@@ -65,22 +65,65 @@ public class UserService implements UserDetailsService {
             // 정렬 기준 설정
             Sort sort = Sort.by("userStatus").ascending().and(Sort.by("userType").ascending().and(Sort.by("englishName").ascending()));
             pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1, 12, sort);
-            List<AuthorityType> authorityType = new ArrayList<>();
-            authorityType.add(AuthorityType.MANAGER);
-            authorityType.add(AuthorityType.GENERAL);
+            List<AuthorityType> authorityTypeList = new ArrayList<>();
+            List<UserStatus> userStatusList = new ArrayList<>();
+            List<UserType> userTypeList = new ArrayList<>();
 
-            switch (searchDto.getSearchType()) {
+            authorityTypeList.add(AuthorityType.MANAGER);
+            authorityTypeList.add(AuthorityType.GENERAL);
+
+            switch (userSearchDto.getUserSearchType()) {
+                case A_SHOW_ALL:
+                    userStatusList.add(UserStatus.ATTENDING);
+                    userStatusList.add(UserStatus.GRADUATED);
+                    userTypeList.add(UserType.A_FACULTY);
+                    userTypeList.add(UserType.B_FULL_TIME_PHD);
+                    userTypeList.add(UserType.C_FULL_TIME_MS);
+                    userTypeList.add(UserType.D_PART_TIME_PHD);
+                    userTypeList.add(UserType.E_PART_TIME_MS);
+                    userTypeList.add(UserType.F_BS);
+                    break;
+                case B_FACULTY:
+                    userStatusList.add(UserStatus.ATTENDING);
+                    userTypeList.add(UserType.A_FACULTY);
+                    break;
+                case C_PHD:
+                    userStatusList.add(UserStatus.ATTENDING);
+                    userTypeList.add(UserType.B_FULL_TIME_PHD);
+                    userTypeList.add(UserType.D_PART_TIME_PHD);
+                    break;
+                case D_MS:
+                    userStatusList.add(UserStatus.ATTENDING);
+                    userTypeList.add(UserType.C_FULL_TIME_MS);
+                    userTypeList.add(UserType.E_PART_TIME_MS);
+                    break;
+                case E_BS:
+                    userStatusList.add(UserStatus.ATTENDING);
+                    userTypeList.add(UserType.F_BS);
+                    break;
+                case F_ALUMNI:
+                    userStatusList.add(UserStatus.GRADUATED);
+                    userTypeList.add(UserType.A_FACULTY);
+                    userTypeList.add(UserType.B_FULL_TIME_PHD);
+                    userTypeList.add(UserType.C_FULL_TIME_MS);
+                    userTypeList.add(UserType.D_PART_TIME_PHD);
+                    userTypeList.add(UserType.E_PART_TIME_MS);
+                    userTypeList.add(UserType.F_BS);
+                    break;
+            }
+
+            switch (userSearchDto.getSearchType()) {
                 case "ENGLISH_NAME":
-                    userList = userRepository.findAllByAuthorityTypeInAndEnglishNameContainingAndActiveStatusIs(pageable, authorityType, searchDto.getKeyword(), ActiveStatus.ACTIVE);
+                    userList = userRepository.findAllByAuthorityTypeInAndEnglishNameContainingAndUserStatusInAndUserTypeInAndActiveStatusIs(pageable, authorityTypeList, userSearchDto.getKeyword(), userStatusList, userTypeList, ActiveStatus.ACTIVE);
                     break;
                 case "KOREAN_NAME":
-                    userList = userRepository.findAllByAuthorityTypeInAndKoreanNameContainingAndActiveStatusIs(pageable, authorityType, searchDto.getKeyword(), ActiveStatus.ACTIVE);
+                    userList = userRepository.findAllByAuthorityTypeInAndKoreanNameContainingAndUserStatusInAndUserTypeInAndActiveStatusIs(pageable, authorityTypeList, userSearchDto.getKeyword(), userStatusList, userTypeList, ActiveStatus.ACTIVE);
                     break;
                 case "EMAIL":
-                    userList = userRepository.findAllByAuthorityTypeInAndEmailContainingAndActiveStatusIs(pageable, authorityType, searchDto.getKeyword(), ActiveStatus.ACTIVE);
+                    userList = userRepository.findAllByAuthorityTypeInAndEmailContainingAndUserStatusInAndUserTypeInAndActiveStatusIs(pageable, authorityTypeList, userSearchDto.getKeyword(), userStatusList, userTypeList, ActiveStatus.ACTIVE);
                     break;
                 default:
-                    userList = userRepository.findAllByAuthorityTypeInAndActiveStatusIs(pageable, authorityType, ActiveStatus.ACTIVE);
+                    userList = userRepository.findAllByAuthorityTypeInAndUserStatusInAndUserTypeInAndActiveStatusIs(pageable, authorityTypeList, userStatusList, userTypeList, ActiveStatus.ACTIVE);
                     break;
             }
         } else {
@@ -96,6 +139,7 @@ public class UserService implements UserDetailsService {
 
         return userDtoList;
     }
+
 
     public Long countAllByActiveStatusIsAndUserStatusIsAndUserTypeIs(UserType userType) {
         return userRepository.countAllByActiveStatusIsAndUserStatusIsAndUserTypeIs(ActiveStatus.ACTIVE, UserStatus.ATTENDING, userType);

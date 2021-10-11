@@ -86,6 +86,10 @@
 /*
  * Member
  */
+.nav-item:hover {
+    cursor: pointer;
+}
+
 .member {
     overflow: hidden;
     border-radius: .5rem;

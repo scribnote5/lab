@@ -24,7 +24,7 @@
     transition: all 0.5s;
     padding: .75rem 0;
     background-color: var(--white);
-    height: 5rem;
+    height: 4.5rem;
 }
 
 #header.header-scrolled {
@@ -42,7 +42,7 @@
 @media (max-width: 992px) {
     #header {
         padding: .5rem 0;
-        height: 4.5rem;
+        height: 4rem;
     }
 }
 
@@ -69,7 +69,7 @@
     font-weight: var(--strong-font-weight);
     padding: 10px 0 10px 18px;
     transition: 0.3s;
-    font-size: var(--larger-font-size);
+    font-size: var(--large-font-size);
 }
 
 .nav-menu a:hover, .nav-menu .active > a, .nav-menu li:hover > a {
@@ -85,7 +85,7 @@
     padding: 10px 18px 10px 18px;
     cursor: pointer;
     font-weight: var(--regular-font-weight);
-    font-size: var(--large-font-size);
+    font-size: var(--regular-font-size);
 }
 
 .nav-menu .login-logout a:hover {
@@ -121,7 +121,7 @@
 
 .nav-menu .drop-down ul a {
     padding: 10px 20px;
-    font-size: 14px;
+    font-size: 13px;
     text-transform: none;
     color: #222222;
 }
@@ -177,7 +177,7 @@
 
 .mobile-nav-toggle i {
     color: #222222;
-    font-size: 36px;
+    font-size: 34px;
 }
 
 .mobile-nav {
@@ -218,7 +218,7 @@
     position: relative;
     color: var(--main-black);
     padding: 10px 20px;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     outline: none;
 }
 
@@ -250,7 +250,7 @@
     padding-left: 10px;
     position: absolute;
     right: 15px;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
 }
 
 .mobile-nav .active.drop-down i:before {
@@ -312,7 +312,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
+    font-size: 22px;
     width: 40px;
     height: 40px;
     border-radius: 4px;

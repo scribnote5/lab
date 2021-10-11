@@ -1,12 +1,20 @@
 /*
  * Hash Tag
  */
-.hash-tag {
+.hash-tag-read {
     background-color: var(--darkest-white);
     color: var(--darkest-grey);
     border-radius: .5rem;
     display: inline-block;
-    margin-top: .35rem;
+    padding: .25rem;
+}
+
+.hash-tag-form {
+    background-color: var(--darkest-white);
+    color: var(--darkest-grey);
+    border-radius: .5rem;
+    display: inline-block;
+    margin-top: .2rem;
     padding: .25rem;
 }
 

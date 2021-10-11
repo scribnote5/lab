@@ -12,7 +12,7 @@
     <div th:replace="layout/header::header"></div>
 
     <div class="container">
-        <form name="form" id="form" th:object="${searchDto}" action="#">
+        <form name="form" id="form" th:object="${userSearchDto}" action="#">
             <div class="page-header breadcrumbs">
                 <div class="d-flex justify-content-between align-items-center" data-aos="fade-up">
                     <h2>Member List</h2>
@@ -37,13 +37,26 @@
                         </select>
                     </div>
                     <div class="pt-2 pr-2">
-                        <input type="search" class="custom-search-input" name="keyword" placeholder="Search" th:value="${searchDto?.keyword}">
+                        <input type="search" class="custom-search-input" name="keyword" placeholder="Search" th:value="${userSearchDto?.keyword}">
                     </div>
                     <div class="pt-2">
                         <i id="search" class="fas fa-search search-icon"></i>
                     </div>
                 </div>
             </div>
+
+            <nav class="mt-5">
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a id="showAll" class="nav-item nav-link link-black" data-toggle="tab" role="tab" th:onclick="searchListByUserSearchType('A_SHOW_ALL')">All</a>
+                    <a id="faculty" class="nav-item nav-link link-black" data-toggle="tab" role="tab" th:onclick="searchListByUserSearchType('B_FACULTY')">Faculty</a>
+                    <a id="phd" class="nav-item nav-link link-black" data-toggle="tab" role="tab" th:onclick="searchListByUserSearchType('C_PHD')">Ph.D</a>
+                    <a id="ms" class="nav-item nav-link link-black" data-toggle="tab" role="tab" th:onclick="searchListByUserSearchType('D_MS')">M.S.</a>
+                    <a id="bs" class="nav-item nav-link link-black" data-toggle="tab" role="tab" th:onclick="searchListByUserSearchType('E_BS')">B.S.</a>
+                    <a id="alumni" class="nav-item nav-link link-black" data-toggle="tab" role="tab" th:onclick="searchListByUserSearchType('F_ALUMNI')">Alumni</a>
+
+                    <input type="hidden" name="userSearchType" th:value="${userSearchDto?.userSearchType}">
+                </div>
+            </nav>
 
             <div class="page-content" data-aos="fade-up">
                 <div class="row mt-4">
@@ -94,40 +107,39 @@
                             </div>
                         </div>
                     </div>
-                    <div th:if="${userDtoList.totalElements == 0}">
-                        <div class="no-posts">
-                            No members founded.
-                        </div>
+                    <div th:if="${userDtoList.totalElements == 0}" class="div-no-posts w-100">
+                        No members founded.
                     </div>
                 </div>
-
-                <div class="row mt-4 mb-4"></div>
-
-                <!-- Pagination -->
-                <div class="row justify-content-center mb-4" aria-label="Page navigation">
-                    <ul class="pagination"
-                        th:with="startNumber=${T(Math).floor(userDtoList.number/10)}*10+1, endNumber=(${userDtoList.totalPages} > ${startNumber}+9) ? ${startNumber}+9 : (${userDtoList.totalPages} == 0 ? 1 : ${userDtoList.totalPages})">
-                        <li class="page-item">
-                            <a class="page-link" aria-label="Previous" th:href="@{/user/list(page=1,searchType=*{searchType},keyword=*{keyword})}">&laquo;</a>
-                        </li>
-                        <li class="page-item" th:style="${userDtoList.first} ? 'display:none'">
-                            <a class="page-link" th:href="@{/user/list(page=${userDtoList.number},searchType=*{searchType},keyword=*{keyword})}">&lsaquo;</a>
-                        </li>
-                        <li th:each="page :${#numbers.sequence(startNumber, endNumber)}" th:class="(${page} == ${userDtoList.number}+1) ? 'page-item active'">
-                            <a class="page-link" th:href="@{/user/list(page=${page},searchType=*{searchType},keyword=*{keyword})}" th:text="${page}"><span class="sr-only"></span></a>
-                        </li>
-                        <li class="page-item" th:style="${userDtoList.last} ? 'display:none'">
-                            <a class="page-link" th:href="@{/user/list(page=${userDtoList.number}+2,searchType=*{searchType},keyword=*{keyword})}">&rsaquo;</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" aria-label="Next" th:href="@{/user/list(page=${userDtoList.totalPages},searchType=*{searchType},keyword=*{keyword})}">&raquo;</a>
-                        </li>
-                    </ul>
-                </div>
-                <!-- /Pagination -->
             </div>
-        </form>
+
+            <div class="row mt-4 mb-4"></div>
+
+            <!-- Pagination -->
+            <div class="row justify-content-center mb-4" aria-label="Page navigation">
+                <ul class="pagination"
+                    th:with="startNumber=${T(Math).floor(userDtoList.number/10)}*10+1, endNumber=(${userDtoList.totalPages} > ${startNumber}+9) ? ${startNumber}+9 : (${userDtoList.totalPages} == 0 ? 1 : ${userDtoList.totalPages})">
+                    <li class="page-item">
+                        <a class="page-link" aria-label="Previous" th:href="@{/user/list(page=1,searchType=*{searchType},keyword=*{keyword},userSearchType=*{userSearchType})}">&laquo;</a>
+                    </li>
+                    <li class="page-item" th:style="${userDtoList.first} ? 'display:none'">
+                        <a class="page-link" th:href="@{/user/list(page=${userDtoList.number},searchType=*{searchType},keyword=*{keyword},userSearchType=*{userSearchType})}">&lsaquo;</a>
+                    </li>
+                    <li th:each="page :${#numbers.sequence(startNumber, endNumber)}" th:class="(${page} == ${userDtoList.number}+1) ? 'page-item active'">
+                        <a class="page-link" th:href="@{/user/list(page=${page},searchType=*{searchType},keyword=*{keyword},userSearchType=*{userSearchType})}" th:text="${page}"><span class="sr-only"></span></a>
+                    </li>
+                    <li class="page-item" th:style="${userDtoList.last} ? 'display:none'">
+                        <a class="page-link" th:href="@{/user/list(page=${userDtoList.number}+2,searchType=*{searchType},keyword=*{keyword},userSearchType=*{userSearchType})}">&rsaquo;</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" aria-label="Next" th:href="@{/user/list(page=${userDtoList.totalPages},searchType=*{searchType},keyword=*{keyword},userSearchType=*{userSearchType})}">&raquo;</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /Pagination -->
     </div>
+    </form>
+</div>
 </div>
 
 <!-- footer -->
@@ -137,11 +149,51 @@
 <th:block th:replace="layout/script.html"></th:block>
 
 <script>
+    $(document).ready(function () {
+        // nav-tab bar active 처리
+        const uri = new URLSearchParams(location.search);
+        const userSearchType = uri.get("userSearchType");
+
+        switch (userSearchType) {
+            case "A_SHOW_ALL" :
+                document.getElementById("showAll").className += ' active';
+                break;
+            case "B_FACULTY" :
+                document.getElementById("faculty").className += ' active';
+                break;
+            case "C_PHD" :
+                document.getElementById("phd").className += ' active';
+                break;
+            case "D_MS" :
+                document.getElementById("ms").className += ' active';
+                break;
+            case "E_BS" :
+                document.getElementById("bs").className += ' active';
+                break;
+            case "F_ALUMNI" :
+                document.getElementById("alumni").className += ' active';
+                break;
+            default :
+                document.getElementById("showAll").className += ' active';
+                break;
+        }
+    });
+
     $("#search").click(function () {
         document.form.action = '/user/list';
         document.form.method = 'get';
         document.form.submit();
     });
+
+    function searchListByUserSearchType(userSearchType) {
+        console.log(userSearchType);
+
+
+        document.getElementsByName("userSearchType")[0].value = userSearchType;
+        document.form.action = '/user/list';
+        document.form.method = 'get';
+        document.form.submit();
+    }
 </script>
 
 </body>

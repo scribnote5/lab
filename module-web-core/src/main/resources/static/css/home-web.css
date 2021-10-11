@@ -2,11 +2,11 @@
  * Breadcrumbs
  */
 .breadcrumbs {
-    margin-top: 6.5rem;
+    margin-top: 5.75rem;
 }
 
 .breadcrumbs i {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
 }
 
 @media (max-width: 992px) {
@@ -63,7 +63,7 @@ section {
     line-height: 2.5rem;
 }
 
-.section-header h3 {
+.section-header h4 {
     margin-bottom: 1rem;
     font-weight: var(--strong-font-weight);
     line-height: 2.25rem;
@@ -95,8 +95,8 @@ section {
  */
 .introduction {
     width: 100%;
-    height: 375px;
-    margin-top: 5rem;
+    height: 400px;
+    margin-top: 4.5rem;
     background-color: var(--dark-main-grey);
     padding: 0;
 }
@@ -109,7 +109,7 @@ section {
     margin-top: -20px !important;
 }
 
-.introduction h1 {
+.introduction h2 {
     margin-bottom: 2rem;
     font-weight: var(--strong-font-weight);
     color: var(--darkest-white);
@@ -129,7 +129,7 @@ section {
     user-select: none;
     border: 2px solid var(--main-red);
     padding: .75rem 1.25rem;
-    font-size: var(--larger-font-size);
+    font-size: var(--large-font-size);
     font-weight: var(--strong-font-weight);
     line-height: 1.5rem;
     border-radius: 3rem;
@@ -189,8 +189,8 @@ section {
 
 @media (max-width: 991px) {
     .introduction {
-        height: calc(100vh - 4.5rem);
-        margin-top: 4.5rem;
+        height: calc(100vh - 4rem);
+        margin-top: 4rem;
     }
 
     .introduction .animated {
@@ -218,13 +218,13 @@ section {
 }
 
 @media (max-width: 768px) {
-    .introduction h1 {
-        font-size: 2rem;
-        margin-bottom: 1.5rem;
+    .introduction h2 {
+        font-size: 1.75rem;
+        margin-bottom: 1.25rem;
     }
 
     .introduction h5 {
-        font-size: 1.25rem;
+        font-size: 1rem;
         margin-bottom: 1.5rem;
         text-align: left;
     }
@@ -347,7 +347,7 @@ section {
     transition: all ease-in-out 0.3s;
 }
 
-.album .album-wrap .album-info h3 {
+.album .album-wrap .album-info h4 {
     color: var(--white);
     font-weight: var(--strong-font-weight);
 }

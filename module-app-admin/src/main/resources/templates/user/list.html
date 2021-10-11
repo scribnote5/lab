@@ -16,7 +16,7 @@
         <div th:replace="layout/header::header"></div>
 
         <div class="container-fluid">
-            <form name="form" id="form" th:object="${searchDto}" action="#">
+            <form name="form" id="form" th:object="${userSearchDto}" action="#">
                 <div class="page-header breadcrumbs">
                     <div class="d-flex justify-content-between align-items-center">
                         <h2>User List</h2>
@@ -41,7 +41,7 @@
                             </select>
                         </div>
                         <div class="pt-2 pr-2">
-                            <input type="search" class="custom-search-input" name="keyword" placeholder="Search" th:value="${searchDto?.keyword}">
+                            <input type="search" class="custom-search-input" name="keyword" placeholder="Search" th:value="${userSearchDto?.keyword}">
                         </div>
                         <div class="pt-2">
                             <i id="search" class="fas fa-search search-icon"></i>

@@ -17,7 +17,7 @@
             <div class="container">
                 <div class="row align-items-center justify-content-center">
                     <div class="introduction-content-wrapper col-lg-7 order-2 order-lg-1 d-flex flex-column justify-content-center" data-aos="fade-right">
-                        <h1 th:text="${#strings.isEmpty(introductionDto)} ? 'No title.' : ${introductionDto.title}"></h1>
+                        <h2 th:text="${#strings.isEmpty(introductionDto)} ? 'No title.' : ${introductionDto.title}"></h2>
                         <h5 th:utext="${#strings.isEmpty(introductionDto)} ? 'No content.' : ${#strings.replace(introductionDto.content, T(System).getProperty('line.separator'), '&lt;br /&gt;')}"></h5>
                         <div>
                             <a href="/about-us/" class="btn-main-about-us">About Us</a>
@@ -42,7 +42,7 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="section-header" data-aos="fade-up">
-                            <h3>Notice Board</h3>
+                            <h4>Notice Board</h4>
                         </div>
 
                         <div class="section-content" data-aos="fade-up">
@@ -71,7 +71,7 @@
 
                     <div class="col-lg-6">
                         <div class="section-header" data-aos="fade-up">
-                            <h3>Seminar</h3>
+                            <h4>Seminar</h4>
                         </div>
 
                         <div class="section-content" data-aos="fade-up">
@@ -104,13 +104,13 @@
         <section class="event">
             <div class="container">
                 <div class="section-header" data-aos="fade-up">
-                    <h3>Upcoming Event</h3>
+                    <h4>Upcoming Event</h4>
                 </div>
 
                 <div class="section-content" data-aos="fade-up">
                     <div class="row justify-content-center">
                         <div th:each="eventDto: ${eventDtoList}" class="col-lg-3 col-md-4 col-sm-6 col-12 d-flex">
-                            <div class="row justify-content-center mt-lg-0 mt-md-4 mt-sm-4 mt-4">
+                            <div class="row justify-content-center mt-lg-0 mt-md-4 mt-sm-4 mt-4 w-100">
                                 <div class="col-md-4 col-sm-3 col-3 text-right">
                                     <h2><span th:text="${#temporals.format(eventDto.startDate,'dd')}" class="badge badge-main"></span></h2>
                                     <h4 th:text="${#temporals.format(eventDto.startDate, 'MMM', new java.util.Locale('en', 'EN'))}"></h4>
@@ -141,7 +141,7 @@
         <section class="research-field">
             <div class="container">
                 <div class="section-header" data-aos="fade-up">
-                    <h3>Research Field</h3>
+                    <h4>Research Field</h4>
                 </div>
 
                 <div class="section-content" data-aos="fade-up">
@@ -166,7 +166,7 @@
         <section class="album">
             <div class="container">
                 <div class="section-header" data-aos="fade-up">
-                    <h3>Album</h3>
+                    <h4>Album</h4>
                 </div>
 
                 <div class="col-lg-12 d-flex justify-content-center" data-aos="fade-up">
@@ -182,7 +182,7 @@
                                     <img th:attr="src=@{|${@environment.getProperty('module-app-api.address')}/api/attachedFiles/view-image/${albumDto.attachedFileList[0].savedFileName}|}"/>
 
                                     <div class="album-info">
-                                        <h3 th:text="${albumDto.title}"></h3>
+                                        <h4 th:text="${albumDto.title}"></h4>
                                         <span th:each="hashTag : ${#strings.arraySplit(albumDto.hashTags,'#')}" th:text="'#' + ${hashTag}" class="hash-tag"></span>
                                     </div>
                                 </a>

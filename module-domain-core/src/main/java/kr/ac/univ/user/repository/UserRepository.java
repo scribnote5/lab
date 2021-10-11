@@ -20,11 +20,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByEnglishName(String englishName);
 
-    User findByUsernameAndAuthorityTypeIn(String username, AuthorityType[] authorityType);
+    User findByUsernameAndAuthorityTypeIn(String username, AuthorityType[] authorityTypeList);
 
     Long countAllBy();
 
-    Long countAllByActiveStatusIsAndUserStatusIsAndUserTypeIs(ActiveStatus activeStatus, UserStatus userStatus, UserType userType);
+    Long countAllByActiveStatusIsAndUserStatusIsAndUserTypeIs(ActiveStatus activeStatus, UserStatus userStatusList, UserType userTypeList);
 
     Page<User> findAllByUsernameContaining(Pageable pageable, String username);
 
@@ -32,11 +32,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Page<User> findAllByEmailContaining(Pageable pageable, String email);
 
-    Page<User> findAllByAuthorityTypeInAndActiveStatusIs(Pageable pageable, List<AuthorityType> authorityType, ActiveStatus activeStatus);
 
-    Page<User> findAllByAuthorityTypeInAndEnglishNameContainingAndActiveStatusIs(Pageable pageable, List<AuthorityType> authorityType, String englishName, ActiveStatus activeStatus);
+    Page<User> findAllByAuthorityTypeInAndUserStatusInAndUserTypeInAndActiveStatusIs(Pageable pageable, List<AuthorityType> authorityTypeList, List<UserStatus> userStatusList, List<UserType> userTypeList, ActiveStatus activeStatus);
 
-    Page<User> findAllByAuthorityTypeInAndKoreanNameContainingAndActiveStatusIs(Pageable pageable, List<AuthorityType> authorityType, String koreanName, ActiveStatus activeStatus);
+    Page<User> findAllByAuthorityTypeInAndEnglishNameContainingAndUserStatusInAndUserTypeInAndActiveStatusIs(Pageable pageable, List<AuthorityType> authorityTypeList, String email, List<UserStatus> userStatusList, List<UserType> userTypeList, ActiveStatus activeStatus);
 
-    Page<User> findAllByAuthorityTypeInAndEmailContainingAndActiveStatusIs(Pageable pageable, List<AuthorityType> authorityType, String email, ActiveStatus activeStatus);
+    Page<User> findAllByAuthorityTypeInAndKoreanNameContainingAndUserStatusInAndUserTypeInAndActiveStatusIs(Pageable pageable, List<AuthorityType> authorityTypeList, String email, List<UserStatus> userStatusList, List<UserType> userTypeList, ActiveStatus activeStatus);
+
+    Page<User> findAllByAuthorityTypeInAndEmailContainingAndUserStatusInAndUserTypeInAndActiveStatusIs(Pageable pageable, List<AuthorityType> authorityTypeList, String email, List<UserStatus> userStatusList, List<UserType> userTypeList, ActiveStatus activeStatus);
 }

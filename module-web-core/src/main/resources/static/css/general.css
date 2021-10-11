@@ -1,11 +1,11 @@
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
-* {
-    font-family: 'Spoqa Han Sans Neo', san-serif;
-    font-weight: var(--regular-font-weight);
-    font-size: var(--regular-font-size);
-    color: var(--main-black);
+body {
+    font-family: 'Spoqa Han Sans Neo', san-serif !important;
+    font-weight: var(--regular-font-weight) !important;
+    font-size: var(--regular-font-size) !important;
+    color: var(--main-black) !important;
 }
 
 body .container-fluid {
@@ -52,6 +52,10 @@ table td {
     text-align: center;
     color: var(--dark-grey);
     font-size: var(--larger-font-size);
+}
+
+.div-no-posts:hover {
+    background: var(--lightest-grey);
 }
 
 .btn-main {

@@ -57,13 +57,13 @@
                         </tr>
                         <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Main Hash Tag</th>
-                            <td><span th:text="*{mainHashTag}" class="hash-tag"></span></td>
+                            <td><span th:text="*{mainHashTag}" class="hash-tag-read"></span></td>
                         </tr>
                         <tr class="d-none d-sm-none d-md-none d-lg-table-row">
                             <th>Hash Tags</th>
                             <td>
                                 <span th:each="hashTag : *{#strings.arraySplit(hashTags,'#')}">
-                                    <span class="hash-tag" th:text="'#' + ${hashTag}"></span>
+                                    <span class="hash-tag-read" th:text="'#' + ${hashTag}"></span>
                                 </span>
                             </td>
                         </tr>
@@ -78,11 +78,11 @@
                             <td colspan="2">
                                 <strong class="mobile-default">Main Page Priority: </strong><span th:text="*{mainPagePriority == -1} ? 'This post not shown on the main page.' : *{mainPagePriority}" class="mobile-default"></span><br>
 
-                                <strong class="mobile-default">Main Hash Tag: </strong><span th:text="*{mainHashTag}" class="hash-tag"></span><br>
+                                <strong class="mobile-default">Main Hash Tag: </strong><span th:text="*{mainHashTag}" class="hash-tag-read"></span><br>
 
                                 <strong class="mobile-default">Hash Tags: </strong>
                                 <span th:each="hashTag : *{#strings.arraySplit(hashTags,'#')}">
-                                    <span class="hash-tag" th:text="'#' + ${hashTag}"></span>
+                                    <span class="hash-tag-read" th:text="'#' + ${hashTag}"></span>
                                 </span><br>
 
                                 <strong class="mobile-default">Main Page Priority: </strong><span th:text="*{mainPagePriority == -1} ? 'This post not shown on the main page.' : *{mainPagePriority}" class="mobile-default"></span>

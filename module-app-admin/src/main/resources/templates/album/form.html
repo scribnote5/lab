@@ -333,7 +333,7 @@
             $("#hashTagsWrapper").append(
                 '<span draggable="true" id="hashTagData' + hashTagId + '">'
                 + '<span id="hashTagSpace' + hashTagId + '" class="hash-tag-space ">    </span>'
-                + '<span id="hashTagContent' + hashTagId + '" class="hash-tag ">'
+                + '<span id="hashTagContent' + hashTagId + '" class="hash-tag-form">'
                 + hashTag + "&nbsp;"
                 + '<i class="far fa-times-circle" onClick="cancelHashTag(' + hashTagId + ')"> </i>'
                 + '</span>'
@@ -448,11 +448,16 @@
     // input name hashTags에 hashTag 추가
     document.getElementsByName("hashTags")[0].value = "";
 
+    // hashTag 추가
     for (var i = 1; i < hashTagArray.length; i++) {
-        $("#hashTagsWrapper").append('<span id="hashTagData' + hashTagId + '" class="hash-tag mt-2">'
-            + '#' + hashTagArray[i] + "&nbsp;"
-            + '<i onClick="cancelHashTag(' + hashTagId + ')" class="far fa-times-circle" />'
-            + '</span>');
+        $("#hashTagsWrapper").append(
+        '<span draggable="true" id="hashTagData' + hashTagId + '">'
+        + '<span id="hashTagSpace' + hashTagId + '" class="hash-tag-space ">    </span>'
+        + '<span id="hashTagContent' + hashTagId + '" class="hash-tag-form">'
+        + hashTagArray[i] + "&nbsp;"
+        + '<i class="far fa-times-circle" onClick="cancelHashTag(' + hashTagId + ')"> </i>'
+        + '</span>'
+        + '</span>');
 
         hashTagId++;
     }

@@ -1,8 +1,8 @@
 package kr.ac.univ.controller;
 
-import kr.ac.univ.common.dto.SearchDto;
 import kr.ac.univ.user.dto.UserDto;
 import kr.ac.univ.user.dto.UserPrincipal;
+import kr.ac.univ.user.dto.UserSearchDto;
 import kr.ac.univ.user.service.UserAttachedFileService;
 import kr.ac.univ.user.service.UserService;
 import kr.ac.univ.util.EmptyUtil;
@@ -94,8 +94,8 @@ public class UserController {
 
     // List
     @GetMapping("/list")
-    public String userList(Pageable pageable, SearchDto searchDto, Model model) {
-        Page<UserDto> userDtoList = userService.findUserList(pageable, searchDto);
+    public String userList(Pageable pageable, UserSearchDto userSearchDto, Model model) {
+        Page<UserDto> userDtoList = userService.findUserList(pageable, userSearchDto);
         for (UserDto userDto : userDtoList) {
             userAttachedFileService.findAttachedFileByUserIdx(userDto.getIdx(), userDto);
         }

@@ -88,7 +88,7 @@
                             </td>
 
                             <!-- Desktop -->
-                            <td class="d-none d-sm-none d-md-none d-lg-table-cell"><span th:text="${albumDto.mainHashTag}" class="hash-tag"></span></td>
+                            <td class="d-none d-sm-none d-md-none d-lg-table-cell"><span th:text="${albumDto.mainHashTag}" class="hash-tag-read"></span></td>
                             <td th:text="${albumDto.createdBy}" class="d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td th:text="${#temporals.format(albumDto.createdDate,'yyyy.MM.dd. HH:mm')}" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
                             <td th:if="${albumDto.activeStatus?.name() == 'ACTIVE'}" th:text="Active" class="text-center d-none d-sm-none d-md-none d-lg-table-cell"></td>
