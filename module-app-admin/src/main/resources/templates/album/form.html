@@ -334,8 +334,8 @@
                 '<span draggable="true" id="hashTagData' + hashTagId + '">'
                 + '<span id="hashTagSpace' + hashTagId + '" class="hash-tag-space ">    </span>'
                 + '<span id="hashTagContent' + hashTagId + '" class="hash-tag-form">'
-                + hashTag + "&nbsp;"
-                + '<i class="far fa-times-circle" onClick="cancelHashTag(' + hashTagId + ')"> </i>'
+                + hashTag
+                + '<i class="far fa-times-circle ml-2" onClick="cancelHashTag(' + hashTagId + ')"> </i>'
                 + '</span>'
                 + '</span>'
             );
@@ -371,10 +371,10 @@
     $("#insert").click(function () {
         // input name hashTags에 hashTag 추가
         document.getElementsByName("hashTags")[0].value = "";
-        var hashTagContentArray = document.querySelectorAll('*[id^="hashTagContent"]');
+        let hashTagContentArray = document.querySelectorAll('*[id^="hashTagData"]');
 
-        for (var i = 0; i < hashTagContentArray.length; i++) {
-            document.getElementsByName("hashTags")[0].value += hashTagContentArray[i].innerText;
+        for (const hashTagContent of hashTagContentArray) {
+            document.getElementsByName("hashTags")[0].value += hashTagContent.innerText.trim();
         }
 
         // validation (input tag mame, length or size)
@@ -451,13 +451,13 @@
     // hashTag 추가
     for (var i = 1; i < hashTagArray.length; i++) {
         $("#hashTagsWrapper").append(
-        '<span draggable="true" id="hashTagData' + hashTagId + '">'
-        + '<span id="hashTagSpace' + hashTagId + '" class="hash-tag-space ">    </span>'
-        + '<span id="hashTagContent' + hashTagId + '" class="hash-tag-form">'
-        + hashTagArray[i] + "&nbsp;"
-        + '<i class="far fa-times-circle" onClick="cancelHashTag(' + hashTagId + ')"> </i>'
-        + '</span>'
-        + '</span>');
+            '<span draggable="true" id="hashTagData' + hashTagId + '">'
+            + '<span id="hashTagSpace' + hashTagId + '" class="hash-tag-space ">    </span>'
+            + '<span id="hashTagContent' + hashTagId + '" class="hash-tag-form">'
+            + '#' + hashTagArray[i]
+            + '<i class="far fa-times-circle ml-2" onClick="cancelHashTag(' + hashTagId + ')"> </i>'
+            + '</span>'
+            + '</span>');
 
         hashTagId++;
     }
@@ -465,12 +465,10 @@
     $("#update").click(function () {
         // input name hashTags에 hashTag 추가
         document.getElementsByName("hashTags")[0].value = "";
+        let hashTagContentArray = document.querySelectorAll('*[id^="hashTagData"]');
 
-        for (var i = 0; i < hashTagId; i++) {
-            if (document.getElementById("hashTagData" + i)) {
-                var hashTag = document.getElementById("hashTagData" + i).innerText;
-                document.getElementsByName("hashTags")[0].value += hashTag;
-            }
+        for (const hashTagContent of hashTagContentArray) {
+            document.getElementsByName("hashTags")[0].value += hashTagContent.innerText.trim();
         }
 
         // validation (input tag mame, length or size)

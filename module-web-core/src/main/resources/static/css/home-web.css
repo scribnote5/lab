@@ -95,7 +95,7 @@ section {
  */
 .introduction {
     width: 100%;
-    height: 400px;
+    height: 500px;
     margin-top: 4.5rem;
     background-color: var(--dark-main-grey);
     padding: 0;
@@ -115,11 +115,13 @@ section {
     color: var(--darkest-white);
 }
 
-.introduction h5 {
+.introduction h6 {
     text-align: justify;
     text-justify: inter-word;
-    color: var(--darker-main-white);
+    color: var(--dark-white);
     margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    line-height: 1.3;
 }
 
 .btn-main-about-us {
@@ -179,11 +181,11 @@ section {
 
 @media (max-width: 1199px) {
     .introduction .introduction-image-carousel {
-        width: 400px !important;
+        width: 375px !important;
     }
 
     .introduction .introduction-image-carousel img {
-        width: 400px !important;
+        width: 375px !important;
     }
 }
 
@@ -218,12 +220,16 @@ section {
 }
 
 @media (max-width: 768px) {
+    .introduction .introduction-content-wrapper {
+        margin-top: 1.75rem;
+    }
+
     .introduction h2 {
-        font-size: 1.75rem;
+        font-size: 1.65rem;
         margin-bottom: 1.25rem;
     }
 
-    .introduction h5 {
+    .introduction h6 {
         font-size: 1rem;
         margin-bottom: 1.5rem;
         text-align: left;
@@ -231,12 +237,27 @@ section {
 }
 
 @media (max-width: 575px) {
+    .introduction .introduction-content-wrapper {
+        margin-top: .65rem;
+    }
+
     .introduction .introduction-image-carousel {
-        width: 315px !important;
+        width: 250px !important;
     }
 
     .introduction .introduction-image-carousel img {
-        width: 315px !important;
+        width: 250px !important;
+    }
+
+    .introduction h2 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+    }
+
+    .introduction h6 {
+        font-size: .9rem;
+        margin-bottom: .65rem;
+        text-align: left;
     }
 }
 

@@ -57,7 +57,7 @@
                         <!-- Common -->
                         <tr>
                             <td colspan="2">
-                                <div class="content" th:utext="*{content}"></div>
+                                <div class="content" th:utext="*{#strings.replace(content, T(System).getProperty('line.separator'), '&lt;br /&gt;')}"></div>
                             </td>
                         </tr>
 

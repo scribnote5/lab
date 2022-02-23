@@ -43,11 +43,12 @@ public class Album extends CommonAudit {
         this.mainHashTag = mainHashTag;
     }
 
-    public void update(Album project) {
-        setActiveStatus(project.getActiveStatus());
-        this.title = project.getTitle();
-        this.photoTakenDate = project.getPhotoTakenDate();
-        this.mainPagePriority = project.getMainPagePriority();
-        this.hashTags = project.getHashTags();
+    public void update(Album album) {
+        setActiveStatus(album.getActiveStatus());
+        this.title = album.getTitle();
+        this.photoTakenDate = album.getPhotoTakenDate();
+        this.mainPagePriority = album.getMainPagePriority();
+        this.hashTags = album.getHashTags();
+        this.mainHashTag = album.getMainHashTag();
     }
 }

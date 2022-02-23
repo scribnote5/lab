@@ -97,8 +97,8 @@ public class AlbumService {
 
         for (int i = 0; i < albumDtoList.size(); i++) {
             // 사용자 album 페이지에서 mainHashTag 출력 여부를 결정
-            if (!mainHashTag.equals(albumDtoList.get(i).getMainHashTag())) {
-                mainHashTag = albumDtoList.get(i).getMainHashTag();
+            if (!mainHashTag.equals(albumDtoList.get(i).getMainHashTag().trim())) {
+                mainHashTag = albumDtoList.get(i).getMainHashTag().trim();
 
                 if (i == 0 || !mainHashTag.equals(previousMainHashTag)) {
                     albumDtoList.get(i).setMainHashTagStatus(MainHashTagStatus.PRINT);
