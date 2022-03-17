@@ -2,6 +2,7 @@
 
 - 목표: 기존 PHP로 개발된 노후화된 연구실 홈페이지를 Spring Boot를 사용하여 새로 개발한다.
 - 진행 기간: 2020-04-14 ~ 2021.04.01
+- 유지보수 기간: 2020-04-01 ~ 현재 진행 중...
 
 - 프로젝트 게시글 리스트: <https://scribnote5.github.io/categories/project-lab/>
 - 개발 프로젝트 소개: <https://scribnote5.github.io/posts/Project-Lab0/>
